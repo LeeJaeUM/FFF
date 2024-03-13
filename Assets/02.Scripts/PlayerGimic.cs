@@ -1,18 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerGimic : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private NavMeshAgent monsterAgent;
+
+    private bool isTraped = false;
+
+    private void Update()
     {
-        
+        if(isTraped && monsterAgent != null)
+        {
+            monsterAgent.SetDestination(gameObject.transform.position);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.CompareTag("TRAP"))
+        {
+            isTraped = true;
+        }
     }
 }

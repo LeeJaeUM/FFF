@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.Android;
 
 public class MonsterCtrl : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class MonsterCtrl : MonoBehaviour
     private float totalTime = 30; // 낮과 밤이 바뀌는 시간
     private float nowTime = 0;
     private float chaseTimer = 0; // 추적을 유지하는 타이머
-    private float pursuitRange = 3f; // 플레이어를 인식하는 범위
+    private float pursuitRange = 3f; // 플레이어를 인식하는 시간
 
     private bool isMonsterMove = false; // 몬스터의 이동 상황
     private int current = 0; // 몬스터의 이동 순서 변수
@@ -39,11 +40,12 @@ public class MonsterCtrl : MonoBehaviour
     {
         nowTime += Time.deltaTime;
 
+        // 시간의 흐름
         if (nowTime >= totalTime)
         {
-            RotateSkyLight();
+            RotateSkyLight(); 
             isMonsterMove = !isMonsterMove;
-            nowTime = 0;
+            nowTime = 0; // directional light가 회전하면 nowTime 초기화
 
             SetNextDestination();
         }
@@ -91,6 +93,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // Dirctional Light 회전
     void RotateSkyLight()
     {
         if (skyLight != null)
@@ -99,6 +102,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // 몬스터의 이동 루트 설정
     void SetNextDestination()
     {
         if(area!=null && area.Length>0)
@@ -116,5 +120,23 @@ public class MonsterCtrl : MonoBehaviour
         {
             agent.SetDestination(area[index].position);
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // 총알에 닿았을 때 사망
+        if(other.gameObject.CompareTag("BULLET"))
+        {
+            anim.SetTrigger("IsDeath");
+
+            agent.enabled = false;
+
+            Invoke("DestroyMonster", 3f);
+        }
+    }
+
+    void DestroyMonster()
+    {
+        Destroy(gameObject);
     }
 }
