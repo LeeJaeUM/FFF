@@ -1029,10 +1029,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   woodWallData: {fileID: 11400000, guid: 89bc3d1ba562dae4fba2c50cf9e720f8, type: 2}
-  foundationData: {fileID: 0}
+  foundationData: {fileID: 11400000, guid: eecca89b9a3697b48b10413b835d3bb6, type: 2}
   wallLength: 2
   interactDistance: 7
   tagOfHitObject: 
+  downSpawnPoint: {x: 0, y: 0.8, z: 0}
+  testVec: {x: 0, y: 0, z: 0}
 --- !u!1 &1552439923
 GameObject:
   m_ObjectHideFlags: 0

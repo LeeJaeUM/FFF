@@ -11,6 +11,9 @@ public class BlockSpwaner : MonoBehaviour
     public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
+    [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0);
+    [SerializeField] Vector3 testVec = Vector3.zero;
+
     void Update()
     {
         RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
@@ -28,7 +31,9 @@ public class BlockSpwaner : MonoBehaviour
             tagOfHitObject = hit.collider.gameObject.tag;
             if (hit.collider.gameObject.CompareTag("Ground"))
             {
-                Debug.Log("tgdggd");
+                testVec = hit.point;
+                Vector3 spawnPosition = hit.point - downSpawnPoint;
+                FoundationSpawn(spawnPosition);
             }
         }
     }
@@ -79,7 +84,7 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    void FaoundationSpawn(Vector3 _spawnPosition)
+    void FoundationSpawn(Vector3 _spawnPosition)
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
