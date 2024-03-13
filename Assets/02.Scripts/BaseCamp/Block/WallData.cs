@@ -5,14 +5,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WallData", menuName = "ScriptableObjects/WallData", order = 1)]
 public class WallData : ScriptableObject
 {
-    public enum WallType
+    public enum MaterialType
     {
         Wood = 0,
         Stone
     }
 
-    public WallType wallType;
+    public MaterialType wallType;
     public float width = 2f;
     public float height = 2f;
+    public float depth = 0.2f;
     public Material wallMaterial;
+    public GameObject wallPrefab;
 }

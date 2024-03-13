@@ -8,10 +8,11 @@ public class WBUI : MonoBehaviour
     [SerializeField]Workbench workbench;
     Transform uiGroup;
 
-    private void Awake()
+    private void Start()
     {
         workbench = BaseCampManager.Instance.Workbench;
-        workbench.onTrigger += Workbench_UI_Use;
+        if(workbench != null )
+            workbench.onTrigger += Workbench_UI_Use;
         uiGroup = transform.GetChild(0);
     }
 

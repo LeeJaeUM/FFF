@@ -6,7 +6,7 @@ using System;
 
 public class InteractAction : MonoBehaviour
 {
-    public float interactDistance = 5.0f; // 상호작용 가능한 최대 거리
+    public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
 
 
     void Update()
