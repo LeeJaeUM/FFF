@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class BlockSpwaner : MonoBehaviour
 {
+    public enum HitType
+    {
+        None = 0,
+        Ground,
+        Foundation,
+        Wall
+    };
+
+    public HitType hitType = HitType.None;
+    public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
+
     public WallData woodWallData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
     public FoundationData foundationData;
     public float wallLength = 2f; // 생성할 벽의 길이
 
     public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
-    public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
     [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0);
     [SerializeField] Vector3 testVec = Vector3.zero;
@@ -27,14 +37,44 @@ public class BlockSpwaner : MonoBehaviour
         // Ray에 부딪힌 물체 정보를 저장
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
-            // 부딪힌 물체의 태그를 가져옴
+            // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
             tagOfHitObject = hit.collider.gameObject.tag;
-            if (hit.collider.gameObject.CompareTag("Ground"))
+            if (hit.collider.gameObject.CompareTag("Wall"))
             {
+                hitType = HitType.Wall;
+            }
+            else if (hit.collider.gameObject.CompareTag("Foundation"))
+            {
+                hitType = HitType.Foundation;
+                // 부딪힌 Foundation 오브젝트의 위치
+                Vector3 foundationCenterPosition = hit.collider.gameObject.GetComponent<SpawnPosition>().currentPosition;
+
+                // 새로운 Foundation 오브젝트의 위치 계산
+                Vector3 newPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
+
+                // Foundation 오브젝트 생성
+                GameObject cube = Instantiate(foundationData.foundationPrefab, newPosition, Quaternion.identity);
+
+                // 큐브의 스케일을 설정하여 크기 조정
+                cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+
+                // 큐브의 머티리얼 설정
+                Renderer renderer = cube.GetComponent<Renderer>();
+                renderer.material = foundationData.foundationMaterial;
+            }
+            else if (hit.collider.gameObject.CompareTag("Ground"))
+            {
+                hitType = HitType.Ground;
                 testVec = hit.point;
                 Vector3 spawnPosition = hit.point - downSpawnPoint;
                 FoundationSpawn(spawnPosition);
             }
+            else
+            {
+                hitType = HitType.None;
+            }
+
+   
         }
     }
 
@@ -98,5 +138,17 @@ public class BlockSpwaner : MonoBehaviour
             Renderer renderer = cube.GetComponent<Renderer>();
             renderer.material = foundationData.foundationMaterial;
         }
+    }
+
+    Vector3 CalculateNewFoundationPosition(Vector3 centerPosition, Vector3 hitPosition)
+    {
+        Vector3 returnVec = Vector3.zero;
+        // 새로운 Foundation 오브젝트의 위치 계산
+        // 여기에 적절한 로직을 추가하여 centerPosition을 기준으로 새로운 위치를 계산합니다.
+        // y값을 무시하고 x와 z 값만을 사용하여 위치의 차이를 구합니다.
+        float difX = hitPosition.x - centerPosition.x;
+        float difZ = hitPosition.z - centerPosition.z;
+
+        return returnVec;
     }
 }
