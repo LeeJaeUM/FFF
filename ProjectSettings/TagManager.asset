@@ -8,6 +8,9 @@ TagManager:
   - TRAP
   - PLAYER
   - HOME
+  - CinemachineTarget
+  - TRAP2
+  - TRAP3
   layers:
   - Default
   - TransparentFX
