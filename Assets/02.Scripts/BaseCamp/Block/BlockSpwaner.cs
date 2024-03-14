@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class BlockSpwaner : MonoBehaviour
 {
@@ -21,8 +22,10 @@ public class BlockSpwaner : MonoBehaviour
 
     public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
 
-    [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0);
-    [SerializeField] Vector3 testVec = Vector3.zero;
+    [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0); //토대의 크기에 맞게 약간 하단에 생성
+    [SerializeField] Vector3 testVec = Vector3.zero;            //확인용 변수
+
+    [SerializeField] SpawnPosition spawnPosition;
 
     void Update()
     {
@@ -47,27 +50,16 @@ public class BlockSpwaner : MonoBehaviour
             {
                 hitType = HitType.Foundation;
                 // 부딪힌 Foundation 오브젝트의 위치
-                Vector3 foundationCenterPosition = hit.collider.gameObject.GetComponent<SpawnPosition>().currentPosition;
-
-                // 새로운 Foundation 오브젝트의 위치 계산
-                Vector3 newPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
-
-                // Foundation 오브젝트 생성
-                GameObject cube = Instantiate(foundationData.foundationPrefab, newPosition, Quaternion.identity);
-
-                // 큐브의 스케일을 설정하여 크기 조정
-                cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
-
-                // 큐브의 머티리얼 설정
-                Renderer renderer = cube.GetComponent<Renderer>();
-                renderer.material = foundationData.foundationMaterial;
+                spawnPosition = hit.collider.gameObject.GetComponent<SpawnPosition>();
+                Vector3 foundationCenterPosition = spawnPosition.currentPosition;
+                FoundationSpwan_FA(foundationCenterPosition, hit.point);
             }
             else if (hit.collider.gameObject.CompareTag("Ground"))
             {
                 hitType = HitType.Ground;
                 testVec = hit.point;
                 Vector3 spawnPosition = hit.point - downSpawnPoint;
-                FoundationSpawn(spawnPosition);
+                FoundationSpawn_Ground(spawnPosition);
             }
             else
             {
@@ -124,7 +116,7 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    void FoundationSpawn(Vector3 _spawnPosition)
+    void FoundationSpawn_Ground(Vector3 _spawnPosition)
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -140,15 +132,55 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
+    void FoundationSpwan_FA(Vector3 centerVec, Vector3 hitPoint)
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            // 부딪힌 Foundation 오브젝트의 위치
+            Vector3 foundationCenterPosition = centerVec;
+
+            // 새로운 Foundation 오브젝트의 위치 계산
+            Vector3 newPosition = CalculateNewFoundationPosition(foundationCenterPosition, hitPoint);
+
+            // Foundation 오브젝트 생성
+            GameObject cube = Instantiate(foundationData.foundationPrefab, newPosition, Quaternion.identity);
+
+            // 큐브의 스케일을 설정하여 크기 조정
+            cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+
+            // 큐브의 머티리얼 설정
+            Renderer renderer = cube.GetComponent<Renderer>();
+            renderer.material = foundationData.foundationMaterial;
+        }
+
+    }
+
     Vector3 CalculateNewFoundationPosition(Vector3 centerPosition, Vector3 hitPosition)
     {
-        Vector3 returnVec = Vector3.zero;
+        Vector3 returnVec = centerPosition;
         // 새로운 Foundation 오브젝트의 위치 계산
         // 여기에 적절한 로직을 추가하여 centerPosition을 기준으로 새로운 위치를 계산합니다.
         // y값을 무시하고 x와 z 값만을 사용하여 위치의 차이를 구합니다.
         float difX = hitPosition.x - centerPosition.x;
         float difZ = hitPosition.z - centerPosition.z;
 
+        // difX와 difZ 중 절대값이 더 큰 값을 선택하여 적용합니다.
+        if (Mathf.Abs(difX) > Mathf.Abs(difZ))
+        {
+            // x가 더 큰 경우
+            if (difX > 0)
+                returnVec.x += 2.0f;
+            else
+                returnVec.x -= 2.0f;
+        }
+        else
+        {
+            // z가 더 큰 경우
+            if (difZ > 0)
+                returnVec.z += 2.0f;
+            else
+                returnVec.z -= 2.0f;
+        }
         return returnVec;
     }
 }
