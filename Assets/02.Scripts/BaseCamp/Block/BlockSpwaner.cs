@@ -174,12 +174,12 @@ public class BlockSpwaner : MonoBehaviour
             // x가 더 큰 경우
             if (difX > 0)
             {
-                returnVec.x += 2.0f;
+                returnVec += Vector3.right * 2;
                 isSpawnAble_FA = spawnedFoundation.Check_Right();
             }
             else
             {
-                returnVec.x -= 2.0f;
+                returnVec += Vector3.left * 2;
                 isSpawnAble_FA = spawnedFoundation.Check_Left();
             }
                 
@@ -189,12 +189,12 @@ public class BlockSpwaner : MonoBehaviour
             // z가 더 큰 경우
             if (difZ > 0)
             {
-                returnVec.z += 2.0f;
+                returnVec += Vector3.forward * 2;
                 isSpawnAble_FA = spawnedFoundation.Check_Forward();
             }
             else
             {
-                returnVec.z -= 2.0f;
+                returnVec += Vector3.back * 2;
                 isSpawnAble_FA = spawnedFoundation.Check_Back();
             }
              

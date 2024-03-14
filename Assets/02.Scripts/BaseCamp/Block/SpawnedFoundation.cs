@@ -18,7 +18,7 @@ public class SpawnedFoundation : MonoBehaviour
     }
     public UsedDirection usedDirection = UsedDirection.None;
 
-    void Start()
+    void OnEnable()
     {
         // 자신의 위치를 저장
         currentPosition = transform.position;
@@ -102,13 +102,25 @@ public class SpawnedFoundation : MonoBehaviour
             {
                 // 방향에 따라 플래그 업데이트
                 if (direction == Vector3.forward)
+                {
                     usedDirection |= UsedDirection.Forward;
+                    adjacentFoundation.usedDirection |= UsedDirection.Back;
+                }
                 else if (direction == Vector3.back)
+                {
                     usedDirection |= UsedDirection.Back;
+                    adjacentFoundation.usedDirection |= UsedDirection.Forward;
+                }
                 else if (direction == Vector3.left)
+                {
                     usedDirection |= UsedDirection.Left;
+                    adjacentFoundation.usedDirection |= UsedDirection.Right;
+                }
                 else if (direction == Vector3.right)
+                {
                     usedDirection |= UsedDirection.Right;
+                    adjacentFoundation.usedDirection |= UsedDirection.Left;
+                }
             }
         }
     }

@@ -372,7 +372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.5986183
+      value: 4.71
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1093,6 +1093,8 @@ MonoBehaviour:
   interactDistance: 7
   downSpawnPoint: {x: 0, y: 0.8, z: 0}
   testVec: {x: 0, y: 0, z: 0}
+  spawnedFoundation: {fileID: 0}
+  isSpawnAble_FA: 1
 --- !u!1 &1552439923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1632,7 @@ Transform:
   m_GameObject: {fileID: 1765022767}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.512, y: 0.211, z: 3.38}
+  m_LocalPosition: {x: -6.41, y: 0.211, z: -4}
   m_LocalScale: {x: 2.7403, y: 0.38961232, z: 2.2829}
   m_ConstrainProportionsScale: 0
   m_Children:
