@@ -24,10 +24,18 @@ public class SpawnedFoundation : MonoBehaviour
         currentPosition = transform.position;
 
         // 각 방향에 대해 레이캐스트를 쏘고 플래그 업데이트
-        UpdateDirectionFlags(Vector3.forward);
-        UpdateDirectionFlags(Vector3.back);
-        UpdateDirectionFlags(Vector3.left);
-        UpdateDirectionFlags(Vector3.right);
+        UpdateDirectionFlags_Enable(Vector3.forward);
+        UpdateDirectionFlags_Enable(Vector3.back);
+        UpdateDirectionFlags_Enable(Vector3.left);
+        UpdateDirectionFlags_Enable(Vector3.right);
+    }
+
+    private void OnDisable()
+    {
+        UpdateDirectionFlags_Disable(Vector3.forward);
+        UpdateDirectionFlags_Disable(Vector3.back);
+        UpdateDirectionFlags_Disable(Vector3.left);
+        UpdateDirectionFlags_Disable(Vector3.right);
     }
 
     public bool Check_Forward()
@@ -83,7 +91,7 @@ public class SpawnedFoundation : MonoBehaviour
         return result;
     }
 
-    void UpdateDirectionFlags(Vector3 direction)
+    void UpdateDirectionFlags_Enable(Vector3 direction)
     {
         // Raycast를 쏴서 해당 방향에 SpawnedFoundation이 있는지 확인
         RaycastHit hit;
@@ -101,6 +109,28 @@ public class SpawnedFoundation : MonoBehaviour
                     usedDirection |= UsedDirection.Left;
                 else if (direction == Vector3.right)
                     usedDirection |= UsedDirection.Right;
+            }
+        }
+    }
+    void UpdateDirectionFlags_Disable(Vector3 direction)
+    {
+        Debug.Log("제거실행");
+        // Raycast를 쏴서 해당 방향에 SpawnedFoundation이 있는지 확인
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, direction, out hit, 2.0f))
+        {
+            SpawnedFoundation adjacentFoundation = hit.collider.GetComponent<SpawnedFoundation>();
+            if (adjacentFoundation != null && adjacentFoundation != this)
+            {
+                // 방향에 따라 플래그 업데이트
+                if (direction == Vector3.forward)
+                    adjacentFoundation.usedDirection &= ~UsedDirection.Back;
+                else if (direction == Vector3.back)
+                    adjacentFoundation.usedDirection &= ~UsedDirection.Forward;
+                else if (direction == Vector3.left)
+                    adjacentFoundation.usedDirection &= ~UsedDirection.Right;
+                else if (direction == Vector3.right)
+                    adjacentFoundation.usedDirection &= ~UsedDirection.Left;
             }
         }
     }
