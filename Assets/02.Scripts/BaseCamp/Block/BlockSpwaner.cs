@@ -5,6 +5,15 @@ using UnityEngine.InputSystem.HID;
 
 public class BlockSpwaner : MonoBehaviour
 {
+    public enum BuildMode
+    {
+        None = 0,
+        Foundation,
+        Wall,
+        Enviroment
+    };
+    public BuildMode buildMode = BuildMode.None;
+
     public enum HitType
     {
         None = 0,
@@ -12,7 +21,6 @@ public class BlockSpwaner : MonoBehaviour
         Foundation,
         Wall
     };
-
     public HitType hitType = HitType.None;
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
@@ -30,6 +38,24 @@ public class BlockSpwaner : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyUp(KeyCode.Tab))
+        {
+            switch(buildMode)
+            {
+                case BuildMode.None:
+                    buildMode = BuildMode.Wall;
+                    break;
+
+                case BuildMode.Wall:
+                    buildMode = BuildMode.Foundation;
+                    break;
+
+                case BuildMode.Foundation:
+                    buildMode = BuildMode.None;
+                    break;
+            }
+        }
+
         RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
         // Cinemachine Virtual Camera를 통해 Ray 발사
@@ -43,6 +69,8 @@ public class BlockSpwaner : MonoBehaviour
         {
             // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
             tagOfHitObject = hit.collider.gameObject.tag;
+
+            //현재 ray에 닿고있는 물체의 타입 판단
             if (hit.collider.gameObject.CompareTag("Wall"))
             {
                 hitType = HitType.Wall;
@@ -50,24 +78,42 @@ public class BlockSpwaner : MonoBehaviour
             else if (hit.collider.gameObject.CompareTag("Foundation"))
             {
                 hitType = HitType.Foundation;
-                // 부딪힌 Foundation 오브젝트의 위치
-                spawnedFoundation = hit.collider.gameObject.GetComponent<SpawnedFoundation>();
-                Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
-                FoundationSpwan_FA(foundationCenterPosition, hit.point);
             }
             else if (hit.collider.gameObject.CompareTag("Ground"))
             {
                 hitType = HitType.Ground;
-                testVec = hit.point;
-                Vector3 spawnPosition = hit.point - downSpawnPoint;
-                FoundationSpawn_Ground(spawnPosition);
             }
             else
             {
                 hitType = HitType.None;
             }
 
-   
+            //건축모드(buildMode) 에 따라서 다른 기능 실행
+            switch (buildMode)
+            {
+                case BuildMode.None:
+                    break;
+
+                case BuildMode.Wall:
+                    break;
+
+                case BuildMode.Foundation:
+                    if (hitType == HitType.Foundation)
+                    {
+                        // 부딪힌 Foundation 오브젝트의 위치
+                        spawnedFoundation = hit.collider.gameObject.GetComponent<SpawnedFoundation>();
+                        Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
+                        FoundationSpwan_FA(foundationCenterPosition, hit.point);
+                    }
+                    else if (hitType == HitType.Ground)
+                    {
+                        testVec = hit.point;
+                        Vector3 spawnPosition = hit.point - downSpawnPoint;
+                        FoundationSpawn_Ground(spawnPosition);
+                    }
+                    break;
+            }
+
         }
     }
 
