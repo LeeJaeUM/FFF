@@ -12,9 +12,9 @@ public class FoundationData : ScriptableObject
     }
 
     public MaterialType wallType;
-    public float width = 2.0f;
+    public float width = 3.0f;
     public float height = 2.0f;
-    public float depth = 2.0f;
+    public float depth = 3.0f;
     public Material foundationMaterial;
     public GameObject foundationPrefab;
 }

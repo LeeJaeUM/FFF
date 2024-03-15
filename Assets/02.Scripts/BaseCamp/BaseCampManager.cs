@@ -27,5 +27,23 @@ public class BaseCampManager : MonoBehaviour
         }
 
     }
+    /// <summary>
+    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트
+    /// </summary>
+    public GameObject fa_preview;
+
+    private void Start()
+    {
+        fa_preview = transform.GetChild(0).gameObject;
+    }
+
+    public void FA_preview_Hide()
+    {
+        fa_preview.SetActive(false);
+    }
+    public void FA_preview_Show()
+    {
+        fa_preview.SetActive(true);
+    }
        
 }

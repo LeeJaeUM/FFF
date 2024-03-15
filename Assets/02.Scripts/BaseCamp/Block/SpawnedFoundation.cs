@@ -18,7 +18,7 @@ public class SpawnedFoundation : MonoBehaviour
     }
     public UsedDirection usedDirection = UsedDirection.None;
 
-    void OnEnable()
+    void Start()
     {
         // 자신의 위치를 저장
         currentPosition = transform.position;
@@ -98,8 +98,12 @@ public class SpawnedFoundation : MonoBehaviour
         if (Physics.Raycast(transform.position, direction, out hit, 2.0f))
         {
             SpawnedFoundation adjacentFoundation = hit.collider.GetComponent<SpawnedFoundation>();
+            if(adjacentFoundation == null) {
+                Debug.Log("ㅇ벗음");
+            }
             if (adjacentFoundation != null && adjacentFoundation != this)
             {
+                Debug.Log(adjacentFoundation.gameObject.name);
                 // 방향에 따라 플래그 업데이트
                 if (direction == Vector3.forward)
                 {
@@ -123,6 +127,7 @@ public class SpawnedFoundation : MonoBehaviour
                 }
             }
         }
+        
     }
     void UpdateDirectionFlags_Disable(Vector3 direction)
     {

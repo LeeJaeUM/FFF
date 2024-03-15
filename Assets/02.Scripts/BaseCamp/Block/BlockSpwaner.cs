@@ -26,7 +26,7 @@ public class BlockSpwaner : MonoBehaviour
 
     public WallData woodWallData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
     public FoundationData foundationData;
-    public float wallLength = 2f; // 생성할 벽의 길이
+    public float lengthMul = 3f; // 생성할 벽의 길이
 
     public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
 
@@ -36,22 +36,23 @@ public class BlockSpwaner : MonoBehaviour
     [SerializeField] SpawnedFoundation spawnedFoundation;
     [SerializeField] bool isSpawnAble_FA = true;   //생성할 위치에 foundation(토대)가 없다면 생성가능
 
+    
+
     void Update()
     {
         if(Input.GetKeyUp(KeyCode.Tab))
         {
             switch(buildMode)
             {
-                case BuildMode.None:
-                    buildMode = BuildMode.Wall;
-                    break;
-
                 case BuildMode.Wall:
                     buildMode = BuildMode.Foundation;
                     break;
 
                 case BuildMode.Foundation:
-                    buildMode = BuildMode.None;
+                    buildMode = BuildMode.Wall;
+                    break;
+                default:
+                    buildMode = BuildMode.Foundation;
                     break;
             }
         }
@@ -92,23 +93,36 @@ public class BlockSpwaner : MonoBehaviour
             switch (buildMode)
             {
                 case BuildMode.None:
+                    //fa_preview 미리보기 숨기기
+                    BaseCampManager.Instance.FA_preview_Hide();
                     break;
 
                 case BuildMode.Wall:
+                    //fa_preview 미리보기 숨기기
+                    BaseCampManager.Instance.FA_preview_Hide();
                     break;
 
                 case BuildMode.Foundation:
+                    //생성될 위치 미리보기
+                    BaseCampManager.Instance.FA_preview_Show();
                     if (hitType == HitType.Foundation)
                     {
                         // 부딪힌 Foundation 오브젝트의 위치
                         spawnedFoundation = hit.collider.gameObject.GetComponent<SpawnedFoundation>();
                         Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
-                        FoundationSpwan_FA(foundationCenterPosition, hit.point);
+
+                        // 새로운 Foundation 오브젝트의 위치 계산
+                        Vector3 spawnPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
+                        BaseCampManager.Instance.fa_preview.transform.position = spawnPosition;
+
+                        FoundationSpwan_FA(spawnPosition);
                     }
                     else if (hitType == HitType.Ground)
                     {
                         testVec = hit.point;
                         Vector3 spawnPosition = hit.point - downSpawnPoint;
+                        
+                        BaseCampManager.Instance.fa_preview.transform.position = spawnPosition;
                         FoundationSpawn_Ground(spawnPosition);
                     }
                     break;
@@ -130,20 +144,20 @@ public class BlockSpwaner : MonoBehaviour
         // Ray에 부딪힌 물체 정보를 저장
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
-            // 충돌한 지점의 법선 벡터를 구함
-            Vector3 normal = hit.normal;
+            //// 충돌한 지점의 법선 벡터를 구함
+            //Vector3 normal = hit.normal;
 
-            // 벽의 모서리에서 출발하는 벡터를 계산
-            Vector3 cornerVector = transform.forward + transform.up * wallLength;
+            //// 벽의 모서리에서 출발하는 벡터를 계산
+            //Vector3 cornerVector = transform.forward + transform.up * wallLength;
 
-            // 두 벡터의 내적을 계산하여 벽을 생성할 방향 벡터 결정
-            Vector3 spawnDirection = Vector3.Cross(cornerVector, normal);
+            //// 두 벡터의 내적을 계산하여 벽을 생성할 방향 벡터 결정
+            //Vector3 spawnDirection = Vector3.Cross(cornerVector, normal);
 
-            // 벽을 생성하는 위치 설정
-            Vector3 spawnPosition = hit.point + spawnDirection.normalized * wallLength * 0.5f;
+            //// 벽을 생성하는 위치 설정
+            //Vector3 spawnPosition = hit.point + spawnDirection.normalized * wallLength * 0.5f;
 
-            // 벽을 생성
-            WallSpawn(spawnPosition);
+            //// 벽을 생성
+            //WallSpawn(spawnPosition);
         }
     }
 
@@ -179,20 +193,14 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    void FoundationSpwan_FA(Vector3 centerVec, Vector3 hitPoint)
+    void FoundationSpwan_FA(Vector3 spawnPosition)
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            // 부딪힌 Foundation 오브젝트의 위치
-            Vector3 foundationCenterPosition = centerVec;
-
-            // 새로운 Foundation 오브젝트의 위치 계산
-            Vector3 newPosition = CalculateNewFoundationPosition(foundationCenterPosition, hitPoint);
-
             if (isSpawnAble_FA)    //생성할 위치에 foundation(토대)가 없다면 생성가능
             {
                 // Foundation 오브젝트 생성
-                GameObject cube = Instantiate(foundationData.foundationPrefab, newPosition, Quaternion.identity);
+                GameObject cube = Instantiate(foundationData.foundationPrefab, spawnPosition, Quaternion.identity);
 
                 // 큐브의 스케일을 설정하여 크기 조정
                 cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
@@ -220,12 +228,12 @@ public class BlockSpwaner : MonoBehaviour
             // x가 더 큰 경우
             if (difX > 0)
             {
-                returnVec += Vector3.right * 2;
+                returnVec += Vector3.right * lengthMul;
                 isSpawnAble_FA = spawnedFoundation.Check_Right();
             }
             else
             {
-                returnVec += Vector3.left * 2;
+                returnVec += Vector3.left * lengthMul;
                 isSpawnAble_FA = spawnedFoundation.Check_Left();
             }
                 
@@ -235,12 +243,12 @@ public class BlockSpwaner : MonoBehaviour
             // z가 더 큰 경우
             if (difZ > 0)
             {
-                returnVec += Vector3.forward * 2;
+                returnVec += Vector3.forward * lengthMul;
                 isSpawnAble_FA = spawnedFoundation.Check_Forward();
             }
             else
             {
-                returnVec += Vector3.back * 2;
+                returnVec += Vector3.back * lengthMul;
                 isSpawnAble_FA = spawnedFoundation.Check_Back();
             }
              
