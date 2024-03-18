@@ -21,7 +21,18 @@ public class BlockSpwaner : MonoBehaviour
         Foundation,
         Wall
     };
+
+    public enum FA_UseDir
+    {
+        None = 0,
+        Forward ,
+        Back,
+        Left,
+        Right,
+        All = int.MaxValue
+    }
     public HitType hitType = HitType.None;
+    public FA_UseDir useDir = FA_UseDir.None;
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
     public WallData woodWallData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
@@ -36,7 +47,8 @@ public class BlockSpwaner : MonoBehaviour
     [SerializeField] SpawnedFoundation spawnedFoundation;
     [SerializeField] bool isSpawnAble_FA = true;   //생성할 위치에 foundation(토대)가 없다면 생성가능
 
-    
+    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
+
 
     void Update()
     {
@@ -56,8 +68,6 @@ public class BlockSpwaner : MonoBehaviour
                     break;
             }
         }
-
-        RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
         // Cinemachine Virtual Camera를 통해 Ray 발사
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
@@ -197,6 +207,21 @@ public class BlockSpwaner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Z))
         {
+            switch (useDir)
+            {
+                case FA_UseDir.Forward:
+                    isSpawnAble_FA = spawnedFoundation.Check_Forward();
+                    break;
+                case FA_UseDir.Back:
+                    isSpawnAble_FA = spawnedFoundation.Check_Back();
+                    break;
+                case FA_UseDir.Left:
+                    isSpawnAble_FA = spawnedFoundation.Check_Left();
+                    break;
+                case FA_UseDir.Right:
+                    isSpawnAble_FA = spawnedFoundation.Check_Right();
+                    break;
+            }
             if (isSpawnAble_FA)    //생성할 위치에 foundation(토대)가 없다면 생성가능
             {
                 // Foundation 오브젝트 생성
@@ -229,12 +254,15 @@ public class BlockSpwaner : MonoBehaviour
             if (difX > 0)
             {
                 returnVec += Vector3.right * lengthMul;
-                isSpawnAble_FA = spawnedFoundation.Check_Right();
+                useDir = FA_UseDir.Right;
+                //isSpawnAble_FA = spawnedFoundation.Check_Right();
+
             }
             else
             {
                 returnVec += Vector3.left * lengthMul;
-                isSpawnAble_FA = spawnedFoundation.Check_Left();
+                useDir = FA_UseDir.Left;
+               // isSpawnAble_FA = spawnedFoundation.Check_Left();
             }
                 
         }
@@ -244,12 +272,14 @@ public class BlockSpwaner : MonoBehaviour
             if (difZ > 0)
             {
                 returnVec += Vector3.forward * lengthMul;
-                isSpawnAble_FA = spawnedFoundation.Check_Forward();
+                useDir = FA_UseDir.Forward;
+               // isSpawnAble_FA = spawnedFoundation.Check_Forward();
             }
             else
             {
                 returnVec += Vector3.back * lengthMul;
-                isSpawnAble_FA = spawnedFoundation.Check_Back();
+                useDir = FA_UseDir.Back;
+               // isSpawnAble_FA = spawnedFoundation.Check_Back();
             }
              
         }
