@@ -52,7 +52,7 @@ public class BlockSpwaner : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Tab))
+        if(Input.GetKeyUp(KeyCode.Tab))     //테스트용 건축모드 변경 tab
         {
             switch(buildMode)
             {
@@ -110,12 +110,20 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall:
                     //fa_preview 미리보기 숨기기
                     BaseCampManager.Instance.FA_preview_Hide();
+                    if (hitType == HitType.Foundation)  //토대에 생성할 때
+                    {
+
+                    }
+                    if (hitType == HitType.Wall)        //벽에서 생성할때
+                    {
+
+                    }
                     break;
 
                 case BuildMode.Foundation:
                     //생성될 위치 미리보기
                     BaseCampManager.Instance.FA_preview_Show();
-                    if (hitType == HitType.Foundation)
+                    if (hitType == HitType.Foundation)  //토대에 생성할 때
                     {
                         // 부딪힌 Foundation 오브젝트의 위치
                         spawnedFoundation = hit.collider.gameObject.GetComponent<SpawnedFoundation>();
@@ -127,7 +135,7 @@ public class BlockSpwaner : MonoBehaviour
 
                         FoundationSpwan_FA(spawnPosition);
                     }
-                    else if (hitType == HitType.Ground)
+                    else if (hitType == HitType.Ground) //땅에서 생성할때
                     {
                         testVec = hit.point;
                         Vector3 spawnPosition = hit.point - downSpawnPoint;
@@ -193,12 +201,12 @@ public class BlockSpwaner : MonoBehaviour
         {
             // WoodWall 스크립터블 오브젝트에 저장된 정보를 이용하여 큐브를 생성
             GameObject cube = Instantiate(foundationData.foundationPrefab, _spawnPosition, Quaternion.identity);
-
+            GameObject child = cube.transform.GetChild(0).gameObject;
             // 큐브의 스케일을 설정하여 크기 조정
             cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
             // 큐브의 머티리얼 설정
-            Renderer renderer = cube.GetComponent<Renderer>();
+            Renderer renderer = child.GetComponent<Renderer>();
             renderer.material = foundationData.foundationMaterial;
         }
     }
@@ -226,12 +234,12 @@ public class BlockSpwaner : MonoBehaviour
             {
                 // Foundation 오브젝트 생성
                 GameObject cube = Instantiate(foundationData.foundationPrefab, spawnPosition, Quaternion.identity);
-
+                GameObject child = cube.transform.GetChild(0).gameObject;
                 // 큐브의 스케일을 설정하여 크기 조정
                 cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
                 // 큐브의 머티리얼 설정
-                Renderer renderer = cube.GetComponent<Renderer>();
+                Renderer renderer = child.GetComponent<Renderer>();
                 renderer.material = foundationData.foundationMaterial;
             }
         }
