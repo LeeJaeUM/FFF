@@ -55,7 +55,7 @@ public class ActionController : MonoBehaviour
         actionText.gameObject.SetActive(true);
         if(hitInfo.transform != null && hitInfo.transform.GetComponent<ItemPickUp>() != null && hitInfo.transform.GetComponent<ItemPickUp>().item != null)
         {
-            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " 획득 " + "<color=yellow>" + "(E)" + "</color>";
+            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " Pick up " + "<color=yellow>" + "[E]" + "</color>";
         }
     }
 
