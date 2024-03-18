@@ -11,11 +11,12 @@ TagManager:
   - CinemachineTarget
   - TRAP2
   - TRAP3
+  - MONSTER
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
   - 
