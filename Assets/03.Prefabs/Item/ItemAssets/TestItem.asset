@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
-  m_Name: Key
+  m_Name: TestItem
   m_EditorClassIdentifier: 
-  itemName: Key
-  itemType: 1
-  itemImage: {fileID: 0}
-  itemPrefab: {fileID: 4989418334832967555, guid: a21c5f7f396cd584eaf83cce0eebc3b3, type: 3}
+  itemID: 0
+  itemIcon: {fileID: 0}
+  itemName: TestItem
+  itemType: 2
+  itemPrefab: {fileID: 5931880204333040682, guid: f1bf0d765d4c7d043aedee28418579b3, type: 3}
+  itemDescription: "\uD14C\uC2A4\uD2B8 \uC544\uC774\uD15C \uC785\uB2C8\uB2E4."
+  SizeX: 0
+  SizeY: 0
+  maxItemCount: 0
+  itemWeight: 0
   weaponType: 

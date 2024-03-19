@@ -53,9 +53,9 @@ public class ActionController : MonoBehaviour
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        if(hitInfo.transform != null && hitInfo.transform.GetComponent<ItemPickUp>() != null && hitInfo.transform.GetComponent<ItemPickUp>().item != null)
+        if(hitInfo.transform != null && hitInfo.transform.GetComponent<ItemPickUp>() != null && hitInfo.transform.GetComponent<ItemPickUp>().itemData != null)
         {
-            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " Pick up " + "<color=yellow>" + "[E]" + "</color>";
+            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().itemData.itemName + " Pick up " + "<color=yellow>" + "[E]" + "</color>";
         }
     }
 
@@ -71,7 +71,7 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)
             {
-                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().item.itemName + " 획득 했습니다.");  // 인벤토리 넣기
+                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().itemData.itemName + " 획득 했습니다.");  // 인벤토리 넣기
                 Destroy(hitInfo.transform.gameObject);
                 ItemInfoDisappear();
             }
