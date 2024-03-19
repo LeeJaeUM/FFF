@@ -70,8 +70,8 @@ public class BlockSpwaner : MonoBehaviour
         }
 
         // Cinemachine Virtual Camera를 통해 Ray 발사
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
-
+        //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         // Ray를 Scene 창에 그림
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.red);
 

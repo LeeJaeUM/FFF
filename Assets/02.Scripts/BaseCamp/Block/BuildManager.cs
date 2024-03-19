@@ -31,8 +31,8 @@ public class BuildManager : MonoBehaviour
         {
             isBuilding = !isBuilding;
         }
-
-        if(isBuilding)
+        ///. 건설 모드일 때에는 GhostBuild() 함수를 호출하여 건물을 미리보기로 표시하고, 마우스 왼쪽 버튼을 클릭하면 PlaceBuild() 함수를 호출하여 실제로 건물을 설치합니다.
+        if (isBuilding)
         {
             GhostBuild();
 
@@ -45,6 +45,9 @@ public class BuildManager : MonoBehaviour
             ghostBuildGameObject = null;
         }
     }
+    /// <summary>
+    /// 현재 선택된 건물을 미리보기로 생성하고, 마우스 위치에 따라 이동시킵니다. 미리보기 건물의 위치가 유효한지 확인하고, 그에 따라 건물을 유효한 위치에 스냅하거나 무효한 위치에 배치합니다
+    /// </summary>
     private void GhostBuild()
     {
         GameObject currentBuild = GetCurrentBuild();
@@ -54,6 +57,10 @@ public class BuildManager : MonoBehaviour
         CheckBuildValidity();
     }
 
+    /// <summary>
+    /// 현재 선택된 건물에 대한 미리보기 프리팹을 생성합니다. 미리보기 프리팹은 유효한 위치에 배치될 때까지 건설 모드에서 이동합니다.
+    /// </summary>
+    /// <param name="currentBuild"></param>
     private void CreateGhostPrefab(GameObject currentBuild)
     {
         if(ghostBuildGameObject == null)
@@ -67,6 +74,9 @@ public class BuildManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 마우스 포인터의 위치에 따라 미리보기 건물을 이동시킵니다.
+    /// </summary>
     private void MoveGhostPrefabToRaycast()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -78,6 +88,9 @@ public class BuildManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 건물을 배치할 위치의 유효성을 검사합니다. 
+    /// </summary>
     private void CheckBuildValidity()
     {
         Collider[] colliders = Physics.OverlapSphere(ghostBuildGameObject.transform.position, connectorOverlapRadius, connectorLayer);
@@ -90,6 +103,11 @@ public class BuildManager : MonoBehaviour
             GhostSeperateBuild();
         }
     }
+
+    /// <summary>
+    /// 이 함수는 건물을 설치할 때 미리보기 건물이 연결될 수 있는지 확인합니다.
+    /// </summary>
+    /// <param name="colliders"></param>
     private void GhostConnectBuild(Collider[] colliders)
     {
         Connector bestConnector = null;
@@ -115,6 +133,10 @@ public class BuildManager : MonoBehaviour
         SnapGhostPrefabToConnector(bestConnector);
     }
 
+    /// <summary>
+    /// 이 함수는 미리보기 건물을 연결 부분에 정확히 맞춥니다.
+    /// </summary>
+    /// <param name="connector"></param>
     private void SnapGhostPrefabToConnector(Connector connector)
     {
         Transform ghostConnector = FindSnapConnector(connector.transform, ghostBuildGameObject.transform.GetChild(1));
@@ -130,7 +152,9 @@ public class BuildManager : MonoBehaviour
         GhostifyModel(ModelParent, ghostMaterialValid);
         isGhostInValidPosition = true;
     }
-
+    /// <summary>
+    /// 이 함수는 미리보기 건물이 지면에 연결되어 있는지 확인하고, 유효성을 검사합니다
+    /// </summary>
     private void GhostSeperateBuild()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -164,6 +188,13 @@ public class BuildManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// 이 함수는 건물의 연결 부분을 찾아 반환합니다.
+    /// </summary>
+    /// <param name="snapConnector"></param>
+    /// <param name="ghostConnectorParent"></param>
+    /// <returns></returns>
     private Transform FindSnapConnector(Transform snapConnector, Transform ghostConnectorParent)
     {
         ConnectorPosition OppositieConnectorTag = GetOppositePosition(snapConnector.GetComponent<Connector>());
@@ -177,6 +208,11 @@ public class BuildManager : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// 이 함수는 주어진 연결 부분의 반대편 연결 부분을 반환합니다
+    /// </summary>
+    /// <param name="connector"></param>
+    /// <returns></returns>
     private ConnectorPosition GetOppositePosition(Connector connector)
     {
         ConnectorPosition position = connector.connectorPosition;
@@ -210,7 +246,7 @@ public class BuildManager : MonoBehaviour
         }
         
     }
-
+    //이 함수는 플레이어에 가장 가까운 연결 부분을 반환합니다.
     private ConnectorPosition GetConnectorClosestToPlayer(bool topBottom)
     {
         Transform cameraTransform = Camera.main.transform;
@@ -238,7 +274,10 @@ public class BuildManager : MonoBehaviour
             }
         }
     }
-
+    /// <summary>
+    /// 이 함수는 현재 선택된 건물을 반환합니다.
+    /// </summary>
+    /// <returns></returns>
     private GameObject GetCurrentBuild()
     {
         switch (currentBuildType)
@@ -251,7 +290,9 @@ public class BuildManager : MonoBehaviour
         return null;
     }
 
-
+    /// <summary>
+    /// 건물을 실제로 배치합니다. 미리보기 건물이 유효한 위치에 있을 때 호출
+    /// </summary>
     private void PlaceBuild()
     {
         if (ghostBuildGameObject != null & isGhostInValidPosition)
@@ -261,7 +302,7 @@ public class BuildManager : MonoBehaviour
             Destroy(ghostBuildGameObject);
             ghostBuildGameObject = null;
 
-            isBuilding = false;
+            //isBuilding = false;
 
             foreach (Connector connector in newBuild.GetComponentsInChildren< Connector>() )
             {
