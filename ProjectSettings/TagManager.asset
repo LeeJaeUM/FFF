@@ -12,6 +12,8 @@ TagManager:
   - TRAP2
   - TRAP3
   - MONSTER
+  - ROOM
+  - GOAL
   layers:
   - Default
   - TransparentFX
