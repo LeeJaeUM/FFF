@@ -127,7 +127,7 @@ public class BlockSpwaner : MonoBehaviour
                     if (hitType == HitType.Foundation)  //토대에 생성할 때
                     {
                         // 부딪힌 Foundation 오브젝트의 위치
-                        spawnedFoundation = hit.collider.gameObject.GetComponent<SpawnedFoundation>();
+                        spawnedFoundation = hit.collider.gameObject.GetComponentInChildren<SpawnedFoundation>();
                         Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
 
                         // 새로운 Foundation 오브젝트의 위치 계산
@@ -211,7 +211,7 @@ public class BlockSpwaner : MonoBehaviour
             GameObject cube = Instantiate(foundationData.foundationPrefab, _spawnPosition, Quaternion.identity);
             GameObject child = cube.transform.GetChild(0).gameObject;
             // 큐브의 스케일을 설정하여 크기 조정
-            cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+            child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
             // 큐브의 머티리얼 설정
             Renderer renderer = child.GetComponent<Renderer>();
@@ -244,7 +244,8 @@ public class BlockSpwaner : MonoBehaviour
                 GameObject cube = Instantiate(foundationData.foundationPrefab, spawnPosition, Quaternion.identity);
                 GameObject child = cube.transform.GetChild(0).gameObject;
                 // 큐브의 스케일을 설정하여 크기 조정
-                cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+                //cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+                child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
                 // 큐브의 머티리얼 설정
                 Renderer renderer = child.GetComponent<Renderer>();

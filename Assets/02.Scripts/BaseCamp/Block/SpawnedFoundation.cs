@@ -22,6 +22,7 @@ public class SpawnedFoundation : MonoBehaviour
     {
         // 자신의 위치를 저장
         currentPosition = transform.position;
+        //currentPosition = transform.parent.position;
 
         // 각 방향에 대해 레이캐스트를 쏘고 플래그 업데이트
         UpdateDirectionFlags_Enable(Vector3.forward);
