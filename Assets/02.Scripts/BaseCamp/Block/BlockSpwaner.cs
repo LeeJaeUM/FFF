@@ -110,6 +110,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall:
                     //fa_preview 미리보기 숨기기
                     BaseCampManager.Instance.FA_preview_Hide();
+                    WallSpawn(WallPosition());
                     if (hitType == HitType.Foundation)  //토대에 생성할 때
                     {
 
@@ -149,7 +150,7 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    void WallRay()
+    void OldRay()
     {
         RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
@@ -193,6 +194,13 @@ public class BlockSpwaner : MonoBehaviour
             Renderer renderer = cube.GetComponent<Renderer>();
             renderer.material = woodWallData.wallMaterial;
         }
+    }
+
+    public Vector3 WallPosition()
+    {
+        Vector3 result = Vector3.zero;
+
+        return result;
     }
 
     void FoundationSpawn_Ground(Vector3 _spawnPosition)

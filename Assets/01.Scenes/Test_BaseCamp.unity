@@ -364,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7869678
+      value: 0.11
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -372,7 +372,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.4510307
+      value: 7.64
       objectReference: {fileID: 0}
     - target: {fileID: 8681078535609565083, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -562,7 +562,7 @@ MonoBehaviour:
   wallObjects:
   - {fileID: 3998939162751938878, guid: 34358910fc078534abc58fe60e372961, type: 3}
   - {fileID: 3998939162751938878, guid: 34358910fc078534abc58fe60e372961, type: 3}
-  currentBuildType: 0
+  currentBuildType: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 64
