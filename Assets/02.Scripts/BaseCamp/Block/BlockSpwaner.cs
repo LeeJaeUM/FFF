@@ -48,6 +48,18 @@ public class BlockSpwaner : MonoBehaviour
     [SerializeField] bool isSpawnAble_FA = true;   //생성할 위치에 foundation(토대)가 없다면 생성가능
 
     RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
+    /// <summary>
+    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트
+    /// </summary>
+    public GameObject fa_preview;
+    public GameObject wall_preview;
+    public GameObject current_previewObj;
+
+    private void Start()
+    {
+        fa_preview = transform.GetChild(0).gameObject;
+        fa_preview = transform.GetChild(1).gameObject;
+    }
 
 
     void Update()
@@ -99,18 +111,28 @@ public class BlockSpwaner : MonoBehaviour
                 hitType = HitType.None;
             }
 
+
+            if (buildMode == BuildMode.Wall)
+            {
+                
+            }
+            else if (buildMode == BuildMode.Foundation)
+            {
+            }
+
             //건축모드(buildMode) 에 따라서 다른 기능 실행
             switch (buildMode)
             {
                 case BuildMode.None:
                     //fa_preview 미리보기 숨기기
-                    BaseCampManager.Instance.FA_preview_Hide();
+                    //FA_preview_Hide();
                     break;
 
                 case BuildMode.Wall:
                     //fa_preview 미리보기 숨기기
-                    BaseCampManager.Instance.FA_preview_Hide();
-                    WallSpawn(WallPosition());
+                    //FA_preview_Hide();
+                    current_previewObj = wall_preview;
+                    //WallSpawn(WallPosition());
                     if (hitType == HitType.Foundation)  //토대에 생성할 때
                     {
 
@@ -123,7 +145,8 @@ public class BlockSpwaner : MonoBehaviour
 
                 case BuildMode.Foundation:
                     //생성될 위치 미리보기
-                    BaseCampManager.Instance.FA_preview_Show();
+                    current_previewObj = fa_preview;
+                    //FA_preview_Show();
                     if (hitType == HitType.Foundation)  //토대에 생성할 때
                     {
                         // 부딪힌 Foundation 오브젝트의 위치
@@ -132,17 +155,16 @@ public class BlockSpwaner : MonoBehaviour
 
                         // 새로운 Foundation 오브젝트의 위치 계산
                         Vector3 spawnPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
-                        BaseCampManager.Instance.fa_preview.transform.position = spawnPosition;
+                        fa_preview.transform.position = spawnPosition;
 
                         FoundationSpwan_FA(spawnPosition);
                     }
                     else if (hitType == HitType.Ground) //땅에서 생성할때
                     {
-                        testVec = hit.point;
-                        Vector3 spawnPosition = hit.point - downSpawnPoint;
+                        //Vector3 spawnPosition = hit.point - downSpawnPoint;
                         
-                        BaseCampManager.Instance.fa_preview.transform.position = spawnPosition;
-                        FoundationSpawn_Ground(spawnPosition);
+                        fa_preview.transform.position = hit.point;
+                        FoundationSpawn_Ground(hit.point);
                     }
                     break;
             }
@@ -301,5 +323,34 @@ public class BlockSpwaner : MonoBehaviour
              
         }
         return returnVec;
+    }
+
+    public void Preview_Hide()
+    {
+        current_previewObj.SetActive(false);
+    }
+    public void Preview_Show()
+    {
+        current_previewObj.SetActive(true);
+    }
+
+    void SpawnPositionSelect()
+    {
+
+    }
+
+    [SerializeField] private float connectorOverlapRadius = 1;
+    [SerializeField] private LayerMask connectorLayer;
+    void ColliderSearch()
+    {
+        Collider[] colliders = Physics.OverlapSphere(current_previewObj.transform.position, connectorOverlapRadius, connectorLayer);
+        if (colliders.Length > 0)
+        {
+           // GhostConnectBuild(colliders);
+        }
+        else
+        {
+           // GhostSeperateBuild();
+        }
     }
 }

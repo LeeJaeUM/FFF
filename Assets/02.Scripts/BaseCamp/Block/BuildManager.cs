@@ -31,6 +31,27 @@ public class BuildManager : MonoBehaviour
         {
             isBuilding = !isBuilding;
         }
+        if(Input.GetKeyDown(KeyCode.Tab))
+        {
+            switch(currentBuildType)
+            {
+                case SelectedBuildType.floor:
+                    currentBuildType = SelectedBuildType.wall;
+                    isBuilding = false;
+                    isBuilding = true;
+                    break; 
+                case SelectedBuildType.wall:
+                    currentBuildType = SelectedBuildType.floor;
+                    isBuilding = false;
+                    isBuilding = true;
+                    break; 
+                default:
+                    currentBuildType = SelectedBuildType.floor;
+                    isBuilding = false;
+                    isBuilding = true;
+                    break;
+            }
+        }
         ///. 건설 모드일 때에는 GhostBuild() 함수를 호출하여 건물을 미리보기로 표시하고, 마우스 왼쪽 버튼을 클릭하면 PlaceBuild() 함수를 호출하여 실제로 건물을 설치합니다.
         if (isBuilding)
         {
