@@ -128,9 +128,10 @@ public class BuildManager : MonoBehaviour
     /// <summary>
     /// 건물을 배치할 위치의 유효성을 검사합니다. 
     /// </summary>
+    public Collider[] colliders;
     private void CheckBuildValidity()
     {
-        Collider[] colliders = Physics.OverlapSphere(ghostBuildGameObject.transform.position, connectorOverlapRadius, connectorLayer);
+        colliders = Physics.OverlapSphere(ghostBuildGameObject.transform.position, connectorOverlapRadius, connectorLayer);
         if (colliders.Length > 0)
         {
             GhostConnectBuild(colliders);

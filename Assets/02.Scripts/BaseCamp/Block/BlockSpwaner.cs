@@ -1,28 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
+using static BlockSpwaner;
+using static Connecting;
 
 public class BlockSpwaner : MonoBehaviour
 {
-    public enum BuildMode
+    public enum BuildMode   //건축 모드
     {
         None = 0,
         Foundation,
-        Wall,
+        Wall_Horizontal,
+        Wall_Vertical,
         Enviroment
     };
-    public BuildMode buildMode = BuildMode.None;
 
-    public enum HitType
+    public enum HitType     //현재 ray에 닿고 있는 오브젝트의 타입
     {
         None = 0,
         Ground,
         Foundation,
-        Wall
+        Wall,
+        Buildables
     };
 
-    public enum FA_UseDir
+    public enum FA_UseDir   //토대 설치시 주변에 토대가 있는 지 확인 하는 용도
     {
         None = 0,
         Forward ,
@@ -31,6 +36,7 @@ public class BlockSpwaner : MonoBehaviour
         Right,
         All = int.MaxValue
     }
+    public BuildMode buildMode = BuildMode.None;
     public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
@@ -52,13 +58,15 @@ public class BlockSpwaner : MonoBehaviour
     /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트
     /// </summary>
     public GameObject fa_preview;
-    public GameObject wall_preview;
-    public GameObject current_previewObj;
+    public GameObject wall_preview_H;
+    public GameObject wall_preview_V;
+    public GameObject previewObj;
 
     private void Start()
     {
         fa_preview = transform.GetChild(0).gameObject;
-        fa_preview = transform.GetChild(1).gameObject;
+        wall_preview_H = transform.GetChild(1).gameObject;
+        wall_preview_V = transform.GetChild(2).gameObject;
     }
 
 
@@ -68,12 +76,16 @@ public class BlockSpwaner : MonoBehaviour
         {
             switch(buildMode)
             {
-                case BuildMode.Wall:
+                case BuildMode.Wall_Horizontal:
+                    buildMode = BuildMode.Wall_Vertical;
+                    break;
+
+                case BuildMode.Wall_Vertical:
                     buildMode = BuildMode.Foundation;
                     break;
 
                 case BuildMode.Foundation:
-                    buildMode = BuildMode.Wall;
+                    buildMode = BuildMode.Wall_Horizontal;
                     break;
                 default:
                     buildMode = BuildMode.Foundation;
@@ -106,18 +118,13 @@ public class BlockSpwaner : MonoBehaviour
             {
                 hitType = HitType.Ground;
             }
+            else if (hit.collider.gameObject.CompareTag("Buildables"))
+            {
+                hitType = HitType.Buildables;
+            }
             else
             {
                 hitType = HitType.None;
-            }
-
-
-            if (buildMode == BuildMode.Wall)
-            {
-                
-            }
-            else if (buildMode == BuildMode.Foundation)
-            {
             }
 
             //건축모드(buildMode) 에 따라서 다른 기능 실행
@@ -125,50 +132,65 @@ public class BlockSpwaner : MonoBehaviour
             {
                 case BuildMode.None:
                     //fa_preview 미리보기 숨기기
-                    //FA_preview_Hide();
+                    Preview_Hide();
                     break;
 
-                case BuildMode.Wall:
+                case BuildMode.Wall_Horizontal:
+                    #region 예쩐 벽
                     //fa_preview 미리보기 숨기기
                     //FA_preview_Hide();
-                    current_previewObj = wall_preview;
                     //WallSpawn(WallPosition());
-                    if (hitType == HitType.Foundation)  //토대에 생성할 때
-                    {
+                    //if (hitType == HitType.Foundation)  //토대에 생성할 때
+                    //{
 
-                    }
-                    if (hitType == HitType.Wall)        //벽에서 생성할때
+                    //}
+                    //if (hitType == HitType.Wall)        //벽에서 생성할때
+                    //{
+
+                    //}
+                    #endregion
+                    Preview_Setting(wall_preview_H);
+                    previewObj.transform.position = hit.point;
+                    ColliderSearch();
+                    break;
+                case BuildMode.Wall_Vertical:
+                    Preview_Setting(wall_preview_V);
+                    if (hit.collider.transform.root.CompareTag("Buildables"))
                     {
 
                     }
                     break;
-
                 case BuildMode.Foundation:
                     //생성될 위치 미리보기
-                    current_previewObj = fa_preview;
+                    Preview_Setting(fa_preview);
+
+                    #region 이전 foundation
+
                     //FA_preview_Show();
-                    if (hitType == HitType.Foundation)  //토대에 생성할 때
-                    {
-                        // 부딪힌 Foundation 오브젝트의 위치
-                        spawnedFoundation = hit.collider.gameObject.GetComponentInChildren<SpawnedFoundation>();
-                        Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
+                    //if (hitType == HitType.Foundation)  //토대에 생성할 때
+                    //{
+                    //    // 부딪힌 Foundation 오브젝트의 위치
+                    //    spawnedFoundation = hit.collider.gameObject.GetComponentInChildren<SpawnedFoundation>();
+                    //    Vector3 foundationCenterPosition = spawnedFoundation.currentPosition;
 
-                        // 새로운 Foundation 오브젝트의 위치 계산
-                        Vector3 spawnPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
-                        fa_preview.transform.position = spawnPosition;
+                    //    // 새로운 Foundation 오브젝트의 위치 계산
+                    //    Vector3 spawnPosition = CalculateNewFoundationPosition(foundationCenterPosition, hit.point);
+                    //    fa_preview.transform.position = spawnPosition;
 
-                        FoundationSpwan_FA(spawnPosition);
-                    }
-                    else if (hitType == HitType.Ground) //땅에서 생성할때
-                    {
-                        //Vector3 spawnPosition = hit.point - downSpawnPoint;
-                        
-                        fa_preview.transform.position = hit.point;
-                        FoundationSpawn_Ground(hit.point);
-                    }
+                    //    FoundationSpwan_FA(spawnPosition);
+                    //}
+                    //else if (hitType == HitType.Ground) //땅에서 생성할때
+                    //{
+                    //    //Vector3 spawnPosition = hit.point - downSpawnPoint;
+
+                    //    fa_preview.transform.position = hit.point;
+                    //    FoundationSpawn_Ground(hit.point);
+                    //}
+                    #endregion
                     break;
             }
-
+            //Debug.Log(hit.collider.name);
+            //Debug.Log($"{previewObj.transform.position.x}, {previewObj.transform.position.y}, {previewObj.transform.position.z}");
         }
     }
 
@@ -325,32 +347,97 @@ public class BlockSpwaner : MonoBehaviour
         return returnVec;
     }
 
+    public void Preview_Setting(GameObject select)
+    {
+        fa_preview.SetActive(false);
+        wall_preview_H.SetActive(false);
+        wall_preview_V.SetActive(false);
+        previewObj = select;
+        select.SetActive(true);
+    }
     public void Preview_Hide()
     {
-        current_previewObj.SetActive(false);
-    }
-    public void Preview_Show()
-    {
-        current_previewObj.SetActive(true);
+        previewObj.SetActive(false);
+        fa_preview.SetActive(false);
+        wall_preview_H.SetActive(false);
+        wall_preview_V.SetActive(false);
     }
 
-    void SpawnPositionSelect()
-    {
-
-    }
 
     [SerializeField] private float connectorOverlapRadius = 1;
-    [SerializeField] private LayerMask connectorLayer;
+    //[SerializeField] private  LayerMask buildObjLayer = 1 << 6;
+    [SerializeField] private  LayerMask buildObjLayer;
+    
     void ColliderSearch()
     {
-        Collider[] colliders = Physics.OverlapSphere(current_previewObj.transform.position, connectorOverlapRadius, connectorLayer);
-        if (colliders.Length > 0)
+        // if ((tempConnecting.usedDir.HasFlag(UsedDir.Left)) || (tempConnecting.usedDir.HasFlag(UsedDir.Right)))  //Horizontal 가로
+        //미리보기의 위치를 기준으로 반지름이 1인 구 범위 내에 콜라이더를 수집
+        Collider[] colliders = Physics.OverlapSphere(previewObj.transform.position, connectorOverlapRadius, buildObjLayer);
+
+        Connecting connecting = null;
+
+        foreach (Collider collider in colliders)    //콜라이더 배열에 COnnecting 에서 생성가능한지 판단하는 bool 체크
         {
-           // GhostConnectBuild(colliders);
+            Connecting tempConnecting = null;
+            tempConnecting = collider.GetComponent<Connecting>();
+            if (tempConnecting.canBuild)
+            {
+                Debug.Log("있다");
+                connecting = tempConnecting;
+                break;
+            }
+            else
+            {
+                return;
+            }
         }
-        else
+        if(connecting != null)
         {
-           // GhostSeperateBuild();
+        SpawnPositionSelect(connecting);
         }
+
+    }
+    void SpawnPositionSelect(Connecting connecting)
+    {
+        Debug.Log("거리계산함");
+        //Transform previewConnector_Tr = connecting.transform;
+        //previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
+        switch (connecting.objType)
+        {
+            case ObjType.Wall_Ho:
+                if ((connecting.usedDir.HasFlag(UsedDir.Right)))
+                {
+                    Debug.Log("벽의 오른쪽 커넷팅임");
+                    Debug.Log(connecting.name);
+                    previewObj.transform.position = connecting.transform.position + Vector3.right * 1.5f;
+                }
+                else if ((connecting.usedDir.HasFlag(UsedDir.Left)))
+                {
+                    Debug.Log("벽의 왼쪽이다");
+
+                    Debug.Log(connecting.name);
+                    previewObj.transform.position = connecting.transform.position + Vector3.left * 1.5f;
+                }
+                else if ((connecting.usedDir.HasFlag(UsedDir.Top)))
+                {
+                    Debug.Log("벽의 위위위---");
+
+                    Debug.Log(connecting.name);
+                    previewObj.transform.position = connecting.transform.position + Vector3.up * 1.5f;
+                }
+                else if ((connecting.usedDir.HasFlag(UsedDir.Bottom)))
+                {
+                    Debug.Log("벽의 아래");
+
+                    Debug.Log(connecting.name);
+                    previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
+                }
+                break;
+            case ObjType.Wall_Ve:
+                break;
+            case ObjType.Floor:
+                break;
+        }
+
     }
 }
