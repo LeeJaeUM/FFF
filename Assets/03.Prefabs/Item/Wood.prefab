@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 2195796551483757676}
   - component: {fileID: 161700919988509483}
   - component: {fileID: 1270377035166067586}
-  m_Layer: 0
+  - component: {fileID: 6497345561960066012}
+  m_Layer: 6
   m_Name: Wood
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 1, y: 0.10000001, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -118,4 +119,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cbfc5c4dba25f4883e6264d8149438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 79f20c9faa7a2134096e8a2bbdaf42eb, type: 2}
+  itemData: {fileID: 11400000, guid: 79f20c9faa7a2134096e8a2bbdaf42eb, type: 2}
+--- !u!114 &6497345561960066012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1012085264493837087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d68c7c3d15b404ba0b24b246f6963f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
