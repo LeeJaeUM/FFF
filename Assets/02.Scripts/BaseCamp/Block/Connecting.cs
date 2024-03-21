@@ -41,20 +41,59 @@ public class Connecting : MonoBehaviour
 
     public UsedDir usedDir = UsedDir.None;
     public ObjType objType = ObjType.None;  
-    public bool canBuild = true;
-    public bool isBuild = false;
     [SerializeField] private float connectorOverlapRadius = 1;
     [SerializeField] private LayerMask connectorLayer;
 
+    public bool canBuild = true;
     public bool isConnectedToFloor = false;
-    public bool isConnectedToWall = false;
+    public bool isConnectedToWall = false; 
+    [SerializeField] private bool canConnectToFloor = true;
+    [SerializeField] private bool canConnectToWall = true;
+
+    private void Awake()
+    {
+        connectorLayer = LayerMask.GetMask("BuildObj");
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = isConnectedToFloor ? (isConnectedToFloor ? Color.red : Color.green) : (!isConnectedToFloor ? Color.green : Color.yellow);
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
-    public void UpdateConnecting()
+    public void UpdateConnecting(bool rootCall = false)
     {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, connectorOverlapRadius * 0.5f, connectorLayer);
+
+        //연결되어있지 않다면 연결 가능하다고 표시
+        canConnectToFloor = !isConnectedToFloor;
+        canConnectToWall = !isConnectedToWall;
+
+        foreach (Collider collider in colliders)
+        {   
+            //현재 오브젝트와 같다면 반복을 건너뛴다.
+            if (collider.GetInstanceID() == GetComponent<Collider>().GetInstanceID())
+            {
+                continue;
+            }
+            //같은 레이어라면 = Connectingㅣ라면
+            if (gameObject.layer == collider.gameObject.layer)
+            {
+                Connecting otherConnecting = collider.GetComponent<Connecting>();
+                switch (otherConnecting.objType)
+                {
+                    case ObjType.Wall_Ho: isConnectedToWall = true;   break;
+                    case ObjType.Wall_Ve: isConnectedToWall = true; break;
+                    case ObjType.Floor: isConnectedToFloor = true;
+                        break;
+                }
+                //중복되어 무한 루프 방지
+                if(rootCall)    
+                    otherConnecting.UpdateConnecting();
+            }
+        }
+        canBuild = true;
+
+        if(isConnectedToFloor && isConnectedToWall)
+            canBuild = false;
 
     }
 }
