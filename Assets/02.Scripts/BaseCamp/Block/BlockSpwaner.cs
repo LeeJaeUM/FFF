@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
 using static BlockSpwaner;
 using static Connecting;
@@ -62,6 +63,72 @@ public class BlockSpwaner : MonoBehaviour
     public GameObject wall_preview_V;
     public GameObject previewObj;
 
+    PlayerInputAction inputAction;
+
+    private void Awake()
+    {
+        inputAction = new PlayerInputAction();
+    }
+
+    #region InputActions
+
+    private void OnEnable()
+    {
+        inputAction.Enable();
+        inputAction.Player.SpawnObj.performed += OnSpawnObj;
+        inputAction.Player.BuildMode.performed += OnBuildMode;
+    }
+
+    private void OnBuildMode(InputAction.CallbackContext context)
+    {
+        switch (buildMode)
+        {
+            case BuildMode.Wall_Horizontal:
+                buildMode = BuildMode.Wall_Vertical;
+                break;
+
+            case BuildMode.Wall_Vertical:
+                buildMode = BuildMode.Foundation;
+                break;
+
+            case BuildMode.Foundation:
+                buildMode = BuildMode.Wall_Horizontal;
+                break;
+            default:
+                buildMode = BuildMode.Foundation;
+                break;
+        }
+    }
+
+    private void OnSpawnObj(InputAction.CallbackContext context)
+    {
+        switch (buildMode)
+        {
+            case BuildMode.Wall_Horizontal:
+                Instantiate(woodWallData.wallPrefab, previewObj.transform.position, Quaternion.identity);
+                break;
+
+            case BuildMode.Wall_Vertical:
+                buildMode = BuildMode.Foundation;
+                break;
+
+            case BuildMode.Foundation:
+                buildMode = BuildMode.Wall_Horizontal;
+                break;
+            default:
+                buildMode = BuildMode.Foundation;
+                break;
+        }
+    }
+
+    private void OnDisable()
+    {
+        inputAction.Player.BuildMode.performed -= OnBuildMode;
+        inputAction.Player.SpawnObj.performed -= OnSpawnObj;
+        inputAction.Disable();
+    }
+
+    #endregion
     private void Start()
     {
         fa_preview = transform.GetChild(0).gameObject;
@@ -72,26 +139,6 @@ public class BlockSpwaner : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Tab))     //테스트용 건축모드 변경 tab
-        {
-            switch(buildMode)
-            {
-                case BuildMode.Wall_Horizontal:
-                    buildMode = BuildMode.Wall_Vertical;
-                    break;
-
-                case BuildMode.Wall_Vertical:
-                    buildMode = BuildMode.Foundation;
-                    break;
-
-                case BuildMode.Foundation:
-                    buildMode = BuildMode.Wall_Horizontal;
-                    break;
-                default:
-                    buildMode = BuildMode.Foundation;
-                    break;
-            }
-        }
 
         // Cinemachine Virtual Camera를 통해 Ray 발사
         //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
@@ -232,19 +279,12 @@ public class BlockSpwaner : MonoBehaviour
             GameObject cube = Instantiate(woodWallData.wallPrefab, _spawnPosition, Quaternion.identity);
 
             // 큐브의 스케일을 설정하여 크기 조정
-            cube.transform.localScale = new Vector3(woodWallData.width, woodWallData.height, woodWallData.depth);
+           // cube.transform.localScale = new Vector3(woodWallData.width, woodWallData.height, woodWallData.depth);
 
             // 큐브의 머티리얼 설정
             Renderer renderer = cube.GetComponent<Renderer>();
             renderer.material = woodWallData.wallMaterial;
         }
-    }
-
-    public Vector3 WallPosition()
-    {
-        Vector3 result = Vector3.zero;
-
-        return result;
     }
 
     void FoundationSpawn_Ground(Vector3 _spawnPosition)
@@ -255,7 +295,7 @@ public class BlockSpwaner : MonoBehaviour
             GameObject cube = Instantiate(foundationData.foundationPrefab, _spawnPosition, Quaternion.identity);
             GameObject child = cube.transform.GetChild(0).gameObject;
             // 큐브의 스케일을 설정하여 크기 조정
-            child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+           // child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
             // 큐브의 머티리얼 설정
             Renderer renderer = child.GetComponent<Renderer>();
@@ -289,7 +329,7 @@ public class BlockSpwaner : MonoBehaviour
                 GameObject child = cube.transform.GetChild(0).gameObject;
                 // 큐브의 스케일을 설정하여 크기 조정
                 //cube.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
-                child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
+                //child.transform.localScale = new Vector3(foundationData.width, foundationData.height, foundationData.depth);
 
                 // 큐브의 머티리얼 설정
                 Renderer renderer = child.GetComponent<Renderer>();
@@ -366,8 +406,8 @@ public class BlockSpwaner : MonoBehaviour
 
     [SerializeField] private float connectorOverlapRadius = 1;
     //[SerializeField] private  LayerMask buildObjLayer = 1 << 6;
-    [SerializeField] private  LayerMask buildObjLayer;
-    
+    [SerializeField] private  LayerMask buildObjLayer; 
+
     void ColliderSearch()
     {
         // if ((tempConnecting.usedDir.HasFlag(UsedDir.Left)) || (tempConnecting.usedDir.HasFlag(UsedDir.Right)))  //Horizontal 가로
@@ -380,15 +420,18 @@ public class BlockSpwaner : MonoBehaviour
         {
             Connecting tempConnecting = null;
             tempConnecting = collider.GetComponent<Connecting>();
-            if (tempConnecting.canBuild)
+            if(tempConnecting != null)
             {
-                Debug.Log("있다");
-                connecting = tempConnecting;
-                break;
-            }
-            else
-            {
-                return;
+                if (tempConnecting.canBuild)
+                {
+                    Debug.Log("있다");
+                    connecting = tempConnecting;
+                    break;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         if(connecting != null)
@@ -400,6 +443,7 @@ public class BlockSpwaner : MonoBehaviour
     void SpawnPositionSelect(Connecting connecting)
     {
         Debug.Log("거리계산함");
+        Debug.Log(connecting.name);
         //Transform previewConnector_Tr = connecting.transform;
         //previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
         switch (connecting.objType)
@@ -433,14 +477,13 @@ public class BlockSpwaner : MonoBehaviour
                     previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
                 }
                 else
-                    Debug.Log("의도대로 설치가 가능한 방향이 아니다");
+                    Debug.Log("의도대로 설치가 가능한 방향이 아니다/설치는가능");
                 break;
             case ObjType.Wall_Ve:
                 break;
             case ObjType.Floor:
                 break;
         }
-
     }
 }
 //이전 플래그일때 사용/// if ((connecting.usedDir.HasFlag(UsedDir.Right)))

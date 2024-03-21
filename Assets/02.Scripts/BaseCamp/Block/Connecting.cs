@@ -45,6 +45,14 @@ public class Connecting : MonoBehaviour
     public bool isBuild = false;
     [SerializeField] private float connectorOverlapRadius = 1;
     [SerializeField] private LayerMask connectorLayer;
+
+    public bool isConnectedToFloor = false;
+    public bool isConnectedToWall = false;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = isConnectedToFloor ? (isConnectedToFloor ? Color.red : Color.green) : (!isConnectedToFloor ? Color.green : Color.yellow);
+        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
+    }
     public void UpdateConnecting()
     {
 
