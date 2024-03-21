@@ -405,33 +405,35 @@ public class BlockSpwaner : MonoBehaviour
         switch (connecting.objType)
         {
             case ObjType.Wall_Ho:
-                if ((connecting.usedDir.HasFlag(UsedDir.Right)))
+                if (connecting.usedDir == UsedDir.Right)
                 {
                     Debug.Log("벽의 오른쪽 커넷팅임");
                     Debug.Log(connecting.name);
                     previewObj.transform.position = connecting.transform.position + Vector3.right * 1.5f;
                 }
-                else if ((connecting.usedDir.HasFlag(UsedDir.Left)))
+                else if (connecting.usedDir == UsedDir.Left)
                 {
                     Debug.Log("벽의 왼쪽이다");
 
                     Debug.Log(connecting.name);
                     previewObj.transform.position = connecting.transform.position + Vector3.left * 1.5f;
                 }
-                else if ((connecting.usedDir.HasFlag(UsedDir.Top)))
+                else if (connecting.usedDir == UsedDir.Top)
                 {
                     Debug.Log("벽의 위위위---");
 
                     Debug.Log(connecting.name);
                     previewObj.transform.position = connecting.transform.position + Vector3.up * 1.5f;
                 }
-                else if ((connecting.usedDir.HasFlag(UsedDir.Bottom)))
+                else if (connecting.usedDir == UsedDir.Bottom)
                 {
                     Debug.Log("벽의 아래");
 
                     Debug.Log(connecting.name);
                     previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
                 }
+                else
+                    Debug.Log("의도대로 설치가 가능한 방향이 아니다");
                 break;
             case ObjType.Wall_Ve:
                 break;
@@ -441,3 +443,31 @@ public class BlockSpwaner : MonoBehaviour
 
     }
 }
+//이전 플래그일때 사용/// if ((connecting.usedDir.HasFlag(UsedDir.Right)))
+//{
+//    Debug.Log("벽의 오른쪽 커넷팅임");
+//    Debug.Log(connecting.name);
+//    previewObj.transform.position = connecting.transform.position + Vector3.right * 1.5f;
+//}
+//                else if ((connecting.usedDir.HasFlag(UsedDir.Left)))
+//{
+//    Debug.Log("벽의 왼쪽이다");
+
+//    Debug.Log(connecting.name);
+//    previewObj.transform.position = connecting.transform.position + Vector3.left * 1.5f;
+//}
+//else if ((connecting.usedDir.HasFlag(UsedDir.Top)))
+//{
+//    Debug.Log("벽의 위위위---");
+
+//    Debug.Log(connecting.name);
+//    previewObj.transform.position = connecting.transform.position + Vector3.up * 1.5f;
+//}
+//else if ((connecting.usedDir.HasFlag(UsedDir.Bottom)))
+//{
+//    Debug.Log("벽의 아래");
+
+//    Debug.Log(connecting.name);
+//    previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
+//}
+//break;
