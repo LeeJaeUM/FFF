@@ -168,8 +168,8 @@ GameObject:
   - component: {fileID: 941651195685417788}
   - component: {fileID: 7435755145620635957}
   - component: {fileID: 2108062594898507781}
-  m_Layer: 0
-  m_Name: Connector_Right
+  m_Layer: 6
+  m_Name: Connector_Right_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,6 +210,8 @@ MonoBehaviour:
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  isConnectedToFloor: 0
+  isConnectedToWall: 0
 --- !u!33 &941651195685417788
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -294,8 +296,8 @@ GameObject:
   - component: {fileID: 7308225265702612652}
   - component: {fileID: 5581549458473369530}
   - component: {fileID: 413305082865114269}
-  m_Layer: 0
-  m_Name: Connector_Forward
+  m_Layer: 6
+  m_Name: Connector_Forward_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,6 +338,8 @@ MonoBehaviour:
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  isConnectedToFloor: 0
+  isConnectedToWall: 0
 --- !u!33 &7308225265702612652
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -420,8 +424,8 @@ GameObject:
   - component: {fileID: 1723085161488389802}
   - component: {fileID: 8189720554493397462}
   - component: {fileID: 6268623328771581319}
-  m_Layer: 0
-  m_Name: Connector_Back
+  m_Layer: 6
+  m_Name: Connector_Back_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,6 +466,8 @@ MonoBehaviour:
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  isConnectedToFloor: 0
+  isConnectedToWall: 0
 --- !u!33 &1723085161488389802
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -601,8 +607,8 @@ GameObject:
   - component: {fileID: 3007117691844812100}
   - component: {fileID: 8924357767872163952}
   - component: {fileID: 4080783593140054179}
-  m_Layer: 0
-  m_Name: Connector_Left
+  m_Layer: 6
+  m_Name: Connector_Left_F
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -643,6 +649,8 @@ MonoBehaviour:
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  isConnectedToFloor: 0
+  isConnectedToWall: 0
 --- !u!33 &3007117691844812100
 MeshFilter:
   m_ObjectHideFlags: 0

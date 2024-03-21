@@ -44,7 +44,8 @@ public class BlockSpwaner : MonoBehaviour
 
     public WallData woodWallData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
     public FoundationData foundationData;
-    public float lengthMul = 3f; // 생성할 벽의 길이
+    float lengthMul = 3f; // 생성할 벽의 길이(구버전)
+    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
 
     public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
 
@@ -109,14 +110,16 @@ public class BlockSpwaner : MonoBehaviour
                 break;
 
             case BuildMode.Wall_Vertical:
-                buildMode = BuildMode.Foundation;
+                Quaternion rotation = Quaternion.Euler(0, 90, 0);
+                // 게임 오브젝트 생성과 함께 회전 적용
+                Instantiate(woodWallData.wallPrefab, previewObj.transform.position, rotation);
                 break;
 
             case BuildMode.Foundation:
-                buildMode = BuildMode.Wall_Horizontal;
+                Instantiate(foundationData.foundationPrefab, previewObj.transform.position, Quaternion.identity);
                 break;
             default:
-                buildMode = BuildMode.Foundation;
+                Debug.Log("건축모드가 아닐때 마우스 클릭함");
                 break;
         }
     }
@@ -184,24 +187,24 @@ public class BlockSpwaner : MonoBehaviour
 
                 case BuildMode.Wall_Horizontal:
                     #region 예쩐 벽
-                    //fa_preview 미리보기 숨기기
-                    //FA_preview_Hide();
-                    //WallSpawn(WallPosition());
-                    //if (hitType == HitType.Foundation)  //토대에 생성할 때
-                    //{
-
-                    //}
-                    //if (hitType == HitType.Wall)        //벽에서 생성할때
-                    //{
-
-                    //}
+                    ///fa_preview 미리보기 숨기기
+                    ///FA_preview_Hide();
+                    ///WallSpawn(WallPosition());
+                    ///if (hitType == HitType.Foundation)  //토대에 생성할 때
+                    ///{
+                    ///}
+                    ///if (hitType == HitType.Wall)        //벽에서 생성할때
+                    ///{
+                    ///}
                     #endregion
                     Preview_Setting(wall_preview_H);
                     previewObj.transform.position = hit.point;
                     ColliderSearch();
                     break;
                 case BuildMode.Wall_Vertical:
-                    Preview_Setting(wall_preview_V);
+                    Preview_Setting(wall_preview_V); 
+                    previewObj.transform.position = hit.point;
+                    ColliderSearch();
                     if (hit.collider.transform.root.CompareTag("Buildables"))
                     {
 
@@ -210,6 +213,8 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Foundation:
                     //생성될 위치 미리보기
                     Preview_Setting(fa_preview);
+                    previewObj.transform.position = hit.point;
+                    ColliderSearch();
 
                     #region 이전 foundation
 
@@ -240,6 +245,7 @@ public class BlockSpwaner : MonoBehaviour
             //Debug.Log($"{previewObj.transform.position.x}, {previewObj.transform.position.y}, {previewObj.transform.position.z}");
         }
     }
+    #region 예전 생성함수
 
     void OldRay()
     {
@@ -387,6 +393,7 @@ public class BlockSpwaner : MonoBehaviour
         return returnVec;
     }
 
+    #endregion
     public void Preview_Setting(GameObject select)
     {
         fa_preview.SetActive(false);
@@ -406,7 +413,8 @@ public class BlockSpwaner : MonoBehaviour
 
     [SerializeField] private float connectorOverlapRadius = 1;
     //[SerializeField] private  LayerMask buildObjLayer = 1 << 6;
-    [SerializeField] private  LayerMask buildObjLayer; 
+    [SerializeField] private  LayerMask buildObjLayer;
+    public bool isHigher = true;
 
     void ColliderSearch()
     {
@@ -436,56 +444,124 @@ public class BlockSpwaner : MonoBehaviour
         }
         if(connecting != null)
         {
-        SpawnPositionSelect(connecting);
+            CheckIfHigher(connecting);
+            SpawnPositionSelect(connecting);
         }
 
+    }
+    void CheckIfHigher(Connecting connecting)
+    {
+        if(hit.point.y > connecting.transform.position.y)
+        {
+            isHigher = true;
+        }
+        else
+        {
+            isHigher = false;
+        }
     }
     void SpawnPositionSelect(Connecting connecting)
     {
+        ///Transform previewConnector_Tr = connecting.transform;
+        ///previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
         Debug.Log("거리계산함");
         Debug.Log(connecting.name);
-        //Transform previewConnector_Tr = connecting.transform;
-        //previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
-        switch (connecting.objType)
-        {
-            case ObjType.Wall_Ho:
+        if(connecting.objType == ObjType.Floor)     //Floor에 생성할때
+        {   //foundation 생성모드일때
+            Debug.Log("층에 닿고있다");
+            if (buildMode == BuildMode.Foundation)
+            {
+                Debug.Log("durl");
                 if (connecting.usedDir == UsedDir.Right)
                 {
-                    Debug.Log("벽의 오른쪽 커넷팅임");
-                    Debug.Log(connecting.name);
-                    previewObj.transform.position = connecting.transform.position + Vector3.right * 1.5f;
+                    Debug.Log("층의 오른쪽 커넷팅임");
+                    previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
                 }
                 else if (connecting.usedDir == UsedDir.Left)
                 {
-                    Debug.Log("벽의 왼쪽이다");
-
-                    Debug.Log(connecting.name);
-                    previewObj.transform.position = connecting.transform.position + Vector3.left * 1.5f;
+                    Debug.Log("층의 왼쪽이다");
+                    previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
                 }
-                else if (connecting.usedDir == UsedDir.Top)
+                else if (connecting.usedDir == UsedDir.Forward)
                 {
-                    Debug.Log("벽의 위위위---");
-
-                    Debug.Log(connecting.name);
-                    previewObj.transform.position = connecting.transform.position + Vector3.up * 1.5f;
+                    Debug.Log("층 앞쪽임 Forward");
+                    previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
                 }
-                else if (connecting.usedDir == UsedDir.Bottom)
+                else if (connecting.usedDir == UsedDir.Back)
                 {
-                    Debug.Log("벽의 아래");
-
-                    Debug.Log(connecting.name);
-                    previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
+                    Debug.Log("층 뒤야 BBBack");
+                    previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
                 }
+            }
+            //건축모드가 아니다
+            else if(buildMode == BuildMode.None)
+            {
+                Debug.Log("건축모드가 아니다 = 패스");
+            }
+            //벽 생성 모드다
+            else
+            {
+                Debug.Log("층에 닿고 있을 때 - 벽 생성모드 ");
+                if(isHigher)
+                    previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
                 else
-                    Debug.Log("의도대로 설치가 가능한 방향이 아니다/설치는가능");
-                break;
-            case ObjType.Wall_Ve:
-                break;
-            case ObjType.Floor:
-                break;
+                    previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
+            }
         }
+        else if(connecting.objType == ObjType.Wall_Ho || connecting.objType == ObjType.Wall_Ve)
+        {//벽에 생성할때
+            Debug.Log("벽에 닿고 있다");
+            if (connecting.usedDir == UsedDir.Right)
+            {
+                Debug.Log("벽의 오른쪽 커넷팅임");
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
+            }
+            else if (connecting.usedDir == UsedDir.Left)
+            {
+                Debug.Log("벽의 왼쪽이다");
+
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
+            }
+            else if (connecting.usedDir == UsedDir.Top)
+            {
+                Debug.Log("벽의 위위위---");
+
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
+            }
+            else if (connecting.usedDir == UsedDir.Bottom)
+            {
+                Debug.Log("벽의 아래");
+
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
+            }
+            else if (connecting.usedDir == UsedDir.Forward)
+            {
+                Debug.Log("앞쪽임 Forward");
+
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
+            }
+            else if (connecting.usedDir == UsedDir.Back)
+            {
+                Debug.Log("뒤야 BBBack");
+
+                Debug.Log(connecting.name);
+                previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
+            }
+            else
+            {
+                Debug.Log("어느방향도 설정되지 않았다.");
+            }
+
+        }
+        
     }
 }
+
 //이전 플래그일때 사용/// if ((connecting.usedDir.HasFlag(UsedDir.Right)))
 //{
 //    Debug.Log("벽의 오른쪽 커넷팅임");
@@ -514,3 +590,61 @@ public class BlockSpwaner : MonoBehaviour
 //    previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
 //}
 //break;
+
+///ㅇㅇ
+
+//switch (connecting.objType) SpawnPositionSelect스위치문 사용
+//{
+//    case ObjType.Wall_Ho:
+//        if (connecting.usedDir == UsedDir.Right)
+//        {
+//            Debug.Log("벽의 오른쪽 커넷팅임");
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.right * 1.5f;
+//        }
+//        else if (connecting.usedDir == UsedDir.Left)
+//        {
+//            Debug.Log("벽의 왼쪽이다");
+
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.left * 1.5f;
+//        }
+//        else if (connecting.usedDir == UsedDir.Top)
+//        {
+//            Debug.Log("벽의 위위위---");
+
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.up * 1.5f;
+//        }
+//        else if (connecting.usedDir == UsedDir.Bottom)
+//        {
+//            Debug.Log("벽의 아래");
+
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.down * 1.5f;
+//        }
+//        else if (connecting.usedDir == UsedDir.Forward)
+//        {
+//            Debug.Log("앞쪽임 Forward");
+
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.forward * 1.5f;
+//        }
+//        else if (connecting.usedDir == UsedDir.Back)
+//        {
+//            Debug.Log("뒤야 BBBack");
+
+//            Debug.Log(connecting.name);
+//            previewObj.transform.position = connecting.transform.position + Vector3.back * 1.5f;
+//        }
+//        else
+//        {
+//            Debug.Log("어느방향도 설정되지 않았다.");
+//        }
+
+//        break;
+//    case ObjType.Wall_Ve:
+//        break;
+//    case ObjType.Floor:
+//        break;
+//}
