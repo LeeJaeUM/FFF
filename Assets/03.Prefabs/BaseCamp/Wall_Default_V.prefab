@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de69ef9f07e3f84ea9b5cae22a229de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usedDir: 0
+  usedDir: 6
   objType: 2
   canBuild: 1
   isBuild: 0
@@ -441,7 +441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de69ef9f07e3f84ea9b5cae22a229de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usedDir: 0
+  usedDir: 5
   objType: 2
   canBuild: 1
   isBuild: 0
@@ -604,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2de69ef9f07e3f84ea9b5cae22a229de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  usedDir: 0
+  usedDir: 2
   objType: 2
   canBuild: 1
   isBuild: 0

@@ -47,7 +47,7 @@ public class BlockSpwaner : MonoBehaviour
     float lengthMul = 3f; // 생성할 벽의 길이(구버전)
     public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
 
-    public float interactDistance = 7.0f; // 상호작용 가능한 최대 거리
+    public float interactDistance = 11.0f; // 건축 상호작용 가능한 최대 거리
 
     [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0); //토대의 크기에 맞게 약간 하단에 생성
     [SerializeField] Vector3 testVec = Vector3.zero;            //확인용 변수
@@ -69,6 +69,7 @@ public class BlockSpwaner : MonoBehaviour
     private void Awake()
     {
         inputAction = new PlayerInputAction();
+        buildObjLayer = LayerMask.GetMask("BuildObj");
     }
 
     #region InputActions
@@ -413,8 +414,9 @@ public class BlockSpwaner : MonoBehaviour
 
     [SerializeField] private float connectorOverlapRadius = 1;
     //[SerializeField] private  LayerMask buildObjLayer = 1 << 6;
-    [SerializeField] private  LayerMask buildObjLayer;
+    [SerializeField] private LayerMask buildObjLayer;
     public bool isHigher = true;
+    public bool isAhead = true;
 
     void ColliderSearch()
     {
@@ -444,121 +446,145 @@ public class BlockSpwaner : MonoBehaviour
         }
         if(connecting != null)
         {
-            CheckIfHigher(connecting);
+            Check_ConnectingToHitDir(connecting);
             SpawnPositionSelect(connecting);
         }
 
     }
-    void CheckIfHigher(Connecting connecting)
+    void Check_ConnectingToHitDir(Connecting connecting)
     {
-        if(hit.point.y > connecting.transform.position.y)
-        {
+            isAhead = false;
+        if (hit.point.y > connecting.transform.position.y)
             isHigher = true;
-        }
         else
-        {
             isHigher = false;
-        }
-    }
+
+        if(hit.point.z > connecting.transform.position.z)
+            isAhead = true;
+        else
+            isAhead = false;
+    }  
     void SpawnPositionSelect(Connecting connecting)
     {
         ///Transform previewConnector_Tr = connecting.transform;
         ///previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
-        Debug.Log("거리계산함");
         Debug.Log(connecting.name);
-        if(connecting.objType == ObjType.Floor)     //Floor에 생성할때
+        //Floor에 생성할때
+        if (connecting.objType == ObjType.Floor)    
         {   //foundation 생성모드일때
             Debug.Log("층에 닿고있다");
-            if (buildMode == BuildMode.Foundation)
+            switch (buildMode)
             {
-                Debug.Log("durl");
-                if (connecting.usedDir == UsedDir.Right)
-                {
-                    Debug.Log("층의 오른쪽 커넷팅임");
-                    previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
-                }
-                else if (connecting.usedDir == UsedDir.Left)
-                {
-                    Debug.Log("층의 왼쪽이다");
-                    previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
-                }
-                else if (connecting.usedDir == UsedDir.Forward)
-                {
-                    Debug.Log("층 앞쪽임 Forward");
-                    previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
-                }
-                else if (connecting.usedDir == UsedDir.Back)
-                {
-                    Debug.Log("층 뒤야 BBBack");
-                    previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
-                }
-            }
-            //건축모드가 아니다
-            else if(buildMode == BuildMode.None)
-            {
-                Debug.Log("건축모드가 아니다 = 패스");
-            }
-            //벽 생성 모드다
-            else
-            {
-                Debug.Log("층에 닿고 있을 때 - 벽 생성모드 ");
-                if(isHigher)
-                    previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
-                else
-                    previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
+                case BuildMode.Foundation:
+                    Debug.Log("durl");
+                    if (connecting.usedDir == UsedDir.Right)
+                    {
+                        Debug.Log("층의 오른쪽 커넷팅임");
+                        previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Left)
+                    {
+                        Debug.Log("층의 왼쪽이다");
+                        previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Forward)
+                    {
+                        Debug.Log("층 앞쪽임 Forward");
+                        previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Back)
+                    {
+                        Debug.Log("층 뒤야 BBBack");
+                        previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
+                    }
+                    break;
+
+                case BuildMode.None: Debug.Log("건축모드가 아니다 = 패스");  break;
+                //벽 생성 모드다
+                default:
+                    Debug.Log("층에 닿고 있을 때 - 벽 생성모드 ");
+                    if (isHigher)
+                        previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
+                    else
+                        previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
+                    break;
             }
         }
-        else if(connecting.objType == ObjType.Wall_Ho || connecting.objType == ObjType.Wall_Ve)
-        {//벽에 생성할때
+        //벽에 생성할때
+        else if (connecting.objType == ObjType.Wall_Ho || connecting.objType == ObjType.Wall_Ve)
+        {
             Debug.Log("벽에 닿고 있다");
-            if (connecting.usedDir == UsedDir.Right)
+            switch (buildMode)
             {
-                Debug.Log("벽의 오른쪽 커넷팅임");
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
-            }
-            else if (connecting.usedDir == UsedDir.Left)
-            {
-                Debug.Log("벽의 왼쪽이다");
+                case BuildMode.Foundation:
+                    switch (connecting.objType)
+                    {
+                        case ObjType.Wall_Ho:
+                            if (isAhead)
+                                previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
+                            else
+                                previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
+                            break;
+                        case ObjType.Wall_Ve:
+                            if (isAhead)
+                                previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
+                            else
+                                previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
+                            break;
+                    }
+                    break;
 
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
-            }
-            else if (connecting.usedDir == UsedDir.Top)
-            {
-                Debug.Log("벽의 위위위---");
+                case BuildMode.None: Debug.Log("건축모드가 아니다 = 패스"); break;
+                //벽 생성 모드다
+                default:
+                    if (connecting.usedDir == UsedDir.Right)
+                    {
+                        Debug.Log("벽의 오른쪽 커넷팅임");
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.right * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Left)
+                    {
+                        Debug.Log("벽의 왼쪽이다");
 
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
-            }
-            else if (connecting.usedDir == UsedDir.Bottom)
-            {
-                Debug.Log("벽의 아래");
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.left * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Top)
+                    {
+                        Debug.Log("벽의 위위위---");
 
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
-            }
-            else if (connecting.usedDir == UsedDir.Forward)
-            {
-                Debug.Log("앞쪽임 Forward");
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Bottom)
+                    {
+                        Debug.Log("벽의 아래");
 
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
-            }
-            else if (connecting.usedDir == UsedDir.Back)
-            {
-                Debug.Log("뒤야 BBBack");
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Forward)
+                    {
+                        Debug.Log("앞쪽임 Forward");
 
-                Debug.Log(connecting.name);
-                previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
-            }
-            else
-            {
-                Debug.Log("어느방향도 설정되지 않았다.");
-            }
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.forward * lengthMulti;
+                    }
+                    else if (connecting.usedDir == UsedDir.Back)
+                    {
+                        Debug.Log("뒤야 BBBack");
 
+                        Debug.Log(connecting.name);
+                        previewObj.transform.position = connecting.transform.position + Vector3.back * lengthMulti;
+                    }
+                    else
+                    {
+                        Debug.Log("어느방향도 설정되지 않았다.");
+                    }
+                    break;
+            }
         }
-        
     }
 }
 
