@@ -46,26 +46,77 @@ public class Connecting : MonoBehaviour
 
     public bool canBuild = true;
     public bool isConnectedToFloor = false;
-    public bool isConnectedToWall = false; 
-    [SerializeField] private bool canConnectToFloor = true;
-    [SerializeField] private bool canConnectToWall = true;
+    public bool isConnectedToWall_Ho = false;
+    public bool isConnectedToWall_Ve = false;
+
+    [SerializeField] private int Wall_HoCount = 0;
+    [SerializeField] private int Wall_VeCount = 0;
+    [SerializeField] private int FloorCount = 0;
+
 
     private void Awake()
     {
         connectorLayer = LayerMask.GetMask("BuildObj");
+        switch (objType)
+        {
+            case ObjType.Floor:
+                if(usedDir == UsedDir.Left || usedDir == UsedDir.Right)
+                {
+                    CountSetting(0, 2, 1);
+                }
+                else
+                {
+                    CountSetting(2,0,1);
+                }
+                break;
+            case ObjType.Wall_Ho:
+                if (usedDir == UsedDir.Top || usedDir == UsedDir.Bottom)
+                {
+                    CountSetting(1, 0, 2);
+                }
+                else
+                {
+                    CountSetting(1, 2, 0);
+                }
+                break;
+            case ObjType.Wall_Ve:
+                if (usedDir == UsedDir.Top || usedDir == UsedDir.Bottom)
+                {
+                    CountSetting(0, 1, 2);
+                }
+                else
+                {
+                    CountSetting(2, 1, 0);
+                }
+                break;
+        }
     }
+
+    void CountSetting(int ho, int ve, int floor)
+    {
+        Wall_HoCount = ho;
+        Wall_VeCount = ve;
+        FloorCount = floor;
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = isConnectedToFloor ? (isConnectedToWall ? Color.red : Color.yellow) : (isConnectedToWall ? Color.blue : Color.green);
+        Color gizColor = Color.green;
+        if(isConnectedToFloor )
+        {
+            if (isConnectedToWall_Ho || isConnectedToWall_Ve)
+            {
+                gizColor = Color.red;
+            }
+
+        }
+        Gizmos.color = gizColor;
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
     public void UpdateConnecting(bool rootCall = false)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, connectorOverlapRadius * 0.5f, connectorLayer);
 
-        //연결되어있지 않다면 연결 가능하다고 표시
-        canConnectToFloor = !isConnectedToFloor;
-        canConnectToWall = !isConnectedToWall;
 
         foreach (Collider collider in colliders)
         {   
@@ -80,10 +131,9 @@ public class Connecting : MonoBehaviour
                 Connecting otherConnecting = collider.GetComponent<Connecting>();
                 switch (otherConnecting.objType)
                 {
-                    case ObjType.Wall_Ho: isConnectedToWall = true;   break;
-                    case ObjType.Wall_Ve: isConnectedToWall = true; break;
-                    case ObjType.Floor: isConnectedToFloor = true;
-                        break;
+                    case ObjType.Wall_Ho: Wall_HoCount--;   break;
+                    case ObjType.Wall_Ve: Wall_VeCount--;   break;
+                    case ObjType.Floor:     FloorCount--;   break;
                 }
                 //중복되어 무한 루프 방지
                 if(rootCall)    
@@ -92,7 +142,14 @@ public class Connecting : MonoBehaviour
         }
         canBuild = true;
 
-        if(isConnectedToFloor && isConnectedToWall)
+        if (Wall_HoCount < 1)
+            isConnectedToWall_Ho = true;
+        if (Wall_VeCount < 1)
+            isConnectedToWall_Ve = true;
+        if (FloorCount < 1) 
+            isConnectedToFloor = true;
+
+        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
             canBuild = false;
 
     }
