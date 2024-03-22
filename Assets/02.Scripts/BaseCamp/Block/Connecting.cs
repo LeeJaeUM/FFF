@@ -56,7 +56,7 @@ public class Connecting : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = isConnectedToFloor ? (isConnectedToFloor ? Color.red : Color.green) : (!isConnectedToFloor ? Color.green : Color.yellow);
+        Gizmos.color = isConnectedToFloor ? (isConnectedToWall ? Color.red : Color.yellow) : (isConnectedToWall ? Color.blue : Color.green);
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
     public void UpdateConnecting(bool rootCall = false)
