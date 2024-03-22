@@ -13,7 +13,8 @@ public class WallData : ScriptableObject
 
 
     public MaterialType materialType;
-    public GameObject wallPrefab;
+    public GameObject wallPrefab_Ho;
+    public GameObject wallPrefab_Ve;
     public Material wallMaterial;
     //public float width = 3f;
     //public float height = 3f;

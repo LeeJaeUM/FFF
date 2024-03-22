@@ -49,14 +49,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 6
   objType: 1
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
   isConnectedToWall: 0
+  canConnectToFloor: 1
+  canConnectToWall: 1
 --- !u!33 &715893096210933974
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -177,14 +178,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 3
   objType: 1
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
   isConnectedToWall: 0
+  canConnectToFloor: 1
+  canConnectToWall: 1
 --- !u!33 &4541111877550989496
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -200,7 +202,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3171846357452585232}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -443,14 +445,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 5
   objType: 1
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
   isConnectedToWall: 0
+  canConnectToFloor: 1
+  canConnectToWall: 1
 --- !u!33 &5438780454097329400
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -606,14 +609,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 4
   objType: 1
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
   isConnectedToWall: 0
+  canConnectToFloor: 1
+  canConnectToWall: 1
 --- !u!33 &2178501619834721515
 MeshFilter:
   m_ObjectHideFlags: 0

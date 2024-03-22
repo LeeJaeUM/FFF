@@ -890,17 +890,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildMode: 1
-  hitType: 0
   useDir: 0
   tagOfHitObject: 
   woodWallData: {fileID: 11400000, guid: 89bc3d1ba562dae4fba2c50cf9e720f8, type: 2}
   foundationData: {fileID: 11400000, guid: eecca89b9a3697b48b10413b835d3bb6, type: 2}
   lengthMulti: 1.5
   interactDistance: 12
+  SpawnAbledMat: {fileID: 2100000, guid: fb668fbbbc0df2a4ab9c7e69b3d79e8e, type: 2}
+  SpawnDisabledMat: {fileID: 2100000, guid: 061bb097f65b6694ab750f44ffd1261e, type: 2}
   downSpawnPoint: {x: 0, y: 0.8, z: 0}
   testVec: {x: 0, y: 0, z: 0}
-  spawnedFoundation: {fileID: 0}
-  isSpawnAble_FA: 1
   fa_preview: {fileID: 0}
   wall_preview_H: {fileID: 0}
   wall_preview_V: {fileID: 0}
@@ -911,7 +910,7 @@ MonoBehaviour:
     m_Bits: 64
   isHigher: 1
   isAhead: 1
-  isRight: 1
+  canSpawnObj: 1
 --- !u!1 &1273053903
 GameObject:
   m_ObjectHideFlags: 0
