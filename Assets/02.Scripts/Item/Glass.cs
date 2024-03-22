@@ -11,21 +11,21 @@ public class Glass : MonoBehaviour
     [SerializeField]
     private float dropChance = 1.0f;
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    // 충돌한 오브젝트가 유리병을 부수는 오브젝트인지 확인
-    //    if (collision.gameObject.CompareTag("Player")) // 태그 확인
-    //    {
-    //        // 랜덤하게 아이템을 드롭할지 결정
-    //        if (Random.value < dropChance)
-    //        {
-    //            DropItem();
-    //        }
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 충돌한 오브젝트가 유리병을 부수는 오브젝트인지 확인
+        if (collision.gameObject.CompareTag("Player")) // 태그 확인
+        {
+            // 랜덤하게 아이템을 드롭할지 결정
+            if (Random.value < dropChance)
+            {
+                DropItem();
+            }
 
-    //        // 유리병 파괴
-    //        Destroy(gameObject);
-    //    }
-    //}
+            // 유리병 파괴
+            Destroy(gameObject);
+        }
+    }
 
 
     /// <summary>

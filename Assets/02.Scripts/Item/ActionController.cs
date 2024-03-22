@@ -102,7 +102,7 @@ public class ActionController : MonoBehaviour
         {
             if (hitInfo.transform != null)  // 충돌 오브젝트가 존재할 때만 처리(혹시 모를 NullReferenceException 방지)
             {
-                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().itemData.itemName + " 획득 했습니다.");  // 인벤토리 넣기
+                Debug.Log(hitInfo.transform.GetComponent<ItemPickUp>().itemData.itemName + " 획득 했습니다.");  
                 Destroy(hitInfo.transform.gameObject);  // 월드에 배치된 해당 아이템 파괴.(주워서 인벤토리에 넣었기 때문에)
                 ItemInfoDisappear();                    // 아이템을 주울 수 없는 상태로 만들고, 줍는 도움말 텍스트 비활성화
             }

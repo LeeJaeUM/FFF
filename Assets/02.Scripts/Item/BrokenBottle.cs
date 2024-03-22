@@ -5,8 +5,8 @@ using UnityEngine;
 public class BrokenBottle : MonoBehaviour
 {
     [SerializeField] GameObject[] pieces;
-    [SerializeField] float velMultiplier = 2f;
-    [SerializeField] float timeBeforeDestroying = 60f;
+    [SerializeField] float velMultiplier = 1.5f;
+    [SerializeField] float timeBeforeDestroying = 5.0f;
 
     void Start()
     {
