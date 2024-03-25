@@ -72,19 +72,19 @@ public class Connecting : MonoBehaviour
         else if (isConnectedToWall_Ve && isConnectedToFloor)
         {
             gizColor = Color.red;
-        }
-        else if(isConnectedToFloor)
-        {
-            gizColor = Color.yellow;
-        }
-        else if (isConnectedToWall_Ho)
-        {
-            gizColor = Color.cyan;
-        }
-        else if (isConnectedToWall_Ve)
-        {
-            gizColor = Color.magenta;
-        }
+        } 
+        //else if(isConnectedToFloor)
+        //{
+        //    gizColor = Color.yellow;
+        //}
+        //else if (isConnectedToWall_Ho)
+        //{
+        //    gizColor = Color.cyan;
+        //}
+        //else if (isConnectedToWall_Ve)
+        //{
+        //    gizColor = Color.magenta;
+        //}
         Gizmos.color = gizColor;
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
@@ -92,6 +92,7 @@ public class Connecting : MonoBehaviour
     private void Awake()
     {
         connectorLayer = LayerMask.GetMask("BuildObj");
+        DirSet();
         CountReset();
     }
 
@@ -99,6 +100,30 @@ public class Connecting : MonoBehaviour
     {
         UpdateConnecting(true, true);
 
+    }
+
+    /// <summary>
+    /// UsedDir을 생성될때 자동으로 설정하는 함수
+    /// </summary>
+    void DirSet()   
+    {
+        Transform parentTransform = transform.parent;
+        Vector3 localPosition = parentTransform.InverseTransformPoint(transform.position);
+
+        if (localPosition.x > 0)
+            usedDir = UsedDir.Right;
+        else if (localPosition.x < 0)
+            usedDir = UsedDir.Left;
+        else if (localPosition.z > 0)
+            usedDir = UsedDir.Forward;
+        else if (localPosition.z < 0)
+            usedDir = UsedDir.Back;
+        else if (localPosition.y > 0)
+            usedDir = UsedDir.Top;
+        else if (localPosition.y < 0)
+            usedDir = UsedDir.Bottom;
+        else
+            usedDir = UsedDir.None;
     }
 
     void CountReset()

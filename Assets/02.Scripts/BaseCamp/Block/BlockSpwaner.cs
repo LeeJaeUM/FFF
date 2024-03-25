@@ -90,7 +90,7 @@ public class BlockSpwaner : MonoBehaviour
     {
         if(buildMode != BuildMode.None && canDespawn)
         {
-            Destroy(hit.collider.transform.parent.gameObject);
+            Destroy(hit.collider.transform.root.gameObject);
         }
     }
     private void OnBuildMode(InputAction.CallbackContext context)
@@ -262,7 +262,6 @@ public class BlockSpwaner : MonoBehaviour
             {
                 if (tempConnecting.canBuild)
                 {
-                    Debug.Log("있다");
                     connecting = tempConnecting;
                     break;
                 }
@@ -324,11 +323,9 @@ public class BlockSpwaner : MonoBehaviour
         //Floor에 생성할때
         if (connecting.objType == ObjType.Floor)    
         {   //foundation 생성모드일때
-            Debug.Log("층에 닿고있다");
             switch (buildMode)
             {
                 case BuildMode.Foundation:
-                    Debug.Log("durl");
                     if (connecting.usedDir == UsedDir.Right)
                     {
                         Debug.Log("층의 오른쪽 커넷팅임");
@@ -373,7 +370,7 @@ public class BlockSpwaner : MonoBehaviour
                         PreviewMatSelect(canSpawnObj);
                         break;
                     }
-                    if (isHigher)
+                    if (isRight)
                         previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
                     else
                         previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
