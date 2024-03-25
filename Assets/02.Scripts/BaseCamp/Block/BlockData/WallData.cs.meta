@@ -3,7 +3,11 @@ guid: 2f2953e76818e1640a90c8cad5f42760
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - wallPrefab_Ho: {instanceID: 0}
+  - wallPrefab_Ve: {instanceID: 0}
+  - floorPrefab: {instanceID: 0}
+  - wallMaterial: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

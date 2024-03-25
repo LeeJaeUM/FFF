@@ -33,8 +33,7 @@ public class BlockSpwaner : MonoBehaviour
     public FA_UseDir useDir = FA_UseDir.None;
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
-    public WallData woodWallData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
-    public FoundationData foundationData;
+    public WallData woodBlockData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
     float lengthMul = 3f; // 생성할 벽의 길이(구버전)
     public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
 
@@ -125,7 +124,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Horizontal:
                     if (!oneConnecting.isConnectedToWall_Ho)
                     {
-                        SpawnBuildObj(woodWallData.wallPrefab_Ho);
+                        SpawnBuildObj(woodBlockData.wallPrefab_Ho);
                     }
                     break;
 
@@ -134,14 +133,14 @@ public class BlockSpwaner : MonoBehaviour
                     // 게임 오브젝트 생성과 함께 회전 적용
                     if (!oneConnecting.isConnectedToWall_Ve)
                     {
-                        SpawnBuildObj(woodWallData.wallPrefab_Ve);
+                        SpawnBuildObj(woodBlockData.wallPrefab_Ve);
                     }
                     break;
 
                 case BuildMode.Foundation:
                     if (oneConnecting == null|| !oneConnecting.isConnectedToFloor)
                     {
-                        SpawnBuildObj(foundationData.foundationPrefab);
+                        SpawnBuildObj(woodBlockData.floorPrefab);
                     }
                     break;
                 case BuildMode.None:
