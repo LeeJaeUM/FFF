@@ -57,6 +57,8 @@ public class BlockSpwaner : MonoBehaviour
     public GameObject previewObj;
     Renderer previewRenderer;
 
+    [SerializeField] bool canDespawn = false;
+
     PlayerInputAction inputAction;
 
     private void Awake()
@@ -86,9 +88,9 @@ public class BlockSpwaner : MonoBehaviour
 
     private void OnDespawnObj(InputAction.CallbackContext context)
     {
-        if(buildMode != BuildMode.None && hit.collider.CompareTag("Buildables"))
+        if(buildMode != BuildMode.None && canDespawn)
         {
-            Destroy(hit.collider.transform.parent.gameObject, 0.01f);
+            Destroy(hit.collider.transform.parent.gameObject);
         }
     }
     private void OnBuildMode(InputAction.CallbackContext context)
@@ -137,12 +139,12 @@ public class BlockSpwaner : MonoBehaviour
                     break;
 
                 case BuildMode.Foundation:
-                    if (!oneConnecting.isConnectedToFloor)
+                    if (oneConnecting == null|| !oneConnecting.isConnectedToFloor)
                     {
                         SpawnBuildObj(foundationData.foundationPrefab);
                     }
                     break;
-                default:
+                case BuildMode.None:
                     Debug.Log("건축모드가 아닐때 마우스 클릭함");
                     break;
             }
@@ -181,6 +183,10 @@ public class BlockSpwaner : MonoBehaviour
         {
             // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
             tagOfHitObject = hit.collider.gameObject.tag;
+
+            if (hit.collider.CompareTag("Buildables"))
+                canDespawn = true;
+
             switch (buildMode)
             {
                 case BuildMode.None:
@@ -208,6 +214,11 @@ public class BlockSpwaner : MonoBehaviour
 
                     break;
             }
+        }
+        else
+        {
+            //ray가 현재 아무것도 닿지 않을때
+            canDespawn = false;
         }
     }
     public void Preview_Setting(GameObject select)

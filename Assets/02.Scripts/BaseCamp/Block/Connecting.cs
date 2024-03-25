@@ -55,14 +55,35 @@ public class Connecting : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Color gizColor = Color.green;
-        if (isConnectedToFloor)
+        Color gizColor = Color.white;
+        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
         {
-            if (isConnectedToWall_Ho || isConnectedToWall_Ve)
-            {
-                gizColor = Color.red;
-            }
+            gizColor = Color.black;
 
+        }
+        else if (isConnectedToFloor && isConnectedToWall_Ho)
+        {
+            gizColor = Color.green;
+        }
+        else if (isConnectedToWall_Ho && isConnectedToWall_Ve)
+        {
+            gizColor = Color.blue;
+        }
+        else if (isConnectedToWall_Ve && isConnectedToFloor)
+        {
+            gizColor = Color.red;
+        }
+        else if(isConnectedToFloor)
+        {
+            gizColor = Color.yellow;
+        }
+        else if (isConnectedToWall_Ho)
+        {
+            gizColor = Color.cyan;
+        }
+        else if (isConnectedToWall_Ve)
+        {
+            gizColor = Color.magenta;
         }
         Gizmos.color = gizColor;
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
