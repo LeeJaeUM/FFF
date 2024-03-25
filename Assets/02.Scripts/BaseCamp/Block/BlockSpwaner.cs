@@ -72,8 +72,25 @@ public class BlockSpwaner : MonoBehaviour
         inputAction.Enable();
         inputAction.Player.SpawnObj.performed += OnSpawnObj;
         inputAction.Player.BuildMode.performed += OnBuildMode;
+        inputAction.Player.DespawnObj.performed += OnDespawnObj;
     }
 
+
+    private void OnDisable()
+    {
+        inputAction.Player.DespawnObj.performed -= OnDespawnObj;
+        inputAction.Player.BuildMode.performed -= OnBuildMode;
+        inputAction.Player.SpawnObj.performed -= OnSpawnObj;
+        inputAction.Disable();
+    }
+
+    private void OnDespawnObj(InputAction.CallbackContext context)
+    {
+        if(buildMode != BuildMode.None && hit.collider.CompareTag("Buildables"))
+        {
+            Destroy(hit.collider.transform.parent.gameObject, 0.01f);
+        }
+    }
     private void OnBuildMode(InputAction.CallbackContext context)
     {
         switch (buildMode)
@@ -142,12 +159,6 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    private void OnDisable()
-    {
-        inputAction.Player.BuildMode.performed -= OnBuildMode;
-        inputAction.Player.SpawnObj.performed -= OnSpawnObj;
-        inputAction.Disable();
-    }
 
     #endregion
     private void Start()

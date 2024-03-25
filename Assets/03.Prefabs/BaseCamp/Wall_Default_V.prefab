@@ -55,9 +55,11 @@ MonoBehaviour:
     m_Bits: 0
   canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &715893096210933974
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -184,9 +186,11 @@ MonoBehaviour:
     m_Bits: 0
   canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &4541111877550989496
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -305,7 +309,7 @@ GameObject:
   - component: {fileID: 2932078345099029141}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Untagged
+  m_TagString: Buildables
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -451,9 +455,11 @@ MonoBehaviour:
     m_Bits: 0
   canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &5438780454097329400
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -615,9 +621,11 @@ MonoBehaviour:
     m_Bits: 0
   canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
-  canConnectToFloor: 1
-  canConnectToWall: 1
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &2178501619834721515
 MeshFilter:
   m_ObjectHideFlags: 0

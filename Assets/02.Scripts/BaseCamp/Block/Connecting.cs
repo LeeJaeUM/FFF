@@ -53,20 +53,45 @@ public class Connecting : MonoBehaviour
     [SerializeField] private int Wall_VeCount = 0;
     [SerializeField] private int FloorCount = 0;
 
+    private void OnDrawGizmos()
+    {
+        Color gizColor = Color.green;
+        if (isConnectedToFloor)
+        {
+            if (isConnectedToWall_Ho || isConnectedToWall_Ve)
+            {
+                gizColor = Color.red;
+            }
+
+        }
+        Gizmos.color = gizColor;
+        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
+    }
 
     private void Awake()
     {
         connectorLayer = LayerMask.GetMask("BuildObj");
+        CountReset();
+    }
+
+    private void OnDisable()
+    {
+        UpdateConnecting(true, true);
+
+    }
+
+    void CountReset()
+    {
         switch (objType)
         {
             case ObjType.Floor:
-                if(usedDir == UsedDir.Left || usedDir == UsedDir.Right)
+                if (usedDir == UsedDir.Left || usedDir == UsedDir.Right)
                 {
                     CountSetting(0, 2, 1);
                 }
                 else
                 {
-                    CountSetting(2,0,1);
+                    CountSetting(2, 0, 1);
                 }
                 break;
             case ObjType.Wall_Ho:
@@ -99,21 +124,7 @@ public class Connecting : MonoBehaviour
         FloorCount = floor;
     }
 
-    private void OnDrawGizmos()
-    {
-        Color gizColor = Color.green;
-        if(isConnectedToFloor )
-        {
-            if (isConnectedToWall_Ho || isConnectedToWall_Ve)
-            {
-                gizColor = Color.red;
-            }
-
-        }
-        Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
-    }
-    public void UpdateConnecting(bool rootCall = false)
+    public void UpdateConnecting(bool rootCall = false, bool isDestroy = false)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, connectorOverlapRadius * 0.5f, connectorLayer);
 
@@ -129,25 +140,56 @@ public class Connecting : MonoBehaviour
             if (gameObject.layer == collider.gameObject.layer)
             {
                 Connecting otherConnecting = collider.GetComponent<Connecting>();
-                switch (otherConnecting.objType)
+
+                if (!isDestroy)
                 {
-                    case ObjType.Wall_Ho: Wall_HoCount--;   break;
-                    case ObjType.Wall_Ve: Wall_VeCount--;   break;
-                    case ObjType.Floor:     FloorCount--;   break;
+                    switch (otherConnecting.objType)
+                    {
+                        case ObjType.Wall_Ho: Wall_HoCount--; break;
+                        case ObjType.Wall_Ve: Wall_VeCount--; break;
+                        case ObjType.Floor: FloorCount--; break;
+                    }
+                    //중복되어 무한 루프 방지
+                    if (rootCall)
+                        otherConnecting.UpdateConnecting();
                 }
-                //중복되어 무한 루프 방지
-                if(rootCall)    
-                    otherConnecting.UpdateConnecting();
+                else
+                {
+                    Debug.LogWarning("삭제될떄의 작업");
+                    //중복되어 무한 루프 방지
+                    if (rootCall)
+                    {
+                        otherConnecting.CountReset();
+                        otherConnecting.UpdateConnecting(false, true);
+                    }
+                }
             }
         }
         canBuild = true;
 
         if (Wall_HoCount < 1)
+        {
             isConnectedToWall_Ho = true;
+            Wall_HoCount = 0;
+        }
+        else
+            isConnectedToWall_Ho = false;
+
         if (Wall_VeCount < 1)
+        {
             isConnectedToWall_Ve = true;
-        if (FloorCount < 1) 
+            Wall_VeCount = 0;
+        }
+        else
+            isConnectedToWall_Ve = false;
+
+        if (FloorCount < 1)
+        {
             isConnectedToFloor = true;
+            FloorCount = 0;
+        }
+        else 
+            isConnectedToFloor = false;
 
         if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
             canBuild = false;

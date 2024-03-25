@@ -12,10 +12,9 @@ GameObject:
   - component: {fileID: 1216732566305020596}
   - component: {fileID: 1363640221463151311}
   - component: {fileID: 7799683197449627908}
-  - component: {fileID: 6484116874670780402}
   m_Layer: 0
   m_Name: Model
-  m_TagString: Foundation
+  m_TagString: Buildables
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,20 +105,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6484116874670780402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119405153633340016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7463197c45737ea48a4f57d7421d4005, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentPosition: {x: 0, y: 0, z: 0}
-  usedDirection: 0
 --- !u!1 &3278684915810175881
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,14 +189,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 4
   objType: 3
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &941651195685417788
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -332,14 +320,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 1
   objType: 3
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &7308225265702612652
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -460,14 +451,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 2
   objType: 3
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &1723085161488389802
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -548,7 +542,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8681078535609565083}
-  - component: {fileID: 5252473419997160228}
   m_Layer: 0
   m_Name: Foundation_Default
   m_TagString: Untagged
@@ -573,27 +566,6 @@ Transform:
   - {fileID: 5393363213892448082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &5252473419997160228
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6236999130810294763}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8812343883127040064
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,14 +615,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   usedDir: 3
   objType: 3
-  canBuild: 1
-  isBuild: 0
   connectorOverlapRadius: 1
   connectorLayer:
     serializedVersion: 2
     m_Bits: 0
+  canBuild: 1
   isConnectedToFloor: 0
-  isConnectedToWall: 0
+  isConnectedToWall_Ho: 0
+  isConnectedToWall_Ve: 0
+  Wall_HoCount: 0
+  Wall_VeCount: 0
+  FloorCount: 0
 --- !u!33 &3007117691844812100
 MeshFilter:
   m_ObjectHideFlags: 0
