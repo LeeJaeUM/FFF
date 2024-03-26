@@ -10,7 +10,7 @@ public class PlayerCtrl : MonoBehaviour
     Animator anim;
     Rigidbody rb;
 
-    private int moveSpeed = 1;
+    public int MoveSpeed { get; private set; } = 1;
     private int rotateSpeed = 5;
 
     private void Awake()
@@ -48,7 +48,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Translate(Time.deltaTime * moveSpeed * vec);
+        transform.Translate(Time.deltaTime * MoveSpeed * vec);
     }
 
     void OnMove(InputAction.CallbackContext context)
@@ -56,5 +56,14 @@ public class PlayerCtrl : MonoBehaviour
         vec = context.ReadValue<Vector3>();
 
         anim.SetFloat("isMove", vec.z);
+    }
+
+    /// <summary>
+    /// 내부에서 MoveSpeed 프로퍼티 값을 변경하는 매소드
+    /// </summary>
+    /// <param name="newSpeed">변경 된 속도</param>
+    public void ModifyMoveSpeed(int newSpeed)
+    {
+        MoveSpeed = newSpeed;
     }
 }
