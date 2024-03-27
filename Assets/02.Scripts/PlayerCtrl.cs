@@ -11,6 +11,7 @@ public class PlayerCtrl : MonoBehaviour
     Rigidbody rb;
 
     public int MoveSpeed { get; private set; } = 1;
+    int moveSpeed = 1;
     private int rotateSpeed = 5;
 
     public int testSpeed = 3;
