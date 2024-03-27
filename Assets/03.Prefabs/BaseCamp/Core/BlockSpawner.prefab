@@ -61,11 +61,12 @@ MonoBehaviour:
   fa_preview: {fileID: 3146838483896004017}
   wall_preview_H: {fileID: 2860555762372291448}
   wall_preview_V: {fileID: 384856258963049592}
-  enviroment_preview: {fileID: 0}
+  enviroment_preview: {fileID: 6777748465058022059}
   previewObj: {fileID: 0}
   enviromentDatas:
   - {fileID: 11400000, guid: ac664e903a7951144b97ee604de989e0, type: 2}
   - {fileID: 11400000, guid: 573f87e69f494c4438877e6b00c69924, type: 2}
+  - {fileID: 11400000, guid: 14168793baa93ee489ce07843449d5cc, type: 2}
   canDespawn: 0
   connectorOverlapRadius: 1
   buildObjLayer:
@@ -202,6 +203,11 @@ PrefabInstance:
 --- !u!4 &1419671759371262246 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7010642197479520296, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
+  m_PrefabInstance: {fileID: 8284760873849528590}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6777748465058022059 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3239781720939078565, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
   m_PrefabInstance: {fileID: 8284760873849528590}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8291687290012277014

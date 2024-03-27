@@ -80,6 +80,12 @@ public class BlockSpwaner : MonoBehaviour
         buildObjLayer = LayerMask.GetMask("BuildObj");
     }
 
+    public void EnviromentSelect(int index)
+    {
+        GameObject selectEnviro = Instantiate(enviromentDatas[index].enviroPrefab, previewObj.transform.position, Quaternion.identity); 
+        Preview_Setting(selectEnviro);
+    }
+
     #region InputActions
 
     private void OnEnable()
