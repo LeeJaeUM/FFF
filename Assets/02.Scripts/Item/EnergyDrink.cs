@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class EnergyDrink : MonoBehaviour
 
     private ActionController controller;
 
+    public Action OnGetDrink;
+
     /// <summary>
     /// 아이템 사용 여부를 나타내는 플래그
     /// </summary>
@@ -23,6 +26,7 @@ public class EnergyDrink : MonoBehaviour
         player = FindObjectOfType<PlayerCtrl>();
         controller = FindObjectOfType<ActionController>();
     }
+
 
     /// <summary>
     /// 아이템 사용 시 호출되는 메서드
