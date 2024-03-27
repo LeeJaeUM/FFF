@@ -35,6 +35,10 @@ public class BCUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 액션으로 BuildSelecUI에서 받아온 BuildMode를 설정
+    /// </summary>
+    /// <param name="index"></param>
     private void OnClickBuildObjIcon(int index)
     {
         spwaner.buildMode = (BlockSpwaner.BuildMode)index;

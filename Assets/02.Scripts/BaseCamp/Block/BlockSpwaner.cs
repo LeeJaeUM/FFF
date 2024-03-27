@@ -53,11 +53,24 @@ public class BlockSpwaner : MonoBehaviour
     public GameObject fa_preview;
     public GameObject wall_preview_H;
     public GameObject wall_preview_V;
-    public GameObject previewObj;
     public GameObject enviroment_preview;
+    public GameObject previewObj;
+
+    [SerializeField]
+    EnviromentData[] enviromentDatas = null;
+
     Renderer previewRenderer;
 
     [SerializeField] bool canDespawn = false;
+
+    [SerializeField] private float connectorOverlapRadius = 1;
+    [SerializeField] private LayerMask buildObjLayer;
+    public bool isHigher = true;
+    public bool isAhead = true;
+    public bool isRight = true;
+    public bool canSpawnObj = true;     //생성가능한지 판단
+    Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
+
 
     PlayerInputAction inputAction;
 
@@ -202,6 +215,7 @@ public class BlockSpwaner : MonoBehaviour
         fa_preview = transform.GetChild(0).gameObject;
         wall_preview_H = transform.GetChild(1).gameObject;
         wall_preview_V = transform.GetChild(2).gameObject;
+        enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
     }
 
 
@@ -227,7 +241,12 @@ public class BlockSpwaner : MonoBehaviour
                     //preview 미리보기 숨기기
                     Preview_Hide();
                     break;
-
+                case BuildMode.Foundation:
+                    //생성될 위치 미리보기
+                    Preview_Setting(fa_preview);
+                    previewObj.transform.position = hit.point;
+                    ColliderSearch();
+                    break;
                 case BuildMode.Wall_Horizontal:
                     Preview_Setting(wall_preview_H);
                     previewObj.transform.position = hit.point;
@@ -238,15 +257,13 @@ public class BlockSpwaner : MonoBehaviour
                     previewObj.transform.position = hit.point;
                     ColliderSearch();
                     break;
-                case BuildMode.Foundation:
+                case BuildMode.Enviroment:
                     //생성될 위치 미리보기
-                    Preview_Setting(fa_preview);
+
+                    Preview_Setting(enviroment_preview);
                     previewObj.transform.position = hit.point;
-
-                    ColliderSearch();
-
-
                     break;
+
             }
         }
         else
@@ -260,6 +277,7 @@ public class BlockSpwaner : MonoBehaviour
         fa_preview.SetActive(false);
         wall_preview_H.SetActive(false);
         wall_preview_V.SetActive(false);
+        enviroment_preview.SetActive(false);
         previewObj = select;
         select.SetActive(true);
     }
@@ -269,16 +287,8 @@ public class BlockSpwaner : MonoBehaviour
         fa_preview.SetActive(false);
         wall_preview_H.SetActive(false);
         wall_preview_V.SetActive(false);
+        enviroment_preview.SetActive(false);
     }
-
-
-    [SerializeField] private float connectorOverlapRadius = 1;
-    [SerializeField] private LayerMask buildObjLayer;
-    public bool isHigher = true;
-    public bool isAhead = true;
-    public bool isRight = true;
-    public bool canSpawnObj = true;     //생성가능한지 판단
-    Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
 
 
     void ColliderSearch()
