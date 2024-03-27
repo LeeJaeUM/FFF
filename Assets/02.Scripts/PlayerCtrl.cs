@@ -13,6 +13,8 @@ public class PlayerCtrl : MonoBehaviour
     public int MoveSpeed { get; private set; } = 1;
     private int rotateSpeed = 5;
 
+    public int testSpeed = 3;
+
     private void Awake()
     {
         inputActions = new PlayerInputAction();
@@ -44,6 +46,8 @@ public class PlayerCtrl : MonoBehaviour
 
         Vector3 rotation = new Vector3(0, mouseDelta.x, 0) * rotateSpeed * Time.deltaTime;
         transform.Rotate(rotation);
+
+        moveSpeed = testSpeed;
     }
 
     private void FixedUpdate()

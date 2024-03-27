@@ -35,6 +35,33 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""BuildMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""248fae67-2b54-4376-8270-324cb9247f86"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpawnObj"",
+                    ""type"": ""Button"",
+                    ""id"": ""34059a87-2f73-483b-b746-522ed8a4f311"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DespawnObj"",
+                    ""type"": ""Button"",
+                    ""id"": ""25119fb1-837c-40f6-ab2c-b76f78705792"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -92,6 +119,39 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7e733cc0-f621-43b5-97fd-1a4ec7c64061"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BuildMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5c66417-acc6-48f2-a840-8379e36aab28"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpawnObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08feed90-d3d2-4ca7-9887-d252e62b6c07"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DespawnObj"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -107,6 +167,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_BuildMode = m_Player.FindAction("BuildMode", throwIfNotFound: true);
+        m_Player_SpawnObj = m_Player.FindAction("SpawnObj", throwIfNotFound: true);
+        m_Player_DespawnObj = m_Player.FindAction("DespawnObj", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -169,11 +232,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_BuildMode;
+    private readonly InputAction m_Player_SpawnObj;
+    private readonly InputAction m_Player_DespawnObj;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @BuildMode => m_Wrapper.m_Player_BuildMode;
+        public InputAction @SpawnObj => m_Wrapper.m_Player_SpawnObj;
+        public InputAction @DespawnObj => m_Wrapper.m_Player_DespawnObj;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -186,6 +255,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
+            @BuildMode.started += instance.OnBuildMode;
+            @BuildMode.performed += instance.OnBuildMode;
+            @BuildMode.canceled += instance.OnBuildMode;
+            @SpawnObj.started += instance.OnSpawnObj;
+            @SpawnObj.performed += instance.OnSpawnObj;
+            @SpawnObj.canceled += instance.OnSpawnObj;
+            @DespawnObj.started += instance.OnDespawnObj;
+            @DespawnObj.performed += instance.OnDespawnObj;
+            @DespawnObj.canceled += instance.OnDespawnObj;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -193,6 +271,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
+            @BuildMode.started -= instance.OnBuildMode;
+            @BuildMode.performed -= instance.OnBuildMode;
+            @BuildMode.canceled -= instance.OnBuildMode;
+            @SpawnObj.started -= instance.OnSpawnObj;
+            @SpawnObj.performed -= instance.OnSpawnObj;
+            @SpawnObj.canceled -= instance.OnSpawnObj;
+            @DespawnObj.started -= instance.OnDespawnObj;
+            @DespawnObj.performed -= instance.OnDespawnObj;
+            @DespawnObj.canceled -= instance.OnDespawnObj;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -222,5 +309,8 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnBuildMode(InputAction.CallbackContext context);
+        void OnSpawnObj(InputAction.CallbackContext context);
+        void OnDespawnObj(InputAction.CallbackContext context);
     }
 }
