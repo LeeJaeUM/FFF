@@ -13,33 +13,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
-                },
-                {
-                    "name": "BuildMode",
-                    "type": "Button",
-                    "id": "248fae67-2b54-4376-8270-324cb9247f86",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "SpawnObj",
-                    "type": "Button",
-                    "id": "34059a87-2f73-483b-b746-522ed8a4f311",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "DespawnObj",
-                    "type": "Button",
-                    "id": "25119fb1-837c-40f6-ab2c-b76f78705792",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -97,37 +70,52 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
+                }
+            ]
+        },
+        {
+            "name": "UI",
+            "id": "ac202fe2-18ab-408a-b968-e23766a425b1",
+            "actions": [
                 {
-                    "name": "",
-                    "id": "7e733cc0-f621-43b5-97fd-1a4ec7c64061",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
+                    "name": "onLeftClick",
+                    "type": "Button",
+                    "id": "9515bf3a-1a58-4c47-bc7b-32dd1dc5105d",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "groups": "",
-                    "action": "BuildMode",
-                    "isComposite": false,
-                    "isPartOfComposite": false
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
+                    "name": "onRightClick",
+                    "type": "Button",
+                    "id": "880f5790-7734-4e7f-81dd-10526e87b6e9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
                     "name": "",
-                    "id": "a5c66417-acc6-48f2-a840-8379e36aab28",
+                    "id": "85f35f36-1c02-435d-99c0-634824d474fd",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SpawnObj",
+                    "action": "onLeftClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "08feed90-d3d2-4ca7-9887-d252e62b6c07",
+                    "id": "a7b6e9c6-4841-40f6-9922-5c2b1f0f1ecc",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "DespawnObj",
+                    "action": "onRightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

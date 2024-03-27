@@ -35,33 +35,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""BuildMode"",
-                    ""type"": ""Button"",
-                    ""id"": ""248fae67-2b54-4376-8270-324cb9247f86"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""SpawnObj"",
-                    ""type"": ""Button"",
-                    ""id"": ""34059a87-2f73-483b-b746-522ed8a4f311"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""DespawnObj"",
-                    ""type"": ""Button"",
-                    ""id"": ""25119fb1-837c-40f6-ab2c-b76f78705792"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -119,37 +92,52 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
+                }
+            ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""ac202fe2-18ab-408a-b968-e23766a425b1"",
+            ""actions"": [
                 {
-                    ""name"": """",
-                    ""id"": ""7e733cc0-f621-43b5-97fd-1a4ec7c64061"",
-                    ""path"": ""<Keyboard>/tab"",
-                    ""interactions"": """",
+                    ""name"": ""onLeftClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""9515bf3a-1a58-4c47-bc7b-32dd1dc5105d"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""BuildMode"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""onRightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""880f5790-7734-4e7f-81dd-10526e87b6e9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
                     ""name"": """",
-                    ""id"": ""a5c66417-acc6-48f2-a840-8379e36aab28"",
+                    ""id"": ""85f35f36-1c02-435d-99c0-634824d474fd"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""SpawnObj"",
+                    ""action"": ""onLeftClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
-                    ""id"": ""08feed90-d3d2-4ca7-9887-d252e62b6c07"",
+                    ""id"": ""a7b6e9c6-4841-40f6-9922-5c2b1f0f1ecc"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""DespawnObj"",
+                    ""action"": ""onRightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -167,9 +155,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_BuildMode = m_Player.FindAction("BuildMode", throwIfNotFound: true);
-        m_Player_SpawnObj = m_Player.FindAction("SpawnObj", throwIfNotFound: true);
-        m_Player_DespawnObj = m_Player.FindAction("DespawnObj", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_onLeftClick = m_UI.FindAction("onLeftClick", throwIfNotFound: true);
+        m_UI_onRightClick = m_UI.FindAction("onRightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -232,17 +221,11 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_BuildMode;
-    private readonly InputAction m_Player_SpawnObj;
-    private readonly InputAction m_Player_DespawnObj;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
         public PlayerActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @BuildMode => m_Wrapper.m_Player_BuildMode;
-        public InputAction @SpawnObj => m_Wrapper.m_Player_SpawnObj;
-        public InputAction @DespawnObj => m_Wrapper.m_Player_DespawnObj;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -255,15 +238,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @BuildMode.started += instance.OnBuildMode;
-            @BuildMode.performed += instance.OnBuildMode;
-            @BuildMode.canceled += instance.OnBuildMode;
-            @SpawnObj.started += instance.OnSpawnObj;
-            @SpawnObj.performed += instance.OnSpawnObj;
-            @SpawnObj.canceled += instance.OnSpawnObj;
-            @DespawnObj.started += instance.OnDespawnObj;
-            @DespawnObj.performed += instance.OnDespawnObj;
-            @DespawnObj.canceled += instance.OnDespawnObj;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -271,15 +245,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @BuildMode.started -= instance.OnBuildMode;
-            @BuildMode.performed -= instance.OnBuildMode;
-            @BuildMode.canceled -= instance.OnBuildMode;
-            @SpawnObj.started -= instance.OnSpawnObj;
-            @SpawnObj.performed -= instance.OnSpawnObj;
-            @SpawnObj.canceled -= instance.OnSpawnObj;
-            @DespawnObj.started -= instance.OnDespawnObj;
-            @DespawnObj.performed -= instance.OnDespawnObj;
-            @DespawnObj.canceled -= instance.OnDespawnObj;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -297,6 +262,60 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_onLeftClick;
+    private readonly InputAction m_UI_onRightClick;
+    public struct UIActions
+    {
+        private @PlayerInputAction m_Wrapper;
+        public UIActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @onLeftClick => m_Wrapper.m_UI_onLeftClick;
+        public InputAction @onRightClick => m_Wrapper.m_UI_onRightClick;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @onLeftClick.started += instance.OnOnLeftClick;
+            @onLeftClick.performed += instance.OnOnLeftClick;
+            @onLeftClick.canceled += instance.OnOnLeftClick;
+            @onRightClick.started += instance.OnOnRightClick;
+            @onRightClick.performed += instance.OnOnRightClick;
+            @onRightClick.canceled += instance.OnOnRightClick;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @onLeftClick.started -= instance.OnOnLeftClick;
+            @onLeftClick.performed -= instance.OnOnLeftClick;
+            @onLeftClick.canceled -= instance.OnOnLeftClick;
+            @onRightClick.started -= instance.OnOnRightClick;
+            @onRightClick.performed -= instance.OnOnRightClick;
+            @onRightClick.canceled -= instance.OnOnRightClick;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyBoardMouseSchemeIndex = -1;
     public InputControlScheme KeyBoardMouseScheme
     {
@@ -309,8 +328,10 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnBuildMode(InputAction.CallbackContext context);
-        void OnSpawnObj(InputAction.CallbackContext context);
-        void OnDespawnObj(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnOnLeftClick(InputAction.CallbackContext context);
+        void OnOnRightClick(InputAction.CallbackContext context);
     }
 }
