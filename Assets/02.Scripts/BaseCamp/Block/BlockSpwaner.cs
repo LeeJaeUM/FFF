@@ -54,6 +54,7 @@ public class BlockSpwaner : MonoBehaviour
     public GameObject wall_preview_H;
     public GameObject wall_preview_V;
     public GameObject previewObj;
+    public GameObject enviroment_preview;
     Renderer previewRenderer;
 
     [SerializeField] bool canDespawn = false;
@@ -96,19 +97,19 @@ public class BlockSpwaner : MonoBehaviour
     {
         switch (buildMode)
         {
-            case BuildMode.Wall_Horizontal:
-                buildMode = BuildMode.Wall_Vertical;
-                break;
+            //case BuildMode.Wall_Horizontal:
+            //    buildMode = BuildMode.Wall_Vertical;
+            //    break;
 
-            case BuildMode.Wall_Vertical:
-                buildMode = BuildMode.Foundation;
-                break;
+            //case BuildMode.Wall_Vertical:
+            //    buildMode = BuildMode.Foundation;
+            //    break;
 
-            case BuildMode.Foundation:
-                buildMode = BuildMode.Wall_Horizontal;
-                break;
+            //case BuildMode.Foundation:
+            //    buildMode = BuildMode.Wall_Horizontal;
+            //    break;
             default:
-                buildMode = BuildMode.Foundation;
+                buildMode = BuildMode.None;
                 break;
         }
     }
@@ -142,6 +143,20 @@ public class BlockSpwaner : MonoBehaviour
                     {
                         SpawnBuildObj(woodBlockData.floorPrefab);
                     }
+                    else
+                    {
+                        Debug.Log("층 생성모드 중 조건에 벗어남");
+                    }
+                    break;
+                case BuildMode.Enviroment:
+                    if (oneConnecting == null || !oneConnecting.isConnectedToFloor)
+                    {
+                        SpawnBuildObj(woodBlockData.floorPrefab);
+                    }
+                    else
+                    {
+                        Debug.Log("환경요소 생성모드 중 조건에 벗어남");
+                    }
                     break;
                 case BuildMode.None:
                     Debug.Log("건축모드가 아닐때 마우스 클릭함");
@@ -151,15 +166,35 @@ public class BlockSpwaner : MonoBehaviour
             oneConnecting = null;
     }
 
-    void SpawnBuildObj(GameObject prefab)
+    void SpawnBuildObj(GameObject prefab, bool isEnviroment = false)
     {
         GameObject newObj = Instantiate(prefab, previewObj.transform.position, Quaternion.identity);
+        if (isEnviroment)
+        {
+
+            return;
+        }
         foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
         {
             connecting.UpdateConnecting(true);
         }
     }
 
+    /// <summary>
+    /// UI활성화 시 생성을 막는 함수 BCUI에서 사용
+    /// </summary>
+    /// <param name="isActive"></param>
+    public void ProhibitSpawn(bool isActive)
+    {
+        if(isActive)
+        {
+            inputAction.Disable();
+        }
+        else
+        {
+            inputAction.Enable();
+        }
+    }
 
     #endregion
     private void Start()

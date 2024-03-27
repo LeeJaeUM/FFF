@@ -28,5 +28,15 @@ public class BaseCampManager : MonoBehaviour
 
     }
 
+    [SerializeField]BlockSpwaner spwaner;
+    public BlockSpwaner BlockSpwaner
+    {
+        get
+        {
+            if(spwaner == null)
+                spwaner = FindAnyObjectByType<BlockSpwaner>();
+            return spwaner;
+        }
+    }
        
 }

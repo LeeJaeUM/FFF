@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class WBUI : MonoBehaviour
 {
     [SerializeField]Workbench workbench;
     Transform uiGroup;
+
 
     private void Start()
     {
