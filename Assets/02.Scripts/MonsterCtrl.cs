@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.Android;
 
 public class MonsterCtrl : MonoBehaviour
 {
@@ -12,26 +13,28 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField]
     private Transform skyLight; // directional light
     [SerializeField]
-    private Transform[] area; // ¸ó½ºÅÍÀÇ ÀÌµ¿ ·çÆ® º¯¼ö
+    private Transform[] area; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ë£¨íŠ¸ ë³€ìˆ˜
     [SerializeField]
-    private Transform player; // ÇÃ·¹ÀÌ¾î À§Ä¡
-    private float chaseDuration = 10f; // ÃßÀûÀ» À¯ÁöÇÒ ½Ã°£
+    private Transform player; // í”Œë ˆì´ì–´ ìœ„ì¹˜
+    private float chaseDuration = 10f; // ì¶”ì ì„ ìœ ì§€í•  ì‹œê°„
 
-    private float totalTime = 30; // ³·°ú ¹ãÀÌ ¹Ù²î´Â ½Ã°£
+    private float totalTime = 30; // ë‚®ê³¼ ë°¤ì´ ë°”ë€ŒëŠ” ì‹œê°„
     private float nowTime = 0;
-    private float chaseTimer = 0; // ÃßÀûÀ» À¯ÁöÇÏ´Â Å¸ÀÌ¸Ó
-    private float pursuitRange = 3f; // ÇÃ·¹ÀÌ¾î¸¦ ÀÎ½ÄÇÏ´Â ¹üÀ§
+    private float chaseTimer = 0; // ì¶”ì ì„ ìœ ì§€í•˜ëŠ” íƒ€ì´ë¨¸
+    private float pursuitRange = 3f; // í”Œë ˆì´ì–´ë¥¼ ì¸ì‹í•˜ëŠ” ì‹œê°„
 
-    private bool isMonsterMove = false; // ¸ó½ºÅÍÀÇ ÀÌµ¿ »óÈ²
-    private int current = 0; // ¸ó½ºÅÍÀÇ ÀÌµ¿ ¼ø¼­ º¯¼ö
-    private bool isChasing = false; // ÃßÀû ÁßÀÎÁö ¿©ºÎÈ®ÀÎ
+    private bool isMonsterMove = false; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ìƒí™©
+    private int current = 0; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ìˆœì„œ ë³€ìˆ˜
+    private bool isChasing = false; // ì¶”ì  ì¤‘ì¸ì§€ ì—¬ë¶€í™•ì¸
+
+    private int monsterLife = 30;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        // ÃÊ±â ¸ñÀûÁö ¼³Á¤
+        // ì´ˆê¸° ëª©ì ì§€ ì„¤ì •
         SetDestinationByIndex(current);
     }
 
@@ -39,21 +42,22 @@ public class MonsterCtrl : MonoBehaviour
     {
         nowTime += Time.deltaTime;
 
+        // ì‹œê°„ì˜ íë¦„
         if (nowTime >= totalTime)
         {
-            RotateSkyLight();
+            RotateSkyLight(); 
             isMonsterMove = !isMonsterMove;
-            nowTime = 0;
+            nowTime = 0; // directional lightê°€ íšŒì „í•˜ë©´ nowTime ì´ˆê¸°í™”
 
             SetNextDestination();
         }
 
         if (isMonsterMove == true && area != null && area.Length>0)
         {
-            // ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸® °è»ê
+            // í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ ê³„ì‚°
             float distanceToPlayer=Vector3.Distance(transform.position, player.position);
 
-            // ÃßÀû ½ÃÀÛ Á¶°Ç
+            // ì¶”ì  ì‹œì‘ ì¡°ê±´
             if(player != null && distanceToPlayer <= pursuitRange)
             {
                 isChasing = true;
@@ -63,7 +67,7 @@ public class MonsterCtrl : MonoBehaviour
                 anim.SetBool("IsWalk", true);
             }
 
-            // ÃßÀû ÁßÀÌ¸é¼­ ÁöÁ¤µÈ ½Ã°£ ÀÌ³»¿¡ ÀÖ´Â °æ¿ì °è¼Ó ÃßÀû
+            // ì¶”ì  ì¤‘ì´ë©´ì„œ ì§€ì •ëœ ì‹œê°„ ì´ë‚´ì— ìˆëŠ” ê²½ìš° ê³„ì† ì¶”ì 
             if(isChasing && chaseTimer<chaseDuration)
             {
                 agent.SetDestination(player.position);
@@ -76,7 +80,7 @@ public class MonsterCtrl : MonoBehaviour
 
                 if (remainingDistance <= agent.stoppingDistance)
                 {
-                    // ÇöÀç ¸ñÀûÁö¿¡ µµÂøÇßÀ¸¸é ´ÙÀ½ ¸ñÀûÁö ¼³Á¤
+                    // í˜„ì¬ ëª©ì ì§€ì— ë„ì°©í–ˆìœ¼ë©´ ë‹¤ìŒ ëª©ì ì§€ ì„¤ì •
                     SetNextDestination();
                     isChasing = false;
                 }
@@ -91,6 +95,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // Dirctional Light íšŒì „
     void RotateSkyLight()
     {
         if (skyLight != null)
@@ -99,13 +104,14 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // ëª¬ìŠ¤í„°ì˜ ì´ë™ ë£¨íŠ¸ ì„¤ì •
     void SetNextDestination()
     {
         if(area!=null && area.Length>0)
         {
             current = (current + 1) % area.Length;
 
-            // ´ÙÀ½ ¸ñÀûÁö·Î ÀÌµ¿
+            // ë‹¤ìŒ ëª©ì ì§€ë¡œ ì´ë™
             SetDestinationByIndex(current);
         }
     }
@@ -116,5 +122,28 @@ public class MonsterCtrl : MonoBehaviour
         {
             agent.SetDestination(area[index].position);
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // ì´ì•Œì— ë‹¿ì•˜ì„ ë•Œ ì‚¬ë§
+        if(other.gameObject.CompareTag("BULLET"))
+        {
+            monsterLife -= 1;
+            
+            if(monsterLife <= 0)
+            {
+                anim.SetTrigger("IsDeath");
+
+                agent.enabled = false;
+
+                Invoke("DestroyMonster", 3f);
+            }
+        }
+    }
+
+    void DestroyMonster()
+    {
+        Destroy(gameObject);
     }
 }
