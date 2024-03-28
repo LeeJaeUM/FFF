@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Test_Inventory : TestBaseCamp
+public class Test_Inventory : TestBase
 {
     public ItemData data;
 

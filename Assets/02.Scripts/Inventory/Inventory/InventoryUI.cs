@@ -7,33 +7,33 @@ using UnityEngine.InputSystem;
 public class InventoryUI : MonoBehaviour
 {
     /// <summary>
-    /// ¾ÆÀÌÅÛ Á¤º¸¸¦ ´ã´Â ÄÁÅ×ÀÌ³Ê ¸®½ºÆ®
+    /// ì•„ì´í…œ ì •ë³´ë¥¼ ë‹´ëŠ” ì»¨í…Œì´ë„ˆ ë¦¬ìŠ¤íŠ¸
     /// </summary>
     public List<ItemContain> containList;
 
     /// <summary>
-    /// ½½·Ô ±×¸®µå¸¦ ÀúÀåÇÏ´Â °´Ã¼
+    /// ìŠ¬ë¡¯ ê·¸ë¦¬ë“œë¥¼ ì €ì¥í•˜ëŠ” ê°ì²´
     /// </summary>
     public GameObject[,] slotGrid;
 
     [HideInInspector]
     /// <summary>
-    /// ±×¸®µå »çÀÌÁî
+    /// ê·¸ë¦¬ë“œ ì‚¬ì´ì¦ˆ
     /// </summary>
     public Vector2Int gridSize => new Vector2Int(_horizontalSlotCount, _verticalSlotCount);
 
     /// <summary>
-    /// ÇöÀç ÀâÈù ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³ÊÀÇ ÇöÀç ÁÂÇ¥, »çÀÌÁî, ½ÃÀÛ ÁÂÇ¥
+    /// í˜„ì¬ ì¡íŒ ì•„ì´í…œ ì»¨í…Œì´ë„ˆì˜ í˜„ì¬ ì¢Œí‘œ, ì‚¬ì´ì¦ˆ, ì‹œì‘ ì¢Œí‘œ
     /// </summary>
     private Vector2Int totalOffset, checkSize, checkStartPos;
 
     /// <summary>
-    /// ½½·Ô¿¡ ÀÖ´Â Á¤º¸ ÀúÀå
+    /// ìŠ¬ë¡¯ì— ìˆëŠ” ì •ë³´ ì €ì¥
     /// </summary>
     private Vector2Int otherItemPos, otherItemSize;
 
     /// <summary>
-    /// °°Àº ¾ÆÀÌÅÛ ½ºÅÈ Áõ°¡½Ã »ç¿ëÇÏ´Â º¯¼ö
+    /// ê°™ì€ ì•„ì´í…œ ìŠ¤íƒ¯ ì¦ê°€ì‹œ ì‚¬ìš©í•˜ëŠ” ë³€ìˆ˜
     /// </summary>
     private Vector2Int StackStartPos;
 
@@ -41,55 +41,55 @@ public class InventoryUI : MonoBehaviour
     private bool isOverEdge = false;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³Ê¸¦ ´ã´Â ºÎ¸ğ °³Ã¼
+    /// ì•„ì´í…œ ì»¨í…Œì´ë„ˆë¥¼ ë‹´ëŠ” ë¶€ëª¨ ê°œì²´
     /// </summary>
     public Transform DropParent;
 
     /// <summary>
-    /// ÇöÀç ¼Õ¿¡ ÀÖ´Â ¾ÆÀÌÅÛ ÄÁÅ×¾î³ÊÀÇ ºÎ¸ğ °³Ã¼
+    /// í˜„ì¬ ì†ì— ìˆëŠ” ì•„ì´í…œ ì»¨í…Œì–´ë„ˆì˜ ë¶€ëª¨ ê°œì²´
     /// </summary>
     public Transform DragParent;
 
     public InvenGrid invenGrid;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ³»¿ëÀ» ³ªÅ¸³»´Â Å¬·¡½º
+    /// ì•„ì´í…œ ë‚´ìš©ì„ ë‚˜íƒ€ë‚´ëŠ” í´ë˜ìŠ¤
     /// </summary>
     public ItemTooltip tooltip;
 
     /// <summary>
-    /// ÇöÀç ¼Õ¿¡ ÀÖ´Â ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³Ê
+    /// í˜„ì¬ ì†ì— ìˆëŠ” ì•„ì´í…œ ì»¨í…Œì´ë„ˆ
     /// </summary>
     public GameObject containGrab = null;
 
     /// <summary>
-    /// ÇöÀç ¸¶¿ì½º°¡ ÀÖ´Â ½½·Ô
+    /// í˜„ì¬ ë§ˆìš°ìŠ¤ê°€ ìˆëŠ” ìŠ¬ë¡¯
     /// </summary>
     public GameObject highlightedSlot;
 
-    [Header("¿É¼Ç")]
+    [Header("ì˜µì…˜")]
     private int _horizontalSlotCount = 8;
 
     [Range(1, 10)]
     public int _verticalSlotCount = 5;
 
     /// <summary>
-    /// ½½·ÔÀÇ Å©±â
+    /// ìŠ¬ë¡¯ì˜ í¬ê¸°
     /// </summary>
     public float slotSize = 64;
 
     /// <summary>
-    /// ½½·Ô »çÀÌÀÇ °Å¸®
+    /// ìŠ¬ë¡¯ ì‚¬ì´ì˜ ê±°ë¦¬
     /// </summary>
     public float edgePadding = 8;
 
     public ItemData[] itemDatas = null;
 
-    PlayerInputAction inputAction;
+    MouseInputAction inputAction;
 
     private void Awake()
     {
-        inputAction = new PlayerInputAction();
+        inputAction = new MouseInputAction();
 
         Transform child = transform.GetChild(0);
         invenGrid = child.GetComponentInChildren<InvenGrid>();
@@ -106,19 +106,19 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
         inputAction.UI.Enable();
-        inputAction.UI.onLeftClick.performed += OnLeftClick;
+        inputAction.UI.LClick.performed += OnLeftClick;
     }
 
     private void OnDisable()
     {
-        inputAction.UI.onLeftClick.performed -= OnLeftClick;
+        inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
 
     /// <summary>
-    /// ÁÂ Å¬¸¯ ÀÌº¥Æ®
+    /// ì¢Œ í´ë¦­ ì´ë²¤íŠ¸
     /// </summary>
-    /// <param name="context">Å¬¸¯ÀÌº¥Æ®</param>
+    /// <param name="context">í´ë¦­ì´ë²¤íŠ¸</param>
     private void OnLeftClick(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -178,9 +178,9 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿µ¿ª ¾È ÄÁÅ×ÀÌ³Ê Ã¼Å©
+    /// ì˜ì—­ ì•ˆ ì»¨í…Œì´ë„ˆ ì²´í¬
     /// </summary>
-    /// <param name="itemSize">¾ÆÀÌÅÛ Å©±â</param>
+    /// <param name="itemSize">ì•„ì´í…œ í¬ê¸°</param>
     private void CheckArea(Vector2Int itemSize)
     {
         Vector2Int halfOffset = Vector2Int.zero;
@@ -229,7 +229,7 @@ public class InventoryUI : MonoBehaviour
                 {
                     InvenSlot instance = slotGrid[checkStartPos.x + x, checkStartPos.y + y].GetComponent<InvenSlot>();
 
-                    if (!instance.isEmpty)  // slotÀÌ ºñ¾îÀÖÁö ¾ÊÀ¸¸ç 
+                    if (!instance.isEmpty)  // slotì´ ë¹„ì–´ìˆì§€ ì•Šìœ¼ë©° 
                     {
                         if (SlotObj == null)
                         {
@@ -290,11 +290,11 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// »ö±òÀÌ ´Ş¶óÁö´Â ÄÃ·¯
+    /// ìƒ‰ê¹”ì´ ë‹¬ë¼ì§€ëŠ” ì»¬ëŸ¬
     /// </summary>
-    /// <param name="color">º¯ÇÒ ÄÃ·¯</param>
-    /// <param name="size">Å©±â</param>
-    /// <param name="startPos">½ÃÀÛ ÁÂÇ¥</param>
+    /// <param name="color">ë³€í•  ì»¬ëŸ¬</param>
+    /// <param name="size">í¬ê¸°</param>
+    /// <param name="startPos">ì‹œì‘ ì¢Œí‘œ</param>
     public void ColorChangeLoop(Color color, Vector2Int size, Vector2Int startPos)
     {
         for (int y = 0; y < size.y; y++)
@@ -307,10 +307,10 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// »ö±òÀÌ ´Ş¶óÁö´Â ÄÃ·¯
+    /// ìƒ‰ê¹”ì´ ë‹¬ë¼ì§€ëŠ” ì»¬ëŸ¬
     /// </summary>
-    /// <param name="size">Å©±â</param>
-    /// <param name="startPos">½ÃÀÛ ÁÂÇ¥</param>
+    /// <param name="size">í¬ê¸°</param>
+    /// <param name="startPos">ì‹œì‘ ì¢Œí‘œ</param>
     public void ColorChangeLoop(Vector2Int size, Vector2Int startPos)
     {
         GameObject slot;
@@ -346,11 +346,11 @@ public class InventoryUI : MonoBehaviour
         {
             for (int x = 0; x < itemSize.x; x++)
             {
-                // ÀÎº¥ ½½·Ô¿¡ Á¤º¸ ÀúÀå
+                // ì¸ë²¤ ìŠ¬ë¡¯ì— ì •ë³´ ì €ì¥
                 InvenSlot instance = slotGrid[startPos.x + x, startPos.y + y].GetComponent<InvenSlot>();
-                instance.storedItemObject = item;                           // ¿ÀºêÁ§Æ® ÀúÀå
-                instance.data = item.GetComponent<ItemContain>().item;      // ¾ÆÀÌÅÛ Á¤º¸ ÀúÀå
-                instance.storedItemSize = itemSize;                         // »çÀÌÁî ÀúÀå
+                instance.storedItemObject = item;                           // ì˜¤ë¸Œì íŠ¸ ì €ì¥
+                instance.data = item.GetComponent<ItemContain>().item;      // ì•„ì´í…œ ì •ë³´ ì €ì¥
+                instance.storedItemSize = itemSize;                         // ì‚¬ì´ì¦ˆ ì €ì¥
                 instance.storedItemStartPos = startPos;
                 instance.isEmpty = false;
                 slotGrid[totalOffset.x + x, totalOffset.y + y].GetComponent<Image>().color = SlotColorHighlights.White;
@@ -359,7 +359,7 @@ public class InventoryUI : MonoBehaviour
 
         contain.id = containList.Count;
         containList.Add(contain);
-        // °ÔÀÓ ¿ÀºêÁ§Æ® Àç¼³Á¤
+        // ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì¬ì„¤ì •
         item.transform.SetParent(DropParent);
         item.GetComponent<RectTransform>().pivot = Vector2.zero;
         item.transform.position = slotGrid[startPos.x, startPos.y].transform.position;
@@ -368,9 +368,9 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// °ÔÀÓ ¿ÀºêÁ§Æ® ¾ò´Â ÇÔ¼ö
+    /// ê²Œì„ ì˜¤ë¸Œì íŠ¸ ì–»ëŠ” í•¨ìˆ˜
     /// </summary>
-    /// <param name="slotObject">½½·Ô¿¡ ÀúÀåµÈ ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³Ê Á¤º¸</param>
+    /// <param name="slotObject">ìŠ¬ë¡¯ì— ì €ì¥ëœ ì•„ì´í…œ ì»¨í…Œì´ë„ˆ ì •ë³´</param>
     /// <returns></returns>
     private GameObject GetItem(GameObject slotObject)
     {
@@ -387,7 +387,7 @@ public class InventoryUI : MonoBehaviour
         {
             for (int x = 0; x < itemSize.x; x++)
             {
-                // ÀÎº¥ ½½·Ô¿¡ Á¤º¸ »èÁ¦
+                // ì¸ë²¤ ìŠ¬ë¡¯ì— ì •ë³´ ì‚­ì œ
                 InvenSlot instance = slotGrid[tempItemPos.x + x, tempItemPos.y + y].GetComponent<InvenSlot>();
                 containGrab = null;
                 StackStartPos = instance.storedItemStartPos;
@@ -415,7 +415,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// °°Àº ¾ÆÀÌÅÛÀ» °æ¿ì °¹¼ö Áõ°¡
+    /// ê°™ì€ ì•„ì´í…œì„ ê²½ìš° ê°¯ìˆ˜ ì¦ê°€
     /// </summary>
     public void AddContain(GameObject obj)
     {
@@ -432,7 +432,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÄÁÅ×ÀÌ³Ê Á¦°Å
+    /// ì»¨í…Œì´ë„ˆ ì œê±°
     /// </summary>
     public void RemoveSelectedButton()
     {

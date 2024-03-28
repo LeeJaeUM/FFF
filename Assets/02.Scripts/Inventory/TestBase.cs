@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TestBaseCamp : MonoBehaviour
+public class TestBase : MonoBehaviour
 {
     public int seed = 0;
     const int allRandom = -1;
