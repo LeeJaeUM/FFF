@@ -4,18 +4,24 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
-  - Foundation
-  - Wall
-  - Buildables
+  - BULLET
+  - TRAP
+  - PLAYER
+  - HOME
+  - CinemachineTarget
+  - TRAP2
+  - TRAP3
+  - MONSTER
+  - ROOM
+  - GOAL
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
-  - BuildObj
+  - 
   - 
   - 
   - 
