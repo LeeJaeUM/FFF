@@ -22,7 +22,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     private float slotSize;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ °¹¼ö
+    /// ì•„ì´í…œ ê°¯ìˆ˜
     /// </summary>
     private int count;
     public int Count
@@ -33,13 +33,12 @@ public class ItemContain : RecycleObject, IPointerClickHandler
             if(count != value)
             {
                 count = value;
-                Mathf.Clamp(count, 0, item.maxItemCount);
             }
         }
     }
 
     /// <summary>
-    /// µå·¡±×½Ã ºÎ¸ğ °³Ã¼
+    /// ë“œë˜ê·¸ì‹œ ë¶€ëª¨ ê°œì²´
     /// </summary>
     private Transform DragParent => GameManager.Instance.inven.DragParent;
 
@@ -51,7 +50,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     }
 
     /// <summary>
-    /// ÄÁÅ×ÀÌ³Ê ½ÃÀÛ ÇÔ¼ö
+    /// ì»¨í…Œì´ë„ˆ ì‹œì‘ í•¨ìˆ˜
     /// </summary>
     public void ContainInitialize(ItemData data, int _count = 1)
     {
@@ -74,9 +73,9 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     }
 
     /// <summary>
-    /// ÄÁÅ×ÀÌ³Ê¿¡ ¾ÆÀÌÅÛ Á¤º¸ ³Ö±â
+    /// ì»¨í…Œì´ë„ˆì— ì•„ì´í…œ ì •ë³´ ë„£ê¸°
     /// </summary>
-    /// <param name="_data">µé¾î°¥ ¾ÆÀÌÅÛ Á¤º¸</param>
+    /// <param name="_data">ë“¤ì–´ê°ˆ ì•„ì´í…œ ì •ë³´</param>
     public void SetItemObject(ItemData _data, int _count = 1)
     {
         item = _data;
@@ -92,7 +91,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     }
 
     /// <summary>
-    /// ¼±ÅÃµÈ ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³Ê
+    /// ì„ íƒëœ ì•„ì´í…œ ì»¨í…Œì´ë„ˆ
     /// </summary>
     /// <param name="obj"></param>
     public GameObject SetSelectedItem(GameObject obj)
@@ -106,7 +105,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ÄÁÅ×¾î³Ê ³»¿ë Áö¿ì±â
+    /// ì•„ì´í…œ ì»¨í…Œì–´ë„ˆ ë‚´ìš© ì§€ìš°ê¸°
     /// </summary>
     public void ResetSelectedItem()
     {
@@ -122,16 +121,30 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         canvasGroup.alpha = 0.5f;
     }
 
-    public void ItemStack(int _count = 1)
+    public int ItemStack(int _count = 1)
     {
         Count += _count;
-        itemCount.text = Count.ToString();
+
+        Debug.Log(item.maxItemCount);
+
+        if (Count > item.maxItemCount)
+        {
+            int result = Count - item.maxItemCount;
+            Count = item.maxItemCount; 
+            SetCount();
+            return result;
+        }
+        else
+        {
+            SetCount();
+            return 0;
+        }
     }
 
     public void ItemDestack(int _count = 1)
     {
         Count -= _count;
-        itemCount.text = Count.ToString();
+        SetCount();
     }
 
     public void ItemSplit(int _count = 1)
@@ -143,12 +156,17 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     public void ContainRemvoe()
     {
-        // ¾ÆÀÌÅÛ Á¤º¸ »èÁ¦
+        // ì•„ì´í…œ ì •ë³´ ì‚­ì œ
         ResetSelectedItem();
 
         transform.SetParent(Factory.Instance.containChild);
 
-        // °ÔÀÓ ¿ÀºêÁ§Æ® ºñÈ°¼ºÈ­
+        // ê²Œì„ ì˜¤ë¸Œì íŠ¸ ë¹„í™œì„±í™”
         gameObject.SetActive(false);
+    }
+
+    public void SetCount()
+    {
+        itemCount.text = Count.ToString();
     }
 }

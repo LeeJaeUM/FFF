@@ -142,6 +142,7 @@ public class InventoryUI : MonoBehaviour
                         RefrechColor(true);
                         break;
                     case 3:
+                        // 같은 아이템이면 저장
                         AddContain(containGrab);
                         ColorChangeLoop(SlotColorHighlights.White, contain.ItemSize, highlightedSlot.GetComponent<InvenSlot>().gridPos);
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
@@ -154,7 +155,7 @@ public class InventoryUI : MonoBehaviour
                 InvenSlot highlightedSlotScript = highlightedSlot.GetComponent<InvenSlot>();
                 ColorChangeLoop(SlotColorHighlights.White,
                     highlightedSlotScript.storedItemSize, highlightedSlotScript.storedItemStartPos);
-                SetSelectedItem(GetItem(highlightedSlot));
+                SetSelectedItem(GrabContain(GetItem(highlightedSlot)));
                 SlotSector.Instance.SetPosOffset();
                 RefrechColor(true);
             }
@@ -217,10 +218,16 @@ public class InventoryUI : MonoBehaviour
             isOverEdge = true;
         }
     }
-
+    
+    /// <summary>
+    /// 슬롯 문제 해결
+    /// </summary>
+    /// <param name="itemSize">아이템 사이즈</param>
+    /// <returns></returns>
     private int SlotCheck(Vector2Int itemSize)
     {
         GameObject SlotObj = null;
+        ItemContain SlotContain = null;
         if (!isOverEdge)
         {
             for (int y = 0; y < itemSize.y; y++)
@@ -233,9 +240,11 @@ public class InventoryUI : MonoBehaviour
                     {
                         if (SlotObj == null)
                         {
+                            // 슬롯에 담긴 컨테이너 정보 추출
                             SlotObj = instance.storedItemObject;
                             otherItemPos = instance.storedItemStartPos;
-                            otherItemSize = SlotObj.GetComponent<ItemContain>().item.Size;
+                            SlotContain = SlotObj.GetComponent<ItemContain>();
+                            otherItemSize = SlotContain.item.Size;
                         }
                         else if (SlotObj != instance.storedItemObject && instance.data != containGrab.GetComponent<ItemContain>().item)
                             return 2;
@@ -398,18 +407,30 @@ public class InventoryUI : MonoBehaviour
 
             }
         }
-        returnItem.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
-        returnItem.GetComponent<CanvasGroup>().alpha = 0.5f;
-        returnItem.transform.position = Input.mousePosition;
-
-        //tooltip.Close();
 
         return returnItem;
     }
 
+    /// <summary>
+    /// 아이템 컨테이너 잡기
+    /// </summary>
+    /// <param name="invenSlot"></param>
+    /// <returns></returns>
+    private GameObject GrabContain(GameObject invenSlot)
+    {
+
+        invenSlot.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+        invenSlot.GetComponent<CanvasGroup>().alpha = 0.5f;
+        invenSlot.transform.position = Input.mousePosition;
+
+        //tooltip.Close();
+
+        return invenSlot;
+    }
+
     private GameObject SwapItem(GameObject item)
     {
-        GameObject tempItem = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
+        GameObject tempItem = GrabContain(GetItem(slotGrid[otherItemPos.x, otherItemPos.y]));
         StoreItem(item);
         return tempItem;
     }
@@ -421,14 +442,29 @@ public class InventoryUI : MonoBehaviour
     {
         GameObject storeObj = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
 
+        // 들어간 컨테이너
         ItemContain InContain = obj.GetComponent<ItemContain>();
+
+        /// 저장된 컨테이너
         ItemContain Outcontain = storeObj.GetComponent<ItemContain>();
         
-        Outcontain.ItemStack(InContain.GetComponent<ItemContain>().Count);
-        StoreItem(Outcontain.gameObject, true);
+        int remainCount = Outcontain.ItemStack(InContain.GetComponent<ItemContain>().Count);
         Debug.Log(StackStartPos);
         Debug.Log(otherItemPos);
-        InContain.ContainRemvoe();
+        Debug.Log(remainCount);
+        
+        if (remainCount == 0)
+        {
+            StoreItem(Outcontain.gameObject, true);
+            InContain.ContainRemvoe();  // 컨테이너 삭제
+        }
+        else
+        {
+            InContain.Count = remainCount;
+            InContain.SetCount();
+            containGrab = GrabContain(obj);
+        }
+        StoreItem(Outcontain.gameObject, true);
     }
 
     /// <summary>
