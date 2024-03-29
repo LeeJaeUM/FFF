@@ -12,26 +12,36 @@ public class MonsterCtrl : MonoBehaviour
     [SerializeField]
     private Transform skyLight; // directional light
     [SerializeField]
-    private Transform[] area; // ¸ó½ºÅÍÀÇ ÀÌµ¿ ·çÆ® º¯¼ö
+    private Transform[] area; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ë£¨íŠ¸ ë³€ìˆ˜
     [SerializeField]
-    private Transform player; // ÇÃ·¹ÀÌ¾î À§Ä¡
-    private float chaseDuration = 10f; // ÃßÀûÀ» À¯ÁöÇÒ ½Ã°£
+    private Transform player; // í”Œë ˆì´ì–´ ìœ„ì¹˜
+    [SerializeField]
+    private GameObject darkWall; // ë°¤ì´ ë  ë•Œë§ˆë‹¤ ì‚¬ë¼ì§ˆ ë²½(íŒŒë€ìƒ‰ ë²½)
+    [SerializeField]
+    private Color afternoonAmbientColor; // ë‚®ìœ¼ë¡œ ë³€í™˜ë  ë•Œ SkyBox ìƒ‰
+    [SerializeField]
+    private Color nightAmbientColor; // ë°¤ìœ¼ë¡œ ë³€í™˜ë  ë•Œ SkyBox ìƒ‰
+    private float chaseDuration = 10f; // ì¶”ì ì„ ìœ ì§€í•  ì‹œê°„
 
-    private float totalTime = 30; // ³·°ú ¹ãÀÌ ¹Ù²î´Â ½Ã°£
+    private float totalTime = 30f; // ë‚®ê³¼ ë°¤ì´ ë°”ë€ŒëŠ” ì‹œê°„
     private float nowTime = 0;
-    private float chaseTimer = 0; // ÃßÀûÀ» À¯ÁöÇÏ´Â Å¸ÀÌ¸Ó
-    private float pursuitRange = 3f; // ÇÃ·¹ÀÌ¾î¸¦ ÀÎ½ÄÇÏ´Â ¹üÀ§
+    private float chaseTimer = 0; // ì¶”ì ì„ ìœ ì§€í•˜ëŠ” íƒ€ì´ë¨¸
+    private float pursuitRange = 3f; // í”Œë ˆì´ì–´ë¥¼ ì¸ì‹í•˜ëŠ” ë²”ìœ„
 
-    private bool isMonsterMove = false; // ¸ó½ºÅÍÀÇ ÀÌµ¿ »óÈ²
-    private int current = 0; // ¸ó½ºÅÍÀÇ ÀÌµ¿ ¼ø¼­ º¯¼ö
-    private bool isChasing = false; // ÃßÀû ÁßÀÎÁö ¿©ºÎÈ®ÀÎ
+    private bool isMonsterMove = false; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ìƒí™©
+    private int current = 0; // ëª¬ìŠ¤í„°ì˜ ì´ë™ ìˆœì„œ ë³€ìˆ˜
+    private bool isChasing = false; // ì¶”ì  ì¤‘ì¸ì§€ ì—¬ë¶€í™•ì¸
+    private bool isDarkWall = true; // ë²½ì˜ ìƒì„± ì—¬ë¶€
+
+    private int maxHp = 5;
+    private int stopHp = 0;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
 
-        // ÃÊ±â ¸ñÀûÁö ¼³Á¤
+        // ì´ˆê¸° ëª©ì ì§€ ì„¤ì •
         SetDestinationByIndex(current);
     }
 
@@ -41,8 +51,18 @@ public class MonsterCtrl : MonoBehaviour
 
         if (nowTime >= totalTime)
         {
-            RotateSkyLight();
             isMonsterMove = !isMonsterMove;
+            if(isMonsterMove)
+            {
+                darkWall.SetActive(false);
+                RenderSettings.ambientSkyColor = nightAmbientColor;
+            }
+            else if(!isMonsterMove)
+            {
+                darkWall.SetActive(true);
+                RenderSettings.ambientSkyColor = afternoonAmbientColor;
+            }
+
             nowTime = 0;
 
             SetNextDestination();
@@ -50,10 +70,10 @@ public class MonsterCtrl : MonoBehaviour
 
         if (isMonsterMove == true && area != null && area.Length>0)
         {
-            // ÇÃ·¹ÀÌ¾î¿ÍÀÇ °Å¸® °è»ê
+            // í”Œë ˆì´ì–´ì™€ì˜ ê±°ë¦¬ ê³„ì‚°
             float distanceToPlayer=Vector3.Distance(transform.position, player.position);
 
-            // ÃßÀû ½ÃÀÛ Á¶°Ç
+            // ì¶”ì  ì‹œì‘ ì¡°ê±´
             if(player != null && distanceToPlayer <= pursuitRange)
             {
                 isChasing = true;
@@ -63,7 +83,7 @@ public class MonsterCtrl : MonoBehaviour
                 anim.SetBool("IsWalk", true);
             }
 
-            // ÃßÀû ÁßÀÌ¸é¼­ ÁöÁ¤µÈ ½Ã°£ ÀÌ³»¿¡ ÀÖ´Â °æ¿ì °è¼Ó ÃßÀû
+            // ì¶”ì  ì¤‘ì´ë©´ì„œ ì§€ì •ëœ ì‹œê°„ ì´ë‚´ì— ìˆëŠ” ê²½ìš° ê³„ì† ì¶”ì 
             if(isChasing && chaseTimer<chaseDuration)
             {
                 agent.SetDestination(player.position);
@@ -76,7 +96,7 @@ public class MonsterCtrl : MonoBehaviour
 
                 if (remainingDistance <= agent.stoppingDistance)
                 {
-                    // ÇöÀç ¸ñÀûÁö¿¡ µµÂøÇßÀ¸¸é ´ÙÀ½ ¸ñÀûÁö ¼³Á¤
+                    // í˜„ì¬ ëª©ì ì§€ì— ë„ì°©í–ˆìœ¼ë©´ ë‹¤ìŒ ëª©ì ì§€ ì„¤ì •
                     SetNextDestination();
                     isChasing = false;
                 }
@@ -91,21 +111,13 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
-    void RotateSkyLight()
-    {
-        if (skyLight != null)
-        {
-            skyLight.transform.Rotate(180f, 0, 0);
-        }
-    }
-
     void SetNextDestination()
     {
         if(area!=null && area.Length>0)
         {
             current = (current + 1) % area.Length;
 
-            // ´ÙÀ½ ¸ñÀûÁö·Î ÀÌµ¿
+            // ë‹¤ìŒ ëª©ì ì§€ë¡œ ì´ë™
             SetDestinationByIndex(current);
         }
     }
@@ -115,6 +127,21 @@ public class MonsterCtrl : MonoBehaviour
         if(area != null && area.Length>index)
         {
             agent.SetDestination(area[index].position);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("BULLET"))
+        {
+            Debug.Log("ë‹¿ì•˜ìŠµë‹ˆë‹¤");
+            maxHp -= 1;
+        }
+
+        if(maxHp<=0)
+        {
+            Debug.Log("í™œë™ì„ ì •ì§€í•©ë‹ˆë‹¤");
+            agent.ResetPath();
         }
     }
 }
