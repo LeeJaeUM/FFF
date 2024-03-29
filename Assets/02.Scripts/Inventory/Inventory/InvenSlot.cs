@@ -1,36 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InvenSlot : RecycleObject
 {
     /// <summary>
-    /// ±×¸®µå¿¡ ÀúÀåµÈ ¾ÆÀÌÅÛ Á¤º¸
+    /// ê·¸ë¦¬ë“œì— ì €ì¥ëœ ì•„ì´í…œ ì •ë³´
     /// </summary>
     public ItemData data;
 
     /// <summary>
-    /// ±×¸®µå ÁÂÇ¥
+    /// ê·¸ë¦¬ë“œ ì¢Œí‘œ
     /// </summary>
     public Vector2Int gridPos;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ °ÔÀÓ ¿ÀºêÁ§Æ®
+    /// ì €ì¥ëœ ë¬¼ì²´ ê²Œì„ ì˜¤ë¸Œì íŠ¸
     /// </summary>
     public GameObject storedItemObject;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ÀÇ »çÀÌÁî
+    /// ì €ì¥ëœ ë¬¼ì²´ì˜ ì‚¬ì´ì¦ˆ
     /// </summary>
     public Vector2Int storedItemSize;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ÀÇ ½ÃÀÛ ÁÂÇ¥
+    /// ì €ì¥ëœ ë¬¼ì²´ì˜ ì‹œì‘ ì¢Œí‘œ
     /// </summary>
     public Vector2Int storedItemStartPos;
 
     /// <summary>
-    /// ºó ½½·ÔÀ» ³ªÅ¸³»´Â ¿©ºÎ
+    /// ë¹ˆ ìŠ¬ë¡¯ì„ ë‚˜íƒ€ë‚´ëŠ” ì—¬ë¶€
     /// </summary>
     public bool isEmpty = true;
 

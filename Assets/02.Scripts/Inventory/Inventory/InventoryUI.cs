@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -68,9 +69,11 @@ public class InventoryUI : MonoBehaviour
     public GameObject highlightedSlot;
 
     [Header("옵션")]
-    private int _horizontalSlotCount = 8;
 
-    [Range(1, 10)]
+    [Range(5, 8)]
+    public int _horizontalSlotCount = 5;
+
+    [Range(2, 10)]
     public int _verticalSlotCount = 5;
 
     /// <summary>
@@ -96,6 +99,7 @@ public class InventoryUI : MonoBehaviour
         child = transform.GetChild(1);
         DropParent = child.GetChild(0);
         DragParent = child.GetChild(1);
+        tooltip = GetComponentInChildren<ItemTooltip>();
     }
 
     private void Start()
@@ -144,10 +148,11 @@ public class InventoryUI : MonoBehaviour
                     case 3:
                         // 같은 아이템이면 저장
                         AddContain(containGrab);
-                        ColorChangeLoop(SlotColorHighlights.White, contain.ItemSize, highlightedSlot.GetComponent<InvenSlot>().gridPos);
+                        //ColorChangeLoop(SlotColorHighlights.White, contain.ItemSize, highlightedSlot.GetComponent<InvenSlot>().gridPos);
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
                         break;
                 }
+                tooltip.IsPause = false;
             }
             else if (highlightedSlot != null && containGrab == null
                 && !highlightedSlot.GetComponent<InvenSlot>().isEmpty)
@@ -158,6 +163,8 @@ public class InventoryUI : MonoBehaviour
                 SetSelectedItem(GrabContain(GetItem(highlightedSlot)));
                 SlotSector.Instance.SetPosOffset();
                 RefrechColor(true);
+
+                tooltip.IsPause = true;
             }
             //Debug.Log(highlightedSlot != null && ItemContain.selectedItem == null);
             //if (highlightedSlot != null)

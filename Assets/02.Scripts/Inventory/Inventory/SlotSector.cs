@@ -8,12 +8,12 @@ using UnityEngine.EventSystems;
 public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
-    /// ½½·Ô(»óÀ§ °³Ã¼)
+    /// ìŠ¬ë¡¯(ìƒìœ„ ê°œì²´)
     /// </summary>
     public GameObject slotParent;
 
     /// <summary>
-    /// °íÀ¯ °´Ã¼ ³Ñ¹ö
+    /// ê³ ìœ  ê°ì²´ ë„˜ë²„
     /// </summary>
     public int QuadNum;
 
@@ -28,7 +28,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     [SerializeField]
     /// <summary>
-    /// ºÎ¸ğÀÇ ½ºÅ©¸³Æ®
+    /// ë¶€ëª¨ì˜ ìŠ¤í¬ë¦½íŠ¸
     /// </summary>
     private InvenSlot parentSlotScript;
 
@@ -40,7 +40,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     /// <summary>
-    /// ¸¶¿ì½º Æ÷ÀÎÆ®°¡ µé¾î¿Ã °æ¿ì
+    /// ë§ˆìš°ìŠ¤ í¬ì¸íŠ¸ê°€ ë“¤ì–´ì˜¬ ê²½ìš°
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
@@ -48,7 +48,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         Instance = this;
         inven.highlightedSlot = slotParent;
 
-        // ¸¶¿ì½º À§Ä¡¿¡ ¾î¶² UI°¡ ÀÖ´Ù.
+        // ë§ˆìš°ìŠ¤ ìœ„ì¹˜ì— ì–´ë–¤ UIê°€ ìˆë‹¤.
         SetPosOffset();
         if (itemContain != null)
         {
@@ -58,10 +58,6 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             inven.ColorChangeLoop(SlotColorHighlights.Blue,
                 parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
-        if (parentSlotScript != null)
-        {
-            //GameManager.Instance.inventory.tooltip.Open(parentSlotScript.data);
         }
     }
     

@@ -5,27 +5,27 @@ using UnityEngine;
 public class InvenGrid : MonoBehaviour
 {
     /// <summary>
-    /// ±×¸®µå ¿ÀºêÁ§Æ®
+    /// ê·¸ë¦¬ë“œ ì˜¤ë¸Œì íŠ¸
     /// </summary>
     public GameObject[,] slotGrid;
 
     /// <summary>
-    /// ±×¸®µå ÇÁ¸®Æé
+    /// ê·¸ë¦¬ë“œ í”„ë¦¬í©
     /// </summary>
     public GameObject slotPrefab;
 
     /// <summary>
-    /// ±×¸®µå »çÀÌÁî
+    /// ê·¸ë¦¬ë“œ ì‚¬ì´ì¦ˆ
     /// </summary>
     public Vector2Int gridSize => GameManager.Instance.inven.gridSize;
 
     /// <summary>
-    /// ½½·ÔÀÇ Å©±â
+    /// ìŠ¬ë¡¯ì˜ í¬ê¸°
     /// </summary>
     public float slotSize => GameManager.Instance.inven.slotSize;
 
     /// <summary>
-    /// ½½·Ô »çÀÌÀÇ °Å¸®
+    /// ìŠ¬ë¡¯ ì‚¬ì´ì˜ ê±°ë¦¬
     /// </summary>
     public float edgePadding => GameManager.Instance.inven.edgePadding;
 
@@ -37,7 +37,7 @@ public class InvenGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// ½½·Ô »ı¼º
+    /// ìŠ¬ë¡¯ ìƒì„±
     /// </summary>
     private void CreateSlots()
     {
@@ -60,7 +60,7 @@ public class InvenGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// »çÀÌÁî¸¦ ´Ù½Ã Á¶Àı
+    /// ì‚¬ì´ì¦ˆë¥¼ ë‹¤ì‹œ ì¡°ì ˆ
     /// </summary>
     private void ResizePanel()
     {

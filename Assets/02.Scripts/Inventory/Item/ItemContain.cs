@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemContain : RecycleObject, IPointerClickHandler
+public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public int id;
 
@@ -168,5 +168,18 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     public void SetCount()
     {
         itemCount.text = Count.ToString();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(item != null)
+        {
+            GameManager.Instance.inven.tooltip.Open(item);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.Instance.inven.tooltip.Close();
     }
 }
