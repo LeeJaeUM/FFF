@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class ItemContain : RecycleObject, IPointerClickHandler
 {
     public int id;
 
@@ -151,7 +151,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     {
         ItemDestack(_count);
 
-        GameManager.Instance.inven.containGrab = Factory.Instance.ItemContain(item, _count);
+        GameManager.Instance.inven.containGrab = Factory.Instance.GetItemContain(item, _count);
     }
 
     public void ContainRemvoe()
@@ -168,18 +168,5 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     public void SetCount()
     {
         itemCount.text = Count.ToString();
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if(item != null)
-        {
-            GameManager.Instance.inven.tooltip.Open(item);
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GameManager.Instance.inven.tooltip.Close();
     }
 }

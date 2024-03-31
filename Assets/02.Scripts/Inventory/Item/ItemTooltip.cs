@@ -30,6 +30,7 @@ public class ItemTooltip : MonoBehaviour
             {
                 Close();    // 일시 정지가 되면 열려있던 상세 정보창도 닫는다.
             }
+            Debug.Log(isPause);
         }
     }
 
@@ -55,6 +56,11 @@ public class ItemTooltip : MonoBehaviour
         DescriptionText = child.GetComponent<TextMeshProUGUI>();
     }
 
+    private void Update()
+    {
+        MovePosition(Mouse.current.position.ReadValue());
+    }
+
     public void Open(ItemData data)
     {
         if(!IsPause && data != null)
@@ -67,7 +73,6 @@ public class ItemTooltip : MonoBehaviour
             weightText.text = $"무게 : {data.itemWeight}";
 
             canvasGroup.alpha = 0.0001f;
-            MovePosition(Mouse.current.position.ReadValue());
 
             StopAllCoroutines();
             StartCoroutine(FadeIn());
@@ -94,6 +99,7 @@ public class ItemTooltip : MonoBehaviour
             rect.position = screenPos;
         }
     }
+
 
     /// <summary>
     /// 알파를 0 -> 1로 만드는 코루틴

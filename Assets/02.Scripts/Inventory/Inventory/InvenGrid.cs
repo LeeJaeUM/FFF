@@ -45,7 +45,7 @@ public class InvenGrid : MonoBehaviour
         {
             for(int x = 0; x < gridSize.x; x++)
             {
-                GameObject obj = Factory.Instance.GridSlot(x, y, this.transform);
+                GameObject obj = Factory.Instance.GetGridSlot(x, y, this.transform);
 
                 RectTransform rect = obj.transform.GetComponent<RectTransform>();
                 rect.localPosition = new Vector3(x * slotSize + edgePadding, y * slotSize + edgePadding, 0);

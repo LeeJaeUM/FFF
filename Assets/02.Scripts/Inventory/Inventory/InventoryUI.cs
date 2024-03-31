@@ -423,7 +423,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     /// <param name="invenSlot"></param>
     /// <returns></returns>
-    private GameObject GrabContain(GameObject invenSlot)
+    public GameObject GrabContain(GameObject invenSlot)
     {
 
         invenSlot.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);

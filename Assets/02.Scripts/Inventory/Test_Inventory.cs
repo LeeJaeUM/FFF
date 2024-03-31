@@ -9,6 +9,6 @@ public class Test_Inventory : TestBase
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        Factory.Instance.ItemContain(data);
+        Factory.Instance.GetItemContain(data);
     }
 }

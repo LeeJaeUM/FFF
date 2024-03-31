@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
-public class InvenSlot : RecycleObject
+public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
     /// 그리드에 저장된 아이템 정보
@@ -47,5 +48,19 @@ public class InvenSlot : RecycleObject
         }
 
         isEmpty = true;
+    }
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (data != null)
+        {
+            GameManager.Instance.inven.tooltip.Open(data);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.Instance.inven.tooltip.Close();
     }
 }
