@@ -8,7 +8,8 @@ public class BlockData : ScriptableObject
     public enum MaterialType
     {
         Wood = 0,
-        Stone
+        Stone,
+        Iron
     }
 
 

@@ -31,7 +31,7 @@ public class BCUI : MonoBehaviour
         spwaner = BaseCampManager.Instance.BlockSpwaner;
         for (int i = 0; i < buildSelectUIs.Length; i++)
         {
-            buildSelectUIs[i].onClick += OnClickBuildObjIcon;
+            buildSelectUIs[i].onClick += OnClickBuildObjIcon;   //액션 등록
         }
     }
 
@@ -57,6 +57,10 @@ public class BCUI : MonoBehaviour
         inputAction.Disable();
     }
 
+    /// <summary>
+    /// 탭 누르면 켜지고 꺼짐
+    /// </summary>
+    /// <param name="context"></param>
     private void OnBuildMode(InputAction.CallbackContext context)
     {
         isActive = !isActive;
