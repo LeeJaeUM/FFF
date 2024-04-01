@@ -23,7 +23,7 @@ public class MonsterCtrl : MonoBehaviour
     private Color nightAmbientColor; // 밤으로 변환될 때 SkyBox 색
     private float chaseDuration = 10f; // 추적을 유지할 시간
 
-    private float totalTime = 30f; // 낮과 밤이 바뀌는 시간
+    private float totalTime = 60f; // 낮과 밤이 바뀌는 시간
     private float nowTime = 0;
     private float chaseTimer = 0; // 추적을 유지하는 타이머
     private float pursuitRange = 3f; // 플레이어를 인식하는 범위
@@ -90,6 +90,14 @@ public class MonsterCtrl : MonoBehaviour
                 chaseTimer += Time.deltaTime;
             }
 
+            if (maxHp <= 0)
+            {
+                Debug.Log("활동을 정지합니다");
+                agent.ResetPath();
+
+                StartCoroutine(ReDestination());
+            }
+
             else
             {
                 float remainingDistance = agent.remainingDistance;
@@ -137,11 +145,12 @@ public class MonsterCtrl : MonoBehaviour
             Debug.Log("닿았습니다");
             maxHp -= 1;
         }
+    }
 
-        if(maxHp<=0)
-        {
-            Debug.Log("활동을 정지합니다");
-            agent.ResetPath();
-        }
+    IEnumerator ReDestination()
+    {
+        yield return new WaitForSeconds(20f);
+
+        maxHp = 5;
     }
 }
