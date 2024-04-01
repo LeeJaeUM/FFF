@@ -88,6 +88,8 @@ public class InventoryUI : MonoBehaviour
 
     public ItemData[] itemDatas = null;
 
+    private InvenUI UI;
+
     MouseInputAction inputAction;
 
     private void Awake()
@@ -100,10 +102,12 @@ public class InventoryUI : MonoBehaviour
         DropParent = child.GetChild(0);
         DragParent = child.GetChild(1);
         tooltip = GetComponentInChildren<ItemTooltip>();
+        UI = GetComponentInChildren<InvenUI>();
     }
 
     private void Start()
-    { 
+    {
+        UI.Initialized();
         invenGrid.GridInitialize();
     }
 
@@ -191,10 +195,12 @@ public class InventoryUI : MonoBehaviour
     /// <param name="itemSize">아이템 크기</param>
     private void CheckArea(Vector2Int itemSize)
     {
+        // 아이템 컨테이너의 가운데 위치
         Vector2Int halfOffset = Vector2Int.zero;
         halfOffset.x = (itemSize.x - (itemSize.x % 2 == 0 ? 0 : 1)) / 2;
         halfOffset.y = (itemSize.y - (itemSize.y % 2 == 0 ? 0 : 1)) / 2;
 
+        // 아이템 컨테이너의 시작 위치 = 마우스 위치 그리드 - (가운데 위치 + 슬롯의 제 4분면위치)
         totalOffset = highlightedSlot.GetComponent<InvenSlot>().gridPos - (halfOffset + SlotSector.posOffset);
 
         checkStartPos = totalOffset;
@@ -347,6 +353,11 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 슬롯에 아이템 저장
+    /// </summary>
+    /// <param name="item">들어갈 아이템 오브젝트</param>
+    /// <param name="isStack"></param>
     private void StoreItem(GameObject item, bool isStack = false)
     {
         ItemContain contain = item.GetComponent<ItemContain>();
