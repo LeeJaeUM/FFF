@@ -8,7 +8,7 @@ public class EnergyDrink : MonoBehaviour
     /// <summary>
     /// 에너지드링크 효과 지속 시간
     /// </summary>
-    public float duration = 5.0f;
+    public float duration = 3.0f;
 
     private PlayerCtrl player;
 
@@ -44,6 +44,8 @@ public class EnergyDrink : MonoBehaviour
 
             // 아이템 사용 여부 플래그 설정
             isUsed = true;
+
+            OnGetDrink?.Invoke();
         }
     }
 

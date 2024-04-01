@@ -39,6 +39,8 @@ public class PlayerCtrl : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
+
+        FindObjectOfType<EnergyDrink>().OnGetDrink += ApplyDrinkEffect;
     }
 
     private void Update()
@@ -70,5 +72,12 @@ public class PlayerCtrl : MonoBehaviour
     public void ModifyMoveSpeed(int newSpeed)
     {
         MoveSpeed = newSpeed;
+    }
+
+    private void ApplyDrinkEffect()
+    {
+        // 플레이어에게 효과를 적용
+        // 예를 들어, 여기서는 효과를 적용하지 않고 있으므로 테스트 스피드를 변경하는 부분을 다른 효과로 대체해야 합니다.
+        MoveSpeed = 3; // 예시로 테스트 스피드를 변경하는 부분입니다.
     }
 }

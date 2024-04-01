@@ -4925,6 +4925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b19447a3764c6429e68fb14840d03d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testSpeed: 3
 --- !u!1 &5325391232570010106
 GameObject:
   m_ObjectHideFlags: 0
@@ -6027,6 +6028,10 @@ PrefabInstance:
     - target: {fileID: 4273520345615284239, guid: 1eedd8b659316d94fb586e2efbe61983, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7227109694801861392, guid: 1eedd8b659316d94fb586e2efbe61983, type: 3}
+      propertyPath: dropChance
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8269323394439723422, guid: 1eedd8b659316d94fb586e2efbe61983, type: 3}
       propertyPath: m_Name
