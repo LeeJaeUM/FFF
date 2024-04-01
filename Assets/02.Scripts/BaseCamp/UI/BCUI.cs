@@ -48,11 +48,11 @@ public class BCUI : MonoBehaviour
     {
         inputAction.Enable();
         inputAction.Player.BuildMode.performed += OnBuildMode;
-        inputAction.Player.BuildMode.canceled += OnBuildMode;
+        //inputAction.Player.BuildMode.canceled += OnBuildMode;
     }
     private void OnDisable()
     {
-        inputAction.Player.BuildMode.canceled -= OnBuildMode;
+        //inputAction.Player.BuildMode.canceled -= OnBuildMode;
         inputAction.Player.BuildMode.performed -= OnBuildMode;
         inputAction.Disable();
     }
