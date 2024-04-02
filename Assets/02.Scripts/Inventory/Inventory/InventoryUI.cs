@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System;
+using Unity.VisualScripting;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -53,10 +55,7 @@ public class InventoryUI : MonoBehaviour
 
     public InvenGrid invenGrid;
 
-    /// <summary>
-    /// 아이템 내용을 나타내는 클래스
-    /// </summary>
-    public ItemTooltip tooltip;
+    CanvasGroup canvasGroup;
 
     /// <summary>
     /// 현재 손에 있는 아이템 컨테이너
@@ -88,17 +87,46 @@ public class InventoryUI : MonoBehaviour
 
     public ItemData[] itemDatas = null;
 
+    public Action<float> onWeightChange;
+
+    /// <summary>
+    /// 인벤토리 무게
+    /// </summary>
+    private float weight;
+
+    public float TotalWeight
+    {
+        get => weight;
+        set
+        {
+            if(weight != value)
+            {
+                weight = value;
+                onWeightChange?.Invoke(weight);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템 내용을 나타내는 클래스
+    /// </summary>
+    public ItemTooltip tooltip;
+
     private InvenUI UI;
 
+    /// <summary>
+    /// 입력
+    /// </summary>
     MouseInputAction inputAction;
 
     private void Awake()
     {
         inputAction = new MouseInputAction();
+        canvasGroup = GetComponent<CanvasGroup>();
 
         Transform child = transform.GetChild(0);
         invenGrid = child.GetComponentInChildren<InvenGrid>();
-        child = transform.GetChild(1);
+        child = child.GetChild(3);
         DropParent = child.GetChild(0);
         DragParent = child.GetChild(1);
         tooltip = GetComponentInChildren<ItemTooltip>();
@@ -107,6 +135,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
+        TotalWeight = 0;
         UI.Initialized();
         invenGrid.GridInitialize();
     }
@@ -385,6 +414,7 @@ public class InventoryUI : MonoBehaviour
         }
 
         contain.id = containList.Count;
+        TotalWeight += contain.item.itemWeight;
         containList.Add(contain);
         // 게임 오브젝트 재설정
         item.transform.SetParent(DropParent);
@@ -406,9 +436,10 @@ public class InventoryUI : MonoBehaviour
         Vector2Int tempItemPos = invenSlot.storedItemStartPos;
 
         GameObject returnItem = invenSlot.storedItemObject;
-        Vector2Int itemSize = returnItem.GetComponent<ItemContain>().item.Size;
-
-        containList.RemoveAt(returnItem.GetComponent<ItemContain>().id);
+        ItemContain returnItemContain = returnItem.GetComponent<ItemContain>();
+        Vector2Int itemSize = returnItemContain.item.Size;
+        TotalWeight -= returnItemContain.item.itemWeight;
+        containList.RemoveAt(returnItemContain.id);
 
         for (int y = 0; y < itemSize.y; y++)
         {
@@ -491,6 +522,26 @@ public class InventoryUI : MonoBehaviour
     public void RemoveSelectedButton()
     {
         containGrab = null;
+    }
+
+    /// <summary>
+    /// 인벤토리를 키는 함수
+    /// </summary>
+    public void Open()
+    {
+        canvasGroup.alpha = 1;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    /// <summary>
+    /// 인벤토리를 끝는 함수
+    /// </summary>
+    public void Close()
+    {
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+        canvasGroup.alpha = 0;
     }
 }
 

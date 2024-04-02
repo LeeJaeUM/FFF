@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class InvenUI : MonoBehaviour
 {
     // 하위 UI
-    RectTransform InvenHead;
-    RectTransform InvenInfo;
-    RectTransform InvenGrid;
+    RectTransform invenHeadRect;
+    RectTransform invenInfoRect;
+    RectTransform invenGridRect;
 
     InventoryUI inven => GameManager.Instance.inven;
 
@@ -16,32 +16,41 @@ public class InvenUI : MonoBehaviour
 
     private void Awake()
     {
-        InvenHead = transform.GetChild(0).GetComponent<RectTransform>();
-        InvenInfo = transform.GetChild(1).GetComponent<RectTransform>();
-        InvenGrid = transform.GetChild(2).GetComponent<RectTransform>();
+        invenHeadRect = transform.GetChild(0).GetComponent<RectTransform>();
+        invenInfoRect = transform.GetChild(1).GetComponent<RectTransform>();
+        invenGridRect = transform.GetChild(2).GetComponent<RectTransform>();
+    }
+
+    private void Start()
+    {
+        InvenHead head = GetComponentInChildren<InvenHead>();
+        head.Drag += (position) =>
+        {
+            transform.position = transform.position + (Vector3)position;
+        };
     }
 
     public void Initialized()
     {
         // 헤드 부분 크기
-        InvenHead.localPosition = new(0, inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize + inven.edgePadding * 2 + inven.slotSize);
-        InvenHead.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
+        invenHeadRect.localPosition = new(0, inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize + inven.edgePadding * 2 + inven.slotSize);
+        invenHeadRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
             inven.edgePadding * 2 + inven._horizontalSlotCount * inven.slotSize);
-        InvenHead.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
+        invenHeadRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
             inven.edgePadding * 2 + inven.slotSize);
 
         // 정보창 크기
-        InvenInfo.localPosition = new(0, inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize);
-        InvenInfo.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
+        invenInfoRect.localPosition = new(0, inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize);
+        invenInfoRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
             inven.edgePadding * 2 + inven._horizontalSlotCount * inven.slotSize);
-        InvenInfo.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
+        invenInfoRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
             inven.edgePadding * 2 + inven.slotSize);
 
         // 그리드의 크기
-        InvenGrid.localPosition = new(0, 0);
-        InvenGrid.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
+        invenGridRect.localPosition = new(0, 0);
+        invenGridRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
             inven.edgePadding * 2 + inven._horizontalSlotCount * inven.slotSize);
-        InvenGrid.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
+        invenGridRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
             inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize);
     }
 }
