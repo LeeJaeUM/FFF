@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System;
 using Unity.VisualScripting;
+using System.ComponentModel;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -167,12 +168,14 @@ public class InventoryUI : MonoBehaviour
                 switch (checkSatae)
                 {
                     case 0:
-                        StoreItem(containGrab);
+                        // 빈 슬롯에 저장
+                        StoreItem(containGrab, totalOffset);
                         ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
                         contain.ResetSelectedItem();
                         RemoveSelectedButton();
                         break;
                     case 1:
+                        // 다른 아이템 스왑
                         SetSelectedItem(SwapItem(containGrab));
                         SlotSector.Instance.SetPosOffset();
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
@@ -181,7 +184,6 @@ public class InventoryUI : MonoBehaviour
                     case 3:
                         // 같은 아이템이면 저장
                         AddContain(containGrab);
-                        //ColorChangeLoop(SlotColorHighlights.White, contain.ItemSize, highlightedSlot.GetComponent<InvenSlot>().gridPos);
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
                         break;
                 }
@@ -265,8 +267,8 @@ public class InventoryUI : MonoBehaviour
     /// 슬롯 문제 해결
     /// </summary>
     /// <param name="itemSize">아이템 사이즈</param>
-    /// <returns></returns>
-    private int SlotCheck(Vector2Int itemSize)
+    /// <returns>0: 빈 슬롯, 1: 아이템이 들어간 슬롯</returns>
+    private int SlotCheck(Vector2Int StartPos, Vector2Int itemSize)
     {
         GameObject SlotObj = null;
         ItemContain SlotContain = null;
@@ -276,7 +278,7 @@ public class InventoryUI : MonoBehaviour
             {
                 for (int x = 0; x < itemSize.x; x++)
                 {
-                    InvenSlot instance = slotGrid[checkStartPos.x + x, checkStartPos.y + y].GetComponent<InvenSlot>();
+                    InvenSlot instance = slotGrid[StartPos.x + x, StartPos.y + y].GetComponent<InvenSlot>();
 
                     if (!instance.isEmpty)  // slot이 비어있지 않으며 
                     {
@@ -289,6 +291,7 @@ public class InventoryUI : MonoBehaviour
                             otherItemSize = SlotContain.item.Size;
                         }
                         else if (SlotObj != instance.storedItemObject && instance.data != containGrab.GetComponent<ItemContain>().item)
+                            // 슬롯 오브젝트와 저장된 아이템하고 다른때, 아이템 정보가 서로 다른때
                             return 2;
                         else if (instance.data == containGrab.GetComponent<ItemContain>().item)
                             return 3;
@@ -303,13 +306,12 @@ public class InventoryUI : MonoBehaviour
         return 2;
     }
 
-
     public void RefrechColor(bool enter)
     {
         if (enter)
         {
             CheckArea(containGrab.GetComponent<ItemContain>().ItemSize);
-            checkSatae = SlotCheck(checkSize);
+            checkSatae = SlotCheck(checkStartPos, checkSize);
             switch (checkSatae)
             {
                 case 0:
@@ -387,16 +389,11 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     /// <param name="item">들어갈 아이템 오브젝트</param>
     /// <param name="isStack"></param>
-    private void StoreItem(GameObject item, bool isStack = false)
+    private void StoreItem(GameObject item, Vector2Int startPos)
     {
         ItemContain contain = item.GetComponent<ItemContain>();
         contain.isDragging = false;
         Vector2Int itemSize = contain.item.Size;
-
-        Vector2Int startPos = totalOffset;
-
-        if (isStack)
-            startPos = otherItemPos;
 
         for (int y = 0; y < itemSize.y; y++)
         {
@@ -480,7 +477,7 @@ public class InventoryUI : MonoBehaviour
     private GameObject SwapItem(GameObject item)
     {
         GameObject tempItem = GrabContain(GetItem(slotGrid[otherItemPos.x, otherItemPos.y]));
-        StoreItem(item);
+        StoreItem(item, totalOffset);
         return tempItem;
     }
 
@@ -504,7 +501,7 @@ public class InventoryUI : MonoBehaviour
         
         if (remainCount == 0)
         {
-            StoreItem(Outcontain.gameObject, true);
+            StoreItem(Outcontain.gameObject, otherItemPos);
             InContain.ContainRemvoe();  // 컨테이너 삭제
         }
         else
@@ -513,8 +510,103 @@ public class InventoryUI : MonoBehaviour
             InContain.SetCount();
             containGrab = GrabContain(obj);
         }
-        StoreItem(Outcontain.gameObject, true);
+        StoreItem(Outcontain.gameObject, otherItemPos);
     }
+
+    public Action<ItemData, int> onDontGetItem;
+
+    public void GetItemToSlot(ItemData data, int _count)
+    {
+        //int remainCount = _count;
+
+        //for(int i = 0;  i < containList.Count; i++)
+        //{
+        //    if (containList[i].item == data)
+        //    {
+        //        remainCount = containList[i].ItemStack(_count);
+        //        if(remainCount == 0)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
+
+        //if(remainCount > 0)
+        //{
+        //    int state = 0;
+
+        //    for (int y = 0; y < _verticalSlotCount; y++)
+        //    {
+        //        for (int x = 0; x < _horizontalSlotCount; x++)
+        //        {
+        //            InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
+
+        //            // 슬롯이 비어 있다.
+        //            if (instance.isEmpty)
+        //            {
+        //                Debug.Log(instance.gridPos);
+        //                state = SlotCheck(instance.gridPos, data.Size);
+
+        //                if(state == 0)
+        //                {
+        //                    GameObject obj = Factory.Instance.GetItemContain(data, _count);
+        //                    StoreItem(obj, instance.gridPos);
+        //                    break;
+        //                }
+        //                else
+        //                {
+        //                    onDontGetItem?.Invoke(data, _count);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                onDontGetItem?.Invoke(data, _count);
+        //            }
+        //        }
+        //        if (state == 0)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
+
+        for (int y = 0; y < _verticalSlotCount; y++)
+        {
+            for (int x = 0; x < _horizontalSlotCount; x++)
+            {
+                InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
+
+                // 슬롯이 비어 있다.
+                if (instance.isEmpty)
+                {
+                    Debug.Log(instance.gridPos);
+                    int state = SlotCheck(instance.gridPos, data.Size);
+                    int remainCount = 0;
+
+                    switch (state)
+                    {
+                        case 0:
+                            GameObject obj = Factory.Instance.GetItemContain(data, _count);
+                            StoreItem(obj, instance.gridPos);
+                            break;
+                        case 2:
+                            // 자리가 없을 때
+                            onDontGetItem?.Invoke(data, _count);
+                            break;
+                        case 3:
+                            //remainCount = containList[i].ItemStack(_count);
+                            break;
+
+                    }
+                }
+                else
+                {
+                    
+                }
+            }
+        }
+    }
+
 
     /// <summary>
     /// 컨테이너 제거

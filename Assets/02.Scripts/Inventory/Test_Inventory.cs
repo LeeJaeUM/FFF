@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 public class Test_Inventory : TestBase
 {
     public ItemData data;
+    public int count;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        Factory.Instance.GetItemContain(data);
+        GameManager.Instance.inven.GetItemToSlot(data, count);
     }
 }
