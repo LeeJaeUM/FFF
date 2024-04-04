@@ -33,8 +33,7 @@ public class MonsterCtrl : MonoBehaviour
     private bool isChasing = false; // 추적 중인지 여부확인
     private bool isDarkWall = true; // 벽의 생성 여부
 
-    private int maxHp = 5;
-    private int stopHp = 0;
+    private int maxHp = 5; // 몬스터의 기존 Hp 
 
     private void Start()
     {
@@ -49,6 +48,7 @@ public class MonsterCtrl : MonoBehaviour
     {
         nowTime += Time.deltaTime;
 
+        // 시간의 흐름에 따라 낮밤 조절
         if (nowTime >= totalTime)
         {
             isMonsterMove = !isMonsterMove;
@@ -80,7 +80,7 @@ public class MonsterCtrl : MonoBehaviour
                 chaseTimer = 0;
 
                 agent.SetDestination(player.position);
-                anim.SetBool("IsWalk", true);
+                anim.SetBool("IsChasing", true);
             }
 
             // 추적 중이면서 지정된 시간 이내에 있는 경우 계속 추적
@@ -90,9 +90,9 @@ public class MonsterCtrl : MonoBehaviour
                 chaseTimer += Time.deltaTime;
             }
 
+            // 몬스터의 Hp가 0이 되었을 때 일시 정지
             if (maxHp <= 0)
             {
-                Debug.Log("활동을 정지합니다");
                 agent.ResetPath();
 
                 StartCoroutine(ReDestination());
@@ -130,6 +130,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // 몬스터의 맵 랜덤 이동
     void SetDestinationByIndex(int index)
     {
         if(area != null && area.Length>index)
@@ -140,9 +141,9 @@ public class MonsterCtrl : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // 총알에 맞았을 경우 체력 감소
         if(other.gameObject.CompareTag("BULLET"))
         {
-            Debug.Log("닿았습니다");
             maxHp -= 1;
         }
     }
@@ -151,6 +152,6 @@ public class MonsterCtrl : MonoBehaviour
     {
         yield return new WaitForSeconds(20f);
 
-        maxHp = 5;
+        maxHp = 5; // 체력 초기화
     }
 }
