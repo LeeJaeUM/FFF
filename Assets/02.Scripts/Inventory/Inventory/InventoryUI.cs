@@ -290,11 +290,15 @@ public class InventoryUI : MonoBehaviour
                             SlotContain = SlotObj.GetComponent<ItemContain>();
                             otherItemSize = SlotContain.item.Size;
                         }
-                        else if (SlotObj != instance.storedItemObject && instance.data != containGrab.GetComponent<ItemContain>().item)
-                            // 슬롯 오브젝트와 저장된 아이템하고 다른때, 아이템 정보가 서로 다른때
-                            return 2;
-                        else if (instance.data == containGrab.GetComponent<ItemContain>().item)
-                            return 3;
+                        else if(containGrab != null)
+                        {
+                            if (SlotObj != instance.storedItemObject && instance.data != containGrab.GetComponent<ItemContain>().item)
+                                // 슬롯 오브젝트와 저장된 아이템하고 다른때, 아이템 정보가 서로 다른때
+                                return 2;
+                            else if (instance.data == containGrab.GetComponent<ItemContain>().item)
+                                // 저장된 아이템이 서로 같을때
+                                return 3;
+                        }
                     }
                 }
             }
@@ -517,92 +521,36 @@ public class InventoryUI : MonoBehaviour
 
     public void GetItemToSlot(ItemData data, int _count)
     {
-        //int remainCount = _count;
-
-        //for(int i = 0;  i < containList.Count; i++)
-        //{
-        //    if (containList[i].item == data)
-        //    {
-        //        remainCount = containList[i].ItemStack(_count);
-        //        if(remainCount == 0)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //}
-
-        //if(remainCount > 0)
-        //{
-        //    int state = 0;
-
-        //    for (int y = 0; y < _verticalSlotCount; y++)
-        //    {
-        //        for (int x = 0; x < _horizontalSlotCount; x++)
-        //        {
-        //            InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
-
-        //            // 슬롯이 비어 있다.
-        //            if (instance.isEmpty)
-        //            {
-        //                Debug.Log(instance.gridPos);
-        //                state = SlotCheck(instance.gridPos, data.Size);
-
-        //                if(state == 0)
-        //                {
-        //                    GameObject obj = Factory.Instance.GetItemContain(data, _count);
-        //                    StoreItem(obj, instance.gridPos);
-        //                    break;
-        //                }
-        //                else
-        //                {
-        //                    onDontGetItem?.Invoke(data, _count);
-        //                }
-        //            }
-        //            else
-        //            {
-        //                onDontGetItem?.Invoke(data, _count);
-        //            }
-        //        }
-        //        if (state == 0)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //}
-
         for (int y = 0; y < _verticalSlotCount; y++)
         {
             for (int x = 0; x < _horizontalSlotCount; x++)
             {
                 InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
 
-                // 슬롯이 비어 있다.
-                if (instance.isEmpty)
+                int remainCount = 0;
+                if (!instance.isEmpty && instance.data == data && remainCount == 0)
                 {
-                    Debug.Log(instance.gridPos);
-                    int state = SlotCheck(instance.gridPos, data.Size);
-                    int remainCount = 0;
+                    ItemContain contain = instance.storedItemObject.GetComponent<ItemContain>();
+                    remainCount = contain.ItemStack(_count);
 
-                    switch (state)
+                    if (remainCount == 0)
                     {
-                        case 0:
-                            GameObject obj = Factory.Instance.GetItemContain(data, _count);
-                            StoreItem(obj, instance.gridPos);
-                            break;
-                        case 2:
-                            // 자리가 없을 때
-                            onDontGetItem?.Invoke(data, _count);
-                            break;
-                        case 3:
-                            //remainCount = containList[i].ItemStack(_count);
-                            break;
-
+                        return;
                     }
                 }
-                else
+                // 슬롯이 비어 있다.
+                else if (instance.isEmpty)
                 {
-                    
+                    int state = SlotCheck(instance.gridPos, data.Size);
+
+                    if(state == 0)
+                    {
+                        GameObject obj = Factory.Instance.GetItemContain(data, _count);
+                        StoreItem(obj, instance.gridPos);
+                        return;
+                    }
                 }
+
             }
         }
     }
