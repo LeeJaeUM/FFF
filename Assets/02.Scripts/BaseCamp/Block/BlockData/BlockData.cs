@@ -17,7 +17,7 @@ public class BlockData : ScriptableObject
     public GameObject wallPrefab_Ho;
     public GameObject wallPrefab_Ve;
     public GameObject floorPrefab;
-    public Material wallMaterial;
+    public Material blockMaterial;
     //public float width = 3f;
     //public float height = 3f;
     //public float depth = 0.2f;

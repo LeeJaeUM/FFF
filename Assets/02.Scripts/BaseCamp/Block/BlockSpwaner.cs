@@ -28,12 +28,19 @@ public class BlockSpwaner : MonoBehaviour
         Right,
         All = int.MaxValue
     }
+    public enum MaterialType
+    {
+        Wood = 0,
+        Stone,
+        Iron
+    }
     public BuildMode buildMode = BuildMode.None;
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
+    public MaterialType materialType = MaterialType.Wood;
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
-    public BlockData woodBlockData; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
+    public BlockData[] blockDatas; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
     float lengthMul = 3f; // 생성할 벽의 길이(구버전)
     public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
 
@@ -114,6 +121,7 @@ public class BlockSpwaner : MonoBehaviour
     }
     private void OnBuildMode(InputAction.CallbackContext context)
     {
+        //UI로 변경하기 위해 임시로 막아둠
         switch (buildMode)
         {
             //case BuildMode.Wall_Horizontal:
@@ -144,7 +152,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Horizontal:
                     if (!oneConnecting.isConnectedToWall_Ho)
                     {
-                        SpawnBuildObj(woodBlockData.wallPrefab_Ho);
+                        SpawnBuildObj(blockDatas[0].wallPrefab_Ho);
                     }
                     break;
 
@@ -153,14 +161,14 @@ public class BlockSpwaner : MonoBehaviour
                     // 게임 오브젝트 생성과 함께 회전 적용
                     if (!oneConnecting.isConnectedToWall_Ve)
                     {
-                        SpawnBuildObj(woodBlockData.wallPrefab_Ve);
+                       SpawnBuildObj(blockDatas[0].wallPrefab_Ve);
                     }
                     break;
 
                 case BuildMode.Foundation:
                     if (oneConnecting == null|| !oneConnecting.isConnectedToFloor)
                     {
-                        SpawnBuildObj(woodBlockData.floorPrefab);
+                       SpawnBuildObj(blockDatas[0].floorPrefab);
                     }
                     else
                     {
@@ -170,7 +178,8 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Enviroment:
                     if (oneConnecting == null || !oneConnecting.isConnectedToFloor)
                     {
-                        SpawnBuildObj(woodBlockData.floorPrefab);
+                       SpawnBuildObj(blockDatas[0].floorPrefab);
+                        Debug.Log("환경요소는 따로 추가해야함");
                     }
                     else
                     {
@@ -193,10 +202,26 @@ public class BlockSpwaner : MonoBehaviour
 
             return;
         }
+        Renderer renderer = newObj.transform.GetChild(0).GetComponent<Renderer>();
+        switch (materialType)
+        {
+            case MaterialType.Wood:
+                renderer.material = blockDatas[0].blockMaterial;
+                break;
+            case MaterialType.Stone:
+                renderer.material = blockDatas[1].blockMaterial;
+                break;
+            case MaterialType.Iron:
+                renderer.material = blockDatas[2].blockMaterial;
+                break;
+        }
+
         foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
         {
             connecting.UpdateConnecting(true);
         }
+
+        
     }
 
     /// <summary>

@@ -16,4 +16,4 @@ MonoBehaviour:
   wallPrefab_Ho: {fileID: 3998939162751938878, guid: 3e17f846675ba254b962281f6c612936, type: 3}
   wallPrefab_Ve: {fileID: 3998939162751938878, guid: 645b371ff7582804b932a9915a585c0e, type: 3}
   floorPrefab: {fileID: 6236999130810294763, guid: 4ae279ee20d287f48b2a49bb5e7181b8, type: 3}
-  wallMaterial: {fileID: 2100000, guid: 4190bd2c1ca0e9844a0cc93a84d083c1, type: 2}
+  blockMaterial: {fileID: 2100000, guid: 4190bd2c1ca0e9844a0cc93a84d083c1, type: 2}
