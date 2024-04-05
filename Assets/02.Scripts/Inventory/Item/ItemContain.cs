@@ -37,6 +37,8 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         }
     }
 
+    public bool FullCount => Count >= item.maxItemCount;
+
     /// <summary>
     /// 드래그시 부모 개체
     /// </summary>

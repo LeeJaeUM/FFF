@@ -414,6 +414,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        Debug.Log(containList.Count);
         contain.id = containList.Count;
         TotalWeight += contain.item.itemWeight;
         containList.Add(contain);
@@ -521,36 +522,73 @@ public class InventoryUI : MonoBehaviour
 
     public void GetItemToSlot(ItemData data, int _count)
     {
-        for (int y = 0; y < _verticalSlotCount; y++)
+        List<Vector2Int> emptyList = new List<Vector2Int>();
+        List<ItemContain> sameItemContainList = new List<ItemContain>();
+        
+        // 탐색을 하고
+        for (int y = 0; y < _verticalSlotCount - data.SizeY; y++)
         {
-            for (int x = 0; x < _horizontalSlotCount; x++)
+            for (int x = 0; x < _horizontalSlotCount - data.SizeX; x++)
             {
                 InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
 
-                int remainCount = 0;
-                if (!instance.isEmpty && instance.data == data && remainCount == 0)
-                {
-                    ItemContain contain = instance.storedItemObject.GetComponent<ItemContain>();
-                    remainCount = contain.ItemStack(_count);
-
-                    if (remainCount == 0)
-                    {
-                        return;
-                    }
-                }
-                // 슬롯이 비어 있다.
-                else if (instance.isEmpty)
+                if (instance.isEmpty)
                 {
                     int state = SlotCheck(instance.gridPos, data.Size);
 
                     if(state == 0)
                     {
-                        GameObject obj = Factory.Instance.GetItemContain(data, _count);
-                        StoreItem(obj, instance.gridPos);
-                        return;
+                        emptyList.Add(new Vector2Int(x, y));
                     }
                 }
+                else
+                {
+                    foreach(var contain in containList)
+                    {
+                        if(contain.item == data)
+                        {
+                            sameItemContainList.Add(contain);
+                        }
+                    }
+                }
+            }
+        }
 
+        int remain = _count;
+
+        // 넣는다.
+        if (sameItemContainList.Count > 0)
+        {
+            foreach (var item in sameItemContainList)
+            {
+                remain = item.ItemStack(remain);
+            }
+        }
+        else if(emptyList.Count > 0 && remain > 0)
+        {
+            foreach(var grid in emptyList)
+            {
+                GameObject obj = null;
+                // 데이터의 최대 수량보다 크며
+                if (_count > data.maxItemCount)
+                {
+                    remain -= data.maxItemCount;
+                    obj = Factory.Instance.GetItemContain(data, data.maxItemCount);
+                    if (SlotCheck(grid, data.Size) == 0)
+                    {
+                        StoreItem(obj, grid);
+                        break;
+                    }
+                }
+                else
+                {
+                    obj = Factory.Instance.GetItemContain(data, remain);
+                    if (SlotCheck(grid, data.Size) == 0)
+                    {
+                        StoreItem(obj, grid);
+                        break;
+                    }
+                }
             }
         }
     }
