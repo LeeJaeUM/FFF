@@ -16,14 +16,14 @@ public class BuildSelectUI : MonoBehaviour, IPointerClickHandler
     };
     [SerializeField] BuildMode buildMode = BuildMode.None;
 
-    public Action<int> onClick;
+    public Action<int> onClickBlock;
     /// <summary>
     /// 클릭 시 현재 이 ui에 설정된 BuildMode의 index가 BCUI로 넘어감 이걸로 BlockSpawner의 buildMOde를 변경
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClick?.Invoke((int)buildMode);
+        onClickBlock?.Invoke((int)buildMode);
     }
 
 }
