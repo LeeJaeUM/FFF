@@ -278,7 +278,10 @@ public class InventoryUI : MonoBehaviour
             {
                 for (int x = 0; x < itemSize.x; x++)
                 {
-                    InvenSlot instance = slotGrid[StartPos.x + x, StartPos.y + y].GetComponent<InvenSlot>();
+                    InvenSlot instance = null;
+                    if(StartPos.x + x < _horizontalSlotCount && StartPos.y + y < _verticalSlotCount)
+                        instance = slotGrid[StartPos.x + x, StartPos.y + y].GetComponent<InvenSlot>();
+                    else return 4;
 
                     if (!instance.isEmpty)  // slot이 비어있지 않으며 
                     {
@@ -512,7 +515,6 @@ public class InventoryUI : MonoBehaviour
         else
         {
             InContain.Count = remainCount;
-            InContain.SetCount();
             containGrab = GrabContain(obj);
         }
         StoreItem(Outcontain.gameObject, otherItemPos);
@@ -526,9 +528,9 @@ public class InventoryUI : MonoBehaviour
         List<ItemContain> sameItemContainList = new List<ItemContain>();
         
         // 탐색을 하고
-        for (int y = 0; y < _verticalSlotCount - data.SizeY; y++)
+        for (int y = 0; y < _verticalSlotCount; y++)
         {
-            for (int x = 0; x < _horizontalSlotCount - data.SizeX; x++)
+            for (int x = 0; x < _horizontalSlotCount; x++)
             {
                 InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
 
@@ -545,7 +547,7 @@ public class InventoryUI : MonoBehaviour
                 {
                     foreach(var contain in containList)
                     {
-                        if(contain.item == data)
+                        if(contain.item == data && !contain.FullCount)
                         {
                             sameItemContainList.Add(contain);
                         }
@@ -559,12 +561,15 @@ public class InventoryUI : MonoBehaviour
         // 넣는다.
         if (sameItemContainList.Count > 0)
         {
+            Debug.Log("같은 아이템이 있다.");
             foreach (var item in sameItemContainList)
             {
                 remain = item.ItemStack(remain);
+                if (remain > 0)
+                    break;
             }
         }
-        else if(emptyList.Count > 0 && remain > 0)
+        if(emptyList.Count > 0 && remain > 0)
         {
             foreach(var grid in emptyList)
             {
@@ -591,6 +596,9 @@ public class InventoryUI : MonoBehaviour
                 }
             }
         }
+
+        sameItemContainList.Clear();
+        emptyList.Clear();
     }
 
 

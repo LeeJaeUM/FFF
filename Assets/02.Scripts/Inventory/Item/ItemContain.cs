@@ -21,10 +21,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     private float slotSize;
 
+    [SerializeField]
     /// <summary>
     /// 아이템 갯수
     /// </summary>
-    private int count;
+    private int count = 0;
     public int Count
     {
         get => count;
@@ -33,6 +34,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
             if(count != value)
             {
                 count = value;
+                SetCount(count);
             }
         }
     }
@@ -59,11 +61,13 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         slotSize = GameManager.Instance.inven.slotSize;
 
         SetItemObject(data, _count);
+        CanvasGroup canvas = GetComponent<CanvasGroup>();
+        canvas.blocksRaycasts = false;
     }
 
     private void Start()
     {
-        ContainInitialize(item);
+        //ContainInitialize(item);
     }
 
     private void Update()
@@ -80,6 +84,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     /// <param name="_data">들어갈 아이템 정보</param>
     public void SetItemObject(ItemData _data, int _count = 1)
     {
+        Debug.Log(_count);
         item = _data;
         ItemSize = item.Size;
         Count = _count;
@@ -89,7 +94,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ItemSize.y * slotSize);
         itemIcon.sprite = _data.itemIcon;
-        itemCount.text = Count.ToString();
     }
 
     /// <summary>
@@ -133,12 +137,10 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         {
             int result = Count - item.maxItemCount;
             Count = item.maxItemCount; 
-            SetCount();
             return result;
         }
         else
         {
-            SetCount();
             return 0;
         }
     }
@@ -146,7 +148,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     public void ItemDestack(int _count = 1)
     {
         Count -= _count;
-        SetCount();
     }
 
     public void ItemSplit(int _count = 1)
@@ -167,8 +168,9 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         gameObject.SetActive(false);
     }
 
-    public void SetCount()
+    private void SetCount(int _count)
     {
-        itemCount.text = Count.ToString();
+        Debug.Log(_count);
+        itemCount.text = _count.ToString();
     }
 }
