@@ -295,7 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 61234969}
   m_Layer: 5
-  m_Name: WallButtonGroup
+  m_Name: BlockButtonGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1130,7 +1130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2e062332e60734490fa2458610ac06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 0
+  buildMode: 2
 --- !u!114 &610262200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1318,7 +1318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2e062332e60734490fa2458610ac06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 0
+  buildMode: 3
 --- !u!114 &758294677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,7 +1905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &929989992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2396,7 +2396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb2e062332e60734490fa2458610ac06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 0
+  buildMode: 1
 --- !u!114 &1299479708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4204,7 +4204,7 @@ GameObject:
   - component: {fileID: 2043393127}
   - component: {fileID: 2043393128}
   m_Layer: 5
-  m_Name: MaterialSelectBtnGroup
+  m_Name: BlockMatSelectBtnGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4247,7 +4247,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectButtons: []
-  wallButtonsTr: []
 --- !u!1 &2132399414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5409,6 +5408,10 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 236189375397650745}
+  - {fileID: 219172293}
+  - {fileID: 139373086}
+  - {fileID: 761181660}
+  - {fileID: 928056114}
   - {fileID: 1568776789}
   - {fileID: 1352939967}
   - {fileID: 1113299923}
@@ -5421,7 +5424,3 @@ SceneRoots:
   - {fileID: 1813958800}
   - {fileID: 7103269590288974220}
   - {fileID: 6891452896713506790}
-  - {fileID: 219172293}
-  - {fileID: 139373086}
-  - {fileID: 761181660}
-  - {fileID: 928056114}

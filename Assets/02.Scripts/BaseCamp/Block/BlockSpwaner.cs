@@ -35,6 +35,7 @@ public class BlockSpwaner : MonoBehaviour
         Iron
     }
     public BuildMode buildMode = BuildMode.None;
+
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
     public MaterialType materialType = MaterialType.Wood;

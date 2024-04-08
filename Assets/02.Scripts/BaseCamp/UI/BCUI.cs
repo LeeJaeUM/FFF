@@ -15,6 +15,8 @@ public class BCUI : MonoBehaviour
     [SerializeField] BuildSelectUI[] buildSelectUIs = null;
     [SerializeField] BlockSpwaner spwaner = null;
 
+    MaterialSelectUI materialSelectUI;
+
 
     private void Awake()
     {
@@ -23,17 +25,33 @@ public class BCUI : MonoBehaviour
         buildUI = child.gameObject;
 
         buildSelectUIs = GetComponentsInChildren<BuildSelectUI>(true);
-        
+
+        materialSelectUI = GetComponentInChildren<MaterialSelectUI>();
     }
 
     private void Start()
     {
+        //블록 스포너 불러오기
         spwaner = BaseCampManager.Instance.BlockSpwaner;
         for (int i = 0; i < buildSelectUIs.Length; i++)
         {
-            buildSelectUIs[i].onClick += OnClickBuildObjIcon;   //액션 등록
+            buildSelectUIs[i].onClickBlock += OnClickBuildObjIcon;   //액션 등록
         }
+
+        materialSelectUI.onSelecMAterial += OnBlockMatSetting;
     }
+
+    private void OnEnable()
+    {
+        inputAction.Enable();
+        inputAction.Player.BuildMode.performed += OnBuildMode;
+    }
+    private void OnDisable()
+    {
+        inputAction.Player.BuildMode.performed -= OnBuildMode;
+        inputAction.Disable();
+    }
+
 
     /// <summary>
     /// 액션으로 BuildSelecUI에서 받아온 BuildMode를 설정
@@ -44,21 +62,9 @@ public class BCUI : MonoBehaviour
         spwaner.buildMode = (BlockSpwaner.BuildMode)index;
     }
 
-    private void OnEnable()
-    {
-        inputAction.Enable();
-        inputAction.Player.BuildMode.performed += OnBuildMode;
-        //inputAction.Player.BuildMode.canceled += OnBuildMode;
-    }
-    private void OnDisable()
-    {
-        //inputAction.Player.BuildMode.canceled -= OnBuildMode;
-        inputAction.Player.BuildMode.performed -= OnBuildMode;
-        inputAction.Disable();
-    }
 
     /// <summary>
-    /// 탭 누르면 켜지고 꺼짐
+    /// 탭 누르면 켜지고 꺼지며 마우스를 제외한 플레이어 인풋 제한
     /// </summary>
     /// <param name="context"></param>
     private void OnBuildMode(InputAction.CallbackContext context)
@@ -67,6 +73,20 @@ public class BCUI : MonoBehaviour
         buildUI.SetActive(isActive);
         spwaner.ProhibitSpawn(isActive);
         
+    }
+
+    void OnBlockMatSetting(int btnIndex)
+    {
+        Debug.Log(btnIndex);
+        // 환경요소가 아닐 때
+        if(btnIndex != 3)
+        {
+            spwaner.materialType = (BlockSpwaner.MaterialType)btnIndex;
+        }
+        else
+        {
+            return;
+        }
     }
 
 }
