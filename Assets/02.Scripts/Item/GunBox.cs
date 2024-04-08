@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class GunBox : MonoBehaviour
 {
-    public GameObject hammer;
+    /// <summary>
+    /// 인벤토리에 Hammer를 가지고 있는지 확인용 변수
+    /// </summary>
+    bool hasHammer = false;
 
     public GameObject gunBox;
-
-    public Action hammerToInventory;
-
-    bool hasHammer = false;
+    ItemData target;
 
     public void BreakGunBox()
     {
-        if (hasHammer && gunBox != null)
+        if (hasHammer && target.itemID != 5) // ID 5번은 gunBox 이다
         {
             Destroy(gunBox);
         }
