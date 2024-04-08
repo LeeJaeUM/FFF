@@ -24,9 +24,9 @@ public class BCUI : MonoBehaviour
         Transform child = transform.GetChild(0);
         buildUI = child.gameObject;
 
+        materialSelectUI = GetComponent<MaterialSelectUI>();
         buildSelectUIs = GetComponentsInChildren<BuildSelectUI>(true);
 
-        materialSelectUI = GetComponentInChildren<MaterialSelectUI>();
     }
 
     private void Start()
@@ -38,17 +38,17 @@ public class BCUI : MonoBehaviour
             buildSelectUIs[i].onClickBlock += OnClickBuildObjIcon;   //액션 등록
         }
 
-        materialSelectUI.onSelecMAterial += OnBlockMatSetting;
+        materialSelectUI.onSelectMaterial += OnBlockMatSetting;
     }
 
     private void OnEnable()
     {
         inputAction.Enable();
-        inputAction.Player.BuildMode.performed += OnBuildMode;
+        inputAction.Player.BuildUI.performed += OnBuildUI;
     }
     private void OnDisable()
     {
-        inputAction.Player.BuildMode.performed -= OnBuildMode;
+        inputAction.Player.BuildUI.performed -= OnBuildUI;
         inputAction.Disable();
     }
 
@@ -67,7 +67,7 @@ public class BCUI : MonoBehaviour
     /// 탭 누르면 켜지고 꺼지며 마우스를 제외한 플레이어 인풋 제한
     /// </summary>
     /// <param name="context"></param>
-    private void OnBuildMode(InputAction.CallbackContext context)
+    private void OnBuildUI(InputAction.CallbackContext context)
     {
         isActive = !isActive;
         buildUI.SetActive(isActive);
@@ -79,12 +79,14 @@ public class BCUI : MonoBehaviour
     {
         Debug.Log(btnIndex);
         // 환경요소가 아닐 때
-        if(btnIndex != 3)
+        if(btnIndex < 3)
         {
             spwaner.materialType = (BlockSpwaner.MaterialType)btnIndex;
         }
         else
         {
+            //Enviroment를 눌렀을 때
+            Debug.Log("범위를 벗어났다.");
             return;
         }
     }

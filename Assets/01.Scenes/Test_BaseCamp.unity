@@ -316,7 +316,7 @@ RectTransform:
   - {fileID: 1299479706}
   - {fileID: 610262198}
   - {fileID: 758294675}
-  m_Father: {fileID: 2043393127}
+  m_Father: {fileID: 929989992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1223,6 +1223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 674689507}
   - component: {fileID: 674689508}
+  - component: {fileID: 674689509}
   m_Layer: 5
   m_Name: BuildGroup
   m_TagString: Untagged
@@ -1266,6 +1267,19 @@ MonoBehaviour:
   isActive: 0
   buildSelectUIs: []
   spwaner: {fileID: 0}
+--- !u!114 &674689509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674689506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e33dc3836aade3b48825bda00e0ff50e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectButtons: []
 --- !u!1 &758294674
 GameObject:
   m_ObjectHideFlags: 0
@@ -1905,7 +1919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &929989992
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1919,6 +1933,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2043393127}
+  - {fileID: 61234969}
+  - {fileID: 1843971018}
   m_Father: {fileID: 674689507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3590,6 +3606,7 @@ GameObject:
   - component: {fileID: 1843971022}
   - component: {fileID: 1843971021}
   - component: {fileID: 1843971020}
+  - component: {fileID: 1843971023}
   m_Layer: 5
   m_Name: EnviromenBtn
   m_TagString: Untagged
@@ -3610,7 +3627,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 219831594}
-  m_Father: {fileID: 2043393127}
+  m_Father: {fileID: 929989992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -3699,6 +3716,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843971017}
   m_CullTransparentMesh: 1
+--- !u!114 &1843971023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843971017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb2e062332e60734490fa2458610ac06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildMode: 4
 --- !u!1 &1893979206
 GameObject:
   m_ObjectHideFlags: 0
@@ -4154,7 +4184,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1971475011}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1971475011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4202,7 +4244,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2043393127}
-  - component: {fileID: 2043393128}
   m_Layer: 5
   m_Name: BlockMatSelectBtnGroup
   m_TagString: Untagged
@@ -4225,8 +4266,6 @@ RectTransform:
   - {fileID: 405219072}
   - {fileID: 1971475009}
   - {fileID: 534758127}
-  - {fileID: 1843971018}
-  - {fileID: 61234969}
   m_Father: {fileID: 929989992}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4234,19 +4273,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2043393128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2043393126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e33dc3836aade3b48825bda00e0ff50e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectButtons: []
 --- !u!1 &2132399414
 GameObject:
   m_ObjectHideFlags: 0
@@ -5058,6 +5084,10 @@ PrefabInstance:
     - target: {fileID: 2062778572743537557, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
       propertyPath: m_Name
       value: BlockSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
+      propertyPath: buildMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
       propertyPath: buildObjLayer.m_Bits

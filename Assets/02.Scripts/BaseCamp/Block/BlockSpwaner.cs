@@ -34,7 +34,7 @@ public class BlockSpwaner : MonoBehaviour
         Stone,
         Iron
     }
-    public BuildMode buildMode = BuildMode.None;
+    public BuildMode buildMode = BuildMode.Foundation;
 
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
@@ -125,17 +125,17 @@ public class BlockSpwaner : MonoBehaviour
         //UI로 변경하기 위해 임시로 막아둠
         switch (buildMode)
         {
-            //case BuildMode.Wall_Horizontal:
-            //    buildMode = BuildMode.Wall_Vertical;
-            //    break;
+            case BuildMode.Wall_Horizontal:
+                buildMode = BuildMode.Wall_Vertical;
+                break;
 
-            //case BuildMode.Wall_Vertical:
-            //    buildMode = BuildMode.Foundation;
-            //    break;
+            case BuildMode.Wall_Vertical:
+                buildMode = BuildMode.Foundation;
+                break;
 
-            //case BuildMode.Foundation:
-            //    buildMode = BuildMode.Wall_Horizontal;
-            //    break;
+            case BuildMode.Foundation:
+                buildMode = BuildMode.Wall_Horizontal;
+                break;
             default:
                 buildMode = BuildMode.None;
                 break;
@@ -315,7 +315,7 @@ public class BlockSpwaner : MonoBehaviour
     }
     public void Preview_Hide()
     {
-        previewObj.SetActive(false);
+        previewObj?.SetActive(false);
         fa_preview.SetActive(false);
         wall_preview_H.SetActive(false);
         wall_preview_V.SetActive(false);
