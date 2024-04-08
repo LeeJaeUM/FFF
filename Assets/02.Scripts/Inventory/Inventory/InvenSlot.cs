@@ -63,4 +63,12 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
     {
         GameManager.Instance.inven.tooltip.Close();
     }
+
+    public void SlotRemove()
+    {
+        storedItemSize = Vector2Int.zero;
+        storedItemStartPos = Vector2Int.zero;
+        data = null;
+        isEmpty = true;
+    }
 }

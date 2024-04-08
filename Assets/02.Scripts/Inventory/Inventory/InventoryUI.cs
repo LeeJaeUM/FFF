@@ -161,8 +161,11 @@ public class InventoryUI : MonoBehaviour
     {
         if (context.performed)
         {
+            bool isShiftPress = (Keyboard.current.shiftKey.ReadValue() > 0);
+
             if (highlightedSlot != null && containGrab != null && !isOverEdge)
             {
+                // 마우스가 슬롯 위에 있다 / 마우스에 잡힌 컨테이너가 있다 / 
                 ItemContain contain = containGrab.GetComponent<ItemContain>();
                 Debug.Log(checkSatae);
                 switch (checkSatae)
@@ -195,19 +198,26 @@ public class InventoryUI : MonoBehaviour
                 InvenSlot highlightedSlotScript = highlightedSlot.GetComponent<InvenSlot>();
                 ColorChangeLoop(SlotColorHighlights.White,
                     highlightedSlotScript.storedItemSize, highlightedSlotScript.storedItemStartPos);
-                SetSelectedItem(GrabContain(GetItem(highlightedSlot)));
-                SlotSector.Instance.SetPosOffset();
-                RefrechColor(true);
 
                 tooltip.IsPause = true;
+
+                GameObject containObj = GetItem(highlightedSlot);
+                ItemContain contain = containObj.GetComponent<ItemContain>();
+
+                if (isShiftPress && contain.Count > 1)
+                {
+                    int _count = Mathf.FloorToInt(contain.Count/2);
+                    GameObject returnObj = contain.ItemSplit(_count);
+                    SetSelectedItem(GrabContain(returnObj));
+                    StoreItem(containObj, totalOffset);
+                }
+                else
+                {
+                    SetSelectedItem(GrabContain(containObj));
+                }
+                SlotSector.Instance.SetPosOffset();
+                RefrechColor(true);
             }
-            //Debug.Log(highlightedSlot != null && ItemContain.selectedItem == null);
-            //if (highlightedSlot != null)
-            //{
-            //    Debug.Log(highlightedSlot.GetComponent<InvenSlot>().isOccupied == true);
-            //    Debug.Log(highlightedSlot != null && ItemContain.selectedItem == null
-            //    && highlightedSlot.GetComponent<InvenSlot>().isOccupied == true);
-            //}
         }
     }
 
@@ -421,11 +431,10 @@ public class InventoryUI : MonoBehaviour
         contain.id = containList.Count;
         TotalWeight += contain.item.itemWeight;
         containList.Add(contain);
+
         // 게임 오브젝트 재설정
-        item.transform.SetParent(DropParent);
-        item.GetComponent<RectTransform>().pivot = Vector2.zero;
-        item.transform.position = slotGrid[startPos.x, startPos.y].transform.position;
-        item.GetComponent<CanvasGroup>().alpha = 1.0f;
+        Vector2 position = slotGrid[startPos.x, startPos.y].transform.position;
+        contain.StoreContain(DropParent, position);
         //tooltip.Open(highlightedSlot.GetComponent<InvenSlot>().data);
     }
 
@@ -444,6 +453,7 @@ public class InventoryUI : MonoBehaviour
         ItemContain returnItemContain = returnItem.GetComponent<ItemContain>();
         Vector2Int itemSize = returnItemContain.item.Size;
         TotalWeight -= returnItemContain.item.itemWeight;
+        Debug.Log(returnItemContain.id);
         containList.RemoveAt(returnItemContain.id);
 
         for (int y = 0; y < itemSize.y; y++)
@@ -454,11 +464,7 @@ public class InventoryUI : MonoBehaviour
                 InvenSlot instance = slotGrid[tempItemPos.x + x, tempItemPos.y + y].GetComponent<InvenSlot>();
                 containGrab = null;
                 StackStartPos = instance.storedItemStartPos;
-                instance.storedItemSize = Vector2Int.zero;
-                instance.storedItemStartPos = Vector2Int.zero;
-                instance.data = null;
-                instance.isEmpty = true;
-
+                instance.SlotRemove();
             }
         }
 
@@ -601,6 +607,10 @@ public class InventoryUI : MonoBehaviour
         emptyList.Clear();
     }
 
+    public void findID()
+    {
+
+    }
 
     /// <summary>
     /// 컨테이너 제거

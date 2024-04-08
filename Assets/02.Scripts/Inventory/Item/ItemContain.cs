@@ -46,6 +46,9 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     /// </summary>
     private Transform DragParent => GameManager.Instance.inven.DragParent;
 
+    RectTransform rect; 
+    CanvasGroup canvas;
+
     private void Awake()
     {
         itemIcon = transform.GetChild(1).GetComponent<Image>();
@@ -60,8 +63,17 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     {
         slotSize = GameManager.Instance.inven.slotSize;
 
-        SetItemObject(data, _count);
-        CanvasGroup canvas = GetComponent<CanvasGroup>();
+        item = data;
+        ItemSize = item.Size;
+        Count = _count;
+        isDragging = false;
+
+        rect = GetComponent<RectTransform>();
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ItemSize.y * slotSize);
+        itemIcon.sprite = data.itemIcon;
+
+        canvas = GetComponent<CanvasGroup>();
         canvas.blocksRaycasts = false;
     }
 
@@ -78,22 +90,12 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         }
     }
 
-    /// <summary>
-    /// 컨테이너에 아이템 정보 넣기
-    /// </summary>
-    /// <param name="_data">들어갈 아이템 정보</param>
-    public void SetItemObject(ItemData _data, int _count = 1)
+    public void StoreContain(Transform parent, Vector2 position)
     {
-        Debug.Log(_count);
-        item = _data;
-        ItemSize = item.Size;
-        Count = _count;
-        isDragging = false;
-
-        RectTransform rect = GetComponent<RectTransform>();
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ItemSize.y * slotSize);
-        itemIcon.sprite = _data.itemIcon;
+        transform.SetParent(parent);
+        rect.pivot = Vector2.zero;
+        transform.position = position;
+        canvas.alpha = 1.0f;
     }
 
     /// <summary>
@@ -122,9 +124,8 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         SetSelectedItem(this.gameObject);
-        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = !isDragging;
-        canvasGroup.alpha = 0.5f;
+        canvas.blocksRaycasts = !isDragging;
+        canvas.alpha = 0.5f;
     }
 
     public int ItemStack(int _count = 1)
@@ -150,11 +151,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         Count -= _count;
     }
 
-    public void ItemSplit(int _count = 1)
+    public GameObject ItemSplit(int _count = 1)
     {
         ItemDestack(_count);
 
-        GameManager.Instance.inven.containGrab = Factory.Instance.GetItemContain(item, _count);
+        return Factory.Instance.GetItemContain(item, _count);
     }
 
     public void ContainRemvoe()
