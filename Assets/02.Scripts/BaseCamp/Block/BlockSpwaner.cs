@@ -187,15 +187,8 @@ public class BlockSpwaner : MonoBehaviour
                     }
                     break;
                 case BuildMode.Enviroment:
-                    if (canSpawnObj)
-                    {
-                       SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
-                        Debug.Log("환경요소는 따로 추가해야함");
-                    }
-                    else
-                    {
-                        Debug.Log("환경요소 생성모드 중 조건에 벗어남");
-                    }
+                        SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
+                        //Debug.Log("환경요소는 따로 추가해야함");
                     break;
                 case BuildMode.None:
                     Debug.Log("건축모드가 아닐때 마우스 클릭함");
@@ -270,59 +263,60 @@ public class BlockSpwaner : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.red);
 
         // Ray에 부딪힌 물체 정보를 저장
-
-        if (Physics.Raycast(ray, out hit, interactDistance))
+        // 환경요소 생성 모드일때
+        if (buildMode == BuildMode.Enviroment)
         {
-            // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
-            tagOfHitObject = hit.collider.gameObject.tag;
-
-            if (hit.collider.CompareTag("Buildables"))
-                canDespawn = true;
-
-            switch (buildMode)
+            if (Physics.Raycast(ray, out hit, interactDistance, LayerMask.GetMask("EnvrioAble")))
             {
-                case BuildMode.None:
-                    //preview 미리보기 숨기기
-                    Preview_Hide();
-                    break;
-                case BuildMode.Foundation:
-                    //생성될 위치 미리보기
-                    Preview_Setting(fa_preview);
-                    previewObj.transform.position = hit.point;
-                    ColliderSearch();
-                    break;
-                case BuildMode.Wall_Horizontal:
-                    Preview_Setting(wall_preview_H);
-                    previewObj.transform.position = hit.point;
-                    ColliderSearch();
-                    break;
-                case BuildMode.Wall_Vertical:
-                    Preview_Setting(wall_preview_V); 
-                    previewObj.transform.position = hit.point;
-                    ColliderSearch();
-                    break;
-                case BuildMode.Enviroment:
-                    
-                    //프리뷰 오브젝트 레이캐스트 닿는 위치로 이동
-                    previewObj.transform.position = hit.point;
+                // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
+                tagOfHitObject = hit.collider.gameObject.tag;
 
-                    //
-                    if (hit.collider.CompareTag("EnviroAble"))
-                    {
-                        canDespawn = true;
-                        Debug.Log("trr");
-                    }
-                    else
-                    {
-                        canSpawnObj = false;
-                    }
-                    break;
+                //프리뷰 오브젝트 레이캐스트 닿는 위치로 이동
+                previewObj.transform.position = hit.point;
+
             }
         }
+        // 환경요소 생성 모드가 아닐 때
         else
         {
-            //ray가 현재 아무것도 닿지 않을때
-            canDespawn = false;
+
+            if (Physics.Raycast(ray, out hit, interactDistance))
+            {
+                // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
+                tagOfHitObject = hit.collider.gameObject.tag;
+
+                if (hit.collider.CompareTag("Buildables"))
+                    canDespawn = true;
+
+                switch (buildMode)
+                {
+                    case BuildMode.None:
+                        //preview 미리보기 숨기기
+                        Preview_Hide();
+                        break;
+                    case BuildMode.Foundation:
+                        //생성될 위치 미리보기
+                        Preview_Setting(fa_preview);
+                        previewObj.transform.position = hit.point;
+                        ColliderSearch();
+                        break;
+                    case BuildMode.Wall_Horizontal:
+                        Preview_Setting(wall_preview_H);
+                        previewObj.transform.position = hit.point;
+                        ColliderSearch();
+                        break;
+                    case BuildMode.Wall_Vertical:
+                        Preview_Setting(wall_preview_V);
+                        previewObj.transform.position = hit.point;
+                        ColliderSearch();
+                        break;
+                }
+            }
+            else
+            {
+                //ray가 현재 아무것도 닿지 않을때
+                canDespawn = false;
+            }
         }
     }
     void EniromentPreview_Setting(int index)

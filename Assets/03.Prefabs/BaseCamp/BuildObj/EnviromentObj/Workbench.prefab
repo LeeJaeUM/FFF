@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2885951334929872660}
   - component: {fileID: 7229969120497683614}
   - component: {fileID: 2568761528303331319}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ GameObject:
   - component: {fileID: 1642360689930102396}
   - component: {fileID: 5006685863177205187}
   - component: {fileID: 6385497998854471536}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Workbench
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 4183124856903203488}
   - component: {fileID: 4682419672693169196}
   - component: {fileID: 1260594053687339113}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Model (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 7251640356744988226}
   - component: {fileID: 4677292167650753373}
   - component: {fileID: 1105173627888124977}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -359,7 +359,7 @@ GameObject:
   - component: {fileID: 4467529494819978769}
   - component: {fileID: 5816898104801786973}
   - component: {fileID: 915826335968771842}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
