@@ -7,7 +7,7 @@ public class Bottle : MonoBehaviour
     [SerializeField]
     GameObject brokenBottlePrefab;
     [SerializeField]
-    GameObject KeyItem;
+    GameObject keyItem;
 
     [SerializeField]
     float forceMagnitude = 5.0f;
@@ -22,7 +22,7 @@ public class Bottle : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
     }
 
-    void Update() // just for testing
+    void Update() // 테스트
     {
         if(Input.GetKeyDown(KeyCode.K))
         {
@@ -71,6 +71,6 @@ public class Bottle : MonoBehaviour
     void DropItem()
     {
         // "Key" 아이템을 생성하여 화면에 표시
-        Instantiate(KeyItem, transform.position, Quaternion.identity);
+        Instantiate(keyItem, transform.position, Quaternion.identity);
     }
 }

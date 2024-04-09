@@ -1,23 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class GunBox : MonoBehaviour
 {
     /// <summary>
-    /// 인벤토리에 Hammer를 가지고 있는지 확인용 변수
+    /// 인벤토리에 Axe 가지고 있는지 확인용 변수
     /// </summary>
-    bool hasHammer = false;
+    bool onAxe = false;
 
-    public GameObject gunBox;
-    ItemData target;
+    [SerializeField]
+    GameObject gunBox;
+    [SerializeField]
+    GameObject dynamite;
+    [SerializeField]
+    ItemData itemData;
+
+    private void Awake()
+    {
+        itemData = FindAnyObjectByType<ItemData>();
+    }
 
     public void BreakGunBox()
     {
-        if (hasHammer && target.itemID != 5) // ID 5번은 gunBox 이다
+        if (onAxe && itemData.itemID != 5) // ID 5번은 gunBox 이다
         {
-            Destroy(gunBox);
+            DropDynamite();
         }
+    }
+
+    void DropDynamite()
+    {
+        Destroy(gunBox);
+        //실행 된 자리에 Dynamite아이템을 생성
+        Instantiate(dynamite, transform.position, Quaternion.identity);
     }
 }
