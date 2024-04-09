@@ -30,7 +30,7 @@ public class ItemTooltip : MonoBehaviour
             {
                 Close();    // 일시 정지가 되면 열려있던 상세 정보창도 닫는다.
             }
-            Debug.Log(isPause);
+            //Debug.Log(isPause);
         }
     }
 

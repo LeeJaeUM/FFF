@@ -44,11 +44,13 @@ public class InventoryUI : MonoBehaviour
     private int checkSatae;
     private bool isOverEdge = false;
 
+    [HideInInspector]
     /// <summary>
     /// 아이템 컨테이너를 담는 부모 개체
     /// </summary>
     public Transform DropParent;
 
+    [HideInInspector]
     /// <summary>
     /// 현재 손에 있는 아이템 컨테어너의 부모 개체
     /// </summary>
@@ -172,10 +174,17 @@ public class InventoryUI : MonoBehaviour
                 {
                     case 0:
                         // 빈 슬롯에 저장
-                        StoreItem(containGrab, totalOffset);
-                        ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
-                        contain.ResetSelectedItem();
-                        RemoveSelectedButton();
+                        if (isShiftPress && contain.Count > 1)
+                        {
+                            StoreItem(contain.ItemSplit(), totalOffset);
+                            ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
+                        }
+                        else
+                        {
+                            StoreItem(containGrab, totalOffset);
+                            ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
+                            contain.ResetSelectedItem();
+                        }
                         break;
                     case 1:
                         // 다른 아이템 스왑
@@ -186,8 +195,20 @@ public class InventoryUI : MonoBehaviour
                         break;
                     case 3:
                         // 같은 아이템이면 저장
-                        AddContain(containGrab);
-                        ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                        if (isShiftPress && contain.Count > 1)
+                        {
+                            Debug.Log("같은 아이템 하나씩 저장");
+                            contain.ItemDestack();
+                            AddContain(containGrab, 1);
+                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                        }
+                        else
+                        {
+                            Debug.Log("같은 아이템이므로 저장");
+                            AddContain(containGrab, contain.Count);
+                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                            contain.ContainRemvoe();
+                        }
                         break;
                 }
                 tooltip.IsPause = false;
@@ -418,17 +439,12 @@ public class InventoryUI : MonoBehaviour
             {
                 // 인벤 슬롯에 정보 저장
                 InvenSlot instance = slotGrid[startPos.x + x, startPos.y + y].GetComponent<InvenSlot>();
-                instance.storedItemObject = item;                           // 오브젝트 저장
-                instance.data = item.GetComponent<ItemContain>().item;      // 아이템 정보 저장
-                instance.storedItemSize = itemSize;                         // 사이즈 저장
-                instance.storedItemStartPos = startPos;
-                instance.isEmpty = false;
+                instance.SlotStore(item, startPos);
                 slotGrid[totalOffset.x + x, totalOffset.y + y].GetComponent<Image>().color = SlotColorHighlights.White;
             }
         }
 
-        Debug.Log(containList.Count);
-        contain.id = containList.Count;
+        Debug.Log(containList);
         TotalWeight += contain.item.itemWeight;
         containList.Add(contain);
 
@@ -453,8 +469,14 @@ public class InventoryUI : MonoBehaviour
         ItemContain returnItemContain = returnItem.GetComponent<ItemContain>();
         Vector2Int itemSize = returnItemContain.item.Size;
         TotalWeight -= returnItemContain.item.itemWeight;
-        Debug.Log(returnItemContain.id);
-        containList.RemoveAt(returnItemContain.id);
+
+        for (int i = 0; i < containList.Count; i++)
+        {
+            if (containList[i].id == returnItemContain.GetComponent<ItemContain>().id)
+            {
+                containList.RemoveAt(i);
+            }
+        }
 
         for (int y = 0; y < itemSize.y; y++)
         {
@@ -478,7 +500,7 @@ public class InventoryUI : MonoBehaviour
     /// <returns></returns>
     public GameObject GrabContain(GameObject invenSlot)
     {
-
+        
         invenSlot.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
         invenSlot.GetComponent<CanvasGroup>().alpha = 0.5f;
         invenSlot.transform.position = Input.mousePosition;
@@ -498,7 +520,7 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 같은 아이템을 경우 갯수 증가
     /// </summary>
-    public void AddContain(GameObject obj)
+    public void AddContain(GameObject obj, int _count = 0)
     {
         GameObject storeObj = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
 
@@ -506,24 +528,20 @@ public class InventoryUI : MonoBehaviour
         ItemContain InContain = obj.GetComponent<ItemContain>();
 
         /// 저장된 컨테이너
-        ItemContain Outcontain = storeObj.GetComponent<ItemContain>();
+        ItemContain storeContain = storeObj.GetComponent<ItemContain>();
+
+        int remainCount = storeContain.ItemStack(_count);
         
-        int remainCount = Outcontain.ItemStack(InContain.GetComponent<ItemContain>().Count);
-        Debug.Log(StackStartPos);
-        Debug.Log(otherItemPos);
-        Debug.Log(remainCount);
-        
-        if (remainCount == 0)
-        {
-            StoreItem(Outcontain.gameObject, otherItemPos);
-            InContain.ContainRemvoe();  // 컨테이너 삭제
-        }
-        else
+        if(remainCount > 0)
         {
             InContain.Count = remainCount;
-            containGrab = GrabContain(obj);
+            containGrab = GrabContain(obj); 
+            StoreItem(storeContain.gameObject, otherItemPos);
         }
-        StoreItem(Outcontain.gameObject, otherItemPos);
+        else if(remainCount == 0)
+        {
+            StoreItem(storeContain.gameObject, otherItemPos);
+        }
     }
 
     public Action<ItemData, int> onDontGetItem;
@@ -605,19 +623,6 @@ public class InventoryUI : MonoBehaviour
 
         sameItemContainList.Clear();
         emptyList.Clear();
-    }
-
-    public void findID()
-    {
-
-    }
-
-    /// <summary>
-    /// 컨테이너 제거
-    /// </summary>
-    public void RemoveSelectedButton()
-    {
-        containGrab = null;
     }
 
     /// <summary>

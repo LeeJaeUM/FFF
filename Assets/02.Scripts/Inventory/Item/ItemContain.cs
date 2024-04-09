@@ -132,7 +132,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     {
         Count += _count;
 
-        Debug.Log(item.maxItemCount);
+        //Debug.Log(item.maxItemCount);
 
         if (Count > item.maxItemCount)
         {
@@ -160,6 +160,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     public void ContainRemvoe()
     {
+        Debug.Log("삭제");
         // 아이템 정보 삭제
         ResetSelectedItem();
 
@@ -171,7 +172,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     private void SetCount(int _count)
     {
-        Debug.Log(_count);
+        //Debug.Log(_count);
         itemCount.text = _count.ToString();
     }
 }

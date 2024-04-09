@@ -71,4 +71,13 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
         data = null;
         isEmpty = true;
     }
+
+    public void SlotStore(GameObject Item, Vector2Int startPosition)
+    {
+        storedItemObject = Item;
+        data = Item.GetComponent<ItemContain>().item;
+        storedItemSize = data.Size;
+        storedItemStartPos = startPosition;
+        isEmpty = false;
+    }
 }
