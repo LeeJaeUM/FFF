@@ -9,6 +9,8 @@ public class WBUI : MonoBehaviour
     [SerializeField]Workbench workbench;
     Transform uiGroup;
 
+    [SerializeField] BlockSpwaner blockSpwaner;
+
 
     private void Start()
     {
@@ -16,17 +18,21 @@ public class WBUI : MonoBehaviour
         if(workbench != null )
             workbench.onTrigger += Workbench_UI_Use;
         uiGroup = transform.GetChild(0);
+
+        blockSpwaner = BaseCampManager.instance.BlockSpwaner;
     }
 
     private void Workbench_UI_Use(bool isUse)
     {
         if (isUse)
         {
-            uiGroup.gameObject.SetActive(true);
+            blockSpwaner.ProhibitSpawn(isUse);
+            uiGroup.gameObject.SetActive(isUse);
         }
         else
         {
-            uiGroup.gameObject.SetActive(false);
+            blockSpwaner.ProhibitSpawn(isUse);
+            uiGroup.gameObject.SetActive(isUse);
         }
     }
 }
