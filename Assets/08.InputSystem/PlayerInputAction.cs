@@ -62,6 +62,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BuildUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""e2bdf7a5-15a6-4783-9e68-664129bd90db"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""DespawnObj"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b77135e-c8af-469a-bf7f-36e984a5200d"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BuildUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -170,6 +190,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_BuildMode = m_Player.FindAction("BuildMode", throwIfNotFound: true);
         m_Player_SpawnObj = m_Player.FindAction("SpawnObj", throwIfNotFound: true);
         m_Player_DespawnObj = m_Player.FindAction("DespawnObj", throwIfNotFound: true);
+        m_Player_BuildUI = m_Player.FindAction("BuildUI", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -235,6 +256,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_BuildMode;
     private readonly InputAction m_Player_SpawnObj;
     private readonly InputAction m_Player_DespawnObj;
+    private readonly InputAction m_Player_BuildUI;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -243,6 +265,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         public InputAction @BuildMode => m_Wrapper.m_Player_BuildMode;
         public InputAction @SpawnObj => m_Wrapper.m_Player_SpawnObj;
         public InputAction @DespawnObj => m_Wrapper.m_Player_DespawnObj;
+        public InputAction @BuildUI => m_Wrapper.m_Player_BuildUI;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -264,6 +287,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @DespawnObj.started += instance.OnDespawnObj;
             @DespawnObj.performed += instance.OnDespawnObj;
             @DespawnObj.canceled += instance.OnDespawnObj;
+            @BuildUI.started += instance.OnBuildUI;
+            @BuildUI.performed += instance.OnBuildUI;
+            @BuildUI.canceled += instance.OnBuildUI;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -280,6 +306,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @DespawnObj.started -= instance.OnDespawnObj;
             @DespawnObj.performed -= instance.OnDespawnObj;
             @DespawnObj.canceled -= instance.OnDespawnObj;
+            @BuildUI.started -= instance.OnBuildUI;
+            @BuildUI.performed -= instance.OnBuildUI;
+            @BuildUI.canceled -= instance.OnBuildUI;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -312,5 +341,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         void OnBuildMode(InputAction.CallbackContext context);
         void OnSpawnObj(InputAction.CallbackContext context);
         void OnDespawnObj(InputAction.CallbackContext context);
+        void OnBuildUI(InputAction.CallbackContext context);
     }
 }

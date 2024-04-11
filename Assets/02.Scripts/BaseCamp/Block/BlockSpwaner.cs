@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -34,7 +35,7 @@ public class BlockSpwaner : MonoBehaviour
         Stone,
         Iron
     }
-    public BuildMode buildMode = BuildMode.None;
+    public BuildMode buildMode = BuildMode.Foundation;
 
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
@@ -66,6 +67,21 @@ public class BlockSpwaner : MonoBehaviour
 
     [SerializeField]
     EnviromentData[] enviromentDatas = null;
+    //[SerializeField] int enviromentIndex = 0;
+    public int enviromentIndex = 0; //임시로 public으로 변경
+    public int EnviromentIndex
+    {
+        get => enviromentIndex;
+        set
+        {
+            if (enviromentIndex != value)
+            {
+                enviromentIndex = value;
+                EniromentPreview_Setting(enviromentIndex);
+                //enviroment_preview = 
+            }
+        }
+    }
 
     Renderer previewRenderer;
 
@@ -86,12 +102,6 @@ public class BlockSpwaner : MonoBehaviour
     {
         inputAction = new PlayerInputAction();
         buildObjLayer = LayerMask.GetMask("BuildObj");
-    }
-
-    public void EnviromentSelect(int index)
-    {
-        GameObject selectEnviro = Instantiate(enviromentDatas[index].enviroPrefab, previewObj.transform.position, Quaternion.identity); 
-        Preview_Setting(selectEnviro);
     }
 
     #region InputActions
@@ -125,17 +135,17 @@ public class BlockSpwaner : MonoBehaviour
         //UI로 변경하기 위해 임시로 막아둠
         switch (buildMode)
         {
-            //case BuildMode.Wall_Horizontal:
-            //    buildMode = BuildMode.Wall_Vertical;
-            //    break;
+            case BuildMode.Wall_Horizontal:
+                buildMode = BuildMode.Wall_Vertical;
+                break;
 
-            //case BuildMode.Wall_Vertical:
-            //    buildMode = BuildMode.Foundation;
-            //    break;
+            case BuildMode.Wall_Vertical:
+                buildMode = BuildMode.Foundation;
+                break;
 
-            //case BuildMode.Foundation:
-            //    buildMode = BuildMode.Wall_Horizontal;
-            //    break;
+            case BuildMode.Foundation:
+                buildMode = BuildMode.Wall_Horizontal;
+                break;
             default:
                 buildMode = BuildMode.None;
                 break;
@@ -177,9 +187,9 @@ public class BlockSpwaner : MonoBehaviour
                     }
                     break;
                 case BuildMode.Enviroment:
-                    if (oneConnecting == null || !oneConnecting.isConnectedToFloor)
+                    if (canSpawnObj)
                     {
-                       SpawnBuildObj(blockDatas[0].floorPrefab);
+                       SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
                         Debug.Log("환경요소는 따로 추가해야함");
                     }
                     else
@@ -203,26 +213,27 @@ public class BlockSpwaner : MonoBehaviour
 
             return;
         }
-        Renderer renderer = newObj.transform.GetChild(0).GetComponent<Renderer>();
-        switch (materialType)
+        else
         {
-            case MaterialType.Wood:
-                renderer.material = blockDatas[0].blockMaterial;
-                break;
-            case MaterialType.Stone:
-                renderer.material = blockDatas[1].blockMaterial;
-                break;
-            case MaterialType.Iron:
-                renderer.material = blockDatas[2].blockMaterial;
-                break;
-        }
+            Renderer renderer = newObj.transform.GetChild(0).GetComponent<Renderer>();
+            switch (materialType)
+            {
+                case MaterialType.Wood:
+                    renderer.material = blockDatas[0].blockMaterial;
+                    break;
+                case MaterialType.Stone:
+                    renderer.material = blockDatas[1].blockMaterial;
+                    break;
+                case MaterialType.Iron:
+                    renderer.material = blockDatas[2].blockMaterial;
+                    break;
+            }
 
-        foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
-        {
-            connecting.UpdateConnecting(true);
+            foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
+            {
+                connecting.UpdateConnecting(true);
+            }
         }
-
-        
     }
 
     /// <summary>
@@ -259,6 +270,7 @@ public class BlockSpwaner : MonoBehaviour
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.red);
 
         // Ray에 부딪힌 물체 정보를 저장
+
         if (Physics.Raycast(ray, out hit, interactDistance))
         {
             // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
@@ -290,12 +302,21 @@ public class BlockSpwaner : MonoBehaviour
                     ColliderSearch();
                     break;
                 case BuildMode.Enviroment:
-                    //생성될 위치 미리보기
-
-                    Preview_Setting(enviroment_preview);
+                    
+                    //프리뷰 오브젝트 레이캐스트 닿는 위치로 이동
                     previewObj.transform.position = hit.point;
-                    break;
 
+                    //
+                    if (hit.collider.CompareTag("EnviroAble"))
+                    {
+                        canDespawn = true;
+                        Debug.Log("trr");
+                    }
+                    else
+                    {
+                        canSpawnObj = false;
+                    }
+                    break;
             }
         }
         else
@@ -304,6 +325,25 @@ public class BlockSpwaner : MonoBehaviour
             canDespawn = false;
         }
     }
+    void EniromentPreview_Setting(int index)
+    {
+        GameObject selectEnviro = Instantiate(enviromentDatas[index].enviroPrefab, transform);
+        enviroment_preview = selectEnviro;
+        Preview_Setting(enviroment_preview);
+
+        //이전 환경요소 프리뷰 삭제
+        Transform enviroChild = transform.GetChild(3);
+        if (enviroChild != null && enviroChild.gameObject != selectEnviro)
+        {
+            Debug.Log(enviroChild.gameObject.name);
+        }
+        else
+        {
+            Debug.Log("못찾앗어");
+        }
+        Destroy(enviroChild.gameObject);
+    }
+
     public void Preview_Setting(GameObject select)
     {
         fa_preview.SetActive(false);
@@ -315,7 +355,7 @@ public class BlockSpwaner : MonoBehaviour
     }
     public void Preview_Hide()
     {
-        previewObj.SetActive(false);
+        previewObj?.SetActive(false);
         fa_preview.SetActive(false);
         wall_preview_H.SetActive(false);
         wall_preview_V.SetActive(false);
