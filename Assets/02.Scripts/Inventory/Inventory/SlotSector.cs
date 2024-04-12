@@ -10,7 +10,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// <summary>
     /// 슬롯(상위 개체)
     /// </summary>
-    public GameObject slotParent;
+    public InvenSlot slotParent;
 
     /// <summary>
     /// 고유 객체 넘버
@@ -24,7 +24,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField]
     private InventoryUI inven => GameManager.Instance.inven;
 
-    private GameObject itemContain => inven.containGrab;
+    private ItemContain itemContain => inven.containGrab;
 
     [SerializeField]
     /// <summary>
@@ -32,7 +32,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     private InvenSlot parentSlotScript;
 
-    public void SlotSectorInitialize(GameObject obj, int id)
+    public void SlotSectorInitialize(InvenSlot obj, int id)
     {
         slotParent = obj;
         parentSlotScript = obj.GetComponent<InvenSlot>();
@@ -54,7 +54,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             inven.RefrechColor(true);
         }
-        if (parentSlotScript.storedItemObject != null && itemContain == null)
+        if (parentSlotScript.storedItemContain != null && itemContain == null)
         {
             inven.ColorChangeLoop(SlotColorHighlights.Blue,
                 parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
@@ -118,7 +118,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             inven.RefrechColor(false);
         }
         posOffset = Vector2Int.zero;
-        if(parentSlotScript.storedItemObject != null && itemContain == null)
+        if(parentSlotScript.storedItemContain != null && itemContain == null)
         {
             inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
         }

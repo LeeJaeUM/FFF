@@ -7,7 +7,7 @@ public class InvenGrid : MonoBehaviour
     /// <summary>
     /// 그리드 오브젝트
     /// </summary>
-    public GameObject[,] slotGrid;
+    public InvenSlot[,] slotGrid;
 
     /// <summary>
     /// 그리드 프리펩
@@ -31,7 +31,7 @@ public class InvenGrid : MonoBehaviour
 
     public void GridInitialize()
     {
-        slotGrid = new GameObject[gridSize.x, gridSize.y];
+        slotGrid = new InvenSlot[gridSize.x, gridSize.y];
         CreateSlots();
         ResizePanel();
     }
@@ -53,7 +53,7 @@ public class InvenGrid : MonoBehaviour
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize);
                 obj.GetComponent<RectTransform>().localScale = Vector3.one;
                 obj.GetComponent<InvenSlot>().SlotInitialize(x, y);
-                slotGrid[x, y] = obj;
+                slotGrid[x, y] = obj.GetComponent<InvenSlot>();
             }
         }
         GameManager.Instance.inven.slotGrid = slotGrid;

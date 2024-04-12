@@ -19,7 +19,7 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
     /// <summary>
     /// 저장된 물체 게임 오브젝트
     /// </summary>
-    public GameObject storedItemObject;
+    public ItemContain storedItemContain;
 
     /// <summary>
     /// 저장된 물체의 사이즈
@@ -72,10 +72,10 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
         isEmpty = true;
     }
 
-    public void SlotStore(GameObject Item, Vector2Int startPosition)
+    public void SlotStore(ItemContain Item, Vector2Int startPosition)
     {
-        storedItemObject = Item;
-        data = Item.GetComponent<ItemContain>().item;
+        storedItemContain = Item;
+        data = Item.item;
         storedItemSize = data.Size;
         storedItemStartPos = startPosition;
         isEmpty = false;

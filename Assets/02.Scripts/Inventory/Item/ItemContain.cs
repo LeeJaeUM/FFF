@@ -175,4 +175,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         //Debug.Log(_count);
         itemCount.text = _count.ToString();
     }
+
+    public void Grab()
+    {
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        canvas.alpha = 0.5f;
+        transform.position = Input.mousePosition;
+    }
 }
