@@ -62,24 +62,24 @@ public class Factory : Singleton<Factory>
         return result;
     }
 
-    public GameObject GetItemContain(ItemData data, int _count = 1)
+    public ItemContain GetItemContain(ItemData data, int _count = 1)
     {
-        GameObject obj = ContainPool.GetObject().gameObject;
+        ItemContain contain = ContainPool.GetObject();
 
-        obj.GetComponent<ItemContain>().ContainInitialize(data, _count);
-        obj.transform.SetParent(GameManager.Instance.inven.DragParent);
+        contain.GetComponent<ItemContain>().ContainInitialize(data, _count);
+        contain.transform.SetParent(GameManager.Instance.inven.DragParent);
 
-        return obj;
+        return contain;
     }
 
-    public GameObject GetGridSlot()
+    public InvenSlot GetGridSlot()
     {
-        return SlotPool.GetObject().gameObject;
+        return SlotPool.GetObject();
     }
 
-    public GameObject GetGridSlot(int x, int y, Transform parent)
+    public InvenSlot GetGridSlot(int x, int y, Transform parent)
     {
-        GameObject result = SlotPool.GetObject().gameObject;
+        InvenSlot result = GetGridSlot();
 
         result.transform.name = $"slot[{x},{y}]";
         result.transform.SetParent(parent);

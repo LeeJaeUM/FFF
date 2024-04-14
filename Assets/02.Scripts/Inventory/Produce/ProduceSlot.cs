@@ -37,11 +37,10 @@ public class ProduceSlot : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameObject containObj = GameManager.Instance.inven.containGrab;
+        ItemContain contain = GameManager.Instance.inven.containGrab;
         // 마우스에 아이템이 정보가 담겨있을 경우
-        if (containObj != null)
+        if (contain != null)
         {
-            ItemContain contain = containObj.GetComponent<ItemContain>();
             SetData(contain.item);
             if(contain.Count == 1)
             {
@@ -53,9 +52,9 @@ public class ProduceSlot : MonoBehaviour, IPointerClickHandler
             }
         }
         // 없을 경우
-        else if(containObj == null && data != null)
+        else if(contain == null && data != null)
         {
-            GameManager.Instance.inven.GrabContain(Factory.Instance.GetItemContain(data));
+            GameManager.Instance.inven.SetSelectedItem(Factory.Instance.GetItemContain(data));
         }
     }
 }

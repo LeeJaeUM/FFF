@@ -32,10 +32,10 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     private InvenSlot parentSlotScript;
 
-    public void SlotSectorInitialize(InvenSlot obj, int id)
+    public void SlotSectorInitialize(InvenSlot slot, int id)
     {
-        slotParent = obj;
-        parentSlotScript = obj.GetComponent<InvenSlot>();
+        slotParent = slot;
+        parentSlotScript = slot.GetComponent<InvenSlot>();
         QuadNum = id;
     }
 

@@ -101,15 +101,15 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     /// <summary>
     /// 선택된 아이템 컨테이너
     /// </summary>
-    /// <param name="obj"></param>
-    public GameObject SetSelectedItem(GameObject obj)
+    /// <param name="contain"></param>
+    public ItemContain SetSelectedItem(ItemContain contain)
     {
         isDragging = true;
-        obj.transform.SetParent(DragParent);
-        obj.GetComponent<RectTransform>().localScale = Vector3.one;
-        GameManager.Instance.inven.containGrab = obj;
+        contain.transform.SetParent(DragParent);
+        contain.GetComponent<RectTransform>().localScale = Vector3.one;
+        GameManager.Instance.inven.containGrab = contain;
 
-        return obj;
+        return contain;
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        SetSelectedItem(this.gameObject);
+        SetSelectedItem(this);
         canvas.blocksRaycasts = !isDragging;
         canvas.alpha = 0.5f;
     }
@@ -151,7 +151,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         Count -= _count;
     }
 
-    public GameObject ItemSplit(int _count = 1)
+    public ItemContain ItemSplit(int _count = 1)
     {
         ItemDestack(_count);
 

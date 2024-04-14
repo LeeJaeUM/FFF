@@ -227,8 +227,8 @@ public class InventoryUI : MonoBehaviour
                 if (isShiftPress && contain.Count > 1)
                 {
                     int _count = Mathf.FloorToInt(contain.Count/2);
-                    GameObject returnObj = contain.ItemSplit(_count);
-                    SetSelectedItem(returnObj.GetComponent<ItemContain>());
+                    ItemContain returnContain = contain.ItemSplit(_count);
+                    SetSelectedItem(returnContain.GetComponent<ItemContain>());
                 }
                 else
                 {
@@ -577,24 +577,24 @@ public class InventoryUI : MonoBehaviour
         {
             foreach(var grid in emptyList)
             {
-                GameObject obj = null;
+                ItemContain contain = null;
                 // 데이터의 최대 수량보다 크며
                 if (_count > data.maxItemCount)
                 {
                     remain -= data.maxItemCount;
-                    obj = Factory.Instance.GetItemContain(data, data.maxItemCount);
+                    contain = Factory.Instance.GetItemContain(data, data.maxItemCount);
                     if (SlotCheck(grid, data.Size) == 0)
                     {
-                        StoreItem(obj.GetComponent<ItemContain>(), grid);
+                        StoreItem(contain, grid);
                         break;
                     }
                 }
                 else
                 {
-                    obj = Factory.Instance.GetItemContain(data, remain);
+                    contain = Factory.Instance.GetItemContain(data, remain);
                     if (SlotCheck(grid, data.Size) == 0)
                     {
-                        StoreItem(obj.GetComponent<ItemContain>(), grid);
+                        StoreItem(contain, grid);
                         break;
                     }
                 }

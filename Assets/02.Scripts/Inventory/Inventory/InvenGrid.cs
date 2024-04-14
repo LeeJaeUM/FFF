@@ -45,15 +45,15 @@ public class InvenGrid : MonoBehaviour
         {
             for(int x = 0; x < gridSize.x; x++)
             {
-                GameObject obj = Factory.Instance.GetGridSlot(x, y, this.transform);
+                InvenSlot slot = Factory.Instance.GetGridSlot(x, y, this.transform);
 
-                RectTransform rect = obj.transform.GetComponent<RectTransform>();
+                RectTransform rect = slot.transform.GetComponent<RectTransform>();
                 rect.localPosition = new Vector3(x * slotSize + edgePadding, y * slotSize + edgePadding, 0);
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize);
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize);
-                obj.GetComponent<RectTransform>().localScale = Vector3.one;
-                obj.GetComponent<InvenSlot>().SlotInitialize(x, y);
-                slotGrid[x, y] = obj.GetComponent<InvenSlot>();
+                rect.localScale = Vector3.one;
+                slot.SlotInitialize(x, y);
+                slotGrid[x, y] = slot;
             }
         }
         GameManager.Instance.inven.slotGrid = slotGrid;

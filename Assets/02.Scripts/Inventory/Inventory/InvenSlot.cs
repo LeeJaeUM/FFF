@@ -44,7 +44,7 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
         SlotSector[] slotsSector = GetComponentsInChildren<SlotSector>();
         for (int i = 0; i < slotsSector.Length; i++)
         {
-            slotsSector[i].SlotSectorInitialize(gameObject, i + 1);
+            slotsSector[i].SlotSectorInitialize(this, i + 1);
         }
 
         isEmpty = true;

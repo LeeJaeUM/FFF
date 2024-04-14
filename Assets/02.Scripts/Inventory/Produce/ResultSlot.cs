@@ -39,7 +39,8 @@ public class ResultSlot : MonoBehaviour, IPointerClickHandler
     {
         if(data != null)
         {
-            GameManager.Instance.inven.GrabContain(Factory.Instance.GetItemContain(data));
+            ItemContain contain = Factory.Instance.GetItemContain(data);
+            GameManager.Instance.inven.SetSelectedItem(contain);
             RemoveData();
         }
     }
