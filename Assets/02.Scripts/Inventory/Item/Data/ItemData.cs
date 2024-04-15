@@ -2,39 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// ¾ÆÀÌÅÛÀÇ µ¥ÀÌÅÍ¸¦ ´ã¾ÆµÎ´Â ½ºÅ©·¯ÅÍºí ¿ÀºêÁ§Æ®
+// ì•„ì´í…œì˜ ë°ì´í„°ë¥¼ ë‹´ì•„ë‘ëŠ” ìŠ¤í¬ëŸ¬í„°ë¸” ì˜¤ë¸Œì íŠ¸
 [CreateAssetMenu(fileName = "ItemData", menuName = "Data/ItemData", order = 0)]
 public class ItemData : ScriptableObject
 {
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ °íÀ¯¹øÈ£
+    /// ì•„ì´í…œì˜ ê³ ìœ ì½”ë“œ
     /// </summary>
-    public int itemID;
+    public ItemCode itemCode;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ¾ÆÀÌÄÜ
+    /// ì•„ì´í…œì˜ ì•„ì´ì½˜
     /// </summary>
     public Sprite itemIcon;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ÀÌ¸§
+    /// ì•„ì´í…œì˜ ì´ë¦„
     /// </summary>
     public string itemName;
 
     [TextArea]
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ¼³¸í
+    /// ì•„ì´í…œì˜ ì„¤ëª…
     /// </summary>
     public string itemDescription;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ °¡·ÎÅ©±â
+    /// ì•„ì´í…œì˜ ê°€ë¡œí¬ê¸°
     /// </summary>
     [Range(1, 3)]
     public int SizeX = 1;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ¼¼·ÎÅ©±â
+    /// ì•„ì´í…œì˜ ì„¸ë¡œí¬ê¸°
     /// </summary>
     [Range(1, 5)]
     public int SizeY = 1;
@@ -53,17 +53,17 @@ public class ItemData : ScriptableObject
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ÃÖ´ë ¼ö·®
+    /// ì•„ì´í…œì˜ ìµœëŒ€ ìˆ˜ëŸ‰
     /// </summary>
     public int maxItemCount;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ °¡°İ
+    /// ì•„ì´í…œ ê°€ê²©
     /// </summary>
     public float itemPrice;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ ¹«°Ô
+    /// ì•„ì´í…œì˜ ë¬´ê²Œ
     /// </summary>
     public float itemWeight;
 }
