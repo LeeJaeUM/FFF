@@ -16,7 +16,7 @@ public class MaterialSelectUI : MonoBehaviour
         Transform g_child = child.transform.GetChild(0);
         selectButtons = g_child.GetComponentsInChildren<Button>(true);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
             //    selectButtons[i] = transform.GetChild(i).GetComponent<Button>();     
 
