@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ItemData", menuName = "Data/ItemData", order = 0)]
 public class ItemData : ScriptableObject
 {
+    [Header("아이템 고유코드")]
     /// <summary>
     /// 아이템의 고유코드
     /// </summary>

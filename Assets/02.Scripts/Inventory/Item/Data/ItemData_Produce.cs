@@ -6,6 +6,5 @@ using UnityEngine;
 public class ItemData_Produce : ItemData
 {
     [Header("조합 아이템 부모")]
-    public ItemData parentData_1;
-    public ItemData parentData_2;
+    public ItemCode[] code;
 }
