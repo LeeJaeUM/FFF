@@ -6029,10 +6029,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7227109694801861392, guid: 1eedd8b659316d94fb586e2efbe61983, type: 3}
-      propertyPath: dropChance
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8269323394439723422, guid: 1eedd8b659316d94fb586e2efbe61983, type: 3}
       propertyPath: m_Name
       value: Bottle

@@ -377,7 +377,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brokenBottlePrefab: {fileID: 4870190301582926355, guid: 1becc5cfa7613e640aa0653e8c9d9582, type: 3}
-  KeyItem: {fileID: 8043901628230181311, guid: b5c7e566a136f0b4894062ef7617528f, type: 3}
+  keyItem: {fileID: 8043901628230181311, guid: b5c7e566a136f0b4894062ef7617528f, type: 3}
   forceMagnitude: 1
   threshold: 0.5
-  dropChance: 0
+  dropChance: 1
