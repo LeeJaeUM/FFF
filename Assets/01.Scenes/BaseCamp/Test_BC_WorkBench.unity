@@ -4654,7 +4654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &2382442803022430109
 GameObject:
   m_ObjectHideFlags: 0
@@ -5842,6 +5842,18 @@ PrefabInstance:
       propertyPath: blockDatas.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: d04ecac2cace8e74eb9f9768d7900283, type: 2}
+    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
+      propertyPath: enviromentDatas.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 573f87e69f494c4438877e6b00c69924, type: 2}
+    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
+      propertyPath: enviromentDatas.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 14168793baa93ee489ce07843449d5cc, type: 2}
+    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
+      propertyPath: enviromentDatas.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: ac664e903a7951144b97ee604de989e0, type: 2}
     - target: {fileID: 6777748465058022059, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
       propertyPath: m_Layer
       value: 2
@@ -5884,6 +5896,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectButtons: []
+  enviroSelectButtons: []
 --- !u!114 &7047357649498969220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6767,5 +6780,5 @@ SceneRoots:
   - {fileID: 1813958800}
   - {fileID: 7103269590288974220}
   - {fileID: 6891452896713506790}
-  - {fileID: 493328397}
   - {fileID: 1501723806}
+  - {fileID: 493328397}

@@ -12,12 +12,21 @@ public class BCUI : MonoBehaviour
     [SerializeField]GameObject buildUI;
     [SerializeField] bool isActive = false;
 
+    /// <summary>
+    /// 블럭 설치 모드 변경 버튼 그룹
+    /// </summary>
     [SerializeField] GameObject blockSelectGroup;
+    /// <summary>
+    /// 환경요소 선택 버튼 그룹
+    /// </summary>
     [SerializeField] GameObject enviroSelectGroup;
 
     [SerializeField] BuildSelectUI[] buildSelectUIs = null;
     [SerializeField] BlockSpwaner spwaner = null;
 
+    /// <summary>
+    /// 벽 생성 시 재료 선택 UI 
+    /// </summary>
     MaterialSelectUI materialSelectUI;
 
 
@@ -48,8 +57,8 @@ public class BCUI : MonoBehaviour
         }
 
         materialSelectUI.onSelectMaterial += OnBlockMatSetting;
+        materialSelectUI.onSelectEnviroment += OnSelectEnviroment;
     }
-
     private void OnEnable()
     {
         inputAction.Enable();
@@ -87,6 +96,7 @@ public class BCUI : MonoBehaviour
     void OnBlockMatSetting(int btnIndex)
     {
         Debug.Log(btnIndex);
+
         // 환경요소가 아닐 때
         if(btnIndex < 3)
         {
@@ -97,10 +107,19 @@ public class BCUI : MonoBehaviour
         else
         {
             //Enviroment를 눌렀을 때
+
             blockSelectGroup.SetActive(false);
             enviroSelectGroup.SetActive(true);
             return;
         }
+    }
+
+    private void OnSelectEnviroment(int btnIndex)
+    {
+        Debug.Log(btnIndex);
+
+        spwaner.EnviromentIndex = btnIndex;
+
     }
 
 }
