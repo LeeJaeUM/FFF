@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using System;
 using Unity.VisualScripting;
 using System.ComponentModel;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -14,6 +15,21 @@ public class InventoryUI : MonoBehaviour
     /// 아이템 정보를 담는 컨테이너 리스트
     /// </summary>
     public List<ItemContain> containList;
+
+    public List<ItemContain> ContainList
+    {
+        get => containList;
+        set
+        {
+            if(value != containList)
+            {
+                containList = value;
+                onContainList?.Invoke(containList);
+            }
+        }
+    }
+
+    public Action<List<ItemContain>> onContainList { get; set; }
 
     /// <summary>
     /// 슬롯 그리드를 저장하는 객체
@@ -526,8 +542,10 @@ public class InventoryUI : MonoBehaviour
 
     public Action<ItemData, int> onDontGetItem;
 
-    public void GetItemToSlot(ItemData data, int _count)
+    public void GetItemToSlot(ItemCode code, int _count)
     {
+        ItemData data = FindCodeData(code);
+
         List<Vector2Int> emptyList = new List<Vector2Int>();
         List<ItemContain> sameItemContainList = new List<ItemContain>();
         
@@ -623,6 +641,19 @@ public class InventoryUI : MonoBehaviour
         canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = false;
         canvasGroup.alpha = 0;
+    }
+
+    public ItemData FindCodeData(ItemCode _code)
+    {
+        foreach(var data in itemDatas)
+        {
+            if(data.itemCode == _code)
+            {
+                return data;
+            }
+        }
+
+        return null;
     }
 }
 

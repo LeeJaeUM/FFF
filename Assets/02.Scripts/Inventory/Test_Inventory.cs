@@ -5,11 +5,11 @@ using UnityEngine.InputSystem;
 
 public class Test_Inventory : TestBase
 {
-    public ItemData data;
+    public ItemCode code;
     public int count;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        GameManager.Instance.inven.GetItemToSlot(data, count);
+        GameManager.Instance.inven.GetItemToSlot(code, count);
     }
 }

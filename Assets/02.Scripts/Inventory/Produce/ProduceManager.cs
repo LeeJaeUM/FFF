@@ -11,7 +11,8 @@ public class ProduceManager : MonoBehaviour
     private void Awake()
     {
         inven = GameManager.Instance.inven;
-
+        
+        // 리스트에 따로 보관
         foreach (ItemData data in inven.itemDatas)
         {
             if(data is ItemData_Produce)
@@ -20,4 +21,15 @@ public class ProduceManager : MonoBehaviour
             }
         }
     }
+
+    private void Start()
+    {
+        // 전달받은 리스트
+        inven.onContainList = (list) =>
+        {
+
+        };
+    }
 }
+
+// 구조체 만들기

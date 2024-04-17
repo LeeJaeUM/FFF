@@ -18,6 +18,7 @@ public class Factory : Singleton<Factory>
     // 오브젝트 풀들
     GridSlotPool SlotPool;
     ItemContainPool ContainPool;
+    ProduceSlotPool ProducePool;
 
     public Transform containChild;
 
@@ -83,6 +84,15 @@ public class Factory : Singleton<Factory>
 
         result.transform.name = $"slot[{x},{y}]";
         result.transform.SetParent(parent);
+
+        return result;
+    }
+
+    public ProduceSlot GetProduceSlot(ItemCode _code, int _count, int _total)
+    {
+        ProduceSlot result = ProducePool.GetObject();
+
+        result.SetData(_code, _count, _total);
 
         return result;
     }

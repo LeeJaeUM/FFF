@@ -6,5 +6,22 @@ using UnityEngine;
 public class ItemData_Produce : ItemData
 {
     [Header("조합 아이템 부모")]
-    public ItemCode[] code;
+    public parentCode[] parentCodes;
+
+    public struct parentCode
+    {
+        private ItemCode code;
+
+        public ItemCode Code => code;
+
+        private int count;
+
+        public int Count => count;
+
+        public parentCode(ItemCode _code, int _count)
+        {
+            this.code = _code;
+            this.count = _count;
+        }
+    }
 }
