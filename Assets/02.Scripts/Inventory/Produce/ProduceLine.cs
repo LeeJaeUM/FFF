@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 제작에 아이템을 보여주는 클래스
-public class ProduceLine : MonoBehaviour
+public class ProduceLine : RecycleObject
 {
     #region 변수
     private ItemData_Produce data;
@@ -49,10 +49,54 @@ public class ProduceLine : MonoBehaviour
         itemName.text = _data.itemName;
 
         produceSlots = new ProduceSlot[_data.parentCodes.Length];
+        int index = 0;
         foreach(var code in _data.parentCodes)
         {
-            //Factory.Instance.GetProduceSlot(code.Code, code.Count, )
+            produceSlots[index] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
+            index++;
         }
+
+        // 아이템 갯수 체크
+        Refresh();
+
+        // 버튼 클릭시 
+        produceButton.onClick.AddListener(() =>
+        {
+            InventoryUI inven = GameManager.Instance.inven;
+            inven.SetSelectedItem(Factory.Instance.GetItemContain(data));
+        });
+    }
+
+    /// <summary>
+    /// 아이템 갯수가 맞는지 확인하는 함수
+    /// </summary>
+    public void Refresh()
+    {
+        foreach(var slot in produceSlots)
+        {
+            foreach(var ItemContain in GameManager.Instance.inven.containList)
+            {
+                if(ItemContain.item == slot.Data)
+                {
+                    slot.SetIngredient(ItemContain.Count);
+                }
+            }
+        }
+
+        produceButton.interactable = checkProduce();
+    }
+
+    public bool checkProduce()
+    {
+        foreach(var slot in produceSlots)
+        {
+            if (!slot.IsProduceOk)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
     #endregion
 }

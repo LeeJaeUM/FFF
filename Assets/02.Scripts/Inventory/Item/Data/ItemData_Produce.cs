@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,20 +9,24 @@ public class ItemData_Produce : ItemData
     [Header("조합 아이템 부모")]
     public parentCode[] parentCodes;
 
-    public struct parentCode
+}
+
+[Serializable]
+public struct parentCode
+{
+    [SerializeField]
+    private ItemCode code;
+
+    public ItemCode Code => code;
+
+    [SerializeField]
+    private int count;
+
+    public int Count => count;
+
+    public parentCode(ItemCode _code, int _count)
     {
-        private ItemCode code;
-
-        public ItemCode Code => code;
-
-        private int count;
-
-        public int Count => count;
-
-        public parentCode(ItemCode _code, int _count)
-        {
-            this.code = _code;
-            this.count = _count;
-        }
+        this.code = _code;
+        this.count = _count;
     }
 }

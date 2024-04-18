@@ -19,6 +19,7 @@ public class Factory : Singleton<Factory>
     GridSlotPool SlotPool;
     ItemContainPool ContainPool;
     ProduceSlotPool ProducePool;
+    ProduceLinePool LinePool;
 
     public Transform containChild;
 
@@ -38,6 +39,12 @@ public class Factory : Singleton<Factory>
 
         SlotPool = GetComponentInChildren<GridSlotPool>();
         if(SlotPool != null ) SlotPool.Initialized();
+
+        ProducePool = GetComponentInChildren<ProduceSlotPool>();
+        if( ProducePool != null ) ProducePool.Initialized();
+            
+        LinePool = GetComponentInChildren<ProduceLinePool>();
+        if( LinePool != null ) LinePool.Initialized();
     }
 
     /// <summary>
@@ -88,11 +95,21 @@ public class Factory : Singleton<Factory>
         return result;
     }
 
-    public ProduceSlot GetProduceSlot(ItemCode _code, int _count, int _total)
+    public ProduceSlot GetProduceSlot(ItemCode _code, int _count, Transform parent)
     {
         ProduceSlot result = ProducePool.GetObject();
 
-        result.SetData(_code, _count, _total);
+        result.SetData(_code, _count);
+        result.transform.SetParent(parent);
+
+        return result;
+    }
+
+    public ProduceLine GetProduceLine(Transform parent)
+    {
+        ProduceLine result = LinePool.GetObject();
+
+        result.transform.SetParent(parent);
 
         return result;
     }

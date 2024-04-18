@@ -8,6 +8,9 @@ using UnityEngine.UI;
 public class ProduceSlot : RecycleObject
 {
     ItemData data;
+
+    public ItemData Data => data;
+
     int count;
     int total = 0;
 
@@ -25,7 +28,7 @@ public class ProduceSlot : RecycleObject
         }
     }
 
-    bool IsProduceOk => count < Total;
+    public bool IsProduceOk => count < Total;
 
 
     #region 컴포넌트
@@ -45,11 +48,10 @@ public class ProduceSlot : RecycleObject
     /// <param name="_code"></param>
     /// <param name="_count"></param>
     /// <param name="_total"></param>
-    public void SetData(ItemCode _code, int _count, int _total)
+    public void SetData(ItemCode _code, int _count)
     {
         this.data = GameManager.Instance.inven.FindCodeData(_code);
         this.count = _count;
-        this.total = _total;
 
         Refresh();
     }
@@ -66,6 +68,6 @@ public class ProduceSlot : RecycleObject
     private void Refresh()
     {
         icon.sprite = data.itemIcon;
-        countText.text = $"X{count}/{total}";
+        countText.text = $"X{total}/{count}";
     }
 }

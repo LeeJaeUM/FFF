@@ -8,6 +8,10 @@ public class ProduceManager : MonoBehaviour
 
     public InventoryUI inven;
 
+    private Transform lineTr;
+
+    public ProduceLine[] lines;
+
     private void Awake()
     {
         inven = GameManager.Instance.inven;
@@ -20,15 +24,33 @@ public class ProduceManager : MonoBehaviour
                 produceList.Add((ItemData_Produce)data);
             }
         }
+
+        Transform child = transform.GetChild(0);    // scrool view
+        child = child.GetChild(0);                  // viewport
+        lineTr = child.GetChild(0);                  // content
+
+        lines = new ProduceLine[produceList.Count];
+
     }
 
-    private void Start()
+    public void Initialize()
     {
-        // 전달받은 리스트
-        inven.onContainList = (list) =>
+        for (int i = 0; i < produceList.Count; i++)
         {
+            lines[i] = Factory.Instance.GetProduceLine(lineTr);
+            lines[i].Initialize(produceList[i]);
+        }
 
-        };
+        // 전달받은 리스트
+        inven.onContainList += onRefresh;
+    }
+
+    private void onRefresh()
+    { 
+        foreach(var line in lines)
+        {
+            line.Refresh();
+        }
     }
 }
 

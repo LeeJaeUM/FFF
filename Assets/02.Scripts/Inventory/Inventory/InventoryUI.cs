@@ -24,12 +24,12 @@ public class InventoryUI : MonoBehaviour
             if(value != containList)
             {
                 containList = value;
-                onContainList?.Invoke(containList);
+                onContainList?.Invoke();
             }
         }
     }
 
-    public Action<List<ItemContain>> onContainList { get; set; }
+    public Action onContainList;
 
     /// <summary>
     /// 슬롯 그리드를 저장하는 객체
@@ -133,6 +133,8 @@ public class InventoryUI : MonoBehaviour
 
     private InvenUI UI;
 
+    private ProduceManager produceManager;
+
     /// <summary>
     /// 입력
     /// </summary>
@@ -150,6 +152,7 @@ public class InventoryUI : MonoBehaviour
         DragParent = child.GetChild(1);
         tooltip = GetComponentInChildren<ItemTooltip>();
         UI = GetComponentInChildren<InvenUI>();
+        produceManager = GetComponentInChildren<ProduceManager>();
     }
 
     private void Start()
@@ -157,6 +160,7 @@ public class InventoryUI : MonoBehaviour
         TotalWeight = 0;
         UI.Initialized();
         invenGrid.GridInitialize();
+        produceManager.Initialize();
     }
 
     private void OnEnable()
@@ -355,6 +359,7 @@ public class InventoryUI : MonoBehaviour
         return 2;
     }
 
+    #region 색깔 변경용 함수들
     public void RefrechColor(bool enter)
     {
         if (enter)
@@ -432,6 +437,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+    #endregion
 
     /// <summary>
     /// 슬롯에 아이템 저장
@@ -455,7 +461,7 @@ public class InventoryUI : MonoBehaviour
 
         Debug.Log(containList);
         TotalWeight += contain.item.itemWeight;
-        containList.Add(contain);
+        ContainList.Add(contain);
 
         // 게임 오브젝트 재설정
         Vector2 position = slotGrid[startPos.x, startPos.y].transform.position;
@@ -487,11 +493,11 @@ public class InventoryUI : MonoBehaviour
         Vector2Int itemSize = returnItem.item.Size;
         TotalWeight -= returnItem.item.itemWeight;
 
-        for (int i = 0; i < containList.Count; i++)
+        for (int i = 0; i < ContainList.Count; i++)
         {
-            if (containList[i].id == returnItem.id)
+            if (ContainList[i].id == returnItem.id)
             {
-                containList.RemoveAt(i);
+                ContainList.RemoveAt(i);
             }
         }
 
@@ -567,7 +573,7 @@ public class InventoryUI : MonoBehaviour
                 }
                 else
                 {
-                    foreach(var contain in containList)
+                    foreach(var contain in ContainList)
                     {
                         if(contain.item == data && !contain.FullCount)
                         {
