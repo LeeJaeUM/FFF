@@ -355,6 +355,11 @@ public class BlockSpwaner : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 환경요소용 미리보기 프리팹 세팅
+    /// </summary>
+    /// <param name="index">EnviromentData배열의 인덱스 BCUI와 MaterialSelectUI에서 액션으로 보냄</param>
     void EniromentPreview_Setting(int index)
     {
         GameObject selectEnviro = Instantiate(enviromentDatas[index].previewPrefab, transform);
@@ -374,6 +379,10 @@ public class BlockSpwaner : MonoBehaviour
         Destroy(enviroChild.gameObject);
     }
 
+    /// <summary>
+    /// 미리보기 세팅
+    /// </summary>
+    /// <param name="select"></param>
     public void Preview_Setting(GameObject select)
     {
         fa_preview.SetActive(false);
@@ -383,6 +392,10 @@ public class BlockSpwaner : MonoBehaviour
         previewObj = select;
         select.SetActive(true);
     }
+
+    /// <summary>
+    /// 모든 미리보기 안보이게 - 건축모드가 아닐때 쓰는 함수
+    /// </summary>
     public void Preview_Hide()
     {
         previewObj?.SetActive(false);
@@ -392,7 +405,9 @@ public class BlockSpwaner : MonoBehaviour
         enviroment_preview.SetActive(false);
     }
 
-
+    /// <summary>
+    /// 벽이 생성가능한지 판단하는 함수
+    /// </summary>
     void ColliderSearch()
     {
         //미리보기의 위치를 기준으로 반지름이 1인 구 범위 내에 콜라이더를 수집
@@ -644,7 +659,12 @@ public class BlockSpwaner : MonoBehaviour
             }
         }
     }
-    void PreviewMatSelect(bool isSpawnable)     //미리보기의 머테리얼 색상 정하는 함수
+
+    /// <summary>
+    ///  미리보기의 머테리얼 색상 정하는 함수
+    /// </summary>
+    /// <param name="isSpawnable">생성 가능할때 true</param>
+    void PreviewMatSelect(bool isSpawnable)    
     {
 
         if (isSpawnable)
