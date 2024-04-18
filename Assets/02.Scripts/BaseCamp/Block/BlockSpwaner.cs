@@ -83,7 +83,7 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    Renderer previewRenderer;       //미리보기 오브젝트의 머티리얼을 변겨앟기 위한 렌더러 변수
+    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
 
     [SerializeField] bool canDespawn = false;
 
@@ -196,8 +196,9 @@ public class BlockSpwaner : MonoBehaviour
                     }
                     break;
                 case BuildMode.Enviroment:
+                    if(canSpawnObj)
                         SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
-                        //Debug.Log("환경요소는 따로 추가해야함");
+                    //Debug.Log("환경요소는 따로 추가해야함");
                     break;
                 case BuildMode.None:
                     Debug.Log("건축모드가 아닐때 마우스 클릭함");
@@ -291,6 +292,16 @@ public class BlockSpwaner : MonoBehaviour
                 //환경요소에 닿을 때 제거 가능
                 canDespawn = true;
 
+                if (tagOfHitObject == "Respawn")
+                {
+                    canSpawnObj = false;
+                }
+                else
+                {
+                    canSpawnObj = true;
+                }
+                PreviewMatSelect(canSpawnObj);
+
             }
             else
             {
@@ -346,7 +357,7 @@ public class BlockSpwaner : MonoBehaviour
     }
     void EniromentPreview_Setting(int index)
     {
-        GameObject selectEnviro = Instantiate(enviromentDatas[index].enviroPrefab, transform);
+        GameObject selectEnviro = Instantiate(enviromentDatas[index].previewPrefab, transform);
         enviroment_preview = selectEnviro;
         Preview_Setting(enviroment_preview);
 
@@ -635,15 +646,22 @@ public class BlockSpwaner : MonoBehaviour
     }
     void PreviewMatSelect(bool isSpawnable)     //미리보기의 머테리얼 색상 정하는 함수
     {
+
         if (isSpawnable)
         {
-            previewRenderer = previewObj.GetComponent<Renderer>();
-            previewRenderer.material = SpawnAbledMat;
+            previewRenderers = previewObj.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in previewRenderers)
+            {
+                renderer.material = SpawnAbledMat;
+            }
         }
         else
         {
-            previewRenderer = previewObj.GetComponent<Renderer>();
-            previewRenderer.material = SpawnDisabledMat;
+            previewRenderers = previewObj.GetComponentsInChildren<Renderer>();
+            foreach (Renderer renderer in previewRenderers)
+            {
+                renderer.material = SpawnDisabledMat;
+            }
         }
     }
 }

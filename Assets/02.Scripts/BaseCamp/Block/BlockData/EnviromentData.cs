@@ -6,4 +6,5 @@ using UnityEngine;
 public class EnviromentData : ScriptableObject
 {
     public GameObject enviroPrefab;
+    public GameObject previewPrefab;
 }
