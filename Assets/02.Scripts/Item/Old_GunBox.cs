@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
-public class GunBox : MonoBehaviour
+public class Old_GunBox : MonoBehaviour
 {
     /// <summary>
     /// 인벤토리에 Axe 가지고 있는지 확인용 변수
