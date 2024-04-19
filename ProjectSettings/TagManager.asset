@@ -5,17 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - BULLET
-  - TRAP
   - PLAYER
   - HOME
   - CinemachineTarget
-  - TRAP2
-  - TRAP3
   - MONSTER
   - ROOM
   - GOAL
   - Ground
   - Buildables
+  - EnviroAble
+  - WOODTRAP
   layers:
   - Default
   - TransparentFX
