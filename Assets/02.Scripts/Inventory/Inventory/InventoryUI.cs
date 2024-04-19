@@ -21,9 +21,10 @@ public class InventoryUI : MonoBehaviour
         get => containList;
         set
         {
-            if(value != containList)
+            if(containList.Count != value.Count)
             {
                 containList = value;
+                Debug.Log("아이템 리스트 변화");
                 onContainList?.Invoke();
             }
         }
@@ -696,6 +697,15 @@ public class InventoryUI : MonoBehaviour
                 else
                 {
                     remain = useCount - contain.Count;
+
+                    for (int i = 0; i < ContainList.Count; i++)
+                    {
+                        if (ContainList[i].id == contain.id)
+                        {
+                            ContainList.RemoveAt(i);
+                            contain.ContainRemvoe();
+                        }
+                    }
                 }
             }
             else if(contain.item != data && remain > 0)

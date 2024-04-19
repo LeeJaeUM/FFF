@@ -70,4 +70,9 @@ public class ProduceSlot : RecycleObject
         icon.sprite = data.itemIcon;
         countText.text = $"X{total}/{count}";
     }
+
+    public void UseItem()
+    {
+        GameManager.Instance.inven.UseItem(data.itemCode, count);
+    }
 }

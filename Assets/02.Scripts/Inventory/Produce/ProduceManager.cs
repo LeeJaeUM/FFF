@@ -53,5 +53,3 @@ public class ProduceManager : MonoBehaviour
         }
     }
 }
-
-// 구조체 만들기

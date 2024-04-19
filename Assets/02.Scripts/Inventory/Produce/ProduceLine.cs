@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -63,6 +64,10 @@ public class ProduceLine : RecycleObject
         produceButton.onClick.AddListener(() =>
         {
             InventoryUI inven = GameManager.Instance.inven;
+            foreach(var slot in produceSlots)
+            {
+                slot.UseItem();
+            }
             inven.SetSelectedItem(Factory.Instance.GetItemContain(data));
         });
     }
