@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public enum ItemCode
 {
     // 재료
@@ -25,4 +27,25 @@ public enum ItemCode
     Axe,            // 도끼
     Hammer,         // 망치
     Crowbar,        // 쇠지렛대
+}
+
+
+public struct SlotColorHighlights
+{
+    public static Color Green
+    { get { return new Color32(127, 223, 127, 255); } }
+    public static Color Yellow
+    { get { return new Color32(223, 223, 63, 255); } }
+    public static Color Red
+    { get { return new Color32(223, 127, 127, 255); } }
+    public static Color Blue
+    { get { return new Color32(159, 159, 223, 255); } }
+    public static Color Blue2
+    { get { return new Color32(191, 191, 223, 255); } }
+    public static Color White
+    { get { return new Color32(255, 255, 255, 255); } }
+    public static Color Blue3
+    {
+        get { return new Color32(100, 160, 255, 255); }
+    }
 }

@@ -140,6 +140,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     MouseInputAction inputAction;
 
+    #region Awake(), start()
     private void Awake()
     {
         inputAction = new MouseInputAction();
@@ -174,6 +175,7 @@ public class InventoryUI : MonoBehaviour
         inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
+    #endregion
 
     /// <summary>
     /// 좌 클릭 이벤트
@@ -501,6 +503,23 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        RemoveContain(itemSize, tempItemPos);
+
+        // 잡기
+        returnItem.Grab();
+
+        //tooltip.Close();
+
+        return returnItem;
+    }
+
+    /// <summary>
+    /// 아이템 컨테이너 정보 삭제
+    /// </summary>
+    /// <param name="itemSize">아이템 크기</param>
+    /// <param name="tempItemPos">아이템 저장 시작 위치</param>
+    public void RemoveContain(Vector2Int itemSize, Vector2Int tempItemPos)
+    {
         for (int y = 0; y < itemSize.y; y++)
         {
             for (int x = 0; x < itemSize.x; x++)
@@ -512,12 +531,6 @@ public class InventoryUI : MonoBehaviour
                 instance.SlotRemove();
             }
         }
-
-        returnItem.Grab();
-
-        //tooltip.Close();
-
-        return returnItem;
     }
 
     private ItemContain SwapItem(ItemContain item)
@@ -661,24 +674,36 @@ public class InventoryUI : MonoBehaviour
 
         return null;
     }
-}
 
-public struct SlotColorHighlights
-{
-    public static Color Green
-    { get { return new Color32(127, 223, 127, 255); } }
-    public static Color Yellow
-    { get { return new Color32(223, 223, 63, 255); } }
-    public static Color Red
-    { get { return new Color32(223, 127, 127, 255); } }
-    public static Color Blue
-    { get { return new Color32(159, 159, 223, 255); } }
-    public static Color Blue2
-    { get { return new Color32(191, 191, 223, 255); } }
-    public static Color White
-    { get { return new Color32(255, 255, 255, 255); } }
-    public static Color Blue3
+    public Action<ItemData, int> onUseItem;
+
+    public bool UseItem(ItemCode code, int useCount = 1)
     {
-        get { return new Color32(100, 160, 255, 255); }
+        ItemData data = FindCodeData(code);
+        int remain = useCount;
+
+        foreach(var contain in containList)
+        {
+            if(contain.item == data)
+            {
+                if(contain.Count > remain)
+                {
+                    contain.Count -= useCount;
+                    onUseItem?.Invoke(data, useCount);
+                    remain = 0;
+                    return true;
+                }
+                else
+                {
+                    remain = useCount - contain.Count;
+                }
+            }
+            else if(contain.item != data && remain > 0)
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 }
