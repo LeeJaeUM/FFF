@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using System;
+using Unity.VisualScripting;
+using System.ComponentModel;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class InventoryUI : MonoBehaviour
 {
@@ -11,10 +16,25 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public List<ItemContain> containList;
 
+    public List<ItemContain> ContainList
+    {
+        get => containList;
+        set
+        {
+            if(value != containList)
+            {
+                containList = value;
+                onContainList?.Invoke();
+            }
+        }
+    }
+
+    public Action onContainList;
+
     /// <summary>
     /// 슬롯 그리드를 저장하는 객체
     /// </summary>
-    public GameObject[,] slotGrid;
+    public InvenSlot[,] slotGrid;
 
     [HideInInspector]
     /// <summary>
@@ -40,11 +60,13 @@ public class InventoryUI : MonoBehaviour
     private int checkSatae;
     private bool isOverEdge = false;
 
+    [HideInInspector]
     /// <summary>
     /// 아이템 컨테이너를 담는 부모 개체
     /// </summary>
     public Transform DropParent;
 
+    [HideInInspector]
     /// <summary>
     /// 현재 손에 있는 아이템 컨테어너의 부모 개체
     /// </summary>
@@ -52,25 +74,24 @@ public class InventoryUI : MonoBehaviour
 
     public InvenGrid invenGrid;
 
-    /// <summary>
-    /// 아이템 내용을 나타내는 클래스
-    /// </summary>
-    public ItemTooltip tooltip;
+    CanvasGroup canvasGroup;
 
     /// <summary>
     /// 현재 손에 있는 아이템 컨테이너
     /// </summary>
-    public GameObject containGrab = null;
+    public ItemContain containGrab = null;
 
     /// <summary>
     /// 현재 마우스가 있는 슬롯
     /// </summary>
-    public GameObject highlightedSlot;
+    public InvenSlot highlightedSlot;
 
     [Header("옵션")]
-    private int _horizontalSlotCount = 8;
 
-    [Range(1, 10)]
+    [Range(5, 8)]
+    public int _horizontalSlotCount = 5;
+
+    [Range(2, 10)]
     public int _verticalSlotCount = 5;
 
     /// <summary>
@@ -85,22 +106,62 @@ public class InventoryUI : MonoBehaviour
 
     public ItemData[] itemDatas = null;
 
+    public Action<float> onWeightChange;
+
+    /// <summary>
+    /// 인벤토리 무게
+    /// </summary>
+    private float weight;
+
+    public float TotalWeight
+    {
+        get => weight;
+        set
+        {
+            if(weight != value)
+            {
+                weight = value;
+                onWeightChange?.Invoke(weight);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템 내용을 나타내는 클래스
+    /// </summary>
+    public ItemTooltip tooltip;
+
+    private InvenUI UI;
+
+    private ProduceManager produceManager;
+
+    /// <summary>
+    /// 입력
+    /// </summary>
     MouseInputAction inputAction;
 
+    #region Awake(), start()
     private void Awake()
     {
         inputAction = new MouseInputAction();
+        canvasGroup = GetComponent<CanvasGroup>();
 
         Transform child = transform.GetChild(0);
         invenGrid = child.GetComponentInChildren<InvenGrid>();
-        child = transform.GetChild(1);
+        child = child.GetChild(3);
         DropParent = child.GetChild(0);
         DragParent = child.GetChild(1);
+        tooltip = GetComponentInChildren<ItemTooltip>();
+        UI = GetComponentInChildren<InvenUI>();
+        produceManager = GetComponentInChildren<ProduceManager>();
     }
 
     private void Start()
-    { 
+    {
+        TotalWeight = 0;
+        UI.Initialized();
         invenGrid.GridInitialize();
+        produceManager.Initialize();
     }
 
     private void OnEnable()
@@ -114,6 +175,7 @@ public class InventoryUI : MonoBehaviour
         inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
+    #endregion
 
     /// <summary>
     /// 좌 클릭 이벤트
@@ -123,30 +185,55 @@ public class InventoryUI : MonoBehaviour
     {
         if (context.performed)
         {
+            bool isShiftPress = (Keyboard.current.shiftKey.ReadValue() > 0);
+
             if (highlightedSlot != null && containGrab != null && !isOverEdge)
             {
+                // 마우스가 슬롯 위에 있다 / 마우스에 잡힌 컨테이너가 있다 / 
                 ItemContain contain = containGrab.GetComponent<ItemContain>();
                 Debug.Log(checkSatae);
                 switch (checkSatae)
                 {
                     case 0:
-                        StoreItem(containGrab);
-                        ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
-                        contain.ResetSelectedItem();
-                        RemoveSelectedButton();
+                        // 빈 슬롯에 저장
+                        if (isShiftPress && contain.Count > 1)
+                        {
+                            StoreItem(contain.ItemSplit().GetComponent<ItemContain>(), totalOffset);
+                            ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
+                        }
+                        else
+                        {
+                            StoreItem(containGrab, totalOffset);
+                            ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
+                            contain.ResetSelectedItem();
+                        }
                         break;
                     case 1:
+                        // 다른 아이템 스왑
                         SetSelectedItem(SwapItem(containGrab));
                         SlotSector.Instance.SetPosOffset();
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
                         RefrechColor(true);
                         break;
                     case 3:
-                        AddContain(containGrab);
-                        ColorChangeLoop(SlotColorHighlights.White, contain.ItemSize, highlightedSlot.GetComponent<InvenSlot>().gridPos);
-                        ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                        // 같은 아이템이면 저장
+                        if (isShiftPress && contain.Count > 1)
+                        {
+                            Debug.Log("같은 아이템 하나씩 저장");
+                            contain.ItemDestack();
+                            AddContain(containGrab, 1);
+                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                        }
+                        else
+                        {
+                            Debug.Log("같은 아이템이므로 저장");
+                            AddContain(containGrab, contain.Count);
+                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                            contain.ContainRemvoe();
+                        }
                         break;
                 }
+                tooltip.IsPause = false;
             }
             else if (highlightedSlot != null && containGrab == null
                 && !highlightedSlot.GetComponent<InvenSlot>().isEmpty)
@@ -154,27 +241,33 @@ public class InventoryUI : MonoBehaviour
                 InvenSlot highlightedSlotScript = highlightedSlot.GetComponent<InvenSlot>();
                 ColorChangeLoop(SlotColorHighlights.White,
                     highlightedSlotScript.storedItemSize, highlightedSlotScript.storedItemStartPos);
-                SetSelectedItem(GetItem(highlightedSlot));
+
+                tooltip.IsPause = true;
+
+                ItemContain contain = GetItem(highlightedSlot);
+
+                if (isShiftPress && contain.Count > 1)
+                {
+                    int _count = Mathf.FloorToInt(contain.Count/2);
+                    ItemContain returnContain = contain.ItemSplit(_count);
+                    SetSelectedItem(returnContain.GetComponent<ItemContain>());
+                }
+                else
+                {
+                    SetSelectedItem(GrabContain(highlightedSlot));
+                }
                 SlotSector.Instance.SetPosOffset();
                 RefrechColor(true);
             }
-            //Debug.Log(highlightedSlot != null && ItemContain.selectedItem == null);
-            //if (highlightedSlot != null)
-            //{
-            //    Debug.Log(highlightedSlot.GetComponent<InvenSlot>().isOccupied == true);
-            //    Debug.Log(highlightedSlot != null && ItemContain.selectedItem == null
-            //    && highlightedSlot.GetComponent<InvenSlot>().isOccupied == true);
-            //}
         }
     }
 
-    public void SetSelectedItem(GameObject obj)
+    public void SetSelectedItem(ItemContain contain)
     {
-        containGrab = obj;
-        ItemContain contain = containGrab.GetComponent<ItemContain>();
+        containGrab = contain;
         contain.isDragging = true;
         containGrab.transform.SetParent(DragParent);
-        obj.GetComponent<RectTransform>().localScale = Vector3.one;
+        contain.GetComponent<RectTransform>().localScale = Vector3.one;
     }
 
     /// <summary>
@@ -183,10 +276,12 @@ public class InventoryUI : MonoBehaviour
     /// <param name="itemSize">아이템 크기</param>
     private void CheckArea(Vector2Int itemSize)
     {
+        // 아이템 컨테이너의 가운데 위치
         Vector2Int halfOffset = Vector2Int.zero;
         halfOffset.x = (itemSize.x - (itemSize.x % 2 == 0 ? 0 : 1)) / 2;
         halfOffset.y = (itemSize.y - (itemSize.y % 2 == 0 ? 0 : 1)) / 2;
 
+        // 아이템 컨테이너의 시작 위치 = 마우스 위치 그리드 - (가운데 위치 + 슬롯의 제 4분면위치)
         totalOffset = highlightedSlot.GetComponent<InvenSlot>().gridPos - (halfOffset + SlotSector.posOffset);
 
         checkStartPos = totalOffset;
@@ -217,34 +312,48 @@ public class InventoryUI : MonoBehaviour
             isOverEdge = true;
         }
     }
-
-    private int SlotCheck(Vector2Int itemSize)
+    
+    /// <summary>
+    /// 슬롯 문제 해결
+    /// </summary>
+    /// <param name="itemSize">아이템 사이즈</param>
+    /// <returns>0: 빈 슬롯, 1: 아이템이 들어간 슬롯</returns>
+    private int SlotCheck(Vector2Int StartPos, Vector2Int itemSize)
     {
-        GameObject SlotObj = null;
+        ItemContain SlotContain = null;
         if (!isOverEdge)
         {
             for (int y = 0; y < itemSize.y; y++)
             {
                 for (int x = 0; x < itemSize.x; x++)
                 {
-                    InvenSlot instance = slotGrid[checkStartPos.x + x, checkStartPos.y + y].GetComponent<InvenSlot>();
+                    InvenSlot instance = null;
+                    if(StartPos.x + x < _horizontalSlotCount && StartPos.y + y < _verticalSlotCount)
+                        instance = slotGrid[StartPos.x + x, StartPos.y + y].GetComponent<InvenSlot>();
+                    else return 4;
 
                     if (!instance.isEmpty)  // slot이 비어있지 않으며 
                     {
-                        if (SlotObj == null)
+                        if (SlotContain == null)
                         {
-                            SlotObj = instance.storedItemObject;
+                            // 슬롯에 담긴 컨테이너 정보 추출
+                            SlotContain = instance.storedItemContain;
                             otherItemPos = instance.storedItemStartPos;
-                            otherItemSize = SlotObj.GetComponent<ItemContain>().item.Size;
+                            otherItemSize = SlotContain.item.Size;
                         }
-                        else if (SlotObj != instance.storedItemObject && instance.data != containGrab.GetComponent<ItemContain>().item)
-                            return 2;
-                        else if (instance.data == containGrab.GetComponent<ItemContain>().item)
-                            return 3;
+                        else if(containGrab != null)
+                        {
+                            if (SlotContain != instance.storedItemContain && instance.data != containGrab.GetComponent<ItemContain>().item)
+                                // 슬롯 오브젝트와 저장된 아이템하고 다른때, 아이템 정보가 서로 다른때
+                                return 2;
+                            else if (instance.data == containGrab.GetComponent<ItemContain>().item)
+                                // 저장된 아이템이 서로 같을때
+                                return 3;
+                        }
                     }
                 }
             }
-            if (SlotObj == null)
+            if (SlotContain == null)
                 return 0;
             else
                 return 1;
@@ -252,13 +361,13 @@ public class InventoryUI : MonoBehaviour
         return 2;
     }
 
-
+    #region 색깔 변경용 함수들
     public void RefrechColor(bool enter)
     {
         if (enter)
         {
             CheckArea(containGrab.GetComponent<ItemContain>().ItemSize);
-            checkSatae = SlotCheck(checkSize);
+            checkSatae = SlotCheck(checkStartPos, checkSize);
             switch (checkSatae)
             {
                 case 0:
@@ -313,7 +422,7 @@ public class InventoryUI : MonoBehaviour
     /// <param name="startPos">시작 좌표</param>
     public void ColorChangeLoop(Vector2Int size, Vector2Int startPos)
     {
-        GameObject slot;
+        InvenSlot slot;
         for (int y = 0; y < size.y; y++)
         {
             for (int x = 0; x < size.x; x++)
@@ -330,17 +439,16 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    private void StoreItem(GameObject item, bool isStack = false)
+    /// <summary>
+    /// 슬롯에 아이템 저장
+    /// </summary>
+    /// <param name="item">들어갈 아이템 오브젝트</param>
+    private void StoreItem(ItemContain contain, Vector2Int startPos)
     {
-        ItemContain contain = item.GetComponent<ItemContain>();
         contain.isDragging = false;
         Vector2Int itemSize = contain.item.Size;
-
-        Vector2Int startPos = totalOffset;
-
-        if (isStack)
-            startPos = otherItemPos;
 
         for (int y = 0; y < itemSize.y; y++)
         {
@@ -348,22 +456,18 @@ public class InventoryUI : MonoBehaviour
             {
                 // 인벤 슬롯에 정보 저장
                 InvenSlot instance = slotGrid[startPos.x + x, startPos.y + y].GetComponent<InvenSlot>();
-                instance.storedItemObject = item;                           // 오브젝트 저장
-                instance.data = item.GetComponent<ItemContain>().item;      // 아이템 정보 저장
-                instance.storedItemSize = itemSize;                         // 사이즈 저장
-                instance.storedItemStartPos = startPos;
-                instance.isEmpty = false;
+                instance.SlotStore(contain, startPos);
                 slotGrid[totalOffset.x + x, totalOffset.y + y].GetComponent<Image>().color = SlotColorHighlights.White;
             }
         }
 
-        contain.id = containList.Count;
-        containList.Add(contain);
+        Debug.Log(containList);
+        TotalWeight += contain.item.itemWeight;
+        ContainList.Add(contain);
+
         // 게임 오브젝트 재설정
-        item.transform.SetParent(DropParent);
-        item.GetComponent<RectTransform>().pivot = Vector2.zero;
-        item.transform.position = slotGrid[startPos.x, startPos.y].transform.position;
-        item.GetComponent<CanvasGroup>().alpha = 1.0f;
+        Vector2 position = slotGrid[startPos.x, startPos.y].transform.position;
+        contain.StoreContain(DropParent, position);
         //tooltip.Open(highlightedSlot.GetComponent<InvenSlot>().data);
     }
 
@@ -372,17 +476,50 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     /// <param name="slotObject">슬롯에 저장된 아이템 컨테이너 정보</param>
     /// <returns></returns>
-    private GameObject GetItem(GameObject slotObject)
+    private ItemContain GetItem(InvenSlot slot)
+    {
+        return slot.storedItemContain;
+    }
+
+    /// <summary>
+    /// 아이템 컨테이너 잡기
+    /// </summary>
+    /// <param name="slot"></param>
+    /// <returns></returns>
+    public ItemContain GrabContain(InvenSlot slot)
     {
         StackStartPos = Vector2Int.zero;
-        InvenSlot invenSlot = slotObject.GetComponent<InvenSlot>();
-        Vector2Int tempItemPos = invenSlot.storedItemStartPos;
+        Vector2Int tempItemPos = slot.storedItemStartPos;
 
-        GameObject returnItem = invenSlot.storedItemObject;
-        Vector2Int itemSize = returnItem.GetComponent<ItemContain>().item.Size;
+        ItemContain returnItem = slot.storedItemContain;
+        Vector2Int itemSize = returnItem.item.Size;
+        TotalWeight -= returnItem.item.itemWeight;
 
-        containList.RemoveAt(returnItem.GetComponent<ItemContain>().id);
+        for (int i = 0; i < ContainList.Count; i++)
+        {
+            if (ContainList[i].id == returnItem.id)
+            {
+                ContainList.RemoveAt(i);
+            }
+        }
 
+        RemoveContain(itemSize, tempItemPos);
+
+        // 잡기
+        returnItem.Grab();
+
+        //tooltip.Close();
+
+        return returnItem;
+    }
+
+    /// <summary>
+    /// 아이템 컨테이너 정보 삭제
+    /// </summary>
+    /// <param name="itemSize">아이템 크기</param>
+    /// <param name="tempItemPos">아이템 저장 시작 위치</param>
+    public void RemoveContain(Vector2Int itemSize, Vector2Int tempItemPos)
+    {
         for (int y = 0; y < itemSize.y; y++)
         {
             for (int x = 0; x < itemSize.x; x++)
@@ -391,71 +528,182 @@ public class InventoryUI : MonoBehaviour
                 InvenSlot instance = slotGrid[tempItemPos.x + x, tempItemPos.y + y].GetComponent<InvenSlot>();
                 containGrab = null;
                 StackStartPos = instance.storedItemStartPos;
-                instance.storedItemSize = Vector2Int.zero;
-                instance.storedItemStartPos = Vector2Int.zero;
-                instance.data = null;
-                instance.isEmpty = true;
-
+                instance.SlotRemove();
             }
         }
-        returnItem.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
-        returnItem.GetComponent<CanvasGroup>().alpha = 0.5f;
-        returnItem.transform.position = Input.mousePosition;
-
-        //tooltip.Close();
-
-        return returnItem;
     }
 
-    private GameObject SwapItem(GameObject item)
+    private ItemContain SwapItem(ItemContain item)
     {
-        GameObject tempItem = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
-        StoreItem(item);
+        ItemContain tempItem = GrabContain(slotGrid[otherItemPos.x, otherItemPos.y]);
+        StoreItem(item, totalOffset);
         return tempItem;
     }
 
     /// <summary>
     /// 같은 아이템을 경우 갯수 증가
     /// </summary>
-    public void AddContain(GameObject obj)
+    public void AddContain(ItemContain InContain, int _count = 0)
     {
-        GameObject storeObj = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
+        ItemContain storeContain = GetItem(slotGrid[otherItemPos.x, otherItemPos.y]);
 
-        ItemContain InContain = obj.GetComponent<ItemContain>();
-        ItemContain Outcontain = storeObj.GetComponent<ItemContain>();
+        int remainCount = storeContain.ItemStack(_count);
         
-        Outcontain.ItemStack(InContain.GetComponent<ItemContain>().Count);
-        StoreItem(Outcontain.gameObject, true);
-        Debug.Log(StackStartPos);
-        Debug.Log(otherItemPos);
-        InContain.ContainRemvoe();
+        if(remainCount > 0)
+        {
+            InContain.Count = remainCount;
+        }
+        else if(remainCount == 0)
+        {
+            StoreItem(InContain, otherItemPos);
+        }
+    }
+
+    public Action<ItemData, int> onDontGetItem;
+
+    public void GetItemToSlot(ItemCode code, int _count)
+    {
+        ItemData data = FindCodeData(code);
+
+        List<Vector2Int> emptyList = new List<Vector2Int>();
+        List<ItemContain> sameItemContainList = new List<ItemContain>();
+        
+        // 탐색을 하고
+        for (int y = 0; y < _verticalSlotCount; y++)
+        {
+            for (int x = 0; x < _horizontalSlotCount; x++)
+            {
+                InvenSlot instance = slotGrid[x, y].GetComponent<InvenSlot>();
+
+                if (instance.isEmpty)
+                {
+                    int state = SlotCheck(instance.gridPos, data.Size);
+
+                    if(state == 0)
+                    {
+                        emptyList.Add(new Vector2Int(x, y));
+                    }
+                }
+                else
+                {
+                    foreach(var contain in ContainList)
+                    {
+                        if(contain.item == data && !contain.FullCount)
+                        {
+                            sameItemContainList.Add(contain);
+                        }
+                    }
+                }
+            }
+        }
+
+        int remain = _count;
+
+        // 넣는다.
+        if (sameItemContainList.Count > 0)
+        {
+            Debug.Log("같은 아이템이 있다.");
+            foreach (var item in sameItemContainList)
+            {
+                remain = item.ItemStack(remain);
+                if (remain > 0)
+                    break;
+            }
+        }
+        if(emptyList.Count > 0 && remain > 0)
+        {
+            foreach(var grid in emptyList)
+            {
+                ItemContain contain = null;
+                // 데이터의 최대 수량보다 크며
+                if (_count > data.maxItemCount)
+                {
+                    remain -= data.maxItemCount;
+                    contain = Factory.Instance.GetItemContain(data, data.maxItemCount);
+                    if (SlotCheck(grid, data.Size) == 0)
+                    {
+                        StoreItem(contain, grid);
+                        break;
+                    }
+                }
+                else
+                {
+                    contain = Factory.Instance.GetItemContain(data, remain);
+                    if (SlotCheck(grid, data.Size) == 0)
+                    {
+                        StoreItem(contain, grid);
+                        break;
+                    }
+                }
+            }
+        }
+
+        sameItemContainList.Clear();
+        emptyList.Clear();
     }
 
     /// <summary>
-    /// 컨테이너 제거
+    /// 인벤토리를 키는 함수
     /// </summary>
-    public void RemoveSelectedButton()
+    public void Open()
     {
-        containGrab = null;
+        canvasGroup.alpha = 1;
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
     }
-}
 
-public struct SlotColorHighlights
-{
-    public static Color Green
-    { get { return new Color32(127, 223, 127, 255); } }
-    public static Color Yellow
-    { get { return new Color32(223, 223, 63, 255); } }
-    public static Color Red
-    { get { return new Color32(223, 127, 127, 255); } }
-    public static Color Blue
-    { get { return new Color32(159, 159, 223, 255); } }
-    public static Color Blue2
-    { get { return new Color32(191, 191, 223, 255); } }
-    public static Color White
-    { get { return new Color32(255, 255, 255, 255); } }
-    public static Color Blue3
+    /// <summary>
+    /// 인벤토리를 끝는 함수
+    /// </summary>
+    public void Close()
     {
-        get { return new Color32(100, 160, 255, 255); }
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+        canvasGroup.alpha = 0;
+    }
+
+    public ItemData FindCodeData(ItemCode _code)
+    {
+        foreach(var data in itemDatas)
+        {
+            if(data.itemCode == _code)
+            {
+                return data;
+            }
+        }
+
+        return null;
+    }
+
+    public Action<ItemData, int> onUseItem;
+
+    public bool UseItem(ItemCode code, int useCount = 1)
+    {
+        ItemData data = FindCodeData(code);
+        int remain = useCount;
+
+        foreach(var contain in containList)
+        {
+            if(contain.item == data)
+            {
+                if(contain.Count > remain)
+                {
+                    contain.Count -= useCount;
+                    onUseItem?.Invoke(data, useCount);
+                    remain = 0;
+                    return true;
+                }
+                else
+                {
+                    remain = useCount - contain.Count;
+                }
+            }
+            else if(contain.item != data && remain > 0)
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 }

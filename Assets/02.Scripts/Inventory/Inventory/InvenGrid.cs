@@ -5,39 +5,39 @@ using UnityEngine;
 public class InvenGrid : MonoBehaviour
 {
     /// <summary>
-    /// ±◊∏ÆµÂ ø¿∫Í¡ß∆Æ
+    /// Í∑∏Î¶¨Îìú Ïò§Î∏åÏ†ùÌä∏
     /// </summary>
-    public GameObject[,] slotGrid;
+    public InvenSlot[,] slotGrid;
 
     /// <summary>
-    /// ±◊∏ÆµÂ «¡∏Æ∆È
+    /// Í∑∏Î¶¨Îìú ÌîÑÎ¶¨Ìé©
     /// </summary>
     public GameObject slotPrefab;
 
     /// <summary>
-    /// ±◊∏ÆµÂ ªÁ¿Ã¡Ó
+    /// Í∑∏Î¶¨Îìú ÏÇ¨Ïù¥Ï¶à
     /// </summary>
     public Vector2Int gridSize => GameManager.Instance.inven.gridSize;
 
     /// <summary>
-    /// ΩΩ∑‘¿« ≈©±‚
+    /// Ïä¨Î°ØÏùò ÌÅ¨Í∏∞
     /// </summary>
     public float slotSize => GameManager.Instance.inven.slotSize;
 
     /// <summary>
-    /// ΩΩ∑‘ ªÁ¿Ã¿« ∞≈∏Æ
+    /// Ïä¨Î°Ø ÏÇ¨Ïù¥Ïùò Í±∞Î¶¨
     /// </summary>
     public float edgePadding => GameManager.Instance.inven.edgePadding;
 
     public void GridInitialize()
     {
-        slotGrid = new GameObject[gridSize.x, gridSize.y];
+        slotGrid = new InvenSlot[gridSize.x, gridSize.y];
         CreateSlots();
         ResizePanel();
     }
 
     /// <summary>
-    /// ΩΩ∑‘ ª˝º∫
+    /// Ïä¨Î°Ø ÏÉùÏÑ±
     /// </summary>
     private void CreateSlots()
     {
@@ -45,22 +45,22 @@ public class InvenGrid : MonoBehaviour
         {
             for(int x = 0; x < gridSize.x; x++)
             {
-                GameObject obj = Factory.Instance.GridSlot(x, y, this.transform);
+                InvenSlot slot = Factory.Instance.GetGridSlot(x, y, this.transform);
 
-                RectTransform rect = obj.transform.GetComponent<RectTransform>();
+                RectTransform rect = slot.transform.GetComponent<RectTransform>();
                 rect.localPosition = new Vector3(x * slotSize + edgePadding, y * slotSize + edgePadding, 0);
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize);
                 rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize);
-                obj.GetComponent<RectTransform>().localScale = Vector3.one;
-                obj.GetComponent<InvenSlot>().SlotInitialize(x, y);
-                slotGrid[x, y] = obj;
+                rect.localScale = Vector3.one;
+                slot.SlotInitialize(x, y);
+                slotGrid[x, y] = slot;
             }
         }
         GameManager.Instance.inven.slotGrid = slotGrid;
     }
 
     /// <summary>
-    /// ªÁ¿Ã¡Ó∏¶ ¥ŸΩ√ ¡∂¿˝
+    /// ÏÇ¨Ïù¥Ï¶àÎ•º Îã§Ïãú Ï°∞Ï†à
     /// </summary>
     private void ResizePanel()
     {

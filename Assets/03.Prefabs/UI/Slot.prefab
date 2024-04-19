@@ -279,7 +279,7 @@ MonoBehaviour:
   storedItemObject: {fileID: 0}
   storedItemSize: {x: 0, y: 0}
   storedItemStartPos: {x: 0, y: 0}
-  isOccupied: 0
+  isEmpty: 1
 --- !u!1 &6405930713599147127
 GameObject:
   m_ObjectHideFlags: 0

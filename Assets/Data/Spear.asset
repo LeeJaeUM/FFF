@@ -16,7 +16,8 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: 9931f524e8374ce40a8e8bf306598e4c, type: 3}
   itemName: "\uCC3D"
   itemDescription: "\uCC3D"
-  SizeX: 0
+  SizeX: 1
   SizeY: 4
   maxItemCount: 1
+  itemPrice: 0
   itemWeight: 8

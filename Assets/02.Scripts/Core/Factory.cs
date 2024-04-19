@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// ¿ÀºêÁ§Æ® Ç®À» »ç¿ëÇÏ´Â ¿ÀºêÁ§Æ®ÀÇ Á¾·ù
+/// ì˜¤ë¸Œì íŠ¸ í’€ì„ ì‚¬ìš©í•˜ëŠ” ì˜¤ë¸Œì íŠ¸ì˜ ì¢…ë¥˜
 /// </summary>
 public enum PoolObjectType
 {
@@ -15,14 +15,16 @@ public enum PoolObjectType
 
 public class Factory : Singleton<Factory>
 {
-    // ¿ÀºêÁ§Æ® Ç®µé
+    // ì˜¤ë¸Œì íŠ¸ í’€ë“¤
     GridSlotPool SlotPool;
     ItemContainPool ContainPool;
+    ProduceSlotPool ProducePool;
+    ProduceLinePool LinePool;
 
     public Transform containChild;
 
     /// <summary>
-    /// ¾ÀÀÌ ·Îµù ¿Ï·áµÉ ¶§¸¶´Ù ½ÇÇàµÇ´Â ÃÊ±âÈ­ ÇÔ¼ö
+    /// ì”¬ì´ ë¡œë”© ì™„ë£Œë  ë•Œë§ˆë‹¤ ì‹¤í–‰ë˜ëŠ” ì´ˆê¸°í™” í•¨ìˆ˜
     /// </summary>
     protected override void OnInitialize()
     {
@@ -37,14 +39,20 @@ public class Factory : Singleton<Factory>
 
         SlotPool = GetComponentInChildren<GridSlotPool>();
         if(SlotPool != null ) SlotPool.Initialized();
+
+        ProducePool = GetComponentInChildren<ProduceSlotPool>();
+        if( ProducePool != null ) ProducePool.Initialized();
+            
+        LinePool = GetComponentInChildren<ProduceLinePool>();
+        if( LinePool != null ) LinePool.Initialized();
     }
 
     /// <summary>
-    /// Ç®¿¡ ÀÖ´Â °ÔÀÓ ¿ÀºêÁ§Æ® ÇÏ³ª °¡Á®¿À±â
+    /// í’€ì— ìˆëŠ” ê²Œì„ ì˜¤ë¸Œì íŠ¸ í•˜ë‚˜ ê°€ì ¸ì˜¤ê¸°
     /// </summary>
-    /// <param name="type">°¡Á®¿ï ¿ÀºêÁ§Æ®ÀÇ Á¾·ù</param>
-    /// <param name="position">¿ÀºêÁ§Æ®°¡ ¹èÄ¡µÉ À§Ä¡</param>
-    /// <returns>È°¼ºÈ­µÈ ¿ÀºêÁ§Æ®</returns>
+    /// <param name="type">ê°€ì ¸ìš¸ ì˜¤ë¸Œì íŠ¸ì˜ ì¢…ë¥˜</param>
+    /// <param name="position">ì˜¤ë¸Œì íŠ¸ê°€ ë°°ì¹˜ë  ìœ„ì¹˜</param>
+    /// <returns>í™œì„±í™”ëœ ì˜¤ë¸Œì íŠ¸</returns>
     public GameObject GetObject(PoolObjectType type, Vector3? position = null, Vector3? eular = null)
     {
         GameObject result = null;
@@ -62,26 +70,45 @@ public class Factory : Singleton<Factory>
         return result;
     }
 
-    public GameObject ItemContain(ItemData data, int _count = 1)
+    public ItemContain GetItemContain(ItemData data, int _count = 1)
     {
-        GameObject obj = ContainPool.GetObject().gameObject;
+        ItemContain contain = ContainPool.GetObject();
 
-        obj.GetComponent<ItemContain>().ContainInitialize(data, _count);
-        obj.transform.SetParent(GameManager.Instance.inven.DragParent);
+        contain.GetComponent<ItemContain>().ContainInitialize(data, _count);
+        contain.transform.SetParent(GameManager.Instance.inven.DragParent);
 
-        return obj;
+        return contain;
     }
 
-    public GameObject GridSlot()
+    public InvenSlot GetGridSlot()
     {
-        return SlotPool.GetObject().gameObject;
+        return SlotPool.GetObject();
     }
 
-    public GameObject GridSlot(int x, int y, Transform parent)
+    public InvenSlot GetGridSlot(int x, int y, Transform parent)
     {
-        GameObject result = SlotPool.GetObject().gameObject;
+        InvenSlot result = GetGridSlot();
 
         result.transform.name = $"slot[{x},{y}]";
+        result.transform.SetParent(parent);
+
+        return result;
+    }
+
+    public ProduceSlot GetProduceSlot(ItemCode _code, int _count, Transform parent)
+    {
+        ProduceSlot result = ProducePool.GetObject();
+
+        result.SetData(_code, _count);
+        result.transform.SetParent(parent);
+
+        return result;
+    }
+
+    public ProduceLine GetProduceLine(Transform parent)
+    {
+        ProduceLine result = LinePool.GetObject();
+
         result.transform.SetParent(parent);
 
         return result;

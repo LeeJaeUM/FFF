@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b480e8cf718001746801eb21ad3840ad, type: 3}
-  m_Name: Boots
+  m_Script: {fileID: 11500000, guid: fb956ff0a39adce4f83fd886570f47e6, type: 3}
+  m_Name: Sword
   m_EditorClassIdentifier: 
-  itemID: 0
-  itemIcon: {fileID: 21300000, guid: 24ddb448b3529a243865a0a659231510, type: 3}
-  itemName: "\uBD80\uCE20"
+  itemCode: 19
+  itemIcon: {fileID: 21300000, guid: 794a2af476118fe4ab2d382181728b50, type: 3}
+  itemName: "\uAC80"
   itemDescription: 
   SizeX: 2
   SizeY: 2
-  maxItemCount: 5
+  maxItemCount: 1
   itemPrice: 0
-  itemWeight: 2
+  itemWeight: 0
+  parentCodes:
+  - code: 0
+    count: 2

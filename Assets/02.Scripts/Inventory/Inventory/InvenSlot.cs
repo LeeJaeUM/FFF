@@ -1,36 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
-public class InvenSlot : RecycleObject
+public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
-    /// ±×¸®µå¿¡ ÀúÀåµÈ ¾ÆÀÌÅÛ Á¤º¸
+    /// ê·¸ë¦¬ë“œì— ì €ì¥ëœ ì•„ì´í…œ ì •ë³´
     /// </summary>
     public ItemData data;
 
     /// <summary>
-    /// ±×¸®µå ÁÂÇ¥
+    /// ê·¸ë¦¬ë“œ ì¢Œí‘œ
     /// </summary>
     public Vector2Int gridPos;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ °ÔÀÓ ¿ÀºêÁ§Æ®
+    /// ì €ì¥ëœ ë¬¼ì²´ ê²Œì„ ì˜¤ë¸Œì íŠ¸
     /// </summary>
-    public GameObject storedItemObject;
+    public ItemContain storedItemContain;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ÀÇ »çÀÌÁî
+    /// ì €ì¥ëœ ë¬¼ì²´ì˜ ì‚¬ì´ì¦ˆ
     /// </summary>
     public Vector2Int storedItemSize;
 
     /// <summary>
-    /// ÀúÀåµÈ ¹°Ã¼ÀÇ ½ÃÀÛ ÁÂÇ¥
+    /// ì €ì¥ëœ ë¬¼ì²´ì˜ ì‹œì‘ ì¢Œí‘œ
     /// </summary>
     public Vector2Int storedItemStartPos;
 
     /// <summary>
-    /// ºó ½½·ÔÀ» ³ªÅ¸³»´Â ¿©ºÎ
+    /// ë¹ˆ ìŠ¬ë¡¯ì„ ë‚˜íƒ€ë‚´ëŠ” ì—¬ë¶€
     /// </summary>
     public bool isEmpty = true;
 
@@ -42,9 +44,40 @@ public class InvenSlot : RecycleObject
         SlotSector[] slotsSector = GetComponentsInChildren<SlotSector>();
         for (int i = 0; i < slotsSector.Length; i++)
         {
-            slotsSector[i].SlotSectorInitialize(gameObject, i + 1);
+            slotsSector[i].SlotSectorInitialize(this, i + 1);
         }
 
         isEmpty = true;
+    }
+
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (data != null)
+        {
+            GameManager.Instance.inven.tooltip.Open(data);
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.Instance.inven.tooltip.Close();
+    }
+
+    public void SlotRemove()
+    {
+        storedItemSize = Vector2Int.zero;
+        storedItemStartPos = Vector2Int.zero;
+        data = null;
+        isEmpty = true;
+    }
+
+    public void SlotStore(ItemContain Item, Vector2Int startPosition)
+    {
+        storedItemContain = Item;
+        data = Item.item;
+        storedItemSize = data.Size;
+        storedItemStartPos = startPosition;
+        isEmpty = false;
     }
 }

@@ -16,7 +16,8 @@ MonoBehaviour:
   itemIcon: {fileID: 21300000, guid: a8fa6803018dd4b4db3f8b48895a34ca, type: 3}
   itemName: "\uCCB4\uB825\uBB3C"
   itemDescription: "\uCCB4\uB825\uC744 \uD68C\uBCF5\uD574\uC900\uB2E4."
-  SizeX: 0
+  SizeX: 1
   SizeY: 2
   maxItemCount: 99
+  itemPrice: 0
   itemWeight: 10
