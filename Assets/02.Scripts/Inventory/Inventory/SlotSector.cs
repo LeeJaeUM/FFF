@@ -54,11 +54,11 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             inven.RefrechColor(true);
         }
-        if (parentSlotScript.storedItemContain != null && itemContain == null)
-        {
-            inven.ColorChangeLoop(SlotColorHighlights.Blue,
-                parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
+        //if (parentSlotScript.storedItemContain != null && itemContain == null)
+        //{
+        //    inven.ColorChangeLoop(SlotColorHighlights.Blue,
+        //        parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
+        //}
     }
     
     public void SetPosOffset()
@@ -67,7 +67,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if(itemContain != null)
         {
-            size = itemContain.GetComponent<ItemContain>().ItemSize;
+            size = itemContain.ItemSize;
         }
 
         if (size.x != 0 && size.x % 2 == 0)
@@ -118,9 +118,9 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             inven.RefrechColor(false);
         }
         posOffset = Vector2Int.zero;
-        if(parentSlotScript.storedItemContain != null && itemContain == null)
-        {
-            inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
+        //if(parentSlotScript.storedItemContain != null && itemContain == null)
+        //{
+        //    inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
+        //}
     }
 }

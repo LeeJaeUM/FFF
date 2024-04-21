@@ -68,7 +68,7 @@ public class ProduceLine : RecycleObject
             {
                 slot.UseItem();
             }
-            inven.SetSelectedItem(Factory.Instance.GetItemContain(data));
+            Factory.Instance.GetItemContain(data).GrabContain();
         });
     }
 
@@ -88,6 +88,7 @@ public class ProduceLine : RecycleObject
             }
         }
 
+        Debug.Log(checkProduce());
         produceButton.interactable = checkProduce();
     }
 
@@ -95,6 +96,7 @@ public class ProduceLine : RecycleObject
     {
         foreach(var slot in produceSlots)
         {
+            //Debug.Log(slot.IsProduceOk);
             if (!slot.IsProduceOk)
             {
                 return false;

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemContain : RecycleObject, IPointerClickHandler
+public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public int id;
 
@@ -46,6 +46,10 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     /// </summary>
     private Transform DragParent => GameManager.Instance.inven.DragParent;
 
+    private bool isGrab;
+
+    public List<InvenSlot> storeSlots;
+
     RectTransform rect; 
     CanvasGroup canvas;
 
@@ -67,6 +71,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         ItemSize = item.Size;
         Count = _count;
         isDragging = false;
+        storeSlots = new List<InvenSlot>((ItemSize.x + 1) * (ItemSize.y + 1));
 
         rect = GetComponent<RectTransform>();
         rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
@@ -96,20 +101,30 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         rect.pivot = Vector2.zero;
         transform.position = position;
         canvas.alpha = 1.0f;
+        canvas.blocksRaycasts = true;
     }
 
     /// <summary>
     /// 선택된 아이템 컨테이너
     /// </summary>
     /// <param name="contain"></param>
-    public ItemContain SetSelectedItem(ItemContain contain)
+    public ItemContain GrabContain()
     {
-        isDragging = true;
-        contain.transform.SetParent(DragParent);
-        contain.GetComponent<RectTransform>().localScale = Vector3.one;
-        GameManager.Instance.inven.containGrab = contain;
+        GameManager.Instance.inven.containGrab = this;
 
-        return contain;
+        isGrab = true;
+        isDragging = true;
+        transform.SetParent(DragParent);
+        transform.position = Input.mousePosition;
+
+        canvas.alpha = 0.5f;
+        canvas.blocksRaycasts = false;
+
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.localScale = Vector3.one;
+
+
+        return this;
     }
 
     /// <summary>
@@ -117,17 +132,19 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     /// </summary>
     public void ResetSelectedItem()
     {
+
+        foreach (var slot in storeSlots)
+        {
+            slot.SlotRemove();
+        }
+
+        storeSlots.Clear();
         isDragging = false;
         GameManager.Instance.inven.containGrab = null;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        SetSelectedItem(this);
-        canvas.blocksRaycasts = !isDragging;
-        canvas.alpha = 0.5f;
-    }
 
+    #region 컨테이너 아이템 갯수 변화
     public int ItemStack(int _count = 1)
     {
         Count += _count;
@@ -157,7 +174,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
         return Factory.Instance.GetItemContain(item, _count);
     }
+    #endregion
 
+    /// <summary>
+    /// 컨테이너 삭제 함수
+    /// </summary>
     public void ContainRemvoe()
     {
         Debug.Log("삭제");
@@ -176,10 +197,58 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         itemCount.text = _count.ToString();
     }
 
-    public void Grab()
+    /// <summary>
+    /// 아이템의 저장된 슬롯의 색을 바꾸는 함수
+    /// </summary>
+    /// <param name="color">바꿀 색깔</param>
+    public void SlotColorChange(Color color)
     {
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        canvas.alpha = 0.5f;
-        transform.position = Input.mousePosition;
+        foreach(var slot in storeSlots)
+        {
+            slot.GetComponent<Image>().color = color;
+        }
     }
+
+    public void StoreSlot(InvenSlot slot)
+    {
+        storeSlots.Add(slot);
+    }
+
+    #region UI 이벤트
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (isGrab)
+        {
+            isGrab = false;
+            foreach (var slot in storeSlots)
+            {
+                slot.SlotRemove();
+            }
+
+            storeSlots.Clear();
+            SlotColorChange(SlotColorHighlights.White);
+        }
+        else
+        {
+            GrabContain();
+            canvas.blocksRaycasts = !isDragging;
+            canvas.alpha = 0.5f;
+
+            SlotSector.Instance.SetPosOffset();
+            GameManager.Instance.inven.RefrechColor(true);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        GameManager.Instance.inven.enterContain = this;
+        GameManager.Instance.inven.tooltip.Open(item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        GameManager.Instance.inven.enterContain = null;
+        GameManager.Instance.inven.tooltip.Close();
+    }
+    #endregion
 }

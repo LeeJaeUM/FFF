@@ -42,11 +42,12 @@ public class ProduceManager : MonoBehaviour
         }
 
         // 전달받은 리스트
-        inven.onContainList += onRefresh;
+        inven.onContainListChange += onRefresh;
     }
 
     private void onRefresh()
-    { 
+    {
+        Debug.Log("리스트 변화 감지");
         foreach(var line in lines)
         {
             line.Refresh();

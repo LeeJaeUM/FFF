@@ -11,7 +11,7 @@ public class ProduceSlot : RecycleObject
 
     public ItemData Data => data;
 
-    int count;
+    int count = 0;
     int total = 0;
 
     public int Total
@@ -19,7 +19,7 @@ public class ProduceSlot : RecycleObject
         get => total;
         set
         {
-            if(total == value)
+            if(total != value)
             {
                 total = value;
 
@@ -62,11 +62,13 @@ public class ProduceSlot : RecycleObject
     /// <param name="_value"></param>
     public void SetIngredient(int _value)
     {
+        Debug.Log($"갯수 변환{_value}");
         Total = _value;
     }
 
     private void Refresh()
     {
+        Debug.Log(IsProduceOk);
         icon.sprite = data.itemIcon;
         countText.text = $"X{total}/{count}";
     }
