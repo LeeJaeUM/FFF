@@ -21,10 +21,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     private float slotSize;
 
+    [SerializeField]
     /// <summary>
-    /// ¾ÆÀÌÅÛ °¹¼ö
+    /// ì•„ì´í…œ ê°¯ìˆ˜
     /// </summary>
-    private int count;
+    private int count = 0;
     public int Count
     {
         get => count;
@@ -33,15 +34,20 @@ public class ItemContain : RecycleObject, IPointerClickHandler
             if(count != value)
             {
                 count = value;
-                Mathf.Clamp(count, 0, item.maxItemCount);
+                SetCount(count);
             }
         }
     }
 
+    public bool FullCount => Count >= item.maxItemCount;
+
     /// <summary>
-    /// µå·¡±×½Ã ºÎ¸ğ °³Ã¼
+    /// ë“œë˜ê·¸ì‹œ ë¶€ëª¨ ê°œì²´
     /// </summary>
     private Transform DragParent => GameManager.Instance.inven.DragParent;
+
+    RectTransform rect; 
+    CanvasGroup canvas;
 
     private void Awake()
     {
@@ -51,18 +57,29 @@ public class ItemContain : RecycleObject, IPointerClickHandler
     }
 
     /// <summary>
-    /// ÄÁÅ×ÀÌ³Ê ½ÃÀÛ ÇÔ¼ö
+    /// ì»¨í…Œì´ë„ˆ ì‹œì‘ í•¨ìˆ˜
     /// </summary>
     public void ContainInitialize(ItemData data, int _count = 1)
     {
         slotSize = GameManager.Instance.inven.slotSize;
 
-        SetItemObject(data, _count);
+        item = data;
+        ItemSize = item.Size;
+        Count = _count;
+        isDragging = false;
+
+        rect = GetComponent<RectTransform>();
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
+        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ItemSize.y * slotSize);
+        itemIcon.sprite = data.itemIcon;
+
+        canvas = GetComponent<CanvasGroup>();
+        canvas.blocksRaycasts = false;
     }
 
     private void Start()
     {
-        ContainInitialize(item);
+        //ContainInitialize(item);
     }
 
     private void Update()
@@ -73,40 +90,30 @@ public class ItemContain : RecycleObject, IPointerClickHandler
         }
     }
 
-    /// <summary>
-    /// ÄÁÅ×ÀÌ³Ê¿¡ ¾ÆÀÌÅÛ Á¤º¸ ³Ö±â
-    /// </summary>
-    /// <param name="_data">µé¾î°¥ ¾ÆÀÌÅÛ Á¤º¸</param>
-    public void SetItemObject(ItemData _data, int _count = 1)
+    public void StoreContain(Transform parent, Vector2 position)
     {
-        item = _data;
-        ItemSize = item.Size;
-        Count = _count;
-        isDragging = false;
-
-        RectTransform rect = GetComponent<RectTransform>();
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ItemSize.x * slotSize);
-        rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ItemSize.y * slotSize);
-        itemIcon.sprite = _data.itemIcon;
-        itemCount.text = Count.ToString();
+        transform.SetParent(parent);
+        rect.pivot = Vector2.zero;
+        transform.position = position;
+        canvas.alpha = 1.0f;
     }
 
     /// <summary>
-    /// ¼±ÅÃµÈ ¾ÆÀÌÅÛ ÄÁÅ×ÀÌ³Ê
+    /// ì„ íƒëœ ì•„ì´í…œ ì»¨í…Œì´ë„ˆ
     /// </summary>
-    /// <param name="obj"></param>
-    public GameObject SetSelectedItem(GameObject obj)
+    /// <param name="contain"></param>
+    public ItemContain SetSelectedItem(ItemContain contain)
     {
         isDragging = true;
-        obj.transform.SetParent(DragParent);
-        obj.GetComponent<RectTransform>().localScale = Vector3.one;
-        GameManager.Instance.inven.containGrab = obj;
+        contain.transform.SetParent(DragParent);
+        contain.GetComponent<RectTransform>().localScale = Vector3.one;
+        GameManager.Instance.inven.containGrab = contain;
 
-        return obj;
+        return contain;
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ÄÁÅ×¾î³Ê ³»¿ë Áö¿ì±â
+    /// ì•„ì´í…œ ì»¨í…Œì–´ë„ˆ ë‚´ìš© ì§€ìš°ê¸°
     /// </summary>
     public void ResetSelectedItem()
     {
@@ -116,39 +123,63 @@ public class ItemContain : RecycleObject, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        SetSelectedItem(this.gameObject);
-        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.blocksRaycasts = !isDragging;
-        canvasGroup.alpha = 0.5f;
+        SetSelectedItem(this);
+        canvas.blocksRaycasts = !isDragging;
+        canvas.alpha = 0.5f;
     }
 
-    public void ItemStack(int _count = 1)
+    public int ItemStack(int _count = 1)
     {
         Count += _count;
-        itemCount.text = Count.ToString();
+
+        //Debug.Log(item.maxItemCount);
+
+        if (Count > item.maxItemCount)
+        {
+            int result = Count - item.maxItemCount;
+            Count = item.maxItemCount; 
+            return result;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void ItemDestack(int _count = 1)
     {
         Count -= _count;
-        itemCount.text = Count.ToString();
     }
 
-    public void ItemSplit(int _count = 1)
+    public ItemContain ItemSplit(int _count = 1)
     {
         ItemDestack(_count);
 
-        GameManager.Instance.inven.containGrab = Factory.Instance.ItemContain(item, _count);
+        return Factory.Instance.GetItemContain(item, _count);
     }
 
     public void ContainRemvoe()
     {
-        // ¾ÆÀÌÅÛ Á¤º¸ »èÁ¦
+        Debug.Log("ì‚­ì œ");
+        // ì•„ì´í…œ ì •ë³´ ì‚­ì œ
         ResetSelectedItem();
 
         transform.SetParent(Factory.Instance.containChild);
 
-        // °ÔÀÓ ¿ÀºêÁ§Æ® ºñÈ°¼ºÈ­
+        // ê²Œì„ ì˜¤ë¸Œì íŠ¸ ë¹„í™œì„±í™”
         gameObject.SetActive(false);
+    }
+
+    private void SetCount(int _count)
+    {
+        //Debug.Log(_count);
+        itemCount.text = _count.ToString();
+    }
+
+    public void Grab()
+    {
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        canvas.alpha = 0.5f;
+        transform.position = Input.mousePosition;
     }
 }

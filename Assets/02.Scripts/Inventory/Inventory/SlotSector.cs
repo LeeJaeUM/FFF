@@ -8,12 +8,12 @@ using UnityEngine.EventSystems;
 public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     /// <summary>
-    /// ½½·Ô(»óÀ§ °³Ã¼)
+    /// ìŠ¬ë¡¯(ìƒìœ„ ê°œì²´)
     /// </summary>
-    public GameObject slotParent;
+    public InvenSlot slotParent;
 
     /// <summary>
-    /// °íÀ¯ °´Ã¼ ³Ñ¹ö
+    /// ê³ ìœ  ê°ì²´ ë„˜ë²„
     /// </summary>
     public int QuadNum;
 
@@ -24,23 +24,23 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField]
     private InventoryUI inven => GameManager.Instance.inven;
 
-    private GameObject itemContain => inven.containGrab;
+    private ItemContain itemContain => inven.containGrab;
 
     [SerializeField]
     /// <summary>
-    /// ºÎ¸ğÀÇ ½ºÅ©¸³Æ®
+    /// ë¶€ëª¨ì˜ ìŠ¤í¬ë¦½íŠ¸
     /// </summary>
     private InvenSlot parentSlotScript;
 
-    public void SlotSectorInitialize(GameObject obj, int id)
+    public void SlotSectorInitialize(InvenSlot slot, int id)
     {
-        slotParent = obj;
-        parentSlotScript = obj.GetComponent<InvenSlot>();
+        slotParent = slot;
+        parentSlotScript = slot.GetComponent<InvenSlot>();
         QuadNum = id;
     }
 
     /// <summary>
-    /// ¸¶¿ì½º Æ÷ÀÎÆ®°¡ µé¾î¿Ã °æ¿ì
+    /// ë§ˆìš°ìŠ¤ í¬ì¸íŠ¸ê°€ ë“¤ì–´ì˜¬ ê²½ìš°
     /// </summary>
     /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
@@ -48,20 +48,16 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         Instance = this;
         inven.highlightedSlot = slotParent;
 
-        // ¸¶¿ì½º À§Ä¡¿¡ ¾î¶² UI°¡ ÀÖ´Ù.
+        // ë§ˆìš°ìŠ¤ ìœ„ì¹˜ì— ì–´ë–¤ UIê°€ ìˆë‹¤.
         SetPosOffset();
         if (itemContain != null)
         {
             inven.RefrechColor(true);
         }
-        if (parentSlotScript.storedItemObject != null && itemContain == null)
+        if (parentSlotScript.storedItemContain != null && itemContain == null)
         {
             inven.ColorChangeLoop(SlotColorHighlights.Blue,
                 parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
-        if (parentSlotScript != null)
-        {
-            //GameManager.Instance.inventory.tooltip.Open(parentSlotScript.data);
         }
     }
     
@@ -122,7 +118,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             inven.RefrechColor(false);
         }
         posOffset = Vector2Int.zero;
-        if(parentSlotScript.storedItemObject != null && itemContain == null)
+        if(parentSlotScript.storedItemContain != null && itemContain == null)
         {
             inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
         }
