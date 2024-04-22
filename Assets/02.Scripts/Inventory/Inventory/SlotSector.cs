@@ -19,10 +19,8 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public static Vector2Int posOffset;
 
-    public static SlotSector Instance;
-
     [SerializeField]
-    private InventoryUI inven => GameManager.Instance.inven;
+    private InventoryUI inven;
 
     private ItemContain itemContain => inven.containGrab;
 
@@ -34,6 +32,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void SlotSectorInitialize(InvenSlot slot, int id)
     {
+        inven = GameManager.Instance.inven;
         slotParent = slot;
         parentSlotScript = slot.GetComponent<InvenSlot>();
         QuadNum = id;
@@ -45,11 +44,11 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Instance = this;
+        inven.slotSector = this;
         inven.highlightedSlot = slotParent;
 
         // 마우스 위치에 어떤 UI가 있다.
-        SetPosOffset();
+        SetPosOffset(inven.containGrab);
         if (itemContain != null)
         {
             inven.RefrechColor(true);
@@ -61,11 +60,11 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         //}
     }
     
-    public void SetPosOffset()
+    public void SetPosOffset(ItemContain contain)
     {
         Vector2Int size = Vector2Int.zero;
 
-        if(itemContain != null)
+        if(contain != null)
         {
             size = itemContain.ItemSize;
         }
@@ -110,7 +109,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Instance = null;
+        inven.slotSector = null;
         inven.highlightedSlot = null;
         
         if(itemContain != null)

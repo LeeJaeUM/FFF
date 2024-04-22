@@ -95,6 +95,11 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         }
     }
 
+    /// <summary>
+    /// 저장시 동작하는 함수
+    /// </summary>
+    /// <param name="parent">저장시 오브젝트의 부모</param>
+    /// <param name="position">저장할 위치</param>
     public void StoreContain(Transform parent, Vector2 position)
     {
         transform.SetParent(parent);
@@ -102,6 +107,10 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         transform.position = position;
         canvas.alpha = 1.0f;
         canvas.blocksRaycasts = true;
+        foreach(InvenSlot slot in storeSlots)
+        {
+            slot.SlotStore();
+        }
     }
 
     /// <summary>
@@ -110,8 +119,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     /// <param name="contain"></param>
     public ItemContain GrabContain()
     {
-        GameManager.Instance.inven.containGrab = this;
-
         isGrab = true;
         isDragging = true;
         transform.SetParent(DragParent);
@@ -123,7 +130,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.localScale = Vector3.one;
 
-
         return this;
     }
 
@@ -132,7 +138,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     /// </summary>
     public void ResetSelectedItem()
     {
-
         foreach (var slot in storeSlots)
         {
             slot.SlotRemove();
@@ -217,26 +222,25 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     #region UI 이벤트
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (isGrab)
-        {
-            isGrab = false;
-            foreach (var slot in storeSlots)
-            {
-                slot.SlotRemove();
-            }
+        //if (isGrab)
+        //{
+        //    isGrab = false;
+        //    foreach (var slot in storeSlots)
+        //    {
+        //        slot.SlotRemove();
+        //    }
 
-            storeSlots.Clear();
-            SlotColorChange(SlotColorHighlights.White);
-        }
-        else
-        {
-            GrabContain();
-            canvas.blocksRaycasts = !isDragging;
-            canvas.alpha = 0.5f;
+        //    storeSlots.Clear();
+        //    SlotColorChange(SlotColorHighlights.White);
+        //}
+        //else
+        //{
+        //    GrabContain();
+        //    canvas.blocksRaycasts = !isDragging;
+        //    canvas.alpha = 0.5f;
 
-            SlotSector.Instance.SetPosOffset();
-            GameManager.Instance.inven.RefrechColor(true);
-        }
+            
+        //}
     }
 
     public void OnPointerEnter(PointerEventData eventData)

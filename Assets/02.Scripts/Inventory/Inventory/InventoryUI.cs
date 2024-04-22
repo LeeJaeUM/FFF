@@ -121,6 +121,8 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public ItemTooltip tooltip;
 
+    public SlotSector slotSector;
+
     private InvenUI UI;
 
     private ProduceManager produceManager;
@@ -186,9 +188,10 @@ public class InventoryUI : MonoBehaviour
                 // 마우스가 슬롯 위에 있다 / 마우스에 잡힌 컨테이너가 있다 / 
                 ItemContain contain = containGrab.GetComponent<ItemContain>();
                 Debug.Log(checkSatae);
-                switch (checkSatae)
+                if(containGrab != null)
                 {
-                    case 0:
+                    if(highlightedSlot != null)
+                    {
                         // 빈 슬롯에 저장
                         if (isShiftPress && contain.Count > 1)
                         {
@@ -201,31 +204,36 @@ public class InventoryUI : MonoBehaviour
                             ColorChangeLoop(SlotColorHighlights.Blue, contain.ItemSize, totalOffset);
                             contain.ResetSelectedItem();
                         }
-                        break;
-                    case 1:
-                        // 다른 아이템 스왑
-                        SwapItem(containGrab).GrabContain();
-                        SlotSector.Instance.SetPosOffset();
-                        ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                        RefrechColor(true);
-                        break;
-                    case 3:
-                        // 같은 아이템이면 저장
-                        if (isShiftPress && contain.Count > 1)
+                    }
+                    else
+                    {
+                        if(enterContain.item == containGrab.item)
                         {
-                            Debug.Log("같은 아이템 하나씩 저장");
-                            contain.ItemDestack();
-                            AddContain(containGrab, 1);
-                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                            // 같은 아이템이면 저장
+                            if (isShiftPress && contain.Count > 1)
+                            {
+                                Debug.Log("같은 아이템 하나씩 저장");
+                                contain.ItemDestack();
+                                AddContain(containGrab, 1);
+                                ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                            }
+                            else
+                            {
+                                Debug.Log("같은 아이템이므로 저장");
+                                AddContain(containGrab, contain.Count);
+                                ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                                contain.ContainRemvoe();
+                            }
                         }
                         else
                         {
-                            Debug.Log("같은 아이템이므로 저장");
-                            AddContain(containGrab, contain.Count);
+                            // 다른 아이템 스왑
+                            SwapItem(containGrab).GrabContain();
+                            slotSector.SetPosOffset(containGrab);
                             ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                            contain.ContainRemvoe();
+                            RefrechColor(true);
                         }
-                        break;
+                    }
                 }
                 tooltip.IsPause = false;
             }
@@ -245,9 +253,15 @@ public class InventoryUI : MonoBehaviour
                 }
                 else
                 {
-                    enterContain.GrabContain();
+                    containGrab = GrabContain(enterContain);
                 }
-                
+
+                Debug.Log(containGrab);
+                if(containGrab != null)
+                {
+                    slotSector.SetPosOffset(containGrab);
+                }
+                RefrechColor(true);
             }
         }
     }
@@ -304,22 +318,9 @@ public class InventoryUI : MonoBehaviour
     {
         if (!isOverEdge)
         {
-            for (int y = 0; y < itemSize.y; y++)
+            if (containGrab != null)
             {
-                for (int x = 0; x < itemSize.x; x++)
-                {
-                    InvenSlot instance = slotGrid[startPos.x + x, startPos.y + y];
-
-                    if (instance.isEmpty)  // slot이 비어있지 않으며 
-                    {
-                        return 0;
-                    }
-                }
-            }
-
-            if(containGrab != null)
-            {
-                if(containGrab.item == enterContain.item)
+                if (containGrab.item == enterContain.item)
                 {
                     return 3;
                 }
@@ -328,6 +329,25 @@ public class InventoryUI : MonoBehaviour
                     return 1;
                 }
             }
+
+            for (int y = 0; y < itemSize.y; y++)
+            {
+                for (int x = 0; x < itemSize.x; x++)
+                {
+                    InvenSlot instance = null;
+
+                    if (startPos.x + x < _horizontalSlotCount && startPos.y + y < _verticalSlotCount)
+                        instance = slotGrid[startPos.x + x, startPos.y + y];
+                    else return 4;
+
+                    if (!instance.isEmpty)  // slot이 비어있지 않으며 
+                    {
+                        return 2;
+                    }
+                }
+            }
+
+            return 0;
         }
         // 현재 인벤토리 범위를 넘어있을 때
         return 2;
