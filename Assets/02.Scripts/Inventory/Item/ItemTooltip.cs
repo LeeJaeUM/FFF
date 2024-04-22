@@ -12,7 +12,7 @@ public class ItemTooltip : MonoBehaviour
     private bool isPause;
 
     /// <summary>
-    /// ÀÏ½Ã Á¤Áö ¸ğµå¸¦ È®ÀÎÇÏ°í ¼³Á¤ÇÏ´Â ÇÁ·ÎÆÛÆ¼
+    /// ì¼ì‹œ ì •ì§€ ëª¨ë“œë¥¼ í™•ì¸í•˜ê³  ì„¤ì •í•˜ëŠ” í”„ë¡œí¼í‹°
     /// </summary>
     public bool IsPause
     {
@@ -22,7 +22,7 @@ public class ItemTooltip : MonoBehaviour
             isPause = value;
             if (isPause)
             {
-                Close();    // ÀÏ½Ã Á¤Áö°¡ µÇ¸é ¿­·ÁÀÖ´ø »ó¼¼ Á¤º¸Ã¢µµ ´İ´Â´Ù.
+                Close();    // ì¼ì‹œ ì •ì§€ê°€ ë˜ë©´ ì—´ë ¤ìˆë˜ ìƒì„¸ ì •ë³´ì°½ë„ ë‹«ëŠ”ë‹¤.
             }
         }
     }
@@ -31,11 +31,11 @@ public class ItemTooltip : MonoBehaviour
     {
         if(!IsPause && data != null)
         {
-            // ÄÄÆ÷³ÍÆ® Ã¤¿ì±â
+            // ì»´í¬ë„ŒíŠ¸ ì±„ìš°ê¸°
             Icon.sprite = data.itemIcon;
             nameText.text = data.name;
             DescriptionText.text = data.itemDescription;
-            priceText.text = data.itemPrice.ToString();
+            //priceText.text = data.itemPrice.ToString();
             weightText.text = data.itemWeight.ToString();
         }
     }
