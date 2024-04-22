@@ -35,6 +35,10 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
             {
                 count = value;
                 SetCount(count);
+                if(count <= 0)
+                {
+                    ContainRemvoe();
+                }
             }
         }
     }
@@ -82,11 +86,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         canvas.blocksRaycasts = false;
     }
 
-    private void Start()
-    {
-        //ContainInitialize(item);
-    }
-
     private void Update()
     {
         if(isDragging)
@@ -103,14 +102,22 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     public void StoreContain(Transform parent, Vector2 position)
     {
         transform.SetParent(parent);
-        rect.pivot = Vector2.zero;
         transform.position = position;
+
+        isDragging = false;
+
+        rect.pivot = Vector2.zero;
+        
         canvas.alpha = 1.0f;
         canvas.blocksRaycasts = true;
+        
         foreach(InvenSlot slot in storeSlots)
         {
+            Debug.Log(slot.name);
             slot.SlotStore();
         }
+        
+        SlotColorChange(SlotColorHighlights.White);
     }
 
     /// <summary>
@@ -129,6 +136,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
 
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.localScale = Vector3.one;
+        ResetContain();
 
         return this;
     }
@@ -136,15 +144,16 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     /// <summary>
     /// 아이템 컨테어너 내용 지우기
     /// </summary>
-    public void ResetSelectedItem()
+    public void ResetContain()
     {
+        SlotColorChange(SlotColorHighlights.White);
+
         foreach (var slot in storeSlots)
         {
             slot.SlotRemove();
         }
 
         storeSlots.Clear();
-        isDragging = false;
         GameManager.Instance.inven.containGrab = null;
     }
 
@@ -188,7 +197,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     {
         Debug.Log("삭제");
         // 아이템 정보 삭제
-        ResetSelectedItem();
+        ResetContain();
 
         transform.SetParent(Factory.Instance.containChild);
 

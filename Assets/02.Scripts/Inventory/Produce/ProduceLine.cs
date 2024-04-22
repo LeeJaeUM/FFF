@@ -68,7 +68,8 @@ public class ProduceLine : RecycleObject
             {
                 slot.UseItem();
             }
-            Factory.Instance.GetItemContain(data).GrabContain();
+            ItemContain contain = Factory.Instance.GetItemContain(data);
+            contain.GrabContain();
         });
     }
 
@@ -81,9 +82,10 @@ public class ProduceLine : RecycleObject
         {
             foreach(var ItemContain in GameManager.Instance.inven.containList)
             {
-                if(ItemContain.item == slot.Data)
+
+                if(ItemContain.itemCode == slot.Data.itemCode)
                 {
-                    slot.SetIngredient(ItemContain.Count);
+                    slot.SetIngredient(ItemContain.itemCount);
                 }
             }
         }
@@ -106,4 +108,5 @@ public class ProduceLine : RecycleObject
         return true;
     }
     #endregion
+
 }

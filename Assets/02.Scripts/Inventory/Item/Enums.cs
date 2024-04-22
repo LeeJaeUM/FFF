@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum ItemCode
@@ -48,4 +49,11 @@ public struct SlotColorHighlights
     {
         get { return new Color32(100, 160, 255, 255); }
     }
+}
+
+public struct ItemContainList
+{
+    public ItemCode itemCode;
+    public List<ItemContain> containList;
+    public int itemCount;
 }

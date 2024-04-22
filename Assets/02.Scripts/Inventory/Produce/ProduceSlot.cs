@@ -75,6 +75,7 @@ public class ProduceSlot : RecycleObject
 
     public void UseItem()
     {
-        GameManager.Instance.inven.UseItem(data.itemCode, count);
+        bool isUse = GameManager.Instance.inven.UseItem(data.itemCode, count);
+        Debug.Log(isUse);
     }
 }

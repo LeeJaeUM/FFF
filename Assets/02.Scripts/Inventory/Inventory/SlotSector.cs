@@ -17,12 +17,10 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public int QuadNum;
 
-    public static Vector2Int posOffset;
+    public Vector2Int posOffset = Vector2Int.zero;
 
     [SerializeField]
     private InventoryUI inven;
-
-    private ItemContain itemContain => inven.containGrab;
 
     [SerializeField]
     /// <summary>
@@ -48,9 +46,9 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         inven.highlightedSlot = slotParent;
 
         // 마우스 위치에 어떤 UI가 있다.
-        SetPosOffset(inven.containGrab);
-        if (itemContain != null)
+        if (inven.containGrab != null)
         {
+            SetPosOffset(inven.containGrab.ItemSize);
             inven.RefrechColor(true);
         }
         //if (parentSlotScript.storedItemContain != null && itemContain == null)
@@ -60,15 +58,8 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         //}
     }
     
-    public void SetPosOffset(ItemContain contain)
+    public void SetPosOffset(Vector2Int size)
     {
-        Vector2Int size = Vector2Int.zero;
-
-        if(contain != null)
-        {
-            size = itemContain.ItemSize;
-        }
-
         if (size.x != 0 && size.x % 2 == 0)
         {
             switch (QuadNum)
@@ -112,7 +103,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         inven.slotSector = null;
         inven.highlightedSlot = null;
         
-        if(itemContain != null)
+        if(inven.containGrab != null)
         {
             inven.RefrechColor(false);
         }
