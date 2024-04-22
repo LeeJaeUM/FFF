@@ -69,7 +69,6 @@ public class ItemTooltip : MonoBehaviour
             Icon.sprite = data.itemIcon;
             nameText.text = data.name;
             DescriptionText.text =$" {data.itemDescription}";
-            priceText.text = $"가격 : {data.itemPrice}";
             weightText.text = $"무게 : {data.itemWeight}";
 
             canvasGroup.alpha = 0.0001f;

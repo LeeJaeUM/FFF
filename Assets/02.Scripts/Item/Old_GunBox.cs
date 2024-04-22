@@ -23,13 +23,13 @@ public class Old_GunBox : MonoBehaviour
         itemData = FindAnyObjectByType<ItemData>();
     }
 
-    public void BreakGunBox()
-    {
-        if (onAxe && itemData.itemID != 5) // ID 5번은 gunBox 이다
-        {
-            DropDynamite();
-        }
-    }
+    //public void BreakGunBox()
+    //{
+    //    if (onAxe && itemData.itemID != 5) // ID 5번은 gunBox 이다
+    //    {
+    //        DropDynamite();
+    //    }
+    //}
 
     void DropDynamite()
     {

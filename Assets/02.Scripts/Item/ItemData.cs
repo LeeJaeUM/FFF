@@ -20,9 +20,14 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     }
 
     /// <summary>
-    /// 아이템의 고유번호
+    /// 아이템의 고유코드
     /// </summary>
-    public int itemID;
+    public ItemCode itemCode;
+
+    ///// <summary>
+    ///// 아이템의 고유번호
+    ///// </summary>
+    //public int itemID;
 
     /// <summary>
     /// 아이템의 아이콘
