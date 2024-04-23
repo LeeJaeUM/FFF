@@ -201,7 +201,7 @@ public class Connecting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("삭제될떄의 작업");
+                    //Debug.LogWarning("삭제될떄의 작업");
                     //중복되어 무한 루프 방지
                     if (rootCall)
                     {

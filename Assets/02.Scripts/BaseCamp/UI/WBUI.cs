@@ -7,10 +7,11 @@ using UnityEngine.InputSystem;
 public class WBUI : MonoBehaviour
 {
     Transform uiGroup;
+    Transform navbtnUIGroup;
     [SerializeField] BlockSpwaner blockSpwaner;
 
-    [SerializeField] private bool isUIActive = false;
-    [SerializeField] private bool canUse_Workbench = false;
+    private bool isUIActive = false;
+    private bool canUse_Workbench = false;
 
     public bool CanUse_Workbench
     {
@@ -20,9 +21,10 @@ public class WBUI : MonoBehaviour
             if(canUse_Workbench != value)
             {
                 canUse_Workbench = value;
+                navbtnUIGroup.gameObject.SetActive(value); // E버튼 안내 ui 비/활성화
 
                 // 트리거 밖으로 나가서 flase가 되면 자동으로 종료
-                if(canUse_Workbench == false)
+                if (canUse_Workbench == false)
                 {
                     Workbench_UI_Use(canUse_Workbench);
                     isUIActive = false;
@@ -31,11 +33,20 @@ public class WBUI : MonoBehaviour
         }
     }
 
+
+
     PlayerInputAction inputActions;
 
     private void Awake()
     {
         inputActions = new PlayerInputAction();
+        navbtnUIGroup = transform.GetChild(0);
+        uiGroup = transform.GetChild(1);
+    }
+
+    private void Start()
+    {
+        blockSpwaner = BaseCampManager.Instance.BlockSpwaner;
     }
 
     private void OnEnable()
@@ -50,11 +61,6 @@ public class WBUI : MonoBehaviour
         inputActions.UI.Disable();
     }
 
-    private void Start()
-    {
-        uiGroup = transform.GetChild(0);
-        blockSpwaner = BaseCampManager.Instance.BlockSpwaner;
-    }
 
     /// <summary>
     /// 트리거 범위 내부일때 e를 눌러서 UI 활성화 가능함

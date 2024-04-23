@@ -483,7 +483,7 @@ public class BlockSpwaner : MonoBehaviour
     {
         ///Transform previewConnector_Tr = connecting.transform;
         ///previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
-        Debug.Log(connecting.name);
+        //Debug.Log(connecting.name);
         //Floor에 생성할때
         if (connecting.objType == ObjType.Floor)    
         {   //foundation 생성모드일때

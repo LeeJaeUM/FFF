@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 258762296787118669}
   - component: {fileID: 2885951334929872660}
   - component: {fileID: 7229969120497683614}
+  - component: {fileID: 2711631814552708031}
   m_Layer: 7
-  m_Name: Model
+  m_Name: Model_Shelf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2711631814552708031
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19887623622885846}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.99999994, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3196613445242150100
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,9 +187,9 @@ GameObject:
   - component: {fileID: 6502660990752917784}
   - component: {fileID: 4183124856903203488}
   - component: {fileID: 4682419672693169196}
-  - component: {fileID: 1260594053687339113}
+  - component: {fileID: 7842080829470765603}
   m_Layer: 7
-  m_Name: Model (1)
+  m_Name: Model_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,19 +260,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1260594053687339113
-MonoBehaviour:
+--- !u!65 &7842080829470765603
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5990701545544688534}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0ca47d2d11ba4a4f9fcd0c0281e4998, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPlayerIn: 0
+  serializedVersion: 3
+  m_Size: {x: 0.99999994, y: 0.99999994, z: 0.9999999}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6434219066972358598
 GameObject:
   m_ObjectHideFlags: 0
