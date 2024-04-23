@@ -11,6 +11,7 @@ using static Connecting;
 
 public class BlockSpwaner : MonoBehaviour
 {
+    #region enum타입 변수들
     public enum BuildMode   //건축 모드
     {
         None = 0,
@@ -40,30 +41,33 @@ public class BlockSpwaner : MonoBehaviour
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
     public MaterialType materialType = MaterialType.Wood;
+
+    #endregion
+
+
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
     public BlockData[] blockDatas; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
-    float lengthMul = 3f; // 생성할 벽의 길이(구버전)
-    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
+    //float lengthMul = 3f; // 생성할 벽의 길이(구버전)
+    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲(반지름)
 
     [SerializeField] private float interactDistance = 18.0f; // 건축 상호작용 가능한 최대 거리
 
-    public Material SpawnAbledMat;
-    public Material SpawnDisabledMat;
 
-    [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0); //토대의 크기에 맞게 약간 하단에 생성
-    [SerializeField] Vector3 testVec = Vector3.zero;            //확인용 변수
-
-
-    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
     /// <summary>
-    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트
+    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트--------------------------
     /// </summary>
     public GameObject fa_preview;
     public GameObject wall_preview_H;
     public GameObject wall_preview_V;
     public GameObject enviroment_preview;
     public GameObject previewObj;
+
+    //생성 가능/불가능 시 미리보기 옵젝에 씌울 적/녹색 머테리얼------------------------------------------
+    public Material SpawnAbledMat;
+    public Material SpawnDisabledMat;
+
+    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
 
     [SerializeField]
     EnviromentData[] enviromentDatas = null;
@@ -83,9 +87,7 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
-
-    [SerializeField] bool canDespawn = false;
+    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
     [SerializeField] private float connectorOverlapRadius = 1;
     [SerializeField] private LayerMask buildObjLayer;
@@ -95,6 +97,7 @@ public class BlockSpwaner : MonoBehaviour
     public bool isRight = true;         //현재 Ray의 히트 위치가 블록 보다 오른쪽인지 왼쪽인지 판단
 
     public bool canSpawnObj = true;     //생성가능한지 판단
+    [SerializeField] bool canDespawn = false;
     Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
 
 

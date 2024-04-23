@@ -15,17 +15,15 @@ public class BaseCampManager : MonoBehaviour
         }
     }
 
-
-    [SerializeField]Workbench workbench;
-    public Workbench Workbench 
-    { 
-        get 
-        { 
-            if (workbench == null)
-                workbench = FindAnyObjectByType<Workbench>();
-            return workbench; 
+    [SerializeField] WBUI wbui;
+    public WBUI WBUI
+    {
+        get
+        {
+            if (wbui == null)
+                wbui = FindAnyObjectByType<WBUI>();
+            return wbui;
         }
-
     }
 
     [SerializeField]BlockSpwaner spwaner;

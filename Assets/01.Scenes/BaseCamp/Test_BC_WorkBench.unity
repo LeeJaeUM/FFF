@@ -5068,7 +5068,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025305065fb795b4d893477f1546a2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  workbench: {fileID: 0}
   blockSpwaner: {fileID: 0}
 --- !u!224 &3352516956790941965
 RectTransform:
@@ -6039,50 +6038,6 @@ PrefabInstance:
     - target: {fileID: 2062778572743537557, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
       propertyPath: m_Name
       value: BlockSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: buildMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: interactDistance
-      value: 18
-      objectReference: {fileID: 0}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: buildObjLayer.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: blockDatas.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: blockDatas.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 89bc3d1ba562dae4fba2c50cf9e720f8, type: 2}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: blockDatas.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 1c1efb865fe98c348892a5a08013bcb9, type: 2}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: blockDatas.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: d04ecac2cace8e74eb9f9768d7900283, type: 2}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: enviromentDatas.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 573f87e69f494c4438877e6b00c69924, type: 2}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: enviromentDatas.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: 14168793baa93ee489ce07843449d5cc, type: 2}
-    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: enviromentDatas.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: ac664e903a7951144b97ee604de989e0, type: 2}
-    - target: {fileID: 6777748465058022059, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
-      propertyPath: m_Layer
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
