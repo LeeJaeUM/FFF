@@ -25,10 +25,10 @@ public class Old_GunBox : MonoBehaviour
 
     public void BreakGunBox()
     {
-        if (onAxe && itemData.itemID != 5) // ID 5번은 gunBox 이다
+        /*if (onAxe && itemData.itemID != 5) // ID 5번은 gunBox 이다
         {
             DropDynamite();
-        }
+        }*/
     }
 
     void DropDynamite()
