@@ -272,7 +272,7 @@ public class BlockSpwaner : MonoBehaviour
         enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
     }
 
-
+    // Update 문------------------------------------------------------------------------------------------------------------------------------------------------------------
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
@@ -295,6 +295,7 @@ public class BlockSpwaner : MonoBehaviour
                 //환경요소에 닿을 때 제거 가능
                 canDespawn = true;
 
+                //환경요소에 닿을 때 생성 불가 , 태그 : Respawn
                 if (tagOfHitObject == "Respawn")
                 {
                     canSpawnObj = false;
@@ -303,8 +304,11 @@ public class BlockSpwaner : MonoBehaviour
                 {
                     canSpawnObj = true;
                 }
+
+                //프리뷰 색상 함수
                 PreviewMatSelect(canSpawnObj);
 
+                EnviroAdjuset(hit.collider.gameObject.transform.position, previewObj.transform.position);
             }
             else
             {
@@ -687,4 +691,67 @@ public class BlockSpwaner : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Enviro의 튀어나온 면을 floor안쪽으로 넣는 함수
+    /// </summary>
+    /// <param name="checkObjPosition">현재 ray가 닿는 바닥의 포지션(원점)</param>
+    /// <param name="prefabPosition">현재 미리보기 프리팹의 위치</param>
+    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition )
+    {
+        // checkObj의 x와 z 값
+        float xCheckObj = checkObjPosition.x;
+        float zCheckObj = checkObjPosition.z;
+
+        // prefabPosition의 x와 z 값
+        float xPrefab = prefabPosition.x;
+        float zPrefab = prefabPosition.z;
+
+        // x 값과 z 값의 비교
+        if (xCheckObj > xPrefab)
+        {
+            Debug.Log("checkObj의 x 값이 prefabPosition의 x 값보다 큽니다.");
+        }
+        else if (xCheckObj < xPrefab)
+        {
+            Debug.Log("prefabPosition의 x 값이 checkObj의 x 값보다 큽니다.");
+        }
+        else
+        {
+            Debug.Log("checkObj와 prefabPosition의 x 값은 같습니다.");
+        }
+
+        if (zCheckObj > zPrefab)
+        {
+            Debug.Log("checkObj의 z 값이 prefabPosition의 z 값보다 큽니다.");
+        }
+        else if (zCheckObj < zPrefab)
+        {
+            Debug.Log("prefabPosition의 z 값이 checkObj의 z 값보다 큽니다.");
+        }
+        else
+        {
+            Debug.Log("checkObj와 prefabPosition의 z 값은 같습니다.");
+        }
+    }
+
+    /*
+     //임시 함수 작성
+     void EnviroAdjust(Vector3 checkObjPosition, Vector3 prefabPosition, float radius)
+{
+    // 두 오브젝트 간의 x 길이와 z 길이 계산
+    float deltaX = Mathf.Abs(checkObjPosition.x - prefabPosition.x);
+    float deltaZ = Mathf.Abs(checkObjPosition.z - prefabPosition.z);
+
+    // x 길이와 z 길이의 합을 구합니다.
+    float distance = deltaX + deltaZ;
+
+    // 조정된 값 계산
+    float adjustedValue = radius - (1.5f - distance);
+
+    // 결과 출력
+    Debug.Log("조정된 값: " + adjustedValue);
+}
+     
+     */
 }
