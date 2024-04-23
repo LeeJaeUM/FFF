@@ -228,6 +228,16 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         storeSlots.Add(slot);
     }
 
+    public void RecastOn()
+    {
+        canvas.blocksRaycasts = true;
+    }
+
+    public void RecastOff()
+    {
+        canvas.blocksRaycasts = false;
+    }
+
     #region UI 이벤트
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -254,14 +264,32 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        GameManager.Instance.inven.enterContain = this;
-        GameManager.Instance.inven.tooltip.Open(item);
+        InventoryUI inven = GameManager.Instance.inven;
+        inven.enterContain = this;
+        if(inven.containGrab != null)
+        {
+            if(item == inven.containGrab.item)
+            {
+                inven.RefrechColor(true, 3);
+            }
+            else
+            {
+                inven.RefrechColor(true, 1);
+            }
+        }
+        else
+        {
+            inven.RefrechColor(true, 3);
+        }
+        inven.tooltip.Open(item);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        GameManager.Instance.inven.enterContain = null;
-        GameManager.Instance.inven.tooltip.Close();
+        InventoryUI inven = GameManager.Instance.inven;
+        SlotColorChange(SlotColorHighlights.White);
+        inven.enterContain = null;
+        inven.tooltip.Close();
     }
     #endregion
 }

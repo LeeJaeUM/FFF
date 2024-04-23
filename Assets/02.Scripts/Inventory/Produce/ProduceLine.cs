@@ -69,7 +69,7 @@ public class ProduceLine : RecycleObject
                 slot.UseItem();
             }
             ItemContain contain = Factory.Instance.GetItemContain(data);
-            contain.GrabContain();
+            inven.containGrab = contain.GrabContain();
         });
     }
 
