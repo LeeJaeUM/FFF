@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enviroPrefab: {fileID: 3239781720939078565, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
   previewPrefab: {fileID: 3239781720939078565, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
-  radius: 1
+  radiusX: 0.5
+  radiusZ: 0.5

@@ -713,7 +713,8 @@ public class BlockSpwaner : MonoBehaviour
         float deltaZ = prefabPosition.z - checkObjPosition.z;
 
         //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
-        float radius = enviromentDatas[enviromentIndex].radius;
+        float radiusX = enviromentDatas[enviromentIndex].radiusX;
+        float radiusZ = enviromentDatas[enviromentIndex].radiusZ;
 
         float newX = 0, newZ =0;
 
@@ -721,7 +722,7 @@ public class BlockSpwaner : MonoBehaviour
 
         if(deltaX > 0)
         {
-            float adjX = radius + deltaX;
+            float adjX = radiusX + deltaX;
             float checkX = lengthMulti - adjX;
             if(checkX < 0)      //밖으로 티어나옴  
             {
@@ -735,7 +736,7 @@ public class BlockSpwaner : MonoBehaviour
         }
         else if(deltaX < 0)
         {
-            float adjX = radius - deltaX;
+            float adjX = radiusX - deltaX;
             float checkX = lengthMulti - adjX;
             if (checkX < 0)      //밖으로 티어나옴  
             {
@@ -750,7 +751,7 @@ public class BlockSpwaner : MonoBehaviour
 
         if(deltaZ > 0)
         {
-            float adjZ = radius + deltaZ;
+            float adjZ = radiusZ + deltaZ;
             float checkZ = lengthMulti - adjZ;
             if (checkZ < 0)      //밖으로 티어나옴  
             {
@@ -764,7 +765,7 @@ public class BlockSpwaner : MonoBehaviour
         }
         else if(deltaZ < 0)
         {
-            float adjZ = radius - deltaZ;
+            float adjZ = radiusZ - deltaZ;
             float checkZ = lengthMulti - adjZ;
             if (checkZ < 0)      //밖으로 티어나옴  
             {

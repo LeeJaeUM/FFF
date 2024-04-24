@@ -7,5 +7,6 @@ public class EnviromentData : ScriptableObject
 {
     public GameObject enviroPrefab;
     public GameObject previewPrefab;
-    public float radius;
+    public float radiusX;
+    public float radiusZ;
 }
