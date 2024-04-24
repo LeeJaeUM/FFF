@@ -530,6 +530,11 @@ public class InventoryUI : MonoBehaviour
 
     public Action<ItemData, int> onDontGetItem;
 
+    /// <summary>
+    /// 아이템을 얻는 함수
+    /// </summary>
+    /// <param name="code">얻은 아이템 코드</param>
+    /// <param name="_count">얻은 아이템의 갯수</param>
     public void GetItemToSlot(ItemCode code, int _count)
     {
         ItemData data = FindCodeData(code);
@@ -612,6 +617,12 @@ public class InventoryUI : MonoBehaviour
         emptyList.Clear();
     }
 
+    #region 아이템 관련 함수
+    /// <summary>
+    /// 아이템의 코드를 사용하여 아이템 정보 출력
+    /// </summary>
+    /// <param name="_code">찾을 아이템 코드</param>
+    /// <returns>찾은 아이템 정보</returns>
     public ItemData FindCodeData(ItemCode _code)
     {
         foreach(var data in itemDatas)
@@ -627,39 +638,70 @@ public class InventoryUI : MonoBehaviour
 
     public Action<ItemData, int> onUseItem;
 
+    /// <summary>
+    /// 아이템을 사용 가능 여부 
+    /// </summary>
+    /// <param name="code">사용할 아이템 코드</param>
+    /// <param name="useCount">사용할 아이템의 갯수</param>
+    /// <returns>true면 사용 성공, false면 사용 실패</returns>
+    /// <returns></returns>
+    public bool UseItemCheck(ItemCode code, int useCount = 1)
+    {
+        bool isOk = false;
+
+        foreach(var List in containList)
+        {
+            if (List.itemCode == code && List.itemCount >= useCount)
+            {
+                isOk = true;
+            }
+        }
+
+        return isOk;
+    }
+
+    /// <summary>
+    /// 아이템을 사용하는 함수
+    /// </summary>
+    /// <param name="code">사용할 아이템 코드</param>
+    /// <param name="useCount">사용할 아이템의 갯수</param>
+    /// <returns>true면 사용 성공, false면 사용 실패</returns>
     public bool UseItem(ItemCode code, int useCount = 1)
     {
         int remain = useCount;
 
-        for (int i = 0; i < containList.Length; i++)
+        if(UseItemCheck(code, useCount))
         {
-            if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
+            for (int i = 0; i < containList.Length; i++)
             {
-                for(int j = containList[i].containList.Count - 1; j > -1; j--)
+                if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
                 {
-
-                    if (remain == 0)
+                    for (int j = containList[i].containList.Count - 1; j > -1; j--)
                     {
-                        RefreshList();
-                        return true;
-                    }
 
-                    if (containList[i].containList[j].Count >= remain)
-                    {
-                        containList[i].containList[j].Count -= remain;
-                        containList[i].itemCount -= remain;
-                        remain = 0;
-                    }
-                    else
-                    {
-                        remain -= containList[i].containList[j].Count;
-                    }
+                        if (remain == 0)
+                        {
+                            RefreshList();
+                            return true;
+                        }
 
-                    Debug.Log($"{remain}");
+                        if (containList[i].containList[j].Count >= remain)
+                        {
+                            containList[i].containList[j].Count -= remain;
+                            containList[i].itemCount -= remain;
+                            remain = 0;
+                        }
+                        else
+                        {
+                            remain -= containList[i].containList[j].Count;
+                        }
 
-                    if (containList[i].containList[j].Count <= 0)
-                    {
-                        containList[i].containList.RemoveAt(j);
+                        Debug.Log($"{remain}");
+
+                        if (containList[i].containList[j].Count <= 0)
+                        {
+                            containList[i].containList.RemoveAt(j);
+                        }
                     }
                 }
             }
@@ -668,6 +710,10 @@ public class InventoryUI : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// 리스트에 아이템 정보 추가
+    /// </summary>
+    /// <param name="add"></param>
     public void AddList(ItemContain add)
     {
         for(int i = 0; i < containList.Length; i++)
@@ -682,6 +728,10 @@ public class InventoryUI : MonoBehaviour
         RefreshList();
     }
 
+    /// <summary>
+    /// 리스트에 아이템 정보 삭제
+    /// </summary>
+    /// <param name="remove"></param>
     public void RemoveList(ItemContain remove)
     {
         for (int i = 0; i < containList.Length; i++)
@@ -693,6 +743,9 @@ public class InventoryUI : MonoBehaviour
         RefreshList();
     }
 
+    /// <summary>
+    /// 인벤토리 안에 정보 재출력
+    /// </summary>
     public void RefreshList()
     {
         for(int i = 0; i < containList.Length; i++)
@@ -710,6 +763,9 @@ public class InventoryUI : MonoBehaviour
         onContainListChange?.Invoke();
     }
 
+    /// <summary>
+    /// 컨테이너 그립 시 여부에 따라 저장된 컨테이너의 UI 레이캐스트 OnOff
+    /// </summary>
     private void RefreshGrab()
     {
         foreach (var _containList in containList)
@@ -728,6 +784,10 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 인벤토리 내의 무게 증감 여부
+    /// </summary>
+    /// <returns>인벤토리 내의 총 무게</returns>
     private float WeightCheck()
     {
         float result = 0;
@@ -741,4 +801,5 @@ public class InventoryUI : MonoBehaviour
 
         return result;
     }
+    #endregion
 }
