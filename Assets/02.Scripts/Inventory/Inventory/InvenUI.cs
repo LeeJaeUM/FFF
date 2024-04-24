@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InvenUI : MonoBehaviour
 {
     // 하위 UI
+    CanvasGroup canvas;
     RectTransform invenHeadRect;
     RectTransform invenInfoRect;
     RectTransform invenGridRect;
@@ -16,18 +17,10 @@ public class InvenUI : MonoBehaviour
 
     private void Awake()
     {
+        canvas = GetComponent<CanvasGroup>();
         invenHeadRect = transform.GetChild(0).GetComponent<RectTransform>();
         invenInfoRect = transform.GetChild(1).GetComponent<RectTransform>();
         invenGridRect = transform.GetChild(2).GetComponent<RectTransform>();
-    }
-
-    private void Start()
-    {
-        InvenHead head = GetComponentInChildren<InvenHead>();
-        head.Drag += (position) =>
-        {
-            transform.position = transform.position + (Vector3)position;
-        };
     }
 
     public void Initialized()
@@ -52,5 +45,33 @@ public class InvenUI : MonoBehaviour
             inven.edgePadding * 2 + inven._horizontalSlotCount * inven.slotSize);
         invenGridRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
             inven.edgePadding * 2 + inven._verticalSlotCount * inven.slotSize);
+
+        OnOff();
+    }
+
+    public void OnOff()
+    {
+        if(canvas.alpha == 0.0f)
+        {
+            Open();
+        }
+        else if(canvas.alpha == 1.0f)
+        {
+            Close();
+        }
+    }
+
+    private void Open()
+    {
+        canvas.alpha = 1.0f;
+        canvas.interactable = true;
+        canvas.blocksRaycasts = true;
+    }
+
+    private void Close()
+    {
+        canvas.blocksRaycasts = false;
+        canvas.interactable = false;
+        canvas.alpha = 0;
     }
 }

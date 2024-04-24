@@ -10,17 +10,24 @@ public class InvenHead : MonoBehaviour, IDragHandler
     public Action<Vector2> Drag;
     public Action DragEnd;
 
+    private Transform parent;
+
     private void Start()
     {
+        parent = transform.parent;
+
         Button button = GetComponentInChildren<Button>();
         button.onClick.AddListener(() =>
         {
-            GameManager.Instance.inven.Close();
+            CanvasGroup canvas = parent.GetComponent<CanvasGroup>();
+            canvas.blocksRaycasts = false;
+            canvas.interactable = false;
+            canvas.alpha = 0;
         });
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Drag?.Invoke(eventData.delta);
+        parent.position = parent.position + (Vector3)eventData.delta;
     }
 }

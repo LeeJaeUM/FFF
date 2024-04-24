@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -63,7 +64,12 @@ public class ProduceLine : RecycleObject
         produceButton.onClick.AddListener(() =>
         {
             InventoryUI inven = GameManager.Instance.inven;
-            inven.SetSelectedItem(Factory.Instance.GetItemContain(data));
+            foreach(var slot in produceSlots)
+            {
+                slot.UseItem();
+            }
+            ItemContain contain = Factory.Instance.GetItemContain(data);
+            inven.containGrab = contain.GrabContain();
         });
     }
 
@@ -76,13 +82,15 @@ public class ProduceLine : RecycleObject
         {
             foreach(var ItemContain in GameManager.Instance.inven.containList)
             {
-                if(ItemContain.item == slot.Data)
+
+                if(ItemContain.itemCode == slot.Data.itemCode)
                 {
-                    slot.SetIngredient(ItemContain.Count);
+                    slot.SetIngredient(ItemContain.itemCount);
                 }
             }
         }
 
+        Debug.Log(checkProduce());
         produceButton.interactable = checkProduce();
     }
 
@@ -90,6 +98,7 @@ public class ProduceLine : RecycleObject
     {
         foreach(var slot in produceSlots)
         {
+            //Debug.Log(slot.IsProduceOk);
             if (!slot.IsProduceOk)
             {
                 return false;
@@ -99,4 +108,5 @@ public class ProduceLine : RecycleObject
         return true;
     }
     #endregion
+
 }

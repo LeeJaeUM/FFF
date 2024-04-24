@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEditor.Progress;
 
-public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandler
+public class InvenSlot : RecycleObject
 {
     /// <summary>
     /// 그리드에 저장된 아이템 정보
@@ -16,19 +17,19 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
     /// </summary>
     public Vector2Int gridPos;
 
-    /// <summary>
-    /// 저장된 물체 게임 오브젝트
-    /// </summary>
-    public ItemContain storedItemContain;
+    ///// <summary>
+    ///// 저장된 물체 아이템 컨테이너
+    ///// </summary>
+    public ItemContain storedContain;
 
-    /// <summary>
-    /// 저장된 물체의 사이즈
-    /// </summary>
+    ///// <summary>
+    ///// 저장된 물체의 사이즈
+    ///// </summary>
     public Vector2Int storedItemSize;
 
-    /// <summary>
-    /// 저장된 물체의 시작 좌표
-    /// </summary>
+    ///// <summary>
+    ///// 저장된 물체의 시작 좌표
+    ///// </summary>
     public Vector2Int storedItemStartPos;
 
     /// <summary>
@@ -51,33 +52,21 @@ public class InvenSlot : RecycleObject, IPointerEnterHandler, IPointerExitHandle
     }
 
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        if (data != null)
-        {
-            GameManager.Instance.inven.tooltip.Open(data);
-        }
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GameManager.Instance.inven.tooltip.Close();
-    }
-
     public void SlotRemove()
     {
+        storedContain = null;
+        data = null;
         storedItemSize = Vector2Int.zero;
         storedItemStartPos = Vector2Int.zero;
-        data = null;
         isEmpty = true;
     }
 
-    public void SlotStore(ItemContain Item, Vector2Int startPosition)
+    public void SlotStore(ItemContain contain)
     {
-        storedItemContain = Item;
-        data = Item.item;
+        storedContain = contain;
+        data = storedContain.item;
         storedItemSize = data.Size;
-        storedItemStartPos = startPosition;
+        storedItemStartPos = contain.storeSlots[0].gridPos;
         isEmpty = false;
     }
 }
