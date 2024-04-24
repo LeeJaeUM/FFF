@@ -107,14 +107,14 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         isDragging = false;
 
         rect.pivot = Vector2.zero;
-        
+
         canvas.alpha = 1.0f;
         canvas.blocksRaycasts = true;
-        
-        foreach(InvenSlot slot in storeSlots)
+
+        foreach (InvenSlot slot in storeSlots)
         {
             Debug.Log(slot.name);
-            slot.SlotStore();
+            slot.SlotStore(this);
         }
         
         SlotColorChange(SlotColorHighlights.White);
@@ -266,21 +266,6 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     {
         InventoryUI inven = GameManager.Instance.inven;
         inven.enterContain = this;
-        if(inven.containGrab != null)
-        {
-            if(item == inven.containGrab.item)
-            {
-                inven.RefrechColor(true, 3);
-            }
-            else
-            {
-                inven.RefrechColor(true, 1);
-            }
-        }
-        else
-        {
-            inven.RefrechColor(true, 3);
-        }
         inven.tooltip.Open(item);
     }
 

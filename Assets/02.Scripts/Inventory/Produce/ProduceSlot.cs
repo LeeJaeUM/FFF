@@ -62,7 +62,7 @@ public class ProduceSlot : RecycleObject
     /// <param name="_value"></param>
     public void SetIngredient(int _value)
     {
-        Debug.Log($"갯수 변환{_value}");
+        //Debug.Log($"갯수 변환{_value}");
         Total = _value;
     }
 

@@ -53,6 +53,15 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventroyOnOff"",
+                    ""type"": ""Button"",
+                    ""id"": ""e313dc08-1f85-4516-bc74-ae8c28ed4d9e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -88,6 +97,17 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""LClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52cf503c-4b49-4e32-af49-f1552e40e739"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventroyOnOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -116,6 +136,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         m_UI_MousePosition = m_UI.FindAction("MousePosition", throwIfNotFound: true);
         m_UI_RClick = m_UI.FindAction("RClick", throwIfNotFound: true);
         m_UI_LClick = m_UI.FindAction("LClick", throwIfNotFound: true);
+        m_UI_InventroyOnOff = m_UI.FindAction("InventroyOnOff", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -180,6 +201,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_MousePosition;
     private readonly InputAction m_UI_RClick;
     private readonly InputAction m_UI_LClick;
+    private readonly InputAction m_UI_InventroyOnOff;
     public struct UIActions
     {
         private @MouseInputAction m_Wrapper;
@@ -187,6 +209,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         public InputAction @MousePosition => m_Wrapper.m_UI_MousePosition;
         public InputAction @RClick => m_Wrapper.m_UI_RClick;
         public InputAction @LClick => m_Wrapper.m_UI_LClick;
+        public InputAction @InventroyOnOff => m_Wrapper.m_UI_InventroyOnOff;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -205,6 +228,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @LClick.started += instance.OnLClick;
             @LClick.performed += instance.OnLClick;
             @LClick.canceled += instance.OnLClick;
+            @InventroyOnOff.started += instance.OnInventroyOnOff;
+            @InventroyOnOff.performed += instance.OnInventroyOnOff;
+            @InventroyOnOff.canceled += instance.OnInventroyOnOff;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -218,6 +244,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @LClick.started -= instance.OnLClick;
             @LClick.performed -= instance.OnLClick;
             @LClick.canceled -= instance.OnLClick;
+            @InventroyOnOff.started -= instance.OnInventroyOnOff;
+            @InventroyOnOff.performed -= instance.OnInventroyOnOff;
+            @InventroyOnOff.canceled -= instance.OnInventroyOnOff;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -249,5 +278,6 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         void OnMousePosition(InputAction.CallbackContext context);
         void OnRClick(InputAction.CallbackContext context);
         void OnLClick(InputAction.CallbackContext context);
+        void OnInventroyOnOff(InputAction.CallbackContext context);
     }
 }
