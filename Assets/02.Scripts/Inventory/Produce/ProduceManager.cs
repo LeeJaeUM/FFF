@@ -12,6 +12,8 @@ public class ProduceManager : MonoBehaviour
 
     public ProduceLine[] lines;
 
+    private CanvasGroup canvas;
+
     private void Awake()
     {
         inven = GameManager.Instance.inven;
@@ -25,12 +27,12 @@ public class ProduceManager : MonoBehaviour
             }
         }
 
-        Transform child = transform.GetChild(0);    // scrool view
+        Transform child = transform.GetChild(1);    // scrool view
         child = child.GetChild(0);                  // viewport
         lineTr = child.GetChild(0);                  // content
 
         lines = new ProduceLine[produceList.Count];
-
+        canvas = GetComponent<CanvasGroup>();    
     }
 
     public void Initialize()
@@ -42,16 +44,43 @@ public class ProduceManager : MonoBehaviour
         }
 
         // 전달받은 리스트
-        inven.onContainList += onRefresh;
+        inven.onContainListChange += onRefresh;
+
+        OnOff();
     }
 
     private void onRefresh()
-    { 
+    {
+        Debug.Log("리스트 변화 감지");
         foreach(var line in lines)
         {
             line.Refresh();
         }
     }
-}
 
-// 구조체 만들기
+    public void OnOff()
+    {
+        if (canvas.alpha == 0.0f)
+        {
+            Open();
+        }
+        else if (canvas.alpha == 1.0f)
+        {
+            Close();
+        }
+    }
+
+    private void Open()
+    {
+        canvas.alpha = 1.0f;
+        canvas.interactable = true;
+        canvas.blocksRaycasts = true;
+    }
+
+    private void Close()
+    {
+        canvas.blocksRaycasts = false;
+        canvas.interactable = false;
+        canvas.alpha = 0;
+    }
+}

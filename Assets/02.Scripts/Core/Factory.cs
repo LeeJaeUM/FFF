@@ -74,7 +74,7 @@ public class Factory : Singleton<Factory>
     {
         ItemContain contain = ContainPool.GetObject();
 
-        contain.GetComponent<ItemContain>().ContainInitialize(data, _count);
+        contain.ContainInitialize(data, _count);
         contain.transform.SetParent(GameManager.Instance.inven.DragParent);
 
         return contain;

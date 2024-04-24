@@ -17,14 +17,10 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// </summary>
     public int QuadNum;
 
-    public static Vector2Int posOffset;
-
-    public static SlotSector Instance;
+    public Vector2Int posOffset = Vector2Int.zero;
 
     [SerializeField]
-    private InventoryUI inven => GameManager.Instance.inven;
-
-    private ItemContain itemContain => inven.containGrab;
+    private InventoryUI inven;
 
     [SerializeField]
     /// <summary>
@@ -34,6 +30,7 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void SlotSectorInitialize(InvenSlot slot, int id)
     {
+        inven = GameManager.Instance.inven;
         slotParent = slot;
         parentSlotScript = slot.GetComponent<InvenSlot>();
         QuadNum = id;
@@ -45,31 +42,24 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Instance = this;
+        inven.slotSector = this;
         inven.highlightedSlot = slotParent;
 
         // 마우스 위치에 어떤 UI가 있다.
-        SetPosOffset();
-        if (itemContain != null)
+        if (inven.containGrab != null)
         {
+            SetPosOffset(inven.containGrab.ItemSize);
             inven.RefrechColor(true);
         }
-        if (parentSlotScript.storedItemContain != null && itemContain == null)
-        {
-            inven.ColorChangeLoop(SlotColorHighlights.Blue,
-                parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
+        //if (parentSlotScript.storedItemContain != null && itemContain == null)
+        //{
+        //    inven.ColorChangeLoop(SlotColorHighlights.Blue,
+        //        parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
+        //}
     }
     
-    public void SetPosOffset()
+    public void SetPosOffset(Vector2Int size)
     {
-        Vector2Int size = Vector2Int.zero;
-
-        if(itemContain != null)
-        {
-            size = itemContain.GetComponent<ItemContain>().ItemSize;
-        }
-
         if (size.x != 0 && size.x % 2 == 0)
         {
             switch (QuadNum)
@@ -110,17 +100,17 @@ public class SlotSector : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Instance = null;
+        inven.slotSector = null;
         inven.highlightedSlot = null;
         
-        if(itemContain != null)
+        if(inven.containGrab != null)
         {
             inven.RefrechColor(false);
         }
         posOffset = Vector2Int.zero;
-        if(parentSlotScript.storedItemContain != null && itemContain == null)
-        {
-            inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
-        }
+        //if(parentSlotScript.storedItemContain != null && itemContain == null)
+        //{
+        //    inven.ColorChangeLoop(SlotColorHighlights.Blue2, parentSlotScript.storedItemSize, parentSlotScript.storedItemStartPos);
+        //}
     }
 }
