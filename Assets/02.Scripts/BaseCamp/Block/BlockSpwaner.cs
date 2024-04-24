@@ -72,7 +72,7 @@ public class BlockSpwaner : MonoBehaviour
     [SerializeField]
     EnviromentData[] enviromentDatas = null;
     //[SerializeField] int enviromentIndex = 0;
-    public int enviromentIndex = 0; //임시로 public으로 변경
+    [SerializeField] int enviromentIndex = 0; //임시로 public으로 변경
     public int EnviromentIndex
     {
         get => enviromentIndex;
@@ -80,7 +80,12 @@ public class BlockSpwaner : MonoBehaviour
         {
             if (enviromentIndex != value)
             {
-                enviromentIndex = value;
+                //enviroData 배열의 길이보다 길면 0
+                if(value >= enviromentDatas.Length)
+                    enviromentIndex = 0;
+                else 
+                    enviromentIndex = value;
+
                 EniromentPreview_Setting(enviromentIndex);
                 //enviroment_preview = 
             }
@@ -154,6 +159,10 @@ public class BlockSpwaner : MonoBehaviour
 
             case BuildMode.Foundation:
                 buildMode = BuildMode.Wall_Horizontal;
+                break;
+            case BuildMode.Enviroment:
+                EnviromentIndex++;    
+                //EnviromentIndex %= enviromentDatas.Length;    //프로퍼티로는 작동이 안됨 + 인덱스범위를 넘은 뒤에 돌아와서 문제가있음
                 break;
             default:
                 buildMode = BuildMode.None;
@@ -290,7 +299,7 @@ public class BlockSpwaner : MonoBehaviour
                 tagOfHitObject = hit.collider.gameObject.tag;
 
                 //프리뷰 오브젝트 레이캐스트 닿는 위치로 이동
-                previewObj.transform.position = hit.point;
+                //previewObj.transform.position = hit.point;
 
                 //환경요소에 닿을 때 제거 가능
                 canDespawn = true;
@@ -308,7 +317,7 @@ public class BlockSpwaner : MonoBehaviour
                 //프리뷰 색상 함수
                 PreviewMatSelect(canSpawnObj);
 
-                EnviroAdjuset(hit.collider.gameObject.transform.position, previewObj.transform.position);
+                EnviroAdjuset(hit.collider.gameObject.transform.position, hit.point);
             }
             else
             {
@@ -695,44 +704,82 @@ public class BlockSpwaner : MonoBehaviour
     /// <summary>
     /// Enviro의 튀어나온 면을 floor안쪽으로 넣는 함수
     /// </summary>
-    /// <param name="checkObjPosition">현재 ray가 닿는 바닥의 포지션(원점)</param>
-    /// <param name="prefabPosition">현재 미리보기 프리팹의 위치</param>
+    /// <param name="checkObjPosition">현재 바닥의 포지션(원점)</param>
+    /// <param name="prefabPosition">현재 ray가 닿는 미리보기 프리팹의 위치</param>
     void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition )
     {
-        // checkObj의 x와 z 값
-        float xCheckObj = checkObjPosition.x;
-        float zCheckObj = checkObjPosition.z;
+        // 두 오브젝트 간의 x 길이와 z 길이 계산(ray의 위치 - 중심 위치)
+        float deltaX = prefabPosition.x - checkObjPosition.x;
+        float deltaZ = prefabPosition.z - checkObjPosition.z;
 
-        // prefabPosition의 x와 z 값
-        float xPrefab = prefabPosition.x;
-        float zPrefab = prefabPosition.z;
+        //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
+        float radius = enviromentDatas[enviromentIndex].radius;
 
-        // x 값과 z 값의 비교
-        if (xCheckObj > xPrefab)
+        float newX = 0, newZ =0;
+
+        Vector3 newPosition = Vector3.zero;
+
+        if(deltaX > 0)
         {
-            Debug.Log("checkObj의 x 값이 prefabPosition의 x 값보다 큽니다.");
+            float adjX = radius + deltaX;
+            float checkX = lengthMulti - adjX;
+            if(checkX < 0)      //밖으로 티어나옴  
+            {
+                newX = hit.point.x + checkX; //마이너스 값이라 더하면 빼짐
+            }
+            else
+            {
+                //벗어나지 않음
+                newX = hit.point.x;
+            }
         }
-        else if (xCheckObj < xPrefab)
+        else if(deltaX < 0)
         {
-            Debug.Log("prefabPosition의 x 값이 checkObj의 x 값보다 큽니다.");
-        }
-        else
-        {
-            Debug.Log("checkObj와 prefabPosition의 x 값은 같습니다.");
+            float adjX = radius - deltaX;
+            float checkX = lengthMulti - adjX;
+            if (checkX < 0)      //밖으로 티어나옴  
+            {
+                newX = hit.point.x - checkX; //마이너스 값이라 빼면 더해짐
+            }
+            else
+            {
+                //벗어나지 않음
+                newX = hit.point.x;
+            }
         }
 
-        if (zCheckObj > zPrefab)
+        if(deltaZ > 0)
         {
-            Debug.Log("checkObj의 z 값이 prefabPosition의 z 값보다 큽니다.");
+            float adjZ = radius + deltaZ;
+            float checkZ = lengthMulti - adjZ;
+            if (checkZ < 0)      //밖으로 티어나옴  
+            {
+                newZ = hit.point.z + checkZ; //마이너스 값이라 더하면 빼짐
+            }
+            else
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
         }
-        else if (zCheckObj < zPrefab)
+        else if(deltaZ < 0)
         {
-            Debug.Log("prefabPosition의 z 값이 checkObj의 z 값보다 큽니다.");
+            float adjZ = radius - deltaZ;
+            float checkZ = lengthMulti - adjZ;
+            if (checkZ < 0)      //밖으로 티어나옴  
+            {
+                newZ = hit.point.z - checkZ; //마이너스 값이라 더하면 빼짐
+            }
+            else
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
         }
-        else
-        {
-            Debug.Log("checkObj와 prefabPosition의 z 값은 같습니다.");
-        }
+
+        //위 길이 만큼 안쪽으로 중심을 이동 시킨다.
+        previewObj.transform.position = new Vector3 (newX, hit.point.y, newZ);
+
     }
 
     /*
