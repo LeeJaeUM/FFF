@@ -2645,6 +2645,7 @@ Transform:
   - {fileID: 1119831612}
   - {fileID: 496231256}
   - {fileID: 271168933}
+  - {fileID: 440827160}
   m_Father: {fileID: 339969264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &337082382
@@ -3728,7 +3729,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 666068484}
+    m_TransformParent: {fileID: 333752397}
     m_Modifications:
     - target: {fileID: 6730130307959391096, guid: 7686c2a7e887a6f45b995031b8140c9d, type: 3}
       propertyPath: m_Name
@@ -3748,15 +3749,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6730130307959562072, guid: 7686c2a7e887a6f45b995031b8140c9d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.924827
+      value: 0.61
       objectReference: {fileID: 0}
     - target: {fileID: 6730130307959562072, guid: 7686c2a7e887a6f45b995031b8140c9d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.116
+      value: 0.713
       objectReference: {fileID: 0}
     - target: {fileID: 6730130307959562072, guid: 7686c2a7e887a6f45b995031b8140c9d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -17.845886
+      value: -19.802
       objectReference: {fileID: 0}
     - target: {fileID: 6730130307959562072, guid: 7686c2a7e887a6f45b995031b8140c9d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5870,7 +5871,6 @@ Transform:
   - {fileID: 844667611}
   - {fileID: 1681276673}
   - {fileID: 1287754929}
-  - {fileID: 440827160}
   - {fileID: 118807411}
   m_Father: {fileID: 339969264}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12767,6 +12767,10 @@ PrefabInstance:
     - target: {fileID: 1163033574844990, guid: 81fc7effd0386764781ee9fcbbd39bf0, type: 3}
       propertyPath: m_Name
       value: PictureFrame
+      objectReference: {fileID: 0}
+    - target: {fileID: 1163033574844990, guid: 81fc7effd0386764781ee9fcbbd39bf0, type: 3}
+      propertyPath: m_TagString
+      value: PICTUREFRAME
       objectReference: {fileID: 0}
     - target: {fileID: 4240822575173696, guid: 81fc7effd0386764781ee9fcbbd39bf0, type: 3}
       propertyPath: m_LocalPosition.x
