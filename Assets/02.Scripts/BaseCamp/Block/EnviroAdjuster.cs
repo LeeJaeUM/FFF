@@ -33,7 +33,7 @@ public class EnviroAdjuster : MonoBehaviour
     public bool isConRight = false;
 
 
-    private void Start()
+    private void Awake()
     {
         Transform parent = transform.parent;
         connectings = parent.GetComponentsInChildren<Connecting>();
