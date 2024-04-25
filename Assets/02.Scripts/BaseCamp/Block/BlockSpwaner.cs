@@ -281,8 +281,9 @@ public class BlockSpwaner : MonoBehaviour
         wall_preview_V = transform.GetChild(2).gameObject;
         enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
     }
-
-    // Update 문------------------------------------------------------------------------------------------------------------------------------------------------------------
+    ///                          --||--------------------------------------\\------------------------------------------||----------------
+    ///   --------//-----------------------------------------------||------------------- Update 문-------------------\\------------------------------------------||----------------------------------------
+    ///                          --||--------------------------------------\\------------------------------------------||----------------
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
@@ -304,7 +305,14 @@ public class BlockSpwaner : MonoBehaviour
                 //previewObj.transform.position = hit.point;
 
                 //환경요소에 닿을 때 제거 가능
-                canDespawn = true;
+                if (hit.collider.gameObject.transform.parent.CompareTag("Untagged"))
+                {
+                    canDespawn = false;
+                }
+                else
+                {
+                    canDespawn = true;
+                }
 
                 //환경요소에 닿을 때 생성 불가 , 태그 : Respawn
                 if (tagOfHitObject == "Respawn")
