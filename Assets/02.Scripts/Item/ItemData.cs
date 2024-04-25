@@ -20,9 +20,9 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     }
 
     /// <summary>
-    /// 아이템의 고유번호
+    /// 아이템의 고유코드
     /// </summary>
-    public int itemID;
+    public ItemCode itemCode;
 
     /// <summary>
     /// 아이템의 아이콘
@@ -62,6 +62,19 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     [Range(1, 5)]
     public int SizeY;
 
+    public Vector2Int Size
+    {
+        get => new Vector2Int(SizeX, SizeY);
+        set
+        {
+            if (Size != value)
+            {
+                Size = value;
+                Debug.Log(Size);
+            }
+        }
+    }
+
     /// <summary>
     /// 아이템의 최대 수량
     /// </summary>
@@ -72,14 +85,10 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     /// </summary>
     public float itemWeight;
 
-    /// <summary>
-    /// 무기의 유형(쓰일지 모르겠음)
-    /// </summary>
-    public string weaponType;
 
     /* ScriptableObject를 상속받는다면
-     * 아이템들이 가지는 기본적인 데이터들을 관리함.
-     * 에셋으로서 만들어 둘 수 있음.
-     * 다른 스크립트와 달리 오브젝트에 컴포넌트로서 붙일 수 없게됨.(MonoBehavior를 상속받지 못했으므로)
-     * 이벤트는 OnEnable, OnDisable, OnDestroy만 받을 수 있음. */
+    * 아이템들이 가지는 기본적인 데이터들을 관리함.
+    * 에셋으로서 만들어 둘 수 있음.
+    * 다른 스크립트와 달리 오브젝트에 컴포넌트로서 붙일 수 없게됨.(MonoBehavior를 상속받지 못했으므로)
+    * 이벤트는 OnEnable, OnDisable, OnDestroy만 받을 수 있음.*/
 }

@@ -5,6 +5,12 @@ using UnityEngine;
 public class PhotoFrame : MonoBehaviour, IInteractable
 {
     public GameObject secondKey;
+    GameObject inventory;
+
+    private void Awake()
+    {
+        
+    }
 
     public void Interact()
     {
