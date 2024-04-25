@@ -195,7 +195,7 @@ public class Connecting : MonoBehaviour
                     {
                         case ObjType.Wall_Ho: wall_HoCount--; break;
                         case ObjType.Wall_Ve: wall_VeCount--; break;
-                        case ObjType.Floor: FloorCount--; break;
+                        case ObjType.Floor: FloorCount--; break;            // Adjuster에 델리게이트를 실행함-------------------------------
                     }
                     //중복되어 무한 루프 방지
                     if (rootCall)
@@ -231,7 +231,7 @@ public class Connecting : MonoBehaviour
         else
             isConnectedToWall_Ve = false;
 
-        if (floorCount < 1)
+        if (floorCount < 1)            // Adjuster에 델리게이트를 실행함-------------------------------
         {
             isConnectedToFloor = true;
             FloorCount = 0;

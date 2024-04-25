@@ -272,8 +272,8 @@ public class BlockSpwaner : MonoBehaviour
             inputAction.Enable();
         }
     }
-
     #endregion
+
     private void Start()
     {
         fa_preview = transform.GetChild(0).gameObject;
@@ -294,6 +294,7 @@ public class BlockSpwaner : MonoBehaviour
         // 환경요소 생성 모드일때
         if (buildMode == BuildMode.Enviroment)
         {
+            //EnvrioAble 레이어인 물체만 판단한다.
             if (Physics.Raycast(ray, out hit, interactDistance, LayerMask.GetMask("EnvrioAble")))
             {
                 // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
@@ -320,9 +321,8 @@ public class BlockSpwaner : MonoBehaviour
 
                 adjuster = hit.collider.GetComponent<EnviroAdjuster>();
                 if(adjuster != null) 
-                    EnviroAdjuset(adjuster.CenterVec, hit.point, adjuster.isConnect);
-                else
-                    EnviroAdjuset(hit.collider.gameObject.transform.position, hit.point);
+                    EnviroAdjuset(adjuster.CenterVec, hit.point);
+                
             }
             else
             {
@@ -333,7 +333,6 @@ public class BlockSpwaner : MonoBehaviour
         // 환경요소 생성 모드가 아닐 때
         else
         {
-
             if (Physics.Raycast(ray, out hit, interactDistance))
             {
                 // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
@@ -711,89 +710,95 @@ public class BlockSpwaner : MonoBehaviour
     /// </summary>
     /// <param name="checkObjPosition">현재 바닥의 포지션(원점)</param>
     /// <param name="prefabPosition">현재 ray가 닿는 미리보기 프리팹의 위치</param>
-    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition, bool isLong = false)
+    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition)
     {
-        if (isLong)
+        float lengthMultiX = lengthMulti;
+        float lengthMultiZ = lengthMulti;
+
+
+        // 두 오브젝트 간의 x 길이와 z 길이 계산(ray의 위치 - 중심 위치)
+        float deltaX = prefabPosition.x - checkObjPosition.x;
+        float deltaZ = prefabPosition.z - checkObjPosition.z;
+
+        //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
+        float radiusX = enviromentDatas[enviromentIndex].radiusX;
+        float radiusZ = enviromentDatas[enviromentIndex].radiusZ;
+
+        float newX = 0, newZ = 0;
+
+        //right, left
+        if (deltaX > 0)
         {
-
+            float adjX = radiusX + deltaX;
+            float checkX = lengthMultiX - adjX;
+            if (checkX > 0 || adjuster.isConRight)       
+            {
+                //벗어나지 않음
+                newX = hit.point.x;
+            }
+            else
+            {
+                //밖으로 티어나옴 
+                newX = hit.point.x + checkX; //마이너스 값이라 더하면 빼짐
+   
+            }
         }
-        else
+        else if (deltaX < 0)
         {
-            // 두 오브젝트 간의 x 길이와 z 길이 계산(ray의 위치 - 중심 위치)
-            float deltaX = prefabPosition.x - checkObjPosition.x;
-            float deltaZ = prefabPosition.z - checkObjPosition.z;
-
-            //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
-            float radiusX = enviromentDatas[enviromentIndex].radiusX;
-            float radiusZ = enviromentDatas[enviromentIndex].radiusZ;
-
-            float newX = 0, newZ = 0;
-
-            Vector3 newPosition = Vector3.zero;
-
-            if (deltaX > 0)
+            float adjX = radiusX - deltaX;
+            float checkX = lengthMultiX - adjX;
+            if (checkX > 0 || adjuster.isConLeft)
             {
-                float adjX = radiusX + deltaX;
-                float checkX = lengthMulti - adjX;
-                if (checkX < 0)      //밖으로 티어나옴  
-                {
-                    newX = hit.point.x + checkX; //마이너스 값이라 더하면 빼짐
-                }
-                else
-                {
-                    //벗어나지 않음
-                    newX = hit.point.x;
-                }
+                //벗어나지 않음
+                newX = hit.point.x;
             }
-            else if (deltaX < 0)
+            else
             {
-                float adjX = radiusX - deltaX;
-                float checkX = lengthMulti - adjX;
-                if (checkX < 0)      //밖으로 티어나옴  
-                {
-                    newX = hit.point.x - checkX; //마이너스 값이라 빼면 더해짐
-                }
-                else
-                {
-                    //벗어나지 않음
-                    newX = hit.point.x;
-                }
-            }
+                //밖으로 티어나옴 
+                newX = hit.point.x - checkX; //마이너스 값이라 빼면 더해짐
 
-            if (deltaZ > 0)
-            {
-                float adjZ = radiusZ + deltaZ;
-                float checkZ = lengthMulti - adjZ;
-                if (checkZ < 0)      //밖으로 티어나옴  
-                {
-                    newZ = hit.point.z + checkZ; //마이너스 값이라 더하면 빼짐
-                }
-                else
-                {
-                    //벗어나지 않음
-                    newZ = hit.point.z;
-                }
             }
-            else if (deltaZ < 0)
-            {
-                float adjZ = radiusZ - deltaZ;
-                float checkZ = lengthMulti - adjZ;
-                if (checkZ < 0)      //밖으로 티어나옴  
-                {
-                    newZ = hit.point.z - checkZ; //마이너스 값이라 더하면 빼짐
-                }
-                else
-                {
-                    //벗어나지 않음
-                    newZ = hit.point.z;
-                }
-            }
-
-            //위 길이 만큼 안쪽으로 중심을 이동 시킨다.
-            previewObj.transform.position = new Vector3(newX, hit.point.y, newZ);
         }
+
+        //forward, back
+        if (deltaZ > 0)
+        {
+            float adjZ = radiusZ + deltaZ;
+            float checkZ = lengthMultiZ - adjZ;
+            if (checkZ > 0 || adjuster.isConForward)
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
+            else
+            {
+                //밖으로 티어나옴  
+                newZ = hit.point.z + checkZ; //마이너스 값이라 더하면 빼짐
+            }
+        }
+        else if (deltaZ < 0)
+        {
+            float adjZ = radiusZ - deltaZ;
+            float checkZ = lengthMultiZ - adjZ;
+            if (checkZ > 0 || adjuster.isConBack)
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
+            else
+            {
+                //밖으로 티어나옴  
+                newZ = hit.point.z - checkZ; //마이너스 값이라 빼면 더해짐
+            }
+        }
+
+        //위 길이 만큼 안쪽으로 중심을 이동 시킨다.
+        previewObj.transform.position = new Vector3(newX, hit.point.y, newZ);
+
+        Debug.Log($"생성될 X : {newX}, 생성될 z : {newZ}");
+    }
       
 
-    }
+    
 
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EnviroAdjuster : MonoBehaviour
 {
-    const float halfWidth = 1.5f;
 
     /// <summary>
     /// 스포너에 리턴할 위치값
@@ -20,26 +19,18 @@ public class EnviroAdjuster : MonoBehaviour
         }
     }
 
-
-    //현재 연결된 floor가 있는 지 판단한다
-    public bool isConnect = false;
-
     //이 floor의 connecting을 수집 순서대로 left, right, forward, back이 들어옴
     [SerializeField] Connecting[] connectings = null;
 
-    /// <summary>
-    /// connecting에서 사용중인 enum타입의 값을 int로 받아서 어느 위치인지 확인
-    /// </summary>
-    public enum UsedDir
-    {
-        None = 0,
-        Forward,
-        Back,
-        Left,
-        Right,
-        Top,
-        Bottom
-    }
+    public float lengthMultiX = 1.5f;
+    public float lengthMultiZ = 1.5f;
+
+
+    //현재 연결된 floor가 있는 지 판단한다
+    public bool isConForward = false;
+    public bool isConBack = false;
+    public bool isConLeft = false;
+    public bool isConRight = false;
 
 
     private void Start()
@@ -63,30 +54,56 @@ public class EnviroAdjuster : MonoBehaviour
     /// <param name="count">0이면 연결됨 1이면 연결되어있지 않음이다</param>
     private void OnChangeCount(int usedDir,int count)
     {
+        //연결될때 날라온 액션
         if(count == 0)
         {
-
+            // connecting에서 사용중인 enum타입의 값을 int로 받아서 어느 위치인지 확인
+            // 1 = forward, 2 = back, 3 = left, 4 = right
+            switch (usedDir)
+            {
+                case 1: isConForward = true;
+                    break;
+                case 2: isConBack = true;
+                    break;
+                case 3: isConLeft = true;
+                    break;
+                case 4: isConRight = true;
+                    break;
+            }
         }
+        // 연결 해제 될 때 날아온 액션
         else
         {
-
+            // 1 = forward, 2 = back, 3 = left, 4 = right
+            switch (usedDir)
+            {
+                case 1:
+                    isConForward = false;
+                    break;
+                case 2:
+                    isConBack = false;
+                    break;
+                case 3:
+                    isConLeft = false;
+                    break;
+                case 4:
+                    isConRight = false;
+                    break;
+            }
         }
 
-        //1 = forward, 2 = back, 3 = left, 4 = right
-        switch (usedDir)
-        {
-            case 1: 
-                centerVec = Vector3.zero;
-                break;
-            case 2:
-                centerVec = Vector3.zero;
-                break;
-            case 3:
-                centerVec = Vector3.zero;
-                break;
-            case 4:
-                centerVec = Vector3.zero;
-                break;
-        }
     }
+
+
+    //public enum UsedDir
+    //{
+    //    None = 0,
+    //    Forward,
+    //    Back,
+    //    Left,
+    //    Right,
+    //    Top,
+    //    Bottom
+    //}
+
 }
