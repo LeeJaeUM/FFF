@@ -225,6 +225,9 @@ public class InventoryUI : MonoBehaviour
                         ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
                         RefrechColor(true);
                         break;
+                    case 2:
+                        Drop();
+                        break;
                     case 3:
                         // 같은 아이템이면 저장
                         // 같은 아이템이면 저장
@@ -800,6 +803,11 @@ public class InventoryUI : MonoBehaviour
         }
 
         return result;
+    }
+
+    private void Drop()
+    {
+
     }
     #endregion
 }

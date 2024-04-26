@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b480e8cf718001746801eb21ad3840ad, type: 3}
   m_Name: Quiver
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemCode: 11
   itemIcon: {fileID: 21300000, guid: ee97b0ded02e7a64a9ef2a59a590a3c1, type: 3}
   itemName: "\uD654\uC0B4\uC9D1"
+  itemType: 0
+  itemPrefab: {fileID: 0}
   itemDescription: " \uD654\uC0B4\uC9D1"
   SizeX: 2
   SizeY: 3

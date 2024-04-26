@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b480e8cf718001746801eb21ad3840ad, type: 3}
   m_Name: Spear
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemCode: 13
   itemIcon: {fileID: 21300000, guid: 9931f524e8374ce40a8e8bf306598e4c, type: 3}
   itemName: "\uCC3D"
+  itemType: 0
+  itemPrefab: {fileID: 0}
   itemDescription: "\uCC3D"
   SizeX: 1
   SizeY: 4
   maxItemCount: 1
-  itemPrice: 0
   itemWeight: 8
