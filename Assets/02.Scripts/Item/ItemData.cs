@@ -24,6 +24,11 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     /// </summary>
     public ItemCode itemCode;
 
+    ///// <summary>
+    ///// 아이템의 고유번호
+    ///// </summary>
+    //public int itemID;
+
     /// <summary>
     /// 아이템의 아이콘
     /// </summary>
@@ -86,9 +91,9 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     public float itemWeight;
 
 
-    /* ScriptableObject를 상속받는다면
-    * 아이템들이 가지는 기본적인 데이터들을 관리함.
-    * 에셋으로서 만들어 둘 수 있음.
-    * 다른 스크립트와 달리 오브젝트에 컴포넌트로서 붙일 수 없게됨.(MonoBehavior를 상속받지 못했으므로)
-    * 이벤트는 OnEnable, OnDisable, OnDestroy만 받을 수 있음.*/
+     /* ScriptableObject를 상속받는다면
+     * 아이템들이 가지는 기본적인 데이터들을 관리함.
+     * 에셋으로서 만들어 둘 수 있음.
+     * 다른 스크립트와 달리 오브젝트에 컴포넌트로서 붙일 수 없게됨.(MonoBehavior를 상속받지 못했으므로)
+     * 이벤트는 OnEnable, OnDisable, OnDestroy만 받을 수 있음.*/
 }
