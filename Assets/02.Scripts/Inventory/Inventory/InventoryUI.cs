@@ -72,7 +72,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// gus
+    /// 마우스 포인터 위에 있는 컨테이너
     /// </summary>
     public ItemContain enterContain = null;
 
@@ -99,7 +99,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public float edgePadding = 8;
 
-    public ItemData[] itemDatas = null;
+    public ItemData[] itemDatas;
 
     public Action<float> onWeightChange;
 
@@ -127,11 +127,25 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public ItemTooltip tooltip;
 
+    /// <summary>
+    /// 현재 마우스 위에 있는 슬롯의 위치
+    /// </summary>
     public SlotSector slotSector;
 
+    /// <summary>
+    /// 디자인용 UI
+    /// </summary>
     private InvenUI UI;
 
+    /// <summary>
+    /// 제작용 매니저
+    /// </summary>
     public ProduceManager produceManager;
+
+    /// <summary>
+    /// 드랍시 위치
+    /// </summary>
+    public Transform target;
 
     /// <summary>
     /// 입력
@@ -201,54 +215,58 @@ public class InventoryUI : MonoBehaviour
         {
             bool isShiftPress = (Keyboard.current.shiftKey.ReadValue() > 0);
 
-            if (highlightedSlot != null && containGrab != null && !isOverEdge)
+            if(containGrab != null)
             {
-                switch (checkState)
+                if (highlightedSlot != null && !isOverEdge)
                 {
-                    case 0:
-                        // 빈 슬롯에 저장
-                        if (isShiftPress && containGrab.Count > 1)
-                        {
-                            StoreItem(ContainGrab.ItemSplit(), totalOffset);
-                            ColorChangeLoop(SlotColorHighlights.Blue, enterContain.ItemSize, totalOffset);
-                        }
-                        else
-                        {
-                            StoreItem(containGrab, totalOffset);
-                            ColorChangeLoop(SlotColorHighlights.Blue, highlightedSlot.storedItemSize, totalOffset);
-                        }
-                        break;
-                    case 1:
-                        // 다른 아이템 스왑
-                        ContainGrab = SwapItem(ContainGrab).GrabContain();
-                        slotSector.SetPosOffset(otherItemSize);
-                        ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                        RefrechColor(true);
-                        break;
-                    case 2:
-                        Drop();
-                        break;
-                    case 3:
-                        // 같은 아이템이면 저장
-                        // 같은 아이템이면 저장
-                        if (isShiftPress && ContainGrab.Count > 1)
-                        {
-                            Debug.Log("같은 아이템 하나씩 저장");
-                            ContainGrab.ItemDestack();
-                            AddContain(ContainGrab, 1);
+                    switch (checkState)
+                    {
+                        case 0:
+                            // 빈 슬롯에 저장
+                            if (isShiftPress && containGrab.Count > 1)
+                            {
+                                StoreItem(ContainGrab.ItemSplit(), totalOffset);
+                                ColorChangeLoop(SlotColorHighlights.Blue, enterContain.ItemSize, totalOffset);
+                            }
+                            else
+                            {
+                                StoreItem(containGrab, totalOffset);
+                                ColorChangeLoop(SlotColorHighlights.Blue, highlightedSlot.storedItemSize, totalOffset);
+                            }
+                            break;
+                        case 1:
+                            // 다른 아이템 스왑
+                            ContainGrab = SwapItem(ContainGrab).GrabContain();
+                            slotSector.SetPosOffset(otherItemSize);
                             ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                        }
-                        else
-                        {
-                            Debug.Log("같은 아이템이므로 저장");
-                            AddContain(containGrab, ContainGrab.Count);
-                            ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                            ContainGrab.ContainRemvoe();
-                        }
-                        break;
+                            RefrechColor(true);
+                            break;
+                        case 3:
+                            // 같은 아이템이면 저장
+                            // 같은 아이템이면 저장
+                            if (isShiftPress && ContainGrab.Count > 1)
+                            {
+                                Debug.Log("같은 아이템 하나씩 저장");
+                                ContainGrab.ItemDestack();
+                                AddContain(ContainGrab, 1);
+                                ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                            }
+                            else
+                            {
+                                Debug.Log("같은 아이템이므로 저장");
+                                AddContain(containGrab, ContainGrab.Count);
+                                ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
+                                ContainGrab.ContainRemvoe();
+                            }
+                            break;
+                    }
+
+                    tooltip.IsPause = false;
                 }
-                
-                tooltip.IsPause = false;
+                else if (highlightedSlot == null)
+                {
+                    Drop(target);
+                }
             }
             else if (highlightedSlot == null && ContainGrab == null
                 && enterContain != null)
@@ -805,9 +823,13 @@ public class InventoryUI : MonoBehaviour
         return result;
     }
 
-    private void Drop()
+    /// <summary>
+    /// 아이템을 드랍하는 함수
+    /// </summary>
+    private void Drop(Transform position)
     {
-
+        Factory.Instance.GetDropItem(containGrab, position);
+        containGrab.ContainRemvoe();
     }
     #endregion
 }

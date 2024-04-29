@@ -34,16 +34,21 @@ public class DropItem : RecycleObject
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            OnPickUp();
-        }
+        //if (collision.gameObject.CompareTag("Player"))
+        //{
+        //    OnPickUp();
+        //}
     }
 
     public void SetData(ItemCode _code, int _count)
     {
+        SetData(inven.FindCodeData(_code), _count);
+    }
+
+    public void SetData(ItemData _data, int _count)
+    {
         ResetData();
-        Data = inven.FindCodeData(_code);
+        Data = _data;
         itemCount = _count;
     }
 
