@@ -10,6 +10,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     RaycastHit hit;
 
     [SerializeField]
+    private Transform raycastOrigin;
+    [SerializeField]
+    private Color rayColor = Color.red;
+
+    [SerializeField]
     private GameObject interactionUI; // 상호작용이 가능한지 나타내는 UI 오브젝트
     [SerializeField]
     private TextMeshProUGUI textField; // 게임의 진행을 위한 Text
@@ -18,12 +23,18 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI choiceText2Field; // 선택지 2
     [SerializeField]
+    private TextMeshProUGUI choiceText3Field; // 선택지 3
+    [SerializeField]
+    private TextMeshProUGUI getItemTextField; // 획득 아이템 텍스트
+    [SerializeField]
     private GameObject player; // 플레이어 캐릭터
     [SerializeField]
     private Animator restroomDoorAnimator;
 
     [SerializeField]
     private GameObject trap; // Trap 오브젝트
+    [SerializeField]
+    private GameObject trapUI; // TrapUI 오브젝트
     [SerializeField]
     private GameObject pictureFrame; // PictureFrame 오브젝트
     
@@ -39,7 +50,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private GameObject remoteControl; // 리모컨 오브젝트
     [SerializeField]
-    private GameObject restroomDoorKey; // RestaurantRoomDoorKey 오브젝트
+    private GameObject restaurantRoomDoorKey; // RestaurantRoomDoorKey 오브젝트
     [SerializeField]
     private GameObject restroomCaution; // RestaurantCaution의 자식으로 있는 Text(TMP)
     private int currentPageIndex = 0; // 페이지 수
@@ -58,6 +69,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool isInteractionTouchPad = false; // TouchPad와 상호작용을 했을 경우
     private bool haveAxe = false; // 인벤토리에 Axe오브젝트가 있을 경우
     private bool haveRestroomDoorKey = false; // 인벤토리에 RestroomDoorKey가 있을 경우
+    private bool haveDoctorHand = false; // 인벤토리에 DoctorHand가 있을 경우
+
+    [SerializeField]
+    private AudioSource padBeep; // 패드가 틀렸을 때의 경고음
 
     private void Start()
     {
@@ -68,10 +83,19 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         Renderer renderer= tvScreen.GetComponent<Renderer>();
 
-        if (Physics.Raycast(transform.position, transform.forward ,out hit, maxDistance))
+        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, maxDistance))
         {
+            Debug.Log(hit.collider.gameObject.name);
+            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * hit.distance, rayColor);
+            
+            // 레이가 Player에 충돌할 경우
+            if(hit.collider.CompareTag("Player"))
+            {
+                return;
+            }
+
             // PictureFrame 상호작용
-            if(hit.collider.CompareTag("PICTUREFRAME"))
+            if (hit.collider.CompareTag("PICTUREFRAME"))
             {
                 // 플레이어가 다른 오브젝트 또는 해당 오브젝트와 상호작용 중이지 않을 때 PictureFrame과 상호작용 가능 여부
                 if(!isInteraction)
@@ -467,13 +491,11 @@ public class PlayerGimicStage3 : MonoBehaviour
                         textField.text = " ";
                         choiceText1Field.text = " ";
                         choiceText2Field.text = " ";
-                        player.SetActive(true); // 상호작용 종료
-                        isInteraction = false;
-                        textDisplayed = false;
-                        interating = false;
-                        choicing = false;
+                        getItemTextField.text = "리모컨 획득";
                         Destroy(remoteControl); // 리모컨 비활성화
                         haveRemoteControl = true; // RetroTelevision 조건 활성화
+
+                        StartCoroutine(GetItem());
                     }
 
                     // 2번을 누를 때
@@ -549,6 +571,44 @@ public class PlayerGimicStage3 : MonoBehaviour
                             interating = false;
                         }
                     }
+
+                    // 특수상호작용 1-2
+                    if(haveAxe)
+                    {
+                        // 특수상호작용 1-2 시작
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                        {
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "이 시체의 손을 가지고 가보자.";
+                            textDisplayed = true;
+                        }
+
+                        // 특수상호작용 1-2 선택지
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                        {
+                            textField.text = "시체의 손을 자를까?";
+                            choiceText1Field.text = "1. 자른다";
+                            choiceText2Field.text = "2. 내버려둔다";
+                            choicing = true;
+                        }
+
+                        if(choicing)
+                        {
+                            // 1번을 누를 때
+                            if (Input.GetKeyDown(KeyCode.Alpha1))
+                            {
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                getItemTextField.text = "절단된 의사의 손 획득";
+                                haveDoctorHand = true;
+
+                                StartCoroutine(GetItem());
+                            }
+                        }
+                    }
                 }
             }
 
@@ -577,13 +637,129 @@ public class PlayerGimicStage3 : MonoBehaviour
                     textField.text = " "; // 상호작용 종료
                     choiceText1Field.text = " ";
                     choiceText2Field.text = " ";
-                    player.SetActive(true); // 상호작용 종료
-                    isInteraction = false;
-                    textDisplayed = false;
-                    interating = false;
-                    choicing = false;
-                    Destroy(restroomDoorKey);
+                    getItemTextField.text = "식당 열쇠 획득";
+                    Destroy(restaurantRoomDoorKey);
                     restroomCaution.SetActive(true);
+
+                    StartCoroutine(GetItem());
+                }
+            }
+
+            // Bag 상호작용
+            if(hit.collider.CompareTag("BAG"))
+            {
+                if(!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    textField.text = "언제든 떠날 준비였던거 같다.";
+                    interactionUI.SetActive(false);
+                    haveRestroomDoorKey = true;
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                {
+                    textField.text = "내용물을 확인해볼까?";
+                    choiceText1Field.text = "1. 앞주머니";
+                    choiceText2Field.text = "2. 중간";
+                    choiceText3Field.text = "3. 메인주머니";
+                    choicing = true;
+                }
+
+                if (choicing)
+                {
+                    // 인벤토리에 Axe오브젝트가 없을 경우
+                    if (!haveAxe)
+                    {
+                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            textField.text = " ";
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            choiceText3Field.text = " ";
+                            getItemTextField.text = "도끼 획득";
+                            haveAxe = true;
+
+                            StartCoroutine(GetItem()); // 상호작용 종료
+                        }
+                    }
+
+                    // 인벤토리에 Axe오브젝트가 있을 경우
+                    else if(haveAxe)
+                    {
+                        if(Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            textField.text = " ";
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            choiceText3Field.text = " ";
+                            player.SetActive(true); // 상호작용 강제 종료
+                            isInteraction = false;
+                            textDisplayed = false;
+                            interating = false;
+                            choicing = false;
+                        }
+                    }
+
+                    if(Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = "아무것도 없다";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        choiceText3Field.text = " ";
+
+                        StartCoroutine(GetItem()); // 상호작용 종료
+                    }
+
+                    if(Input.GetKeyDown(KeyCode.Alpha3))
+                    {
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        choiceText3Field.text = " ";
+                        trapUI.SetActive(true); // 게임 오버
+                    }
+                }
+            }
+
+            // TouchPad 상호작용
+            if(hit.collider.CompareTag("TOUCHPAD"))
+            {
+                if(!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                if(!haveDoctorHand)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        textField.text = "손을 갖다 대는 걸로 작동하는 패드인거 같다..";
+                        interactionUI.SetActive(false);
+                        haveRestroomDoorKey = true;
+                        textDisplayed = true;
+                        isInteractionTouchPad = true;
+                    }
+
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                    {
+                        padBeep.Play();
+                        textField.text = "적당한 것을 찾아보자";
+
+                        StartCoroutine(GetItem());
+                    }
                 }
             }
         }
@@ -600,6 +776,11 @@ public class PlayerGimicStage3 : MonoBehaviour
         {
             StopControl();
         }
+
+        else
+        {
+            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * maxDistance, rayColor);
+        }
     }
 
     // 플레이어는 캐릭터 조종 불가 및 카메라 회전 불가
@@ -609,5 +790,18 @@ public class PlayerGimicStage3 : MonoBehaviour
         {
             player.SetActive(false);
         }
+    }
+
+    IEnumerator GetItem()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        textField.text = " ";
+        getItemTextField.text = " ";
+        player.SetActive(true); // 상호작용 강제 종료
+        isInteraction = false;
+        textDisplayed = false;
+        interating = false;
+        choicing = false;
     }
 }

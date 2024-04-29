@@ -25,6 +25,8 @@ TagManager:
   - REMOTECONTROL
   - DEADDOCTOR
   - RESTROOMDOORKEY
+  - BAG
+  - TOUCHPAD
   layers:
   - Default
   - TransparentFX
@@ -35,7 +37,7 @@ TagManager:
   - BuildObj
   - EnvrioAble
   - InteractionObj
-  - 
+  - player
   - 
   - 
   - 
