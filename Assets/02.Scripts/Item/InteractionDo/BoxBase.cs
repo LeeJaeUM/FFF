@@ -1,22 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEngine;
+using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
 public class BoxBase : MonoBehaviour, IInteractable
 {
-    public void Interact()
-    {
-        // interact했을때 
-        if (true)
-        {
-            //조건에 충족되면 아이템 추가 또는 여타 상호작용
-            //아래 enum 타입을 설정해둔 것들을 프리팹으로 뺴두기
-        }
-        else
-        {
-            //불 충분시 아무것도 안하기 / 안내문자 
-        }
-    }
 
     enum BoxType
     {
@@ -28,6 +17,12 @@ public class BoxBase : MonoBehaviour, IInteractable
     [SerializeField]BoxType boxType = BoxType.None;
 
     public int itemcode = 0;
+    InventoryUI inventoryUI;
+
+    private void Awake()
+    {
+        inventoryUI = FindAnyObjectByType<InventoryUI>();
+    }
 
     private void Start()
     {
@@ -48,5 +43,28 @@ public class BoxBase : MonoBehaviour, IInteractable
                 break;
             default:    break;
         }
+    }
+
+    public void Interact()
+    {
+        // interact했을때 인벤토리에 Axe가 있는지 확인해서
+        if (inventoryUI.FindCodeData(ItemCode.Axe))   // true면
+        {
+            //조건에 충족되면 아이템 추가 또는 여타 상호작용
+            BreakBox(itemcode.);
+            //enum 타입을 설정해둔 것들을 프리팹으로 뺴두기
+        }
+        else    // false면
+        {
+            // 불충분시 안내 텍스트
+            Debug.Log("부술 수 있는 도구가 필요하다.");
+        }
+    }
+
+    private void BreakBox(ItemCode (int)spawnItem)
+    {
+        spawnItem = itemcode;
+        Destroy(gameObject);
+        //Instantiate(itemcode, transform.position, Quaternion.identity);
     }
 }
