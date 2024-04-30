@@ -12,11 +12,11 @@ public enum ItemCode
     Entrails,       // 내장
 
     // 아이템
-    Dynamite,       // 다이너마이트
+    Dynamite,       // 다이너마이트   /6
     CanFood,        // 캔
     GasMask,        // 가스마스크
     Syrings,        // 주사기
-    Key,            // 열쇠
+    Key,            // 열쇠          /10
     FakeKey,        // 가짜열쇠
     MasterKey,      // 마스터키
     noteHint,       // 쪽지 힌트
@@ -24,7 +24,7 @@ public enum ItemCode
     Book,           // 책
 
     // 장비
-    Gun,            // 총
+    Gun,            // 총            /16
     Axe,            // 도끼
     Hammer,         // 망치
     Crowbar,        // 쇠지렛대

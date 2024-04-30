@@ -18,19 +18,35 @@ public class BoxBase : MonoBehaviour, IInteractable
         }
     }
 
-    public enum BoxType
+    enum BoxType
     {
         None = 0,
         Gun,
         Dynamite,
         Magazine
     }
-    
+    [SerializeField]BoxType boxType = BoxType.None;
 
     public int itemcode = 0;
 
     private void Start()
     {
        //start에서 위의 boxtype에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
+       switch(boxType)
+        {
+            case BoxType.None:
+                Debug.Log("아무것도 선택되지 않은 상자");
+                break;
+            case BoxType.Gun:
+                itemcode = (int)ItemCode.Gun;
+                break;
+            case BoxType.Dynamite:
+                itemcode = (int)ItemCode.Dynamite;
+                break;
+            case BoxType.Magazine:
+                itemcode = (int)ItemCode.Magazine;
+                break;
+            default:    break;
+        }
     }
 }
