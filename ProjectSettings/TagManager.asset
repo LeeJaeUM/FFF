@@ -27,6 +27,9 @@ TagManager:
   - RESTROOMDOORKEY
   - BAG
   - TOUCHPAD
+  - BOOKSHELF
+  - HIDDENROOMDOOR
+  - CLEARDOOR
   layers:
   - Default
   - TransparentFX

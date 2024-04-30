@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
+using UnityEngine.AI;
 
 public class PlayerGimicStage3 : MonoBehaviour
 {
@@ -29,7 +30,18 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private GameObject player; // 플레이어 캐릭터
     [SerializeField]
-    private Animator restroomDoorAnimator;
+    private LayerMask playerLayer;
+
+    [SerializeField]
+    private Animator restroomDoorAnimator; // 문이 열리는 애니메이션
+    [SerializeField]
+    private Animator storageDoorAnimator; // 문이 열리는 애니메이션
+    [SerializeField]
+    private Animator bookShelfAnimator; // 책장이 움직이는 애니메이션
+    [SerializeField]
+    private Animator hiddenRoomAnimator; // 비밀문이 열리는 애니메이션
+    [SerializeField]
+    private Animator clearDoorAnimator; // 클리어 문이 열리는 애니메이션
 
     [SerializeField]
     private GameObject trap; // Trap 오브젝트
@@ -61,7 +73,9 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool textDisplayed = false; // 상호작용 중의 텍스트 중복 방지 여부
     private bool interating = false; // 플레이어가 현재 상호작용 중인지 아닌지 여부
     private bool choicing = false; // 선택지가 떴을 때 여부
-    private bool restroomOpen = false; // RestRoomDoor의 열림 여부
+    private bool restroomOpen = true; // RestRoomDoor의 열림 여부
+    private bool isDiary3Open = false; // 다이어리의 3페이지의 활성 여부
+    private bool hiddenRoomDoor = true; // 비밀문의 열림 상태
 
     private bool isEvent = false; // 이벤트 발생 동안
 
@@ -70,9 +84,16 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool haveAxe = false; // 인벤토리에 Axe오브젝트가 있을 경우
     private bool haveRestroomDoorKey = false; // 인벤토리에 RestroomDoorKey가 있을 경우
     private bool haveDoctorHand = false; // 인벤토리에 DoctorHand가 있을 경우
+    private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
+
+    private bool unLockStorageDoor = false; // StorageDoor의 해금 상태
 
     [SerializeField]
     private AudioSource padBeep; // 패드가 틀렸을 때의 경고음
+    [SerializeField]
+    private AudioSource padUnlockSound; // 패드가 성공했을 때의 언락 사운드
+    [SerializeField]
+    private AudioSource bookShelfSound; // 책장 틈에서 나오는 바람 소리 
 
     private void Start()
     {
@@ -83,10 +104,9 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         Renderer renderer= tvScreen.GetComponent<Renderer>();
 
-        if (Physics.Raycast(raycastOrigin.position, raycastOrigin.forward, out hit, maxDistance))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
         {
             Debug.Log(hit.collider.gameObject.name);
-            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * hit.distance, rayColor);
             
             // 레이가 Player에 충돌할 경우
             if(hit.collider.CompareTag("Player"))
@@ -226,6 +246,7 @@ public class PlayerGimicStage3 : MonoBehaviour
 
                             currentPageIndex = 0;
 
+                            isDiary3Open = true;
                             isEvent = false;
                             isInteraction = false;
                             interating = false;
@@ -738,6 +759,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     interactionUI.SetActive(true);
                 }
 
+                //일반상호작용(인벤토리에 절단된 의사의 손이 없을 경우)
                 if(!haveDoctorHand)
                 {
                     // 상호작용 시작
@@ -759,6 +781,207 @@ public class PlayerGimicStage3 : MonoBehaviour
                         textField.text = "적당한 것을 찾아보자";
 
                         StartCoroutine(GetItem());
+                    }
+                }
+
+                //특수상호작용(인벤토리에 절단된 의사의 손이 있을경우)
+                if(haveDoctorHand)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        textField.text = "(절단된 의사의 손을 갖다 댄다..)";
+                        interactionUI.SetActive(false);
+                        haveRestroomDoorKey = true;
+                        textDisplayed = true;
+                        isInteractionTouchPad = true;
+                    }
+
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                    {
+                        padUnlockSound.Play();
+                        textField.text = " ";
+                        unLockStorageDoor = true; // 창고문이 열렸다는 효과음
+                        storageDoorAnimator.SetBool("IsUnlock", true); // 창고문이 열림
+
+                        player.SetActive(true); // 상호작용 강제 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
+                }
+            }
+
+            // BookShelf 상호작용
+            if(hit.collider.CompareTag("BOOKSHELF"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 일반상호작용
+                if(!isDiary3Open)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        textField.text = "커다란 책장이다..";
+                        interactionUI.SetActive(false);
+                        haveRestroomDoorKey = true;
+                        textDisplayed = true;
+                        isInteractionTouchPad = true;
+                    }
+
+                    // 일반상호작용 종료
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                    {
+                        textField.text = " ";
+                        player.SetActive(true);
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                    }
+                }
+
+                // 특수상호작용
+                if (isDiary3Open)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        interactionUI.SetActive(false);
+                        bookShelfSound.Play();
+                        textField.text = "뒤에 바람이 들어온다...";
+                        textDisplayed = true;
+                    }
+
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                    {
+                        textField.text = "뒤에 무언가가 있다...";
+                        choiceText1Field.text = "1. 끌어당긴다";
+                        choiceText2Field.text = "2. 내버려둔다";
+                        choicing = true;
+                    }
+
+                    if(choicing)
+                    {
+                        // 1번을 누를 때
+                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            textField.text = " ";
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            bookShelfAnimator.SetBool("IsTransform", true); // 책장이 옮겨짐
+                            isMoveBookShelf = true;
+
+                            StartCoroutine(GetItem()); // 상호작용 종료
+                        }
+
+                        // 2번을 누를 때
+                        else if (Input.GetKeyDown(KeyCode.Alpha2))
+                        {
+                            textField.text = " "; // 상호작용 종료
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            player.SetActive(true); // 상호작용 종료
+                            isInteraction = false;
+                            textDisplayed = false;
+                            interating = false;
+                            choicing = false;
+                        }
+                    }
+                }
+            }
+
+            // HiddenRoomDoor 상호작용
+            if(hit.collider.CompareTag("HIDDENROOMDOOR"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // BookShelf가 이동하지 않은 상태에서 HiddenRoomDoor와 상호작용이 되는 것을 방지
+                if(isMoveBookShelf)
+                {
+                    // 상호작용 시작, 문이 열리고 닫힘.
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        if (hiddenRoomDoor)
+                        {
+                            hiddenRoomAnimator.SetBool("IsOpen", true);
+                        }
+                        else
+                        {
+                            hiddenRoomAnimator.SetBool("IsOpen", false);
+                        }
+
+                        hiddenRoomDoor = !hiddenRoomDoor;
+                    }
+                }
+            }
+
+            // ClearDoor 상호작용
+            if(hit.collider.CompareTag("CLEARDOOR"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "이 문이 일기에 적혀있던 탈출구 인거 같다";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                {
+                    textField.text = "열까?";
+                    choiceText1Field.text = "1. 연다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                // 선택지가 출력되었을 때 가능한 버튼
+                if (choicing)
+                {
+                    // 1번을 누를 때(게임 오버)
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+
+                        clearDoorAnimator.SetBool("IsOpen", true);
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
                     }
                 }
             }
