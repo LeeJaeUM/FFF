@@ -51,7 +51,7 @@ public class BoxBase : MonoBehaviour, IInteractable
         if (inventoryUI.FindCodeData(ItemCode.Axe))   // true면
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
-            BreakBox(itemcode.);
+            BreakBox(itemcode);
             //enum 타입을 설정해둔 것들을 프리팹으로 뺴두기
         }
         else    // false면
@@ -61,9 +61,10 @@ public class BoxBase : MonoBehaviour, IInteractable
         }
     }
 
-    private void BreakBox(ItemCode (int)spawnItem)
+    private void BreakBox(int itemcode)
     {
-        spawnItem = itemcode;
+        ItemCode spawnItem;
+        spawnItem = (ItemCode)itemcode;
         Destroy(gameObject);
         //Instantiate(itemcode, transform.position, Quaternion.identity);
     }
