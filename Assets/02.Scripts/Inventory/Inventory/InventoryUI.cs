@@ -602,7 +602,7 @@ public class InventoryUI : MonoBehaviour
             foreach (var item in sameItemContainList)
             {
                 remain = item.ItemStack(remain);
-                if (remain > 0)
+                if (remain == 0)
                     break;
             }
         }
