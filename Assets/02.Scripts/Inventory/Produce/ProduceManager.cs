@@ -16,27 +16,28 @@ public class ProduceManager : MonoBehaviour
 
     private void Awake()
     {
-        inven = GameManager.Instance.inven;
-        
-        // 리스트에 따로 보관
-        foreach (ItemData data in inven.itemDatas)
-        {
-            if(data is ItemData_Produce)
-            {
-                produceList.Add((ItemData_Produce)data);
-            }
-        }
-
         Transform child = transform.GetChild(1);    // scrool view
         child = child.GetChild(0);                  // viewport
         lineTr = child.GetChild(0);                  // content
 
-        lines = new ProduceLine[produceList.Count];
         canvas = GetComponent<CanvasGroup>();    
     }
 
     public void Initialize()
     {
+        inven = GameManager.Instance.inven;
+
+        // 리스트에 따로 보관
+        foreach (ItemData data in inven.itemDatas)
+        {
+            if (data is ItemData_Produce)
+            {
+                produceList.Add((ItemData_Produce)data);
+            }
+        }
+
+        lines = new ProduceLine[produceList.Count];
+
         for (int i = 0; i < produceList.Count; i++)
         {
             lines[i] = Factory.Instance.GetProduceLine(lineTr);
