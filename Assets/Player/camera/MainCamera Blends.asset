@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MainCamera Blends
   m_EditorClassIdentifier: 
   m_CustomBlends:
-  - m_From: onepcamera
-    m_To: thirdpcamera
+  - m_From: thirdpcamera
+    m_To: onepcamera
     m_Blend:
-      m_Style: 5
+      m_Style: 4
       m_Time: 1
       m_CustomCurve:
         serializedVersion: 2
@@ -24,10 +24,10 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - m_From: thirdpcamera
-    m_To: onepcamera
+  - m_From: onepcamera
+    m_To: thirdpcamera
     m_Blend:
-      m_Style: 4
+      m_Style: 5
       m_Time: 1
       m_CustomCurve:
         serializedVersion: 2
