@@ -48,7 +48,7 @@ public class BoxBase : MonoBehaviour, IInteractable
     public void Interact()
     {
         // interact했을때 인벤토리에 Axe가 있는지 확인해서
-        if (inventoryUI.FindCodeData(ItemCode.Axe))   // true면
+        if (inventoryUI.UseItemCheck(ItemCode.Axe))   // true면
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
             BreakBox(itemcode);
@@ -63,9 +63,10 @@ public class BoxBase : MonoBehaviour, IInteractable
 
     private void BreakBox(int itemcode)
     {
-        ItemCode spawnItem;
-        spawnItem = (ItemCode)itemcode;
+        ItemCode getItem;
+        getItem = (ItemCode)itemcode;
         Destroy(gameObject);
-        //Instantiate(itemcode, transform.position, Quaternion.identity);
+        inventoryUI.GetItemToSlot(getItem, 1);
+        Debug.Log($"얻은 아이템 : {getItem}");
     }
 }
