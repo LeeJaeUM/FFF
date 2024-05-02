@@ -18,7 +18,7 @@ public class PlayerGimic : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance))
         {
             // 충돌한 물체에 대한 처리
-            Debug.Log("Hit object: " + hitInfo.collider.gameObject.name);
+            //Debug.Log("Hit object: " + hitInfo.collider.gameObject.name);
 
             // 레이의 출발점에서 충돌 지점까지 라인 그리기
             Debug.DrawLine(transform.position, hitInfo.point, Color.red);
