@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  itemID: 0
+  itemCode: 1
   itemIcon: {fileID: 0}
   itemName: Stone
   itemType: 2
@@ -22,4 +22,3 @@ MonoBehaviour:
   SizeY: 0
   maxItemCount: 5
   itemWeight: 5
-  weaponType: 
