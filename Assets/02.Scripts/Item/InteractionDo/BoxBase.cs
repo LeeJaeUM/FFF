@@ -1,12 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using TMPro;
 using UnityEngine;
 using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 
 public class BoxBase : MonoBehaviour, IInteractable
 {
+    /// <summary>
+    /// 하단 자막용 텍스트
+    /// </summary>
+    public TextMeshProUGUI bottomTMP;
 
+    /// <summary>
+    /// 박스 타입의 이넘
+    /// </summary>
     enum BoxType
     {
         None = 0,
@@ -16,12 +24,19 @@ public class BoxBase : MonoBehaviour, IInteractable
     }
     [SerializeField]BoxType boxType = BoxType.None;
 
+    /// <summary>
+    /// 아이템 코드
+    /// </summary>
     public int itemcode = 0;
+
+    /// <summary>
+    /// 인벤토리
+    /// </summary>
     InventoryUI inventoryUI;
 
     private void Awake()
     {
-        inventoryUI = FindAnyObjectByType<InventoryUI>();
+        inventoryUI = FindAnyObjectByType<InventoryUI>();   // 인벤토리UI 참조
     }
 
     private void Start()
@@ -45,10 +60,18 @@ public class BoxBase : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// 테스트용 bool 변수
+    /// </summary>
+    bool isAxeInInven = true;
+
+    /// <summary>
+    /// 상호작용 시도 시 호출될 함수
+    /// </summary>
     public void Interact()
     {
         // interact했을때 인벤토리에 Axe가 있는지 확인해서
-        if (inventoryUI.UseItemCheck(ItemCode.Axe))   // true면
+        if (/*inventoryUI.UseItemCheck(ItemCode.Axe)*/ isAxeInInven)   // true면
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
             BreakBox(itemcode);
@@ -58,15 +81,20 @@ public class BoxBase : MonoBehaviour, IInteractable
         {
             // 불충분시 안내 텍스트
             Debug.Log("부술 수 있는 도구가 필요하다.");
+            bottomTMP.text = "부술 수 있는 도구가 필요하다";
         }
     }
 
+    /// <summary>
+    /// 박스 부수는 상호작용 함수
+    /// </summary>
+    /// <param name="itemcode">박스의 이넘타입에 맞게 얻어질 아이템의 코드</param>
     private void BreakBox(int itemcode)
     {
-        ItemCode getItem;
-        getItem = (ItemCode)itemcode;
-        Destroy(gameObject);
-        inventoryUI.GetItemToSlot(getItem, 1);
+        ItemCode getItem = (ItemCode)itemcode;  // int갑으로 받아온 아이템을 아이템코드로 변환해서 getItem에 담기
+        Debug.Log($"getItem : {getItem}");
+        Destroy(gameObject);                    // 박스를 없애고
+        inventoryUI.GetItemToSlot(getItem, 1);  // 인벤토리에 박스 종류에 해당되는 아이템 넣기
         Debug.Log($"얻은 아이템 : {getItem}");
     }
 }
