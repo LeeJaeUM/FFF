@@ -33,6 +33,9 @@ public class DoorBase : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        Stage1Manager stage1Manager = FindAnyObjectByType<Stage1Manager>();
+        bottomTMP = stage1Manager.bottomTMP;
+
         //start에서 위의 doorType에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
         switch (doorType)
         {
