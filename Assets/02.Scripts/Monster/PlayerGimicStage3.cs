@@ -5,7 +5,6 @@ using TMPro;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class PlayerGimicStage3 : MonoBehaviour
 {
@@ -65,8 +64,6 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private Animator generatorLeverAnimator;
 
-    private string correctLobbyPassword = "1028";
-
     [SerializeField]
     private GameObject player; // 플레이어 캐릭터
     [SerializeField]
@@ -97,7 +94,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject trapUI; // TrapUI 오브젝트
     [SerializeField]
     private GameObject pictureFrame; // PictureFrame 오브젝트
-
+    
     [SerializeField]
     private GameObject tvScreen;
     [SerializeField]
@@ -118,14 +115,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private GameObject generator; // 발전기 오브젝트
     [SerializeField]
-    private GameObject lobbyTrap; // 로비의 트랩 오브젝트
-    [SerializeField]
     private GameObject restaurantRoomDoorKey; // RestaurantRoomDoorKey 오브젝트
     [SerializeField]
     private GameObject restroomCaution; // RestaurantCaution의 자식으로 있는 Text(TMP)
     [SerializeField]
     private GameObject storageTrap; // Generator의 조작을 실패했을 경우 나타나는 오브젝트
-    private GameObject padUI;
     private int currentPageIndex = 0; // 페이지 수
 
     private float maxDistance = 2f; // Raycast 최대 범위
@@ -158,7 +152,6 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool isOperable = false; // 발전기 조작 가능 여부
     private bool lobbyPower = false; // MecanicEye 조작 가능 여부
     private bool generatorClear = false; // 발전기 조작이 완료 됬을 때
-    private bool lobbyKeyPadClear = false; // 로비의 키패드 해금 완료
 
     private bool unLockStorageDoor = false; // StorageDoor의 해금 상태
 
@@ -173,38 +166,38 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     private void Start()
     {
-
+        
     }
 
     private void Update()
     {
-        Renderer renderer = tvScreen.GetComponent<Renderer>();
+        Renderer renderer= tvScreen.GetComponent<Renderer>();
 
-        if (!startDoorOpen)
+        if(!startDoorOpen)
             StartCoroutine(OpenStartDoor());
 
         if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance))
         {
             Debug.Log(hit.collider.gameObject.name);
-
+            
             // 레이가 Player에 충돌할 경우
-            if (hit.collider.CompareTag("Player"))
+            if(hit.collider.CompareTag("Player"))
             {
                 return;
             }
-
+          
             #region Restroom
             // PictureFrame 상호작용
             if (hit.collider.CompareTag("PICTUREFRAME"))
             {
                 // 플레이어가 다른 오브젝트 또는 해당 오브젝트와 상호작용 중이지 않을 때 PictureFrame과 상호작용 가능 여부
-                if (!isInteraction)
+                if(!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
 
                 // 상호작용 시작
-                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                if(Input.GetKeyDown(KeyCode.E) && !textDisplayed)
                 {
                     isInteraction = true;
                     interating = true;
@@ -214,7 +207,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                else if(Input.GetKeyDown(KeyCode.E) && textDisplayed)
                 {
                     textField.text = "들춰낼까?";
                     choiceText1Field.text = "1. 들춰낸다";
@@ -223,7 +216,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 선택지가 출력되었을 때 가능한 버튼
-                if (choicing)
+                if(choicing)
                 {
                     // 1번을 누를 때
                     if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -236,7 +229,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     }
 
                     // 2번을 누를 때
-                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    else if(Input.GetKeyDown(KeyCode.Alpha2))
                     {
                         textField.text = " "; // 상호작용 종료
                         choiceText1Field.text = " ";
@@ -251,10 +244,10 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // Diary 상호작용
-            if (hit.collider.CompareTag("DIARY"))
+            if(hit.collider.CompareTag("DIARY"))
             {
                 // 플레이어가 다른 오브젝트 또는 해당 오브젝트와 상호작용을 하지 않을 때
-                if (!isInteraction)
+                if(!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
@@ -308,7 +301,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 이벤트 시작
-                if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
+                if(isEvent && !choicing && !textDisplayed && isInteraction && interating)
                 {
                     // E키를 누를 때마다 페이지가 넘어감
                     if (Input.GetKeyDown(KeyCode.E))
@@ -337,16 +330,16 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // RetroTelevision 상호작용
-            if (hit.collider.CompareTag("RETROTELEVISION"))
+            if(hit.collider.CompareTag("RETROTELEVISION"))
             {
                 // 플레이어가 다른 오브젝트 또는 해당 오브젝트와 상호작용을 하지 않을 때
                 if (!isInteraction)
                 {
                     interactionUI.SetActive(true);
-                }
+                }         
 
                 // 일반상호작용(인벤토리에 RemoteControl이 없을 경우)
-                if (!haveRemoteControl)
+                if(!haveRemoteControl)
                 {
                     // 일반상호작용 시작
                     if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
@@ -370,7 +363,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 특수상호작용(인벤토리에 RemoteControl이 있을 경우)
-                if (haveRemoteControl)
+                if(haveRemoteControl)
                 {
                     // 특수상호작용 시작
                     if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
@@ -391,7 +384,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         choicing = true;
                     }
 
-                    if (choicing)
+                    if(choicing)
                     {
                         // 1번을 누를 때
                         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -421,7 +414,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // Lamp상호작용
-            if (hit.collider.CompareTag("LAMP"))
+            if(hit.collider.CompareTag("LAMP"))
             {
                 if (!isInteraction)
                 {
@@ -450,7 +443,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // RestroomDoor상호작용
-            if (hit.collider.CompareTag("RESTROOMDOOR"))
+            if(hit.collider.CompareTag("RESTROOMDOOR"))
             {
                 if (!isInteraction)
                 {
@@ -460,7 +453,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 // 상호작용 시작, 문이 열리고 닫힘.
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (restroomOpen)
+                    if(restroomOpen)
                     {
                         restroomDoorAnimator.SetBool("IsOpen", true);
                     }
@@ -474,7 +467,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // ClipBoard상호작용
-            if (hit.collider.CompareTag("CLIPBOARD"))
+            if(hit.collider.CompareTag("CLIPBOARD"))
             {
                 if (!isInteraction)
                 {
@@ -558,9 +551,9 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // RemoteControl 상호작용
-            if (hit.collider.CompareTag("REMOTECONTROL"))
+            if(hit.collider.CompareTag("REMOTECONTROL"))
             {
-                if (!isInteraction)
+                if(!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
@@ -584,7 +577,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     choicing = true;
                 }
 
-                if (choicing)
+                if(choicing)
                 {
                     // 1번을 누를 때
                     if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -615,32 +608,54 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // DeadDoctor 상호작용
-            if (hit.collider.CompareTag("DEADDOCTOR"))
+            if(hit.collider.CompareTag("DEADDOCTOR"))
             {
-                if (!haveDoctorHand || !haveDoctorEye)
+                if (!isInteraction)
                 {
-                    if (!isInteraction)
+                    interactionUI.SetActive(true);
+                }
+
+                // 일반상호작용
+                if(!isInteractionTouchPad)
+                {
+                    // 일반상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                     {
-                        interactionUI.SetActive(true);
+                        isInteraction = true;
+                        interating = true;
+                        interactionUI.SetActive(false);
+                        textField.text = "이 곳에서 실험을 했던 과학자인거 같다...";
+                        textDisplayed = true;
+                    }
+
+                    // 일반상호작용 종료
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                    {
+                        textField.text = " ";
+                        player.SetActive(true);
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
                     }
                 }
 
-                if (!unLockStorageDoor)
+                // 특수상호작용1(TouchPad 오브젝트와 한 번이라도 상호작용 했을 때)
+                if(isInteractionTouchPad)
                 {
-                    // 일반상호작용
-                    if (!isInteractionTouchPad)
+                    // 특수상호작용 1-1
+                    if(!haveAxe)
                     {
-                        // 일반상호작용 시작
+                        // 특수상호작용 1-1 시작
                         if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                         {
                             isInteraction = true;
                             interating = true;
                             interactionUI.SetActive(false);
-                            textField.text = "이 곳에서 실험을 했던 과학자인거 같다...";
+                            textField.text = "손을 자를 수 있는 것이 필요하다..";
                             textDisplayed = true;
                         }
 
-                        // 일반상호작용 종료
+                        // 특수상호작용 1-1 종료
                         else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
                         {
                             textField.text = " ";
@@ -651,167 +666,136 @@ public class PlayerGimicStage3 : MonoBehaviour
                         }
                     }
 
-                    // 특수상호작용1(TouchPad 오브젝트와 한 번이라도 상호작용 했을 때)
-                    if (isInteractionTouchPad)
+                    // 특수상호작용 1-2
+                    if(haveAxe)
                     {
-                        // 특수상호작용 1-1
-                        if (!haveAxe)
+                        // 특수상호작용 1-2 시작
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                         {
-                            // 특수상호작용 1-1 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "이 시체의 손을 가지고 가보자.";
+                            textDisplayed = true;
+                        }
+
+                        // 특수상호작용 1-2 선택지
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                        {
+                            textField.text = "시체의 손을 자를까?";
+                            choiceText1Field.text = "1. 자른다";
+                            choiceText2Field.text = "2. 내버려둔다";
+                            choicing = true;
+                        }
+
+                        if(choicing)
+                        {
+                            // 1번을 누를 때
+                            if (Input.GetKeyDown(KeyCode.Alpha1))
                             {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "손을 자를 수 있는 것이 필요하다..";
-                                textDisplayed = true;
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                getItemTextField.text = "절단된 의사의 손 획득";
+                                haveDoctorHand = true;
+
+                                StartCoroutine(GetItem());
                             }
 
-                            // 특수상호작용 1-1 종료
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                            // 2번을 누를 때
+                            else if (Input.GetKeyDown(KeyCode.Alpha2))
                             {
-                                textField.text = " ";
-                                player.SetActive(true);
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                player.SetActive(true); // 상호작용 종료
                                 isInteraction = false;
                                 textDisplayed = false;
                                 interating = false;
-                            }
-                        }
-
-                        // 특수상호작용 1-2
-                        if (haveAxe)
-                        {
-                            // 특수상호작용 1-2 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                            {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "이 시체의 손을 가지고 가보자.";
-                                textDisplayed = true;
-                            }
-
-                            // 특수상호작용 1-2 선택지
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-                            {
-                                textField.text = "시체의 손을 자를까?";
-                                choiceText1Field.text = "1. 자른다";
-                                choiceText2Field.text = "2. 내버려둔다";
-                                choicing = true;
-                            }
-
-                            if (choicing)
-                            {
-                                // 1번을 누를 때
-                                if (Input.GetKeyDown(KeyCode.Alpha1))
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    getItemTextField.text = "절단된 의사의 손 획득";
-                                    haveDoctorHand = true;
-
-                                    StartCoroutine(GetItem());
-                                }
-
-                                // 2번을 누를 때
-                                else if (Input.GetKeyDown(KeyCode.Alpha2))
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    player.SetActive(true); // 상호작용 종료
-                                    isInteraction = false;
-                                    textDisplayed = false;
-                                    interating = false;
-                                    choicing = false;
-                                }
+                                choicing = false;
                             }
                         }
                     }
                 }
 
-                if (unLockStorageDoor)
+                // 특수상호작용2(MecanicEye와 한번이라도 상호작용 했을 때)
+                if(isInteractionMecanicEye)
                 {
-                    // 특수상호작용2(MecanicEye와 한번이라도 상호작용 했을 때)
-                    if (isInteractionMecanicEye)
+                    // 특수상호작용 2-1(인벤토리에 Blade가 없을 경우)
+                    if(!haveBlade)
                     {
-                        // 특수상호작용 2-1(인벤토리에 Blade가 없을 경우)
-                        if (!haveBlade)
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
                         {
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "이 시체의 눈으로 인식이 가능할 것이다.";
+                            textDisplayed = true;
+                        }
+
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                        {
+                            textField.text = "파낼만한 것을 찾아보자";
+                            textDisplayed2 = true;
+                        }
+
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+                        {
+                            textField.text = " ";
+                            player.SetActive(true);
+                            isInteraction = false;
+                            textDisplayed = false;
+                            textDisplayed2 = false;
+                            interating = false;
+                        }
+                    }
+                    // 특수상호작용 2-2(인벤토리에 Blade가 있을 경우)
+                    if(haveBlade)
+                    {
+                        // 특수상호작용 2-1 시작
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                        {
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "시체의 눈을 파낼까?";
+                            textDisplayed = true;
+                        }
+
+                        // 특수상호작용 2-1 선택지
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                        {
+                            textField.text = "파낼까?";
+                            choiceText1Field.text = "1. 파낸다";
+                            choiceText2Field.text = "2. 내버려둔다";
+                            choicing = true;
+                        }
+
+                        if (choicing)
+                        {
+                            // 1번을 누를 때
+                            if (Input.GetKeyDown(KeyCode.Alpha1))
                             {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "이 시체의 눈으로 인식이 가능할 것이다.";
-                                textDisplayed = true;
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                getItemTextField.text = "적출된 의사의 눈 획득";
+                                haveDoctorEye = true;
+
+                                StartCoroutine(GetItem());
                             }
 
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                            // 2번을 누를 때
+                            else if (Input.GetKeyDown(KeyCode.Alpha2))
                             {
-                                textField.text = "파낼만한 것을 찾아보자";
-                                textDisplayed2 = true;
-                            }
-
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
-                            {
-                                textField.text = " ";
-                                player.SetActive(true);
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                player.SetActive(true); // 상호작용 종료
                                 isInteraction = false;
                                 textDisplayed = false;
-                                textDisplayed2 = false;
                                 interating = false;
-                            }
-                        }
-                        // 특수상호작용 2-2(인벤토리에 Blade가 있을 경우)
-                        if (haveBlade)
-                        {
-                            // 특수상호작용 2-1 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                            {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "시체의 눈을 파낼까?";
-                                textDisplayed = true;
-                            }
-
-                            // 특수상호작용 2-1 선택지
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-                            {
-                                textField.text = "파낼까?";
-                                choiceText1Field.text = "1. 파낸다";
-                                choiceText2Field.text = "2. 내버려둔다";
-                                choicing = true;
-                            }
-
-                            if (choicing)
-                            {
-                                // 1번을 누를 때
-                                if (Input.GetKeyDown(KeyCode.Alpha1))
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    getItemTextField.text = "적출된 의사의 눈 획득";
-                                    haveDoctorEye = true;
-
-                                    StartCoroutine(GetItem());
-                                }
-
-                                // 2번을 누를 때
-                                else if (Input.GetKeyDown(KeyCode.Alpha2))
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    player.SetActive(true); // 상호작용 종료
-                                    isInteraction = false;
-                                    textDisplayed = false;
-                                    interating = false;
-                                    choicing = false;
-                                }
+                                choicing = false;
                             }
                         }
                     }
@@ -821,7 +805,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             // RestaurantRoomDoorKey 상호작용
             if (hit.collider.CompareTag("RESTAURANTDOORKEY"))
             {
-                if (!isInteraction)
+                if(!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
@@ -852,9 +836,9 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // Bag 상호작용
-            if (hit.collider.CompareTag("BAG"))
+            if(hit.collider.CompareTag("BAG"))
             {
-                if (!isInteraction)
+                if(!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
@@ -898,9 +882,9 @@ public class PlayerGimicStage3 : MonoBehaviour
                     }
 
                     // 인벤토리에 Axe오브젝트가 있을 경우
-                    else if (haveAxe)
+                    else if(haveAxe)
                     {
-                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        if(Input.GetKeyDown(KeyCode.Alpha1))
                         {
                             textField.text = " ";
                             choiceText1Field.text = " ";
@@ -914,7 +898,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         }
                     }
 
-                    if (Input.GetKeyDown(KeyCode.Alpha2))
+                    if(Input.GetKeyDown(KeyCode.Alpha2))
                     {
                         textField.text = "아무것도 없다";
                         choiceText1Field.text = " ";
@@ -924,7 +908,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         StartCoroutine(GetItem()); // 상호작용 종료
                     }
 
-                    if (Input.GetKeyDown(KeyCode.Alpha3))
+                    if(Input.GetKeyDown(KeyCode.Alpha3))
                     {
                         textField.text = " ";
                         choiceText1Field.text = " ";
@@ -936,74 +920,70 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // TouchPad 상호작용
-            if (hit.collider.CompareTag("TOUCHPAD"))
+            if(hit.collider.CompareTag("TOUCHPAD"))
             {
-                if (!unLockStorageDoor)
+                if(!isInteraction)
                 {
-                    if (!isInteraction)
+                    interactionUI.SetActive(true);
+                }
+
+                //일반상호작용(인벤토리에 절단된 의사의 손이 없을 경우)
+                if(!haveDoctorHand)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                     {
-                        interactionUI.SetActive(true);
+                        isInteraction = true;
+                        interating = true;
+                        textField.text = "손을 갖다 대는 걸로 작동하는 패드인거 같다..";
+                        interactionUI.SetActive(false);
+                        textDisplayed = true;
+                        isInteractionTouchPad = true;
                     }
 
-                    //일반상호작용(인벤토리에 절단된 의사의 손이 없을 경우)
-                    if (!haveDoctorHand)
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
                     {
-                        // 상호작용 시작
-                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                        {
-                            isInteraction = true;
-                            interating = true;
-                            textField.text = "손을 갖다 대는 걸로 작동하는 패드인거 같다..";
-                            interactionUI.SetActive(false);
-                            textDisplayed = true;
-                            isInteractionTouchPad = true;
-                        }
+                        padBeep.Play();
+                        textField.text = "적당한 것을 찾아보자";
 
-                        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-                        {
-                            padBeep.Play();
-                            textField.text = "적당한 것을 찾아보자";
+                        StartCoroutine(GetItem());
+                    }
+                }
 
-                            StartCoroutine(GetItem());
-                        }
+                //특수상호작용(인벤토리에 절단된 의사의 손이 있을경우)
+                if(haveDoctorHand)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        textField.text = "(절단된 의사의 손을 갖다 댄다..)";
+                        interactionUI.SetActive(false);
+                        textDisplayed = true;
+                        storageDoorOpen = true;
                     }
 
-                    //특수상호작용(인벤토리에 절단된 의사의 손이 있을경우)
-                    if (haveDoctorHand)
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
                     {
-                        // 상호작용 시작
-                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                        {
-                            isInteraction = true;
-                            interating = true;
-                            textField.text = "(절단된 의사의 손을 갖다 댄다..)";
-                            interactionUI.SetActive(false);
-                            textDisplayed = true;
-                            storageDoorOpen = true;
-                        }
+                        padUnlockSound.Play();
+                        textField.text = " ";
+                        unLockStorageDoor = true; // 창고문이 열렸다는 효과음
+                        storageDoorAnimator.SetBool("IsUnlock", true); // 창고문이 열림
 
-                        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-                        {
-                            padUnlockSound.Play();
-                            textField.text = " ";
-                            storageDoorAnimator.SetBool("IsUnlock", true); // 창고문이 열림
-
-                            player.SetActive(true); // 상호작용 강제 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-
-                            unLockStorageDoor = true; // 창고문이 열렸다
-                        }
+                        player.SetActive(true); // 상호작용 강제 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
                     }
                 }
             }
 
             // BookShelf 상호작용
-            if (hit.collider.CompareTag("BOOKSHELF"))
+            if(hit.collider.CompareTag("BOOKSHELF"))
             {
                 if (!isInteraction)
                 {
@@ -1011,7 +991,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 일반상호작용
-                if (!isDiary3Open)
+                if(!isDiary3Open)
                 {
                     // 상호작용 시작
                     if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
@@ -1058,7 +1038,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         choicing = true;
                     }
 
-                    if (choicing)
+                    if(choicing)
                     {
                         // 1번을 누를 때
                         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -1089,7 +1069,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // HiddenRoomDoor 상호작용
-            if (hit.collider.CompareTag("HIDDENROOMDOOR"))
+            if(hit.collider.CompareTag("HIDDENROOMDOOR"))
             {
                 if (!isInteraction)
                 {
@@ -1097,7 +1077,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // BookShelf가 이동하지 않은 상태에서 HiddenRoomDoor와 상호작용이 되는 것을 방지
-                if (isMoveBookShelf)
+                if(isMoveBookShelf)
                 {
                     // 상호작용 시작, 문이 열리고 닫힘.
                     if (Input.GetKeyDown(KeyCode.E))
@@ -1117,7 +1097,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // ClearDoor 상호작용
-            if (hit.collider.CompareTag("CLEARDOOR"))
+            if(hit.collider.CompareTag("CLEARDOOR"))
             {
                 if (!isInteraction)
                 {
@@ -1172,7 +1152,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
             #endregion
             // --------------------------------------------------------------------------------
-
+          
             #region Lobby
             // MecanicEye 상호작용
             if (hit.collider.CompareTag("MECANICEYE"))
@@ -1183,12 +1163,11 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 일반상호작용 (발전기 스위칭을 하지 않았을 시)
-                if (!lobbyPower)
+                if(!lobbyPower)
                 {
                     // 일반상호작용 시작
                     if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
                     {
-                        isInteractionMecanicEye = true;
                         isInteraction = true;
                         interating = true;
                         interactionUI.SetActive(false);
@@ -1216,14 +1195,13 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
 
                 // 특수상호작용1 (발전기 스위칭에 성공했을 때)
-                if (lobbyPower)
+                if(lobbyPower)
                 {
                     // 특수상호작용 1-1 (인벤토리에 DoctorEye가 없을 때)
-                    if (!haveDoctorEye)
+                    if(!haveDoctorEye)
                     {
                         if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
                         {
-                            isInteractionMecanicEye = true;
                             isInteraction = true;
                             interating = true;
                             interactionUI.SetActive(false);
@@ -1249,42 +1227,259 @@ public class PlayerGimicStage3 : MonoBehaviour
                             interating = false;
                         }
                     }
+                }
+            }
 
-                    // 특수상호작용 1-2 (인벤토리에 DoctorEye가 있을 때)
-                    if (haveDoctorEye)
+            // LobbyKeyPad 상호작용
+            if (hit.collider.CompareTag("LOBBYKEYPAD"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 일반상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "비밀번호를 입력해야 하는거 같다.";
+                    textDisplayed = true;
+                }
+
+                // 일반상호작용 중
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    textField.text = "지금은 작동하지 않는 거 같다..";
+                    textDisplayed2 = true;
+                }
+
+                // 일반상호작용 종료
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+                {
+                    textField.text = " ";
+                    player.SetActive(true);
+                    isInteraction = false;
+                    textDisplayed = false;
+                    textDisplayed2 = false;
+                    interating = false;
+                }
+            }
+            #endregion
+            //---------------------------------------------------------------------------------
+
+            #region Restaurant
+            // RestaurantDoor 상호작용
+            if (hit.collider.CompareTag("RESTAURANTDOOR"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 일반상호작용(식당 문 열쇠가 없을 경우)
+                if (!haveRestaurantDoorKey)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        interactionUI.SetActive(false);
+                        textField.text = "문이 열리지 않는다.";
+                        textDisplayed = true;
+                    }
+
+                    // 상호작용 종료
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                    {
+                        textField.text = " ";
+                        player.SetActive(true); // 상호작용 강제 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
+                }
+
+                // 특수상호작용(식당 문 열쇠가 있을 경우)
+                else if (haveRestaurantDoorKey)
+                {
+                    // 상호작용 시작, 문이 열리고 닫힘.
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        if (restaurantDoor)
+                        {
+                            restaurantDoorAnimator.SetBool("IsOpen", true);
+                        }
+                        else
+                        {
+                            restaurantDoorAnimator.SetBool("IsOpen", false);
+                        }
+
+                        restaurantDoor = !restaurantDoor;
+                    }
+                }
+            }
+
+            //Metal 상호작용
+            if (hit.collider.CompareTag("METAL"))
+            {
+                if (!isInteraction)
+                {
+                    interactionUI.SetActive(true);
+                }
+
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "쇠로 된 식기다.";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                {
+                    textField.text = "쓸 데가 있을까?";
+                    choiceText1Field.text = "1. 줍는다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        getItemTextField.text = "쇠로 된 식기 획득";
+                        Destroy(metal); // 식기 비활성화
+                        haveMetal = true;
+
+                        StartCoroutine(GetItem());
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
+                }
+            }
+            #endregion
+            //-----------------------------------------------------------------------------
+
+            #region Storage
+            // Generator 상호작용
+            if (hit.collider.CompareTag("GENERATOR"))
+            {
+                if (!generatorClear)
+                {
+                    if (!isInteraction)
+                    {
+                        interactionUI.SetActive(true);
+                    }
+
+                    // 일반상호작용(인벤토리에 Pilers가 없을 경우)
+                    if (!havePilers)
                     {
                         // 상호작용 시작
-                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                         {
                             isInteraction = true;
                             interating = true;
                             interactionUI.SetActive(false);
-                            textField.text = "시체에서 파낸 눈을 대보자..";
+                            textField.text = "문을 열 만한 도구가 필요하다.";
                             textDisplayed = true;
                         }
 
                         // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
                         {
-                            textField.text = "갖다 대 볼까?";
-                            choiceText1Field.text = "1. 갖다 댄다";
+                            textField.text = " ";
+                            player.SetActive(true); // 상호작용 강제 종료
+                            isInteraction = false;
+                            textDisplayed = false;
+                            interating = false;
+                            choicing = false;
+                        }
+                    }
+
+                    // 특수상호작용1(인벤토리에 Pilers가 있을 경우
+                    if (havePilers && !isOperable)
+                    {
+                        // 상호작용 시작
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                        {
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "연장으로 문을 열 수 있을 거 같다.";
+                            textDisplayed = true;
+                        }
+
+                        // 상호작용 종료(발전기 문이 열림)
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                        {
+                            textField.text = " ";
+                            generatorDoorAnimator.SetBool("IsOpen", true);
+                            isOperable = true;
+                            player.SetActive(true); // 상호작용 강제 종료
+                            isInteraction = false;
+                            textDisplayed = false;
+                            interating = false;
+                            choicing = false;
+
+                            isOperable = true;
+                        }
+                    }
+
+                    // 특수상호작용1-1(발전기 문이 열렸을 경우)
+                    if (isOperable)
+                    {
+                        // 상호작용 시작
+                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                        {
+                            isInteraction = true;
+                            interating = true;
+                            interactionUI.SetActive(false);
+                            textField.text = "발전기를 조작할 수 있을 거 같다.";
+                            textDisplayed = true;
+                        }
+
+                        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                        {
+                            textField.text = "조작하시겠습니까?";
+                            choiceText1Field.text = "1. 조작한다";
                             choiceText2Field.text = "2. 내버려둔다";
                             choicing = true;
                         }
 
-                        // 선택지가 출력되었을 때 가능한 버튼
                         if (choicing)
                         {
                             // 1번을 누를 때
                             if (Input.GetKeyDown(KeyCode.Alpha1))
                             {
-                                if (!lobbyKeyPadClear)
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    lobbyTrap.SetActive(true);
-                                }
+                                textField.text = " ";
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                isEvent = true;
+                                textDisplayed = false;
+                                choicing = false;
                             }
 
                             // 2번을 누를 때
@@ -1300,35 +1495,267 @@ public class PlayerGimicStage3 : MonoBehaviour
                                 choicing = false;
                             }
                         }
+
+                        // 이벤트 시작
+                        if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
+                        {
+                            generatorButtonUI.SetActive(true);
+                            choiceText1Field.text = "강제 종료 Q";
+                            choiceText2Field.text = "레버 당기기 E";
+
+                            // 1번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad1))
+                            {
+                                if (switch1)
+                                {
+                                    switch1Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch1Animator.SetBool("IsMove", false);
+                                }
+
+                                switch1 = !switch1;
+                            }
+
+                            // 2번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad2))
+                            {
+                                if (switch2)
+                                {
+                                    switch2Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch2Animator.SetBool("IsMove", false);
+                                }
+
+                                switch2 = !switch2;
+                            }
+
+                            // 3번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad3))
+                            {
+                                if (switch3)
+                                {
+                                    switch3Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch3Animator.SetBool("IsMove", false);
+                                }
+
+                                switch3 = !switch3;
+                            }
+
+                            // 4번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad4))
+                            {
+                                if (switch4)
+                                {
+                                    switch4Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch4Animator.SetBool("IsMove", false);
+                                }
+
+                                switch4 = !switch4;
+                            }
+
+                            // 5번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad5))
+                            {
+                                if (switch5)
+                                {
+                                    switch5Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch5Animator.SetBool("IsMove", false);
+                                }
+
+                                switch5 = !switch5;
+                            }
+
+                            // 6번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad6))
+                            {
+                                if (switch6)
+                                {
+                                    switch6Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch6Animator.SetBool("IsMove", false);
+                                }
+
+                                switch6 = !switch6;
+                            }
+
+                            // 7번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad7))
+                            {
+                                if (switch7)
+                                {
+                                    switch7Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch7Animator.SetBool("IsMove", false);
+                                }
+
+                                switch7 = !switch7;
+                            }
+
+                            // 8번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad8))
+                            {
+                                if (switch8)
+                                {
+                                    switch8Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch8Animator.SetBool("IsMove", false);
+                                }
+
+                                switch8 = !switch8;
+                            }
+
+                            // 9번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad9))
+                            {
+                                if (switch9)
+                                {
+                                    switch9Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch9Animator.SetBool("IsMove", false);
+                                }
+
+                                switch9 = !switch9;
+                            }
+
+                            // 10번 스위치 조작
+                            if (Input.GetKeyDown(KeyCode.Keypad0))
+                            {
+                                if (switch10)
+                                {
+                                    switch10Animator.SetBool("IsMove", true);
+                                }
+                                else
+                                {
+                                    switch10Animator.SetBool("IsMove", false);
+                                }
+
+                                switch10 = !switch10;
+                            }
+
+                            // 조작 도중 강제 종료
+                            if (Input.GetKeyDown(KeyCode.Q))
+                            {
+                                generatorButtonUI.SetActive(false);
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                player.SetActive(true); // 상호작용 강제 종료
+                                isInteraction = false;
+                                textDisplayed = false;
+                                interating = false;
+                                choicing = false;
+                                isEvent = false;
+                            }
+
+                            // 레버 당기기
+                            if (Input.GetKeyDown(KeyCode.E))
+                            {
+                                generatorLeverAnimator.SetBool("IsMove", true);
+
+                                // 스위치를 올바르게 옮겼을 때
+                                if (switch1 && !switch2 && !switch3 && !switch4 && switch5 && !switch6 && switch7 && switch8 && !switch9 && !switch10)
+                                {
+                                    // 로비에 있는 MecanicEye와 LobbyKeyPad 특수상호작용 가능
+                                    lobbyPower = true;
+                                    generatorButtonUI.SetActive(false);
+                                    choiceText1Field.text = " ";
+                                    choiceText2Field.text = " ";
+                                    player.SetActive(true); // 상호작용 강제 종료
+                                    isInteraction = false;
+                                    textDisplayed = false;
+                                    interating = false;
+                                    choicing = false;
+                                    isEvent = false;
+                                    generatorClear = true;
+                                }
+
+                                // 스위치를 틀렸을 때
+                                else
+                                {
+                                    Destroy(generator);
+                                    storageTrap.SetActive(true);
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            // LobbyKeyPad 상호작용
-            if (hit.collider.CompareTag("LOBBYKEYPAD"))
+            // Bike 상호작용
+            if (hit.collider.CompareTag("BIKE"))
             {
                 if (!isInteraction)
                 {
                     interactionUI.SetActive(true);
                 }
 
-                // 일반상호작용(발전기의 전원이 꺼져있을 때)
-                if (!lobbyPower)
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                 {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    bikeEngineSound.Play();
+                    textField.text = "잘 작동한다..";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                {
+                    textField.text = " ";
+                    player.SetActive(true); // 상호작용 강제 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+                }
+            }
+
+            // StorageDoor 상호작용
+            if (hit.collider.CompareTag("STORAGEDOOR"))
+            {
+                if (!storageDoorOpen)
+                {
+                    if (!isInteraction)
+                    {
+                        interactionUI.SetActive(true);
+                    }
+
                     // 일반상호작용 시작
                     if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
                     {
                         isInteraction = true;
                         interating = true;
                         interactionUI.SetActive(false);
-                        textField.text = "비밀번호를 입력해야 하는거 같다.";
+                        textField.text = "일반적으로 열리는 문이 아니다..";
                         textDisplayed = true;
                     }
 
                     // 일반상호작용 중
                     else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
                     {
-                        textField.text = "지금은 작동하지 않는 거 같다..";
+                        textField.text = "어딘가 열 수 있는 장치가 있을것이다.";
                         textDisplayed2 = true;
                     }
 
@@ -1343,740 +1770,175 @@ public class PlayerGimicStage3 : MonoBehaviour
                         interating = false;
                     }
                 }
-
-                // 특수상호작용(발전기의 전원이 켜져있을 때)
-                if (lobbyPower)
-                {
-                    // 특수상호작용 시작
-                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
-                    {
-                        isInteraction = true;
-                        interating = true;
-                        interactionUI.SetActive(false);
-                        textField.text = "전원이 켜져있다..";
-                        textDisplayed = true;
-                    }
-
-                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                    {
-                        textField.text = "조작하시겠습니까?";
-                        choiceText1Field.text = "1. 조작한다";
-                        choiceText2Field.text = "2. 내버려둔다";
-                        choicing = true;
-                    }
-
-                    if (choicing)
-                    {
-                        // 1번을 누를 때
-                        if (Input.GetKeyDown(KeyCode.Alpha1))
-                        {
-                            textField.text = " ";
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            isEvent = true;
-                            textDisplayed = false;
-                            choicing = false;
-                        }
-
-                        // 2번을 누를 때
-                        else if (Input.GetKeyDown(KeyCode.Alpha2))
-                        {
-                            textField.text = " "; // 상호작용 종료
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            player.SetActive(true); // 상호작용 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-                        }
-                    }
-
-                    // 이벤트 시작
-                    if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
-                    {
-                        //CheckPassword();
-
-                        padUI.SetActive(true);
-                        choiceText1Field.text = "강제 종료 Q";
-                    }
-                }
             }
-                #endregion
-                //---------------------------------------------------------------------------------
 
-                #region Restaurant
-                // RestaurantDoor 상호작용
-                if (hit.collider.CompareTag("RESTAURANTDOOR"))
+            // Blade 상호작용
+            if (hit.collider.CompareTag("BLADE"))
+            {
+                if (!isInteraction)
                 {
-                    if (!isInteraction)
-                    {
-                        interactionUI.SetActive(true);
-                    }
-
-                    // 일반상호작용(식당 문 열쇠가 없을 경우)
-                    if (!haveRestaurantDoorKey)
-                    {
-                        // 상호작용 시작
-                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
-                        {
-                            isInteraction = true;
-                            interating = true;
-                            interactionUI.SetActive(false);
-                            textField.text = "문이 열리지 않는다.";
-                            textDisplayed = true;
-                        }
-
-                        // 상호작용 종료
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-                        {
-                            textField.text = " ";
-                            player.SetActive(true); // 상호작용 강제 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-                        }
-                    }
-
-                    // 특수상호작용(식당 문 열쇠가 있을 경우)
-                    else if (haveRestaurantDoorKey)
-                    {
-                        // 상호작용 시작, 문이 열리고 닫힘.
-                        if (Input.GetKeyDown(KeyCode.E))
-                        {
-                            if (restaurantDoor)
-                            {
-                                restaurantDoorAnimator.SetBool("IsOpen", true);
-                            }
-                            else
-                            {
-                                restaurantDoorAnimator.SetBool("IsOpen", false);
-                            }
-
-                            restaurantDoor = !restaurantDoor;
-                        }
-                    }
+                    interactionUI.SetActive(true);
                 }
 
-                //Metal 상호작용
-                if (hit.collider.CompareTag("METAL"))
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                 {
-                    if (!isInteraction)
-                    {
-                        interactionUI.SetActive(true);
-                    }
-
-                    // 상호작용 시작
-                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                    {
-                        isInteraction = true;
-                        interating = true;
-                        interactionUI.SetActive(false);
-                        textField.text = "쇠로 된 식기다.";
-                        textDisplayed = true;
-                    }
-
-                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                    {
-                        textField.text = "쓸 데가 있을까?";
-                        choiceText1Field.text = "1. 줍는다";
-                        choiceText2Field.text = "2. 내버려둔다";
-                        choicing = true;
-                    }
-
-                    if (choicing)
-                    {
-                        // 1번을 누를 때
-                        if (Input.GetKeyDown(KeyCode.Alpha1))
-                        {
-                            textField.text = " ";
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            getItemTextField.text = "쇠로 된 식기 획득";
-                            Destroy(metal); // 식기 비활성화
-                            haveMetal = true;
-
-                            StartCoroutine(GetItem());
-                        }
-
-                        // 2번을 누를 때
-                        else if (Input.GetKeyDown(KeyCode.Alpha2))
-                        {
-                            textField.text = " "; // 상호작용 종료
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            player.SetActive(true); // 상호작용 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-                        }
-                    }
-                }
-                #endregion
-                //-----------------------------------------------------------------------------
-
-                #region Storage
-                // Generator 상호작용
-                if (hit.collider.CompareTag("GENERATOR"))
-                {
-                    if (!generatorClear)
-                    {
-                        if (!isInteraction)
-                        {
-                            interactionUI.SetActive(true);
-                        }
-
-                        // 일반상호작용(인벤토리에 Pilers가 없을 경우)
-                        if (!havePilers)
-                        {
-                            // 상호작용 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                            {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "문을 열 만한 도구가 필요하다.";
-                                textDisplayed = true;
-                            }
-
-                            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                            {
-                                textField.text = " ";
-                                player.SetActive(true); // 상호작용 강제 종료
-                                isInteraction = false;
-                                textDisplayed = false;
-                                interating = false;
-                                choicing = false;
-                            }
-                        }
-
-                        // 특수상호작용1(인벤토리에 Pilers가 있을 경우
-                        if (havePilers && !isOperable)
-                        {
-                            // 상호작용 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                            {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "연장으로 문을 열 수 있을 거 같다.";
-                                textDisplayed = true;
-                            }
-
-                            // 상호작용 종료(발전기 문이 열림)
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                            {
-                                textField.text = " ";
-                                generatorDoorAnimator.SetBool("IsOpen", true);
-                                isOperable = true;
-                                player.SetActive(true); // 상호작용 강제 종료
-                                isInteraction = false;
-                                textDisplayed = false;
-                                interating = false;
-                                choicing = false;
-
-                                isOperable = true;
-                            }
-                        }
-
-                        // 특수상호작용1-1(발전기 문이 열렸을 경우)
-                        if (isOperable)
-                        {
-                            // 상호작용 시작
-                            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                            {
-                                isInteraction = true;
-                                interating = true;
-                                interactionUI.SetActive(false);
-                                textField.text = "발전기를 조작할 수 있을 거 같다.";
-                                textDisplayed = true;
-                            }
-
-                            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                            {
-                                textField.text = "조작하시겠습니까?";
-                                choiceText1Field.text = "1. 조작한다";
-                                choiceText2Field.text = "2. 내버려둔다";
-                                choicing = true;
-                            }
-
-                            if (choicing)
-                            {
-                                // 1번을 누를 때
-                                if (Input.GetKeyDown(KeyCode.Alpha1))
-                                {
-                                    textField.text = " ";
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    isEvent = true;
-                                    textDisplayed = false;
-                                    choicing = false;
-                                }
-
-                                // 2번을 누를 때
-                                else if (Input.GetKeyDown(KeyCode.Alpha2))
-                                {
-                                    textField.text = " "; // 상호작용 종료
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    player.SetActive(true); // 상호작용 종료
-                                    isInteraction = false;
-                                    textDisplayed = false;
-                                    interating = false;
-                                    choicing = false;
-                                }
-                            }
-
-                            // 이벤트 시작
-                            if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
-                            {
-                                generatorButtonUI.SetActive(true);
-                                choiceText1Field.text = "강제 종료 Q";
-                                choiceText2Field.text = "레버 당기기 E";
-
-                                // 1번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad1))
-                                {
-                                    if (switch1)
-                                    {
-                                        switch1Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch1Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch1 = !switch1;
-                                }
-
-                                // 2번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad2))
-                                {
-                                    if (switch2)
-                                    {
-                                        switch2Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch2Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch2 = !switch2;
-                                }
-
-                                // 3번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad3))
-                                {
-                                    if (switch3)
-                                    {
-                                        switch3Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch3Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch3 = !switch3;
-                                }
-
-                                // 4번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad4))
-                                {
-                                    if (switch4)
-                                    {
-                                        switch4Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch4Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch4 = !switch4;
-                                }
-
-                                // 5번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad5))
-                                {
-                                    if (switch5)
-                                    {
-                                        switch5Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch5Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch5 = !switch5;
-                                }
-
-                                // 6번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad6))
-                                {
-                                    if (switch6)
-                                    {
-                                        switch6Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch6Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch6 = !switch6;
-                                }
-
-                                // 7번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad7))
-                                {
-                                    if (switch7)
-                                    {
-                                        switch7Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch7Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch7 = !switch7;
-                                }
-
-                                // 8번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad8))
-                                {
-                                    if (switch8)
-                                    {
-                                        switch8Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch8Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch8 = !switch8;
-                                }
-
-                                // 9번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad9))
-                                {
-                                    if (switch9)
-                                    {
-                                        switch9Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch9Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch9 = !switch9;
-                                }
-
-                                // 10번 스위치 조작
-                                if (Input.GetKeyDown(KeyCode.Keypad0))
-                                {
-                                    if (switch10)
-                                    {
-                                        switch10Animator.SetBool("IsMove", true);
-                                    }
-                                    else
-                                    {
-                                        switch10Animator.SetBool("IsMove", false);
-                                    }
-
-                                    switch10 = !switch10;
-                                }
-
-                                // 조작 도중 강제 종료
-                                if (Input.GetKeyDown(KeyCode.Q))
-                                {
-                                    generatorButtonUI.SetActive(false);
-                                    choiceText1Field.text = " ";
-                                    choiceText2Field.text = " ";
-                                    player.SetActive(true); // 상호작용 강제 종료
-                                    isInteraction = false;
-                                    textDisplayed = false;
-                                    interating = false;
-                                    choicing = false;
-                                    isEvent = false;
-                                }
-
-                                // 레버 당기기
-                                if (Input.GetKeyDown(KeyCode.E))
-                                {
-                                    generatorLeverAnimator.SetBool("IsMove", true);
-
-                                    // 스위치를 올바르게 옮겼을 때
-                                    if (switch1 && !switch2 && !switch3 && !switch4 && switch5 && !switch6 && switch7 && switch8 && !switch9 && !switch10)
-                                    {
-                                        // 로비에 있는 MecanicEye와 LobbyKeyPad 특수상호작용 가능
-                                        lobbyPower = true;
-                                        generatorButtonUI.SetActive(false);
-                                        choiceText1Field.text = " ";
-                                        choiceText2Field.text = " ";
-                                        player.SetActive(true); // 상호작용 강제 종료
-                                        isInteraction = false;
-                                        textDisplayed = false;
-                                        interating = false;
-                                        choicing = false;
-                                        isEvent = false;
-                                        generatorClear = true;
-                                    }
-
-                                    // 스위치를 틀렸을 때
-                                    else
-                                    {
-                                        Destroy(generator);
-                                        storageTrap.SetActive(true);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "꽤나 예리한 칼이다.";
+                    textDisplayed = true;
                 }
 
-                // Bike 상호작용
-                if (hit.collider.CompareTag("BIKE"))
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
                 {
-                    if (!isInteraction)
-                    {
-                        interactionUI.SetActive(true);
-                    }
+                    textField.text = "가지고 있을까?";
+                    choiceText1Field.text = "1. 줍는다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
 
-                    // 상호작용 시작
-                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                    {
-                        isInteraction = true;
-                        interating = true;
-                        interactionUI.SetActive(false);
-                        bikeEngineSound.Play();
-                        textField.text = "잘 작동한다..";
-                        textDisplayed = true;
-                    }
-
-                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
                     {
                         textField.text = " ";
-                        player.SetActive(true); // 상호작용 강제 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        getItemTextField.text = "예리한 식칼 획득";
+                        Destroy(blade); // 리모컨 비활성화
+                        haveBlade = true; // RetroTelevision 조건 활성화
+
+                        StartCoroutine(GetItem());
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
                         isInteraction = false;
                         textDisplayed = false;
                         interating = false;
                         choicing = false;
                     }
                 }
+            }
+            #endregion
+            //-------------------------------------------------------------------------------------
 
-                // StorageDoor 상호작용
-                if (hit.collider.CompareTag("STORAGEDOOR"))
+            #region Bathroom
+            // Pilers 상호작용
+            if (hit.collider.CompareTag("PILERS"))
+            {
+                if (!isInteraction)
                 {
-                    if (!storageDoorOpen)
-                    {
-                        if (!isInteraction)
-                        {
-                            interactionUI.SetActive(true);
-                        }
-
-                        // 일반상호작용 시작
-                        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
-                        {
-                            isInteraction = true;
-                            interating = true;
-                            interactionUI.SetActive(false);
-                            textField.text = "일반적으로 열리는 문이 아니다..";
-                            textDisplayed = true;
-                        }
-
-                        // 일반상호작용 중
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
-                        {
-                            textField.text = "어딘가 열 수 있는 장치가 있을것이다.";
-                            textDisplayed2 = true;
-                        }
-
-                        // 일반상호작용 종료
-                        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
-                        {
-                            textField.text = " ";
-                            player.SetActive(true);
-                            isInteraction = false;
-                            textDisplayed = false;
-                            textDisplayed2 = false;
-                            interating = false;
-                        }
-                    }
+                    interactionUI.SetActive(true);
                 }
 
-                // Blade 상호작용
-                if (hit.collider.CompareTag("BLADE"))
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                 {
-                    if (!isInteraction)
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "무언가 뜯어버릴 때 유용할 거 같다.";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                {
+                    textField.text = "가지고 있을까?";
+                    choiceText1Field.text = "1. 줍는다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
                     {
-                        interactionUI.SetActive(true);
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        getItemTextField.text = "연장 획득";
+                        Destroy(pilers); // 리모컨 비활성화
+                        havePilers = true; // RetroTelevision 조건 활성화
+
+                        StartCoroutine(GetItem());
                     }
 
-                    // 상호작용 시작
-                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
                     {
-                        isInteraction = true;
-                        interating = true;
-                        interactionUI.SetActive(false);
-                        textField.text = "꽤나 예리한 칼이다.";
-                        textDisplayed = true;
-                    }
-
-                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                    {
-                        textField.text = "가지고 있을까?";
-                        choiceText1Field.text = "1. 줍는다";
-                        choiceText2Field.text = "2. 내버려둔다";
-                        choicing = true;
-                    }
-
-                    if (choicing)
-                    {
-                        // 1번을 누를 때
-                        if (Input.GetKeyDown(KeyCode.Alpha1))
-                        {
-                            textField.text = " ";
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            getItemTextField.text = "예리한 식칼 획득";
-                            Destroy(blade); // 리모컨 비활성화
-                            haveBlade = true; // RetroTelevision 조건 활성화
-
-                            StartCoroutine(GetItem());
-                        }
-
-                        // 2번을 누를 때
-                        else if (Input.GetKeyDown(KeyCode.Alpha2))
-                        {
-                            textField.text = " "; // 상호작용 종료
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            player.SetActive(true); // 상호작용 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-                        }
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
                     }
                 }
-                #endregion
-                //-------------------------------------------------------------------------------------
-
-                #region Bathroom
-                // Pilers 상호작용
-                if (hit.collider.CompareTag("PILERS"))
-                {
-                    if (!isInteraction)
-                    {
-                        interactionUI.SetActive(true);
-                    }
-
-                    // 상호작용 시작
-                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
-                    {
-                        isInteraction = true;
-                        interating = true;
-                        interactionUI.SetActive(false);
-                        textField.text = "무언가 뜯어버릴 때 유용할 거 같다.";
-                        textDisplayed = true;
-                    }
-
-                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
-                    {
-                        textField.text = "가지고 있을까?";
-                        choiceText1Field.text = "1. 줍는다";
-                        choiceText2Field.text = "2. 내버려둔다";
-                        choicing = true;
-                    }
-
-                    if (choicing)
-                    {
-                        // 1번을 누를 때
-                        if (Input.GetKeyDown(KeyCode.Alpha1))
-                        {
-                            textField.text = " ";
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            getItemTextField.text = "연장 획득";
-                            Destroy(pilers); // 리모컨 비활성화
-                            havePilers = true; // RetroTelevision 조건 활성화
-
-                            StartCoroutine(GetItem());
-                        }
-
-                        // 2번을 누를 때
-                        else if (Input.GetKeyDown(KeyCode.Alpha2))
-                        {
-                            textField.text = " "; // 상호작용 종료
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            player.SetActive(true); // 상호작용 종료
-                            isInteraction = false;
-                            textDisplayed = false;
-                            interating = false;
-                            choicing = false;
-                        }
-                    }
-                }
-                #endregion
-                // --------------------------------------------------------------------------------------------
             }
-
-            // 플레이어가 상호작용가능한 오브젝트와 멀어질 경우
-            else
-            {
-                interactionUI.SetActive(false);
-                isInteraction = false;
-            }
-
-            // 플레이어가 상호작용 중일 때 StopControl로 이동
-            if (interating)
-            {
-                StopControl();
-            }
-
-            else
-            {
-                Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * maxDistance, rayColor);
-            }
+            #endregion
+            // --------------------------------------------------------------------------------------------
         }
 
-        // 플레이어는 캐릭터 조종 불가 및 카메라 회전 불가
-        void StopControl()
+        // 플레이어가 상호작용가능한 오브젝트와 멀어질 경우
+        else
         {
-            if (player != null)
-            {
-                player.SetActive(false);
-            }
-        }
-
-        IEnumerator GetItem()
-        {
-            yield return new WaitForSeconds(0.5f);
-
-            textField.text = " ";
-            getItemTextField.text = " ";
-            player.SetActive(true); // 상호작용 강제 종료
+            interactionUI.SetActive(false);
             isInteraction = false;
-            textDisplayed = false;
-            interating = false;
-            choicing = false;
         }
 
-        IEnumerator OpenStartDoor()
+        // 플레이어가 상호작용 중일 때 StopControl로 이동
+        if(interating)
         {
-            yield return new WaitForSeconds(7);
+            StopControl();
+        }
 
-            startLeftDoor.SetTrigger("IsOpen");
-            startRightDoor.SetTrigger("IsOpen");
-            startDoorOpen = true;
+        else
+        {
+            Debug.DrawRay(raycastOrigin.position, raycastOrigin.forward * maxDistance, rayColor);
         }
     }
 
+    // 플레이어는 캐릭터 조종 불가 및 카메라 회전 불가
+    void StopControl()
+    {
+        if(player!= null)
+        {
+            player.SetActive(false);
+        }
+    }
+
+    IEnumerator GetItem()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        textField.text = " ";
+        getItemTextField.text = " ";
+        player.SetActive(true); // 상호작용 강제 종료
+        isInteraction = false;
+        textDisplayed = false;
+        interating = false;
+        choicing = false;
+    }
+
+    IEnumerator OpenStartDoor()
+    {
+        yield return new WaitForSeconds(7);
+
+        startLeftDoor.SetTrigger("IsOpen");
+        startRightDoor.SetTrigger("IsOpen");
+        startDoorOpen = true;
+    }
+}
