@@ -22,6 +22,7 @@ public enum ItemCode
     noteHint,       // 쪽지 힌트
     noteCaution,    // 주의문
     Book,           // 책
+    OilBucket,      // 오일(기름통)      //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
 
     // 장비
     Gun,            // 총            /16
