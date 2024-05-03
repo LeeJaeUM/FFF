@@ -65,7 +65,7 @@ public class BoxBase : MonoBehaviour, IInteractable
     /// <summary>
     /// 테스트용 bool 변수
     /// </summary>
-    bool isAxeInInven = true;
+    readonly bool isAxeInInven = false;
 
     /// <summary>
     /// 상호작용 시도 시 호출될 함수

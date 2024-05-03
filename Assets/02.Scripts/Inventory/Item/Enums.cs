@@ -23,6 +23,8 @@ public enum ItemCode
     noteCaution,    // 주의문
     Book,           // 책
     OilBucket,      // 오일(기름통)      //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
+    OldPick,        // 문 따개           //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함 
+    OldAxe,         // 녹슨 도끼         //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함 
 
     // 장비
     Gun,            // 총            /16
