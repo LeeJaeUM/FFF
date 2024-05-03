@@ -84,4 +84,17 @@ public class Stage1Manager : MonoBehaviour
             Debug.DrawLine(Camera.main.transform.position, Camera.main.transform.position + Camera.main.transform.forward * rayDistance, Color.yellow);
         }
     }
+
+    private KeyPad keyPad;
+    public KeyPad KeyPad
+    {
+        get
+        {
+            if(keyPad == null)
+            {
+                keyPad = FindAnyObjectByType<KeyPad>(); 
+            }
+            return keyPad;
+        }
+    }
 }

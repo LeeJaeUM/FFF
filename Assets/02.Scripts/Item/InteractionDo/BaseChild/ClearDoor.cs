@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class ClearDoor : DoorBase
 {
+    KeyPad keyPad;
+
+    private void Start()
+    {
+        keyPad = Stage1Manager.Instance.KeyPad;
+    }
+
     public override void Interact()
     {
         //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
