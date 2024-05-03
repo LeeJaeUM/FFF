@@ -10,7 +10,7 @@ public class BoxBase : MonoBehaviour, IInteractable
     /// <summary>
     /// 하단 자막용 텍스트
     /// </summary>
-    public TextMeshProUGUI bottomTMP;
+    TextMeshProUGUI bottomTMP;
 
     /// <summary>
     /// 박스 타입의 이넘
@@ -41,6 +41,8 @@ public class BoxBase : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        bottomTMP = Stage1Manager.Instance.bottomTMP;
+
        //start에서 위의 boxtype에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
        switch(boxType)
         {

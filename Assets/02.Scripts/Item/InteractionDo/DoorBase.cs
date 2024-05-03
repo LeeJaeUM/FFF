@@ -8,7 +8,7 @@ public class DoorBase : MonoBehaviour, IInteractable
 {
     public bool testBool = false;
 
-    public TextMeshProUGUI bottomTMP;
+    TextMeshProUGUI bottomTMP;
     enum DoorType
     {
         None = 0,
@@ -27,14 +27,11 @@ public class DoorBase : MonoBehaviour, IInteractable
     private void Awake()
     {
         inventoryUI = FindAnyObjectByType<InventoryUI>();
-
-        //bottomTMP 를 불러오기 위한 매니저 생성해야함
     }
 
     private void Start()
     {
-        Stage1Manager stage1Manager = FindAnyObjectByType<Stage1Manager>();
-        bottomTMP = stage1Manager.bottomTMP;
+        bottomTMP = Stage1Manager.Instance.bottomTMP;
 
         //start에서 위의 doorType에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
         switch (doorType)

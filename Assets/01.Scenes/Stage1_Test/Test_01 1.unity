@@ -640,6 +640,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!224 &1964739076 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2750587490179138760, guid: 1c02ece8c7ecfe147839797ccb3fe3af, type: 3}
+  m_PrefabInstance: {fileID: 3219559805407756261}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2085508350
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rayDistance: 10
+  bottomTMP: {fileID: 0}
 --- !u!4 &2105603150
 Transform:
   m_ObjectHideFlags: 0
@@ -750,7 +756,8 @@ Transform:
   m_LocalPosition: {x: 3.076382, y: -12.302373, z: -9.039205}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1964739076}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3219559805407756261
@@ -759,7 +766,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 2105603150}
     m_Modifications:
     - target: {fileID: 114432992325724860, guid: 1c02ece8c7ecfe147839797ccb3fe3af, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1191,7 +1198,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1463380092}
   - {fileID: 1373327178}
-  - {fileID: 3219559805407756261}
   - {fileID: 2085508353}
   - {fileID: 173571821}
   - {fileID: 460904696}
