@@ -8,22 +8,21 @@ public class TipsUI : MonoBehaviour
     GameObject PressEGroup;
 
     private bool isUIActive = false;
-    private bool canUse_InteracObj = false;
+    private bool canUse_InteractObj = false;
 
-    public bool CanUse_Workbench
+    public bool CanUse_InteractObj
     {
-        get => canUse_InteracObj;
+        get => canUse_InteractObj;
         set
         {
-            if (canUse_InteracObj != value)
+            if (canUse_InteractObj != value)
             {
-                canUse_InteracObj = value;
+                canUse_InteractObj = value;
                 PressEGroup.gameObject.SetActive(value); // E버튼 안내 ui 비/활성화
 
                 // 트리거 밖으로 나가서 flase가 되면 자동으로 종료
-                if (canUse_InteracObj == false)
+                if (canUse_InteractObj == false)
                 {
-                    InteracObj_UI_Use(canUse_InteracObj);
                     isUIActive = false;
                 }
             }
@@ -36,21 +35,4 @@ public class TipsUI : MonoBehaviour
         PressEGroup = child.gameObject;
     }
 
-
-    /// <summary>
-    /// 트리거 범위 내부일때 e를 눌러서 UI 활성화 가능함
-    /// </summary>
-    /// <param name="_"></param>
-    private void OnPressE_UI(InputAction.CallbackContext _)
-    {
-        if (canUse_InteracObj)
-        {
-            isUIActive = !isUIActive;
-            InteracObj_UI_Use(isUIActive);
-        }
-    }
-    private void InteracObj_UI_Use(bool isUse)
-    {
-        
-    }
 }

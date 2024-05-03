@@ -3,41 +3,72 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class PlayerGimic : MonoBehaviour
 {
-    [SerializeField] float rayDistance = 10f; // 레이의 최대 거리
+    [SerializeField] private bool isPlayerIn = false;
 
-    private void Update()
+    //기본적으론 null 상태
+    IInteractable cur_Interactable = null;
+
+    TipsUI tipsUI;
+    PlayerInputAction inputActions;
+
+    private void Awake()
     {
-        // 충돌 정보를 저장할 변수
-        RaycastHit hitInfo;
+        inputActions = new PlayerInputAction();
+    }
 
-        // 레이를 발사하고 충돌 검출
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance))
+    private void OnEnable()
+    {
+        inputActions.UI.Enable();
+        inputActions.UI.Use.performed += OnPressE_UI;
+    }
+
+    private void OnDisable()
+    {
+        inputActions.UI.Use.performed -= OnPressE_UI;
+        inputActions.UI.Disable();
+    }
+
+    private void Start()
+    {
+        tipsUI = Stage1Manager.Instance.TipsUI;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        cur_Interactable = other.GetComponent<IInteractable>();
+        if (cur_Interactable != null)
         {
-            // 충돌한 물체에 대한 처리
-            //Debug.Log("Hit object: " + hitInfo.collider.gameObject.name);
-
-            // 레이의 출발점에서 충돌 지점까지 라인 그리기
-            Debug.DrawLine(transform.position, hitInfo.point, Color.red);
-
-            IInteractable interactable = hitInfo.collider.gameObject.GetComponent<IInteractable>();
-            if(interactable != null )
-            {
-                interactable.Interact();
-            }
-            else
-            {
-                //Debug.Log(" 상호작용 가능한 오브젝트가 아니다! ");
-            }
+            isPlayerIn = true;
+            tipsUI.CanUse_InteractObj = isPlayerIn;
         }
-        else
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        cur_Interactable = other.GetComponent<IInteractable>();
+        if (cur_Interactable != null)
         {
-            // 레이가 아무것도 충돌하지 않은 경우
-            // 레이의 최대 거리만큼 라인 그리기
-            Debug.DrawLine(transform.position, transform.position + transform.forward * rayDistance, Color.yellow);
+            isPlayerIn = false;
+            tipsUI.CanUse_InteractObj = isPlayerIn;
+            cur_Interactable = null;
+        }
+    }
+
+
+    /// <summary>
+    /// 트리거 범위 내부일때 e를 눌러서 UI 활성화 가능함
+    /// </summary>
+    /// <param name="_"></param>
+    private void OnPressE_UI(InputAction.CallbackContext _)
+    {
+        if (cur_Interactable != null)
+        {
+            cur_Interactable.Interact();
         }
     }
 }
