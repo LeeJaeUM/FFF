@@ -8,7 +8,7 @@ public class DoorBase : MonoBehaviour, IInteractable
 {
     public bool testBool = false;
 
-    TextMeshProUGUI bottomTMP;
+    protected TextMeshProUGUI bottomTMP;
     enum DoorType
     {
         None = 0,
