@@ -97,4 +97,18 @@ public class Stage1Manager : MonoBehaviour
             return keyPad;
         }
     }
+
+    private TipsUI tipsUI;
+    public TipsUI TipsUI
+    {
+        get
+        {
+            if (tipsUI == null)
+            {
+                tipsUI = FindAnyObjectByType<TipsUI>();
+            }
+            return tipsUI;
+        }
+    }
+
 }
