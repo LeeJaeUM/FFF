@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine.AI;
 using Unity.Properties;
+using UnityEngine.UI;
 
 public class PlayerGimicStage3 : MonoBehaviour
 {
@@ -15,7 +16,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Transform raycastOrigin;
     [SerializeField]
     private Color rayColor = Color.red;
-
+    [SerializeField]
+    private GameObject player; // 플레이어 캐릭터
+    [SerializeField]
+    private LayerMask playerLayer;
+    #region UI 변수
     [SerializeField]
     private GameObject interactionUI; // 상호작용이 가능한지 나타내는 UI 오브젝트
     [SerializeField]
@@ -29,7 +34,12 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI getItemTextField; // 획득 아이템 텍스트
 
-    // 발전기 조작 변수
+    [SerializeField]
+    private TMP_InputField passwordInputField; // InputField 변수 선언
+    private string correctLobbyPassword = "1028"; //  로비 키패드의 올바른 비밀번호
+    #endregion
+
+    #region Generator 변수
     [SerializeField]
     private GameObject generatorButtonUI; // 발전기 조작 UI
     private bool switch1 = true;
@@ -64,12 +74,9 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator switch10Animator;
     [SerializeField]
     private Animator generatorLeverAnimator;
+    #endregion
 
-    [SerializeField]
-    private GameObject player; // 플레이어 캐릭터
-    [SerializeField]
-    private LayerMask playerLayer;
-
+    #region Animator 변수 
     [SerializeField]
     private Animator restroomDoorAnimator; // 문이 열리는 애니메이션
     [SerializeField]
@@ -88,19 +95,17 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator restaurantDoorAnimator; // 식당 문 애니메이션
     [SerializeField]
     private Animator generatorDoorAnimator; // 발전기 문 애니메이션
+    #endregion
 
+    #region GameObject 변수
     [SerializeField]
     private GameObject trap; // Trap 오브젝트
     [SerializeField]
     private GameObject trapUI; // TrapUI 오브젝트
     [SerializeField]
     private GameObject pictureFrame; // PictureFrame 오브젝트
-
     [SerializeField]
     private GameObject tvScreen;
-    [SerializeField]
-    private Material newScreenMaterial; // TV 스크린 오브젝트의 머티리얼
-
     [SerializeField]
     private GameObject[] diaryUI; // Diary UI 오브젝트
     [SerializeField]
@@ -121,10 +126,19 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject restroomCaution; // RestaurantCaution의 자식으로 있는 Text(TMP)
     [SerializeField]
     private GameObject storageTrap; // Generator의 조작을 실패했을 경우 나타나는 오브젝트
+    [SerializeField]
+    private GameObject keyPadUI; // KeyPad 오브젝트를 조작할 때 뜨는 UI
+    [SerializeField]
+    private GameObject lobbyTrap; // 로비에 있는 Trap오브젝트
+    #endregion
+    
+    [SerializeField]
+    private Material newScreenMaterial; // TV 스크린 오브젝트의 머티리얼
     private int currentPageIndex = 0; // 페이지 수
 
     private float maxDistance = 2f; // Raycast 최대 범위
 
+    #region Bool 변수
     private bool isInteraction = false; // 플레이어의 상호작용 여부
     private bool textDisplayed = false; // 상호작용 중의 텍스트 중복 방지 여부
     private bool textDisplayed2 = false; // 
@@ -152,10 +166,13 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
     private bool isOperable = false; // 발전기 조작 가능 여부
 
-    private bool lobbyPower = false; // MecanicEye 조작 가능 여부
+    private bool lobbyPower = true; // MecanicEye 조작 가능 여부
 
     private bool unLockStorageDoor = false; // StorageDoor의 해금 상태
+    private bool lobbyKeypadUnlock = false; // LobbyKeyPad의 해금 상태
+    #endregion
 
+    #region AudioSource 변수
     [SerializeField]
     private AudioSource padBeep; // 패드가 틀렸을 때의 경고음
     [SerializeField]
@@ -164,10 +181,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private AudioSource bookShelfSound; // 책장 틈에서 나오는 바람 소리 
     [SerializeField]
     private AudioSource bikeEngineSound; // 바이크 엔진 소리
+    #endregion
 
     private void Start()
     {
-
+        
     }
 
     private void Update()
@@ -1355,42 +1373,130 @@ public class PlayerGimicStage3 : MonoBehaviour
                     interating = false;
                 }
             }
+
+            // 특수상호작용 1-2(인벤토리에 DoctorEye가 있을경우)
+            if(haveDoctorEye)
+            {
+
+            }
         }
     }
 
     void LobbyKeyPad()
     {
-        if (!isInteraction)
+        if(!lobbyKeypadUnlock)
         {
-            interactionUI.SetActive(true);
-        }
+            if (!isInteraction)
+            {
+                interactionUI.SetActive(true);
+            }
 
-        // 일반상호작용 시작
-        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
-        {
-            isInteraction = true;
-            interating = true;
-            interactionUI.SetActive(false);
-            textField.text = "비밀번호를 입력해야 하는거 같다.";
-            textDisplayed = true;
-        }
+            // 일반상호작용(Generator가 기능하지 않았을 경우)
+            if (!lobbyPower)
+            {
+                // 일반상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "비밀번호를 입력해야 하는거 같다.";
+                    textDisplayed = true;
+                }
 
-        // 일반상호작용 중
-        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
-        {
-            textField.text = "지금은 작동하지 않는 거 같다..";
-            textDisplayed2 = true;
-        }
+                // 일반상호작용 중
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    textField.text = "지금은 작동하지 않는 거 같다..";
+                    textDisplayed2 = true;
+                }
 
-        // 일반상호작용 종료
-        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
-        {
-            textField.text = " ";
-            player.SetActive(true);
-            isInteraction = false;
-            textDisplayed = false;
-            textDisplayed2 = false;
-            interating = false;
+                // 일반상호작용 종료
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+                {
+                    textField.text = " ";
+                    player.SetActive(true);
+                    isInteraction = false;
+                    textDisplayed = false;
+                    textDisplayed2 = false;
+                    interating = false;
+                }
+            }
+
+            // 특수상호작용
+            else
+            {
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "전원이 들어왔다..";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                {
+                    textField.text = "패드를 조작할까?";
+                    choiceText1Field.text = "1. 조작한다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                // 선택지가 출력되었을 때 가능한 버튼
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        choicing = false;
+                        textDisplayed = false;
+                        isEvent = true;
+                    }
+
+                    // 2번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
+                }
+
+                // KeyPad 조작 시작
+                if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
+                {
+                    keyPadUI.SetActive(true); // KeyPadUI 출력
+                    choiceText1Field.text = "비밀번호 확인 E";
+                    choiceText2Field.text = "상호작용 종료 Q";
+
+                    if (Input.GetKeyDown(KeyCode.Q))
+                    {
+                        keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+
+                        player.SetActive(true); // 상호작용 강제 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                        isEvent = false;
+                    }
+
+                    CheckLobbyPassword();
+                }
+            }
         }
     }
     #endregion
@@ -2005,6 +2111,37 @@ public class PlayerGimicStage3 : MonoBehaviour
         }
     }
     #endregion
+
+    // LobbyKeypad의 InputField 비밀번호 해금 이벤트
+    public void CheckLobbyPassword()
+    {
+        string input = passwordInputField.text; // 입력된 비밀번호
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            // 비밀번호가 일치할 경우
+            if (input == correctLobbyPassword)
+            {
+                lobbyKeypadUnlock = true; // 로비 키패드를 해금함.
+                keyPadUI.SetActive(false); // KeyPadUI창 닫기
+
+                player.SetActive(true); // 상호작용 강제 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+                isEvent = false;
+            }
+
+            // 비밀번호가 실패할 경우 게임오버
+            else
+            {
+                keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                lobbyTrap.SetActive(true);
+            }
+        }
+    }
+
 
     IEnumerator GetItem()
     {
