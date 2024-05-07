@@ -99,6 +99,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator laboratoryLeftDoorAnimator; // 연구실 왼쪽 문
     [SerializeField]
     private Animator laboratoryRightDoorAnimator; // 연구실 오른쪽 문
+    [SerializeField]
+    private Animator bathroomDoorAnimator; // 화장실 문 애니메이션
     #endregion
 
     #region GameObject 변수
@@ -153,6 +155,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool hiddenRoomDoor = true; // 비밀문의 열림 상태
     private bool restaurantDoor = true; // 식당문의 열림 상태
     private bool storageDoorOpen = false; // 창고문의 열림 상태
+    private bool bathroomDoorOpen = true; // 화장실문 열림 상태
 
     private bool isEvent = false; // 이벤트 발생 동안
 
@@ -308,9 +311,11 @@ public class PlayerGimicStage3 : MonoBehaviour
             #region Bathroom
             // Pilers 상호작용
             if (hit.collider.CompareTag("PILERS"))
-            {
                 Pilers();
-            }
+
+            // BathroomDoor 상호작용
+            if (hit.collider.CompareTag("BATHROOMDOOR"))
+                BathroomDoor();
             #endregion
             // --------------------------------------------------------------------------------------------
         }
@@ -2180,6 +2185,29 @@ public class PlayerGimicStage3 : MonoBehaviour
                 interating = false;
                 choicing = false;
             }
+        }
+    }
+
+    void BathroomDoor()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작, 문이 열리고 닫힘.
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (bathroomDoorOpen)
+            {
+                bathroomDoorAnimator.SetBool("IsOpen", true);
+            }
+            else
+            {
+                bathroomDoorAnimator.SetBool("IsOpen", false);
+            }
+
+            bathroomDoorOpen = !bathroomDoorOpen;
         }
     }
     #endregion
