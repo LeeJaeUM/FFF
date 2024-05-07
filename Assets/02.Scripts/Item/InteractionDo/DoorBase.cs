@@ -18,15 +18,15 @@ public class DoorBase : MonoBehaviour, IInteractable
         Clear
     }
 
-    [SerializeField] DoorType doorType = DoorType.None;
+    [SerializeField] private DoorType doorType = DoorType.None;
 
     public int itemcode = 0;
-    InventoryUI inventoryUI;
+    private InventoryUI inventoryUI;
 
     readonly int Interact_Hash = Animator.StringToHash("Interact");
-    Animator animator;
-    Stage1Manager stage1Manager;
-    TipsUI tipsUI;
+    private Animator animator;
+    private Stage1Manager stage1Manager;
+    private TipsUI tipsUI;
 
     private void Awake()
     {
