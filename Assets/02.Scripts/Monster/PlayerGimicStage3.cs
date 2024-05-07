@@ -95,6 +95,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator restaurantDoorAnimator; // 식당 문 애니메이션
     [SerializeField]
     private Animator generatorDoorAnimator; // 발전기 문 애니메이션
+    [SerializeField]
+    private Animator laboratoryLeftDoorAnimator; // 연구실 왼쪽 문
+    [SerializeField]
+    private Animator laboratoryRightDoorAnimator; // 연구실 오른쪽 문
     #endregion
 
     #region GameObject 변수
@@ -166,10 +170,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
     private bool isOperable = false; // 발전기 조작 가능 여부
 
-    private bool lobbyPower = true; // MecanicEye 조작 가능 여부
+    private bool lobbyPower = false; // MecanicEye 조작 가능 여부
 
     private bool unLockStorageDoor = false; // StorageDoor의 해금 상태
     private bool lobbyKeypadUnlock = false; // LobbyKeyPad의 해금 상태
+    private bool mecanicEyeUnlock = false; // MecanicEye의 해금 상태
     #endregion
 
     #region AudioSource 변수
@@ -1301,68 +1306,35 @@ public class PlayerGimicStage3 : MonoBehaviour
     #region Lobby
     void MecanicEye()
     {
-        if (!isInteraction)
+        if(!mecanicEyeUnlock)
         {
-            interactionUI.SetActive(true);
-        }
-
-        // 일반상호작용 (발전기 스위칭을 하지 않았을 시)
-        if (!lobbyPower)
-        {
-            // 일반상호작용 시작
-            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+            if (!isInteraction)
             {
-                isInteractionMecanicEye = true;
-                isInteraction = true;
-                interating = true;
-                interactionUI.SetActive(false);
-                textField.text = "홍채인식으로 작동하는거 같다.";
-                textDisplayed = true;
+                interactionUI.SetActive(true);
             }
 
-            // 일반상호작용 중
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+            // 일반상호작용 (발전기 스위칭을 하지 않았을 시)
+            if (!lobbyPower)
             {
-                textField.text = "지금은 작동하지 않는 거 같다.";
-                textDisplayed2 = true;
-            }
-
-            // 일반상호작용 종료
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
-            {
-                textField.text = " ";
-                player.SetActive(true);
-                isInteraction = false;
-                textDisplayed = false;
-                textDisplayed2 = false;
-                interating = false;
-            }
-        }
-
-        // 특수상호작용1 (발전기 스위칭에 성공했을 때)
-        if (lobbyPower)
-        {
-            // 특수상호작용 1-1 (인벤토리에 DoctorEye가 없을 때)
-            if (!haveDoctorEye)
-            {
+                // 일반상호작용 시작
                 if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
                 {
                     isInteractionMecanicEye = true;
                     isInteraction = true;
                     interating = true;
                     interactionUI.SetActive(false);
-                    textField.text = "눈을 한번 대보자..";
+                    textField.text = "홍채인식으로 작동하는거 같다.";
                     textDisplayed = true;
                 }
 
+                // 일반상호작용 중
                 else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
                 {
-                    textField.text = "적합한 것을 찾아보자.";
-                    padBeep.Play();
+                    textField.text = "지금은 작동하지 않는 거 같다.";
                     textDisplayed2 = true;
-
                 }
 
+                // 일반상호작용 종료
                 else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
                 {
                     textField.text = " ";
@@ -1374,10 +1346,110 @@ public class PlayerGimicStage3 : MonoBehaviour
                 }
             }
 
-            // 특수상호작용 1-2(인벤토리에 DoctorEye가 있을경우)
-            if(haveDoctorEye)
+            // 특수상호작용1 (발전기 스위칭에 성공했을 때)
+            if (lobbyPower)
             {
+                // 특수상호작용 1-1 (인벤토리에 DoctorEye가 없을 때)
+                if (!haveDoctorEye)
+                {
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+                    {
+                        isInteractionMecanicEye = true;
+                        isInteraction = true;
+                        interating = true;
+                        interactionUI.SetActive(false);
+                        textField.text = "눈을 한번 대보자..";
+                        textDisplayed = true;
+                    }
 
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                    {
+                        textField.text = "적합한 것을 찾아보자.";
+                        padBeep.Play();
+                        textDisplayed2 = true;
+
+                    }
+
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+                    {
+                        textField.text = " ";
+                        player.SetActive(true);
+                        isInteraction = false;
+                        textDisplayed = false;
+                        textDisplayed2 = false;
+                        interating = false;
+                    }
+                }
+
+                // 특수상호작용 1-2(인벤토리에 DoctorEye가 있을경우)
+                if (haveDoctorEye)
+                {
+                    // 상호작용 시작
+                    if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                    {
+                        isInteraction = true;
+                        interating = true;
+                        interactionUI.SetActive(false);
+                        textField.text = "이 눈을 기계에 대보자.";
+                        textDisplayed = true;
+                    }
+
+                    // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                    else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+                    {
+                        textField.text = "인식시켜 볼까?";
+                        choiceText1Field.text = "1. 인식시킨다";
+                        choiceText2Field.text = "2. 내버려둔다";
+                        choicing = true;
+                    }
+                }
+
+                // 선택지가 출력되었을 때 가능한 버튼
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        // 키패드가 먼저 해금되었을경우
+                        if (lobbyKeypadUnlock)
+                        {
+                            textField.text = " "; // 상호작용 종료
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            mecanicEyeUnlock = true;
+                            laboratoryLeftDoorAnimator.SetBool("IsOpen", true);
+                            laboratoryRightDoorAnimator.SetBool("IsOpen", true);
+
+                            player.SetActive(true); // 상호작용 종료
+                            isInteraction = false;
+                            textDisplayed = false;
+                            interating = false;
+                            choicing = false;
+                        }
+
+                        // 키패드가 해금되지 않았을 경우
+                        else if (!lobbyKeypadUnlock)
+                        {
+                            textField.text = " "; // 상호작용 종료
+                            choiceText1Field.text = " ";
+                            choiceText2Field.text = " ";
+                            lobbyTrap.SetActive(true);
+                        }
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
+                }
             }
         }
     }
@@ -2122,6 +2194,8 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 비밀번호가 일치할 경우
             if (input == correctLobbyPassword)
             {
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
                 lobbyKeypadUnlock = true; // 로비 키패드를 해금함.
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
 
@@ -2136,12 +2210,13 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 비밀번호가 실패할 경우 게임오버
             else
             {
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 lobbyTrap.SetActive(true);
             }
         }
     }
-
 
     IEnumerator GetItem()
     {
