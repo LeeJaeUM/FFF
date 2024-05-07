@@ -557,6 +557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rayDistance: 10
   bottomTMP: {fileID: 0}
+  keyPad: {fileID: 0}
 --- !u!1001 &245819083809516173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -977,7 +978,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2750587490179138760, guid: 1c02ece8c7ecfe147839797ccb3fe3af, type: 3}
-      insertIndex: -1
+      insertIndex: 1
       addedObject: {fileID: 5626285007085713006}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c02ece8c7ecfe147839797ccb3fe3af, type: 3}

@@ -5,16 +5,21 @@ using UnityEngine;
 public class ClearDoor : DoorBase
 {
     KeyPad keyPad;
+    [SerializeField] private bool isUse = false;
 
     private void Start()
     {
         keyPad = Stage1Manager.Instance.KeyPad;
+        keyPad.onAnswerCheck += DoorOpen;
     }
 
     public override void Interact()
     {
-        //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
-        //if (testBool)
+        isUse = !isUse;
+        keyPad.gameObject.SetActive(isUse);
+
+
+        //if ()
         //{
         //    //조건에 충족되면 아이템 추가 또는 여타 상호작용
         //    DoorOpen();

@@ -23,12 +23,15 @@ public class DoorBase : MonoBehaviour, IInteractable
     public int itemcode = 0;
     InventoryUI inventoryUI;
 
+    readonly int Interact_Hash = Animator.StringToHash("Interact");
+    Animator animator;
     Stage1Manager stage1Manager;
     TipsUI tipsUI;
 
     private void Awake()
     {
         inventoryUI = FindAnyObjectByType<InventoryUI>();
+        animator = GetComponent<Animator>();  
     }
 
     private void Start()
@@ -42,6 +45,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         {
             case DoorType.None:
                 Debug.Log("아무것도 선택되지 않은 문");
+                itemcode = 99;
                 break;
             case DoorType.Normal:
                 itemcode = (int)ItemCode.Axe;
@@ -56,7 +60,7 @@ public class DoorBase : MonoBehaviour, IInteractable
                 itemcode = (int)ItemCode.OilBucket;
                 break;
             case DoorType.Clear:
-                itemcode = 0;
+                itemcode = -1;
                 Debug.Log("키패드로 비밀번호를 풀어야하는 문이다.");
                 break;
             default: break;
@@ -65,6 +69,15 @@ public class DoorBase : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
+        //기본 문 조건
+        if (itemcode == 99)
+        {
+            DoorOpen();
+        }
+        else if (true ) //아래 조건 여기에 사용
+        {
+
+        }
         // interact했을때 인벤토리에 코드에 맞는 아이템이 있는지 확인해서
         //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
         //if (testBool)
@@ -77,12 +90,15 @@ public class DoorBase : MonoBehaviour, IInteractable
         //    // 불충분시 안내 텍스트
         //    bottomTMP.text =  ("문을 열기 위한 도구가 필요하다.");
         //}
-        Debug.Log("문 성공적으로 interact함");
+
+
+        Debug.Log("문과 interact함");
     }
 
     protected void DoorOpen()
     {
         //문 성공적으로 열림
         Debug.Log("문 성공적으로 열림");
+        animator.SetTrigger(Interact_Hash);
     }
 }
