@@ -110,6 +110,34 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Interacable"",
+            ""id"": ""ba5dac88-b016-497a-812e-10013f6fe380"",
+            ""actions"": [
+                {
+                    ""name"": ""InteracableAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9396ff0-f82b-418e-95f1-50073fe12d7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f02820b2-8a2a-402c-9e33-7a0887a06406"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteracableAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -137,6 +165,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         m_UI_RClick = m_UI.FindAction("RClick", throwIfNotFound: true);
         m_UI_LClick = m_UI.FindAction("LClick", throwIfNotFound: true);
         m_UI_InventroyOnOff = m_UI.FindAction("InventroyOnOff", throwIfNotFound: true);
+        // Interacable
+        m_Interacable = asset.FindActionMap("Interacable", throwIfNotFound: true);
+        m_Interacable_InteracableAction = m_Interacable.FindAction("InteracableAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -264,6 +295,52 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Interacable
+    private readonly InputActionMap m_Interacable;
+    private List<IInteracableActions> m_InteracableActionsCallbackInterfaces = new List<IInteracableActions>();
+    private readonly InputAction m_Interacable_InteracableAction;
+    public struct InteracableActions
+    {
+        private @MouseInputAction m_Wrapper;
+        public InteracableActions(@MouseInputAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InteracableAction => m_Wrapper.m_Interacable_InteracableAction;
+        public InputActionMap Get() { return m_Wrapper.m_Interacable; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InteracableActions set) { return set.Get(); }
+        public void AddCallbacks(IInteracableActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InteracableActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteracableActionsCallbackInterfaces.Add(instance);
+            @InteracableAction.started += instance.OnInteracableAction;
+            @InteracableAction.performed += instance.OnInteracableAction;
+            @InteracableAction.canceled += instance.OnInteracableAction;
+        }
+
+        private void UnregisterCallbacks(IInteracableActions instance)
+        {
+            @InteracableAction.started -= instance.OnInteracableAction;
+            @InteracableAction.performed -= instance.OnInteracableAction;
+            @InteracableAction.canceled -= instance.OnInteracableAction;
+        }
+
+        public void RemoveCallbacks(IInteracableActions instance)
+        {
+            if (m_Wrapper.m_InteracableActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInteracableActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InteracableActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InteracableActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InteracableActions @Interacable => new InteracableActions(this);
     private int m_KMSchemeIndex = -1;
     public InputControlScheme KMScheme
     {
@@ -279,5 +356,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         void OnRClick(InputAction.CallbackContext context);
         void OnLClick(InputAction.CallbackContext context);
         void OnInventroyOnOff(InputAction.CallbackContext context);
+    }
+    public interface IInteracableActions
+    {
+        void OnInteracableAction(InputAction.CallbackContext context);
     }
 }

@@ -59,13 +59,13 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     /// 아이템의 가로크기
     /// </summary>
     [Range(1, 3)]
-    public int SizeX;
+    public int SizeX = 1;
 
     /// <summary>
     /// 아이템의 세로크기
     /// </summary>
     [Range(1, 5)]
-    public int SizeY;
+    public int SizeY = 1;
 
     public Vector2Int Size
     {

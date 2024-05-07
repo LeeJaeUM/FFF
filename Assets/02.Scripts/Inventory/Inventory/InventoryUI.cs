@@ -556,7 +556,7 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     /// <param name="code">얻은 아이템 코드</param>
     /// <param name="_count">얻은 아이템의 갯수</param>
-    public void GetItemToSlot(ItemCode code, int _count)
+    public void GetItemToSlot(ItemCode code, int _count = 1)
     {
         ItemData data = FindCodeData(code);
 

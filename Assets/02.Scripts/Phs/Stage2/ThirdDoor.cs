@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdDoor : MonoBehaviour
+public class ThirdDoor : InteracableBase
 {
     Animator animator;
 
@@ -15,8 +15,9 @@ public class ThirdDoor : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void OnOpenClose()
+    protected override void OnUse()
     {
+        isOpen = !isOpen;
         animator.SetBool(Open_Hash, isOpen);
     }
 }
