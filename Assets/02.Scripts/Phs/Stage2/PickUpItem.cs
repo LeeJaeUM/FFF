@@ -6,6 +6,8 @@ public class PickUpItem : InteracableBase
 {
     public ItemCode itemCode;
 
+    public override bool CanUse => true;
+
     protected override void OnUse()
     {
         GameManager.Instance.inven.GetItemToSlot(itemCode);

@@ -4,32 +4,17 @@ using UnityEngine;
 
 public class InteracableBase : MonoBehaviour, IInteracable
 {
+    [SerializeField]
     bool canUse = false;
 
-    public virtual bool CanUse => canUse;
-
-
-    private void OnTriggerEnter(Collider other)
+    public virtual bool CanUse
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            Debug.Log(other.name);
-            canUse = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            //Debug.Log(other.name);
-            canUse = false;
-        }
+        get => canUse;
     }
 
     public void Use()
     {
-        if(canUse)
+        if(CanUse)
         {
             Debug.Log("동작");
             OnUse();

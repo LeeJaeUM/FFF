@@ -22,12 +22,14 @@ public enum ItemCode
 
 
     // Stage2
-    Brain = 14,          // 뇌
+    Brain = 14,     // 뇌
     Entrails,       // 내장
     GasMask,        // 가스마스크
     Syrings,        // 주사기
     FakeKey,        // 가짜열쇠
     noteHint,       // 쪽지 힌트
+    GoldHint_1,
+    GoldHint_2,
     noteCaution,    // 주의문
     Book,           // 책
     Hammer,         // 망치
