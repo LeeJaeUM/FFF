@@ -37,6 +37,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private TMP_InputField passwordInputField; // InputField 변수 선언
     private string correctLobbyPassword = "1028"; //  로비 키패드의 올바른 비밀번호
+    private string correctStorage2Password = "9862"; // 창고2 키패드의 올바른 비밀번호
 
     private string targetTag = "GORE"; // 바꿀 대상의 태그
     [SerializeField]
@@ -105,6 +106,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator laboratoryRightDoorAnimator; // 연구실 오른쪽 문
     [SerializeField]
     private Animator bathroomDoorAnimator; // 화장실 문 애니메이션
+    [SerializeField]
+    private Animator storage2UpDoorAnimaotr; // 창고 2 위쪽문 애니메이션
+    [SerializeField]
+    private Animator storage2DownDoorAnimator; // 창고 2 아래쪽문 애니메이션
     #endregion
 
     #region GameObject 변수
@@ -142,6 +147,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject lobbyTrap; // 로비에 있는 Trap오브젝트
     [SerializeField]
     private GameObject bathroomCaution; // 화장실 주의 표시 오브젝트
+    [SerializeField]
+    private GameObject storage2Trap; // 두번째 창고의 비밀번호를 맞았을 경우 생기는 트랩
     #endregion
     
     [SerializeField]
@@ -184,6 +191,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool unLockStorageDoor = false; // StorageDoor의 해금 상태
     private bool lobbyKeypadUnlock = false; // LobbyKeyPad의 해금 상태
     private bool mecanicEyeUnlock = false; // MecanicEye의 해금 상태
+    private bool storage2Unlock = false; // Storage2Keypad의 해금 상태
     #endregion
 
     #region AudioSource 변수
@@ -328,6 +336,10 @@ public class PlayerGimicStage3 : MonoBehaviour
             // Gore 오브젝트 상호작용
             if (hit.collider.CompareTag("GORE"))
                 Gore();
+
+            // Storage2KeyPad 상호작용
+            if (hit.collider.CompareTag("STORAGE2KEYPAD"))
+                Storage2KeyPad();
             #endregion
         }
 
@@ -2278,6 +2290,85 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
         }
     }
+
+    void Storage2KeyPad()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "또 다른 키패드다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+        {
+            textField.text = "조작할까?";
+            choiceText1Field.text = "1. 조작한다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        // 선택지가 출력되었을 때 가능한 버튼
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                choicing = false;
+                textDisplayed = false;
+                isEvent = true;
+            }
+
+            // 2번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
+
+        // KeyPad 조작 시작
+        if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
+        {
+            keyPadUI.SetActive(true); // KeyPadUI 출력
+            choiceText1Field.text = "비밀번호 확인 E";
+            choiceText2Field.text = "상호작용 종료 Q";
+
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+
+                player.SetActive(true); // 상호작용 강제 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+                isEvent = false;
+            }
+
+            CheckStorage2Password();
+        }
+    }
     #endregion
 
     // LobbyKeypad의 InputField 비밀번호 해금 이벤트
@@ -2310,6 +2401,43 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText2Field.text = " ";
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 lobbyTrap.SetActive(true);
+            }
+        }
+    }
+
+    public void CheckStorage2Password()
+    {
+        string input = passwordInputField.text; // 입력된 비밀번호
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            // 비밀번호가 일치할 경우 게임오버
+            if (input == correctStorage2Password)
+            {
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                storage2Trap.SetActive(true); // 함정 가동
+            }
+
+            // 비밀번호가 다를 경우 해금
+            else
+            {
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                storage2Unlock = true; // 로비 키패드를 해금함.
+                keyPadUI.SetActive(false); // KeyPadUI창 닫기
+
+                // Storage2Door 문이 열림
+                storage2DownDoorAnimator.SetBool("IsOpen", true);
+                storage2UpDoorAnimaotr.SetBool("IsOpen", true);
+
+                player.SetActive(true); // 상호작용 강제 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+                isEvent = false;
             }
         }
     }
