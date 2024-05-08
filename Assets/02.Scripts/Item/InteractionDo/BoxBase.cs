@@ -8,11 +8,6 @@ using static UnityEditor.IMGUI.Controls.PrimitiveBoundsHandle;
 public class BoxBase : MonoBehaviour, IInteractable
 {
     /// <summary>
-    /// 하단 자막용 텍스트
-    /// </summary>
-    TextMeshProUGUI bottomTMP;
-
-    /// <summary>
     /// 박스 타입의 이넘
     /// </summary>
     enum BoxType
@@ -41,8 +36,6 @@ public class BoxBase : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        bottomTMP = Stage1Manager.Instance.bottomTMP;
-
        //start에서 위의 boxtype에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
        switch(boxType)
         {
@@ -63,9 +56,9 @@ public class BoxBase : MonoBehaviour, IInteractable
     }
 
     /// <summary>
-    /// 테스트용 bool 변수
+    /// 인벤토리에 axe가 존재하는지 확인하기 위한 아이템코드
     /// </summary>
-    readonly bool isAxeInInven = false;
+    readonly ItemCode axe = ItemCode.Axe;
 
     /// <summary>
     /// 상호작용 시도 시 호출될 함수
@@ -73,7 +66,7 @@ public class BoxBase : MonoBehaviour, IInteractable
     public void Interact()
     {
         // interact했을때 인벤토리에 Axe가 있는지 확인해서
-        if (/*inventoryUI.UseItemCheck(ItemCode.Axe)*/ isAxeInInven)   // true면
+        if (inventoryUI.UseItemCheck(axe))   // true면
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
             BreakBox(itemcode);
@@ -83,7 +76,7 @@ public class BoxBase : MonoBehaviour, IInteractable
         {
             // 불충분시 안내 텍스트
             Debug.Log("부술 수 있는 도구가 필요하다.");
-            bottomTMP.text = "부술 수 있는 도구가 필요하다";
+            Stage1Manager.Instance.BottomTMPText = "부술 수 있는 도구가 필요하다";
         }
     }
 
