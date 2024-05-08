@@ -42,6 +42,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private string targetTag = "GORE"; // 바꿀 대상의 태그
     [SerializeField]
     private GameObject laboratoryTrap; // 대체할 프리팹
+    [SerializeField]
+    private TextMeshPro caution2Text; // caution2text의 UI시스템
     #endregion
 
     #region Generator 변수
@@ -110,6 +112,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator storage2UpDoorAnimaotr; // 창고 2 위쪽문 애니메이션
     [SerializeField]
     private Animator storage2DownDoorAnimator; // 창고 2 아래쪽문 애니메이션
+    [SerializeField]
+    private Animator LeverAnimator; // Lever 애니메이션
     #endregion
 
     #region GameObject 변수
@@ -149,6 +153,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject bathroomCaution; // 화장실 주의 표시 오브젝트
     [SerializeField]
     private GameObject storage2Trap; // 두번째 창고의 비밀번호를 맞았을 경우 생기는 트랩
+    [SerializeField]
+    private GameObject caution2; // 창고2의 경고문
     #endregion
     
     [SerializeField]
@@ -192,6 +198,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool lobbyKeypadUnlock = false; // LobbyKeyPad의 해금 상태
     private bool mecanicEyeUnlock = false; // MecanicEye의 해금 상태
     private bool storage2Unlock = false; // Storage2Keypad의 해금 상태
+
+    private bool caution2_1 = false; // caution2의 텍스트가 빨강,red일 경우
+    private bool caution2_2 = false; // caution2의 텍스트가 빨강,black일 경우
+    private bool caution2_3 = false; // caution2의 텍스트가 검정,red일 경우
+    private bool caution2_4 = false; // caution2의 텍스트가 검정,black일 경우
     #endregion
 
     #region AudioSource 변수
@@ -207,7 +218,7 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     private void Start()
     {
-        
+       
     }
 
     private void Update()
@@ -339,7 +350,16 @@ public class PlayerGimicStage3 : MonoBehaviour
 
             // Storage2KeyPad 상호작용
             if (hit.collider.CompareTag("STORAGE2KEYPAD"))
-                Storage2KeyPad();
+            {
+                if(!storage2Unlock)
+                {
+                    Storage2KeyPad();
+                }
+            }
+
+            // Lever 상호작용
+            if (hit.collider.CompareTag("LEVER"))
+                Lever();
             #endregion
         }
 
@@ -2369,6 +2389,66 @@ public class PlayerGimicStage3 : MonoBehaviour
             CheckStorage2Password();
         }
     }
+
+    void Lever()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "수상한 레버다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+        {
+            textField.text = "조작할까?";
+            choiceText1Field.text = "1. 조작한다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+
+                // 레버가 움직임
+                LeverAnimator.SetBool("IsMove", true);
+            }
+
+            // 2번을 누를 때
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
+    }
     #endregion
 
     // LobbyKeypad의 InputField 비밀번호 해금 이벤트
@@ -2427,6 +2507,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText2Field.text = " ";
                 storage2Unlock = true; // 로비 키패드를 해금함.
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                caution2.SetActive(true);
 
                 // Storage2Door 문이 열림
                 storage2DownDoorAnimator.SetBool("IsOpen", true);
