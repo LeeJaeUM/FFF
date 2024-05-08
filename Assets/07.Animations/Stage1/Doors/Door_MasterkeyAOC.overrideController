@@ -8,4 +8,8 @@ AnimatorOverrideController:
   m_PrefabAsset: {fileID: 0}
   m_Name: Door_MasterkeyAOC
   m_Controller: {fileID: 9100000, guid: 27a61efaa5e52534a8827c64cd4f5787, type: 2}
-  m_Clips: []
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 3573a2bd3bc68fc4dba11823d85278a5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 490167870710a994e82b4ab929dede6f, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 7b9c7dd5d35a1ed47b8bb56893eb01b9, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4d762114944cd0f40a0d8399fd3c607c, type: 2}

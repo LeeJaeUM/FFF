@@ -77,19 +77,19 @@ public class DoorBase : MonoBehaviour, IInteractable
         else if (true ) //아래 조건 여기에 사용
         {
 
+            // interact했을때 인벤토리에 코드에 맞는 아이템이 있는지 확인해서
+            //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
+            //if (testBool)
+            //{
+            //    //조건에 충족되면 아이템 추가 또는 여타 상호작용
+            //    DoorOpen();
+            //}
+            //else    // false면
+            //{
+            //    // 불충분시 안내 텍스트
+            //    bottomTMP.text =  ("문을 열기 위한 도구가 필요하다.");
+            //}
         }
-        // interact했을때 인벤토리에 코드에 맞는 아이템이 있는지 확인해서
-        //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
-        //if (testBool)
-        //{
-        //    //조건에 충족되면 아이템 추가 또는 여타 상호작용
-        //    DoorOpen();
-        //}
-        //else    // false면
-        //{
-        //    // 불충분시 안내 텍스트
-        //    bottomTMP.text =  ("문을 열기 위한 도구가 필요하다.");
-        //}
 
 
         Debug.Log("문과 interact함");
