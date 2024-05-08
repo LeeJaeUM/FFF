@@ -16589,7 +16589,7 @@ PrefabInstance:
       objectReference: {fileID: 1898887934}
     - target: {fileID: 1788268838538737450, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: totalTime
-      value: 1
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 1788268838538737450, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: area.Array.data[0]
