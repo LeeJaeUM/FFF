@@ -11,20 +11,6 @@ public class IronStone : MonoBehaviour, IInteractable
 
     ItemCode oldAxe = ItemCode.OldAxe;
 
-    bool isInInven = false;
-    bool IsInInven
-    {
-        get => isInInven;
-        set
-        {
-            isInInven = value;
-            if(inventoryUI.UseItemCheck(oldAxe))
-            {
-                isInInven = true;
-            }
-        }
-    }
-
     private void Awake()
     {
         inventoryUI = FindAnyObjectByType<InventoryUI>();
@@ -37,7 +23,7 @@ public class IronStone : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if(IsInInven)
+        if (inventoryUI.UseItemCheck(oldAxe))
         {
             Destroy(gameObject);
             inventoryUI.GetItemToSlot(ItemCode.Wood, 8);

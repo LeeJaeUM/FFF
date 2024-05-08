@@ -32,6 +32,21 @@ public class Stage1Manager : MonoBehaviour
 
     public TextMeshProUGUI bottomTMP;
 
+    public string BottomTMPText
+    {
+        get => bottomTMP.text;
+        set
+        {
+            Debug.Log("fdf");
+            bottomTMP.text = value;
+            if (tmpFadeCoroutine != null)
+                StopCoroutine(tmpFadeCoroutine);
+            tmpFadeCoroutine = StartCoroutine(TmpFade());
+        }
+    }
+
+    private Coroutine tmpFadeCoroutine;
+
 
     private void Awake()
     {
@@ -81,4 +96,25 @@ public class Stage1Manager : MonoBehaviour
         }
     }
 
+    IEnumerator TmpFade()
+    {
+        float duration = 0.5f; // 알파 값을 0으로 줄일 총 시간
+        float elapsedTime = 0f; // 경과 시간
+
+        bottomTMP.alpha = 1; // 초기 알파 값 설정
+
+        //1초 대기
+        yield return new WaitForSeconds(1);
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime; // 경과 시간 업데이트
+            float t = Mathf.Clamp01(elapsedTime / duration); // 시간에 따른 보간값 계산
+            bottomTMP.alpha = Mathf.Lerp(1f, 0f, t); // 알파 값을 서서히 줄임
+
+            yield return null;
+        }
+
+        bottomTMP.alpha = 0; // 최종적으로 알파 값을 0으로 설정
+    }
 }
