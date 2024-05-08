@@ -19,7 +19,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private GameObject player; // 플레이어 캐릭터
     [SerializeField]
-    private LayerMask playerLayer;
+    private LayerMask playerLayer; // 플레이어 레이어
     #region UI 변수
     [SerializeField]
     private GameObject interactionUI; // 상호작용이 가능한지 나타내는 UI 오브젝트
@@ -37,6 +37,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private TMP_InputField passwordInputField; // InputField 변수 선언
     private string correctLobbyPassword = "1028"; //  로비 키패드의 올바른 비밀번호
+
+    private string targetTag = "GORE"; // 바꿀 대상의 태그
+    [SerializeField]
+    private GameObject laboratoryTrap; // 대체할 프리팹
     #endregion
 
     #region Generator 변수
@@ -136,6 +140,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject keyPadUI; // KeyPad 오브젝트를 조작할 때 뜨는 UI
     [SerializeField]
     private GameObject lobbyTrap; // 로비에 있는 Trap오브젝트
+    [SerializeField]
+    private GameObject bathroomCaution; // 화장실 주의 표시 오브젝트
     #endregion
     
     [SerializeField]
@@ -317,7 +323,12 @@ public class PlayerGimicStage3 : MonoBehaviour
             if (hit.collider.CompareTag("BATHROOMDOOR"))
                 BathroomDoor();
             #endregion
-            // --------------------------------------------------------------------------------------------
+
+            #region Laboratory
+            // Gore 오브젝트 상호작용
+            if (hit.collider.CompareTag("GORE"))
+                Gore();
+            #endregion
         }
 
         // 플레이어가 상호작용가능한 오브젝트와 멀어질 경우
@@ -2198,6 +2209,8 @@ public class PlayerGimicStage3 : MonoBehaviour
         // 상호작용 시작, 문이 열리고 닫힘.
         if (Input.GetKeyDown(KeyCode.E))
         {
+            bathroomCaution.SetActive(true);
+
             if (bathroomDoorOpen)
             {
                 bathroomDoorAnimator.SetBool("IsOpen", true);
@@ -2208,6 +2221,61 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             bathroomDoorOpen = !bathroomDoorOpen;
+        }
+    }
+    #endregion
+
+    #region Laboratory
+    void Gore()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "심하게 훼손된 시체다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+        {
+            textField.text = "이 시체들 중 앞으로 나아가는 힌트가 있다..";
+            choiceText1Field.text = "1. 안을 뒤져본다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+
+                LaboratoryGameOver();
+            }
+
+            // 2번을 누를 때
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
         }
     }
     #endregion
@@ -2243,6 +2311,28 @@ public class PlayerGimicStage3 : MonoBehaviour
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 lobbyTrap.SetActive(true);
             }
+        }
+    }
+
+    void LaboratoryGameOver()
+    {
+        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(targetTag); // 태그로부터 모든 오브젝트 찾기
+
+        foreach(GameObject obj in objectsWithTag)
+        {
+            // Gore 오브젝트의 위치, 회전, 부모 등의 정보를 저장
+            Vector3 position = obj.transform.position;
+
+            // 대체할 프리팹으로 새로운 오브젝트 생성
+            GameObject newObject = Instantiate(laboratoryTrap, position, Quaternion.identity);
+
+            // 플레이어를 바라보도록 설정
+            newObject.transform.LookAt(transform.position);
+
+            newObject.transform.eulerAngles = new Vector3(0f, newObject.transform.eulerAngles.y, newObject.transform.eulerAngles.z);
+
+            // Gore 태그 오브젝트 삭제
+            Destroy(obj);
         }
     }
 

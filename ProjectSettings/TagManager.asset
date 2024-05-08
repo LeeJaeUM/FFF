@@ -15,7 +15,6 @@ TagManager:
   - Buildables
   - EnviroAble
   - WOODTRAP
-  - LABORATORYTRAP
   - PICTUREFRAME
   - DIARY
   - RETROTELEVISION
@@ -40,6 +39,7 @@ TagManager:
   - STORAGEDOOR
   - PILERS
   - BATHROOMDOOR
+  - GORE
   layers:
   - Default
   - TransparentFX
@@ -50,8 +50,8 @@ TagManager:
   - BuildObj
   - EnvrioAble
   - InteractionObj
-  - player
-  - 
+  - Player
+  - Camera
   - 
   - 
   - 
