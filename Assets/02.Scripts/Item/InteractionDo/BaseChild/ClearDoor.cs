@@ -17,17 +17,5 @@ public class ClearDoor : DoorBase
     {
         isUse = !isUse;
         keyPad.gameObject.SetActive(isUse);
-
-
-        //if ()
-        //{
-        //    //조건에 충족되면 아이템 추가 또는 여타 상호작용
-        //    DoorOpen();
-        //}
-        //else    // false면
-        //{
-        //    // 불충분시 안내 텍스트
-        //    bottomTMP.text = ("문을 열기 위한 도구가 필요하다.");
-        //}
     }
 }

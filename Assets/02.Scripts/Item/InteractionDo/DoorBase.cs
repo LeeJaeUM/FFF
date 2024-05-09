@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class DoorBase : MonoBehaviour, IInteractable
 {
-
-    protected TextMeshProUGUI bottomTMP;
     enum DoorType
     {
         None = 0,
@@ -20,13 +18,13 @@ public class DoorBase : MonoBehaviour, IInteractable
 
     [SerializeField] private DoorType doorType = DoorType.None;
 
+    private string announsText = string.Empty;
+
     public int itemcode = 0;
     private InventoryUI inventoryUI;
 
     readonly int Interact_Hash = Animator.StringToHash("Interact");
     private Animator animator;
-    private Stage1Manager stage1Manager;
-    private TipsUI tipsUI;
 
     private void Awake()
     {
@@ -36,9 +34,6 @@ public class DoorBase : MonoBehaviour, IInteractable
 
     private void Start()
     {
-        stage1Manager = Stage1Manager.Instance;
-        bottomTMP = stage1Manager.bottomTMP;
-        tipsUI = stage1Manager.TipsUI;
 
         //start에서 위의 doorType에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
         switch (doorType)
@@ -49,19 +44,23 @@ public class DoorBase : MonoBehaviour, IInteractable
                 break;
             case DoorType.Normal:
                 itemcode = (int)ItemCode.Axe;
+                announsText = ("도끼가 필요하다.");
                 break;
             case DoorType.Masterkey:
                 itemcode = (int)ItemCode.MasterKey;
+                announsText = ("특수한 열쇠가 필요하다.");
                 break;
             case DoorType.Firstkey:
                 itemcode = (int)ItemCode.Key;
+                announsText = ("열쇠가 필요하다.");
                 break;
             case DoorType.Metal:
                 itemcode = (int)ItemCode.OilBucket;
+                announsText = ("폭발물이 필요하다.");
                 break;
             case DoorType.Clear:
                 itemcode = -1;
-                Debug.Log("키패드로 비밀번호를 풀어야하는 문이다.");
+                announsText = ("키패드로 비밀번호를 풀어야하는 문이다.");
                 break;
             default: break;
         }
@@ -74,21 +73,16 @@ public class DoorBase : MonoBehaviour, IInteractable
         {
             DoorOpen();
         }
-        else if (true ) //아래 조건 여기에 사용
+        // interact했을때 인벤토리에 코드에 맞는 아이템이 있는지 확인해서
+        else if(inventoryUI.UseItemCheck((ItemCode)itemcode))
         {
-
-            // interact했을때 인벤토리에 코드에 맞는 아이템이 있는지 확인해서
-            //if (inventoryUI.UseItemCheck((ItemCode)itemcode))   // true면
-            //if (testBool)
-            //{
-            //    //조건에 충족되면 아이템 추가 또는 여타 상호작용
-            //    DoorOpen();
-            //}
-            //else    // false면
-            //{
-            //    // 불충분시 안내 텍스트
-            //    bottomTMP.text =  ("문을 열기 위한 도구가 필요하다.");
-            //}
+            //조건에 충족되면 아이템 추가 또는 여타 상호작용
+            DoorOpen();
+        }
+        else    // false면
+        {
+            // 불충분시 안내 텍스트
+            Stage1Manager.Instance.BottomTMPText = announsText;
         }
 
 
