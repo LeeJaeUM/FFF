@@ -14,6 +14,8 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     [SerializeField]
     private Transform gameOverZone; // 플레이어가 이동할 게임오버 존
+    [SerializeField]
+    private Transform lastGameZone; // 라스트 키를 배치할 공간
 
     [SerializeField]
     private Transform raycastOrigin;
@@ -166,6 +168,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject meatWall; // 고기벽 오브젝트
     [SerializeField]
     private GameObject microwave_gas; // 전자레인지와 가스 오브젝트
+    [SerializeField]
+    private GameObject lastKeyPrefab; // 라스트 게임 키 프리팹
     #endregion
     
     [SerializeField]
@@ -215,9 +219,19 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool treatmentPlantDoorUnLock = false; // 처리실 문의 해금상태
 
     private bool isInteractionMeatWall = false; // MeatWall과 상호작용 여부
+
+    private bool isLastKeySetting = false; // LastGameKey 세팅 여부
     #endregion
 
     #region AudioSource 변수
+    [SerializeField]
+    private AudioSource StartDoorSound; // 첫 문이 열렸을 때의 효과음
+    [SerializeField]
+    private AudioSource trapSound; // 트랩 사운드
+    [SerializeField]
+    private AudioSource bookSound; // 책 넘기는 사운드
+    [SerializeField]
+    private AudioSource roomDoorSound; // 문이 열렸을 때의 효과음
     [SerializeField]
     private AudioSource padBeep; // 패드가 틀렸을 때의 경고음
     [SerializeField]
@@ -227,6 +241,13 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private AudioSource bikeEngineSound; // 바이크 엔진 소리
     #endregion
+
+    private float totalTime = 30f; // 총 시간
+    private float currentTime; // 현재 시간
+    [SerializeField]
+    private TextMeshProUGUI timerText; // UI에 시간을 표시할 Text 객체
+    [SerializeField]
+    private GameObject lastTimer; // 타임어택 UI;
 
     private void Start()
     {
@@ -325,6 +346,13 @@ public class PlayerGimicStage3 : MonoBehaviour
             //Metal 상호작용
             if (hit.collider.CompareTag("METAL"))
                 Metal();
+
+            // LastGame 상호작용
+            if (hit.collider.CompareTag("LASTGAME"))
+            {
+                if (haveMetal && haveMicrowave_Gas)
+                    LastGame();
+            }
             #endregion
 
             #region Storage
@@ -465,7 +493,10 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 trap.SetActive(true); // 함정 생성
+                trapSound.Play(); // 트랩 사운드 재생
                 pictureFrame.SetActive(false); // 함정 생성
+
+                StartCoroutine(GameOver());
             }
 
             // 2번을 누를 때
@@ -691,6 +722,9 @@ public class PlayerGimicStage3 : MonoBehaviour
         // 상호작용 시작, 문이 열리고 닫힘.
         if (Input.GetKeyDown(KeyCode.E))
         {
+            // 문 열리는 사운드 재생
+            roomDoorSound.Play();
+
             if (restroomOpen)
             {
                 restroomDoorAnimator.SetBool("IsOpen", true);
@@ -1762,6 +1796,111 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textDisplayed = false;
                 interating = false;
                 choicing = false;
+            }
+        }
+    }
+
+    void LastGame()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 일반상호작용(전자레인지 설치가 안됬을 때)
+        if(!isLastKeySetting)
+        {
+            // 상호작용 시작
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+            {
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "전자레인지안에 가스통과 식기를 설치하자";
+                textDisplayed = true;
+            }
+
+            // 상호작용 종료
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+
+                // LastKey 세팅
+                GameObject newPrefabInstance = Instantiate(lastKeyPrefab, lastGameZone.position, lastGameZone.rotation);
+                newPrefabInstance.transform.position = lastGameZone.position;
+                isLastKeySetting = true;
+
+                StartCoroutine(GetItem());
+            }
+        }
+
+        // 특수상호작용(전자레인지가 설치 됬을 때
+        else if(isLastKeySetting)
+        {
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+            {
+                isInteractionMecanicEye = true;
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "타이밍에 맞춰 몬스터를 유인하고";
+                textDisplayed = true;
+            }
+
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+            {
+                textField.text = "전자레인지를 기폭시킨다..";
+                textDisplayed2 = true;
+            }
+
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+            {
+                textField.text = "준비는 끝났나?";
+                choiceText1Field.text = "1. 가동시킨다";
+                choiceText2Field.text = "2. 내버려둔다";
+                choicing = true;
+            }
+
+            // 선택지가 출력되었을 때 가능한 버튼
+            if (choicing)
+            {
+                // 1번을 누를 때
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+
+                    // 타이머 작동
+                    lastTimer.SetActive(true);
+                    currentTime = totalTime;
+                    UpdateTimerUI();
+                    // 1초마다 UpdateTimer 함수 호출
+                    InvokeRepeating("UpdateTimer", 1f, 1f);
+
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    textDisplayed2 = false;
+                    interating = false;
+                    choicing = false;
+                }
+
+                // 2번을 누를 때
+                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    textDisplayed2 = false;
+                    interating = false;
+                    choicing = false;
+                }
             }
         }
     }
@@ -2858,6 +2997,30 @@ public class PlayerGimicStage3 : MonoBehaviour
         }
     }
 
+    void UpdateTimer()
+    {
+        // 현재 시간을 1초 감소시킴
+        currentTime -= 1f;
+
+        // 시간이 0보다 작거나 같으면 게임 종료
+        if (currentTime <= 0f)
+        {
+            currentTime = 0f;
+            CancelInvoke("UpdateTimer");
+            lastTimer.SetActive(false);
+        }
+
+        UpdateTimerUI();
+    }
+
+    void UpdateTimerUI()
+    {
+        // UI에 현재 시간을 표시
+        int min = Mathf.FloorToInt(currentTime / 60f);
+        int sec = Mathf.FloorToInt(currentTime % 60f);
+        timerText.text = string.Format("{0:00} : {1:00}", min, sec);
+    }
+
     IEnumerator GetItem()
     {
         yield return new WaitForSeconds(0.5f);
@@ -2875,8 +3038,16 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         yield return new WaitForSeconds(7);
 
+        StartDoorSound.Play();
         startLeftDoor.SetTrigger("IsOpen");
         startRightDoor.SetTrigger("IsOpen");
         startDoorOpen = true;
+    }
+
+    IEnumerator GameOver()
+    {
+        yield return new WaitForSeconds(1f);
+
+        gameObject.transform.rotation = Quaternion.Euler(0, 0, 180);
     }
 }
