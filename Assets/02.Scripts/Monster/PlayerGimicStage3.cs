@@ -114,6 +114,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Animator storage2DownDoorAnimator; // 창고 2 아래쪽문 애니메이션
     [SerializeField]
     private Animator LeverAnimator; // Lever 애니메이션
+    [SerializeField]
+    private Animator treatmentPlantUpDoorAnimator;  // 처리실 위쪽 문 애니메이션
+    [SerializeField]
+    private Animator treatmentPlantDownDoorAnimator; // 처리실 아래쪽 문 애니메이션
     #endregion
 
     #region GameObject 변수
@@ -2433,6 +2437,10 @@ public class PlayerGimicStage3 : MonoBehaviour
 
                 // 레버가 움직임
                 LeverAnimator.SetBool("IsMove", true);
+
+                // 처리실 문이 열림
+                treatmentPlantDownDoorAnimator.SetBool("IsOpen", true);
+                treatmentPlantUpDoorAnimator.SetBool("IsOpen", true);
             }
 
             // 2번을 누를 때
