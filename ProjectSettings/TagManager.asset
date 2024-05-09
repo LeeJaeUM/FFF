@@ -45,6 +45,9 @@ TagManager:
   - BLACKBLOCK
   - WHITEBLOCK
   - LEVER
+  - OPTION
+  - MEATWALL
+  - MICROWAVE
   layers:
   - Default
   - TransparentFX

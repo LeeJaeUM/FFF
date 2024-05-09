@@ -159,6 +159,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject storage2Trap; // 두번째 창고의 비밀번호를 맞았을 경우 생기는 트랩
     [SerializeField]
     private GameObject caution2; // 창고2의 경고문
+    [SerializeField]
+    private GameObject meatWall; // 고기벽 오브젝트
+    [SerializeField]
+    private GameObject microwave_gas; // 전자레인지와 가스 오브젝트
     #endregion
     
     [SerializeField]
@@ -193,6 +197,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool haveMetal = false; // 인벤토리에 Metal이 있을 경우
     private bool havePilers = false; // 인벤토리에 Pilers가 있을 경우
     private bool haveDoctorEye = false; // 인벤토리에 DoctorEye가 있을 경우
+    private bool haveboom = false; // 인벤토리에 Boom이 있을 경우
+    private bool haveMicrowave_Gas = false; // 인벤토리의 Microwave_Gas 유무
     private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
     private bool isOperable = false; // 발전기 조작 가능 여부
 
@@ -203,10 +209,9 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool mecanicEyeUnlock = false; // MecanicEye의 해금 상태
     private bool storage2Unlock = false; // Storage2Keypad의 해금 상태
 
-    private bool caution2_1 = false; // caution2의 텍스트가 빨강,red일 경우
-    private bool caution2_2 = false; // caution2의 텍스트가 빨강,black일 경우
-    private bool caution2_3 = false; // caution2의 텍스트가 검정,red일 경우
-    private bool caution2_4 = false; // caution2의 텍스트가 검정,black일 경우
+    private bool treatmentPlantDoorUnLock = false; // 처리실 문의 해금상태
+
+    private bool isInteractionMeatWall = false; // MeatWall과 상호작용 여부
     #endregion
 
     #region AudioSource 변수
@@ -335,6 +340,13 @@ public class PlayerGimicStage3 : MonoBehaviour
             // Blade 상호작용
             if (hit.collider.CompareTag("BLADE"))
                 Blade();
+
+            // Option 상호작용
+            if (hit.collider.CompareTag("OPTION"))
+            {
+                if(!haveboom && isInteractionMeatWall)
+                    Option();
+            }
             #endregion
 
             #region Bathroom
@@ -363,7 +375,24 @@ public class PlayerGimicStage3 : MonoBehaviour
 
             // Lever 상호작용
             if (hit.collider.CompareTag("LEVER"))
-                Lever();
+            {
+                if(!treatmentPlantDoorUnLock)
+                    Lever();
+            }
+            #endregion
+
+            #region Treatmentplant
+            // MeatWall 오브젝트와 상호작용 할 때
+            if (hit.collider.CompareTag("MEATWALL"))
+                MeatWall();
+
+            // MicroWave 상호작용
+            if (hit.collider.CompareTag("MICROWAVE"))
+                Microwave();
+
+            // TrashCan 상호작용
+            if (hit.collider.CompareTag("TRASHCAN"))
+                TrashCan();
             #endregion
         }
 
@@ -2176,6 +2205,61 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
         }
     }
+
+    void Option()
+    {
+        if(!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "여러 상자들이 쌓여있다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+        {
+            textField.text = "쓸만한게 있을지 모른다";
+            choiceText1Field.text = "1. 뒤져본다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                getItemTextField.text = "폭탄 획득";
+                haveboom = true;
+
+                StartCoroutine(GetItem());
+            }
+
+            // 2번을 누를 때
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
+    }
     #endregion
 
     #region Bathroom
@@ -2441,6 +2525,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 // 처리실 문이 열림
                 treatmentPlantDownDoorAnimator.SetBool("IsOpen", true);
                 treatmentPlantUpDoorAnimator.SetBool("IsOpen", true);
+
+                treatmentPlantDoorUnLock = true;
             }
 
             // 2번을 누를 때
@@ -2456,6 +2542,167 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choicing = false;
             }
         }
+    }
+    #endregion
+
+    #region TreatmentPlant
+    void MeatWall()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 일반상호작용 (인벤토리에 폭탄이 없을 시)
+        if (!haveboom)
+        {
+            // 일반상호작용 시작
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+            {
+                isInteractionMecanicEye = true;
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "이쪽 벽만 유독 물컹거린다.";
+                textDisplayed = true;
+                isInteractionMeatWall = true; // 
+            }
+
+            // 일반상호작용 중
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+            {
+                textField.text = "이 벽을 없앨만한 것을 찾아보자";
+                textDisplayed2 = true;
+            }
+
+            // 일반상호작용 종료
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+            {
+                textField.text = " ";
+                player.SetActive(true);
+                isInteraction = false;
+                textDisplayed = false;
+                textDisplayed2 = false;
+                interating = false;
+            }
+        }
+
+        // 특수상호작용 (인벤토리에 폭탄이 있을 경우)
+        if(haveboom)
+        {
+            // 상호작용 시작
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+            {
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "폭탄으로 이 벽을 부술 수 있을것이다";
+                textDisplayed = true;
+            }
+
+            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+            {
+                textField.text = "부숴볼까?";
+                choiceText1Field.text = "1. 부순다";
+                choiceText2Field.text = "2. 내버려둔다";
+                choicing = true;
+            }
+
+            // 선택지가 출력되었을 때 가능한 버튼
+            if (choicing)
+            {
+                // 1번을 누를 때
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+
+                    Destroy(meatWall); // 고기벽 삭제
+                }
+
+                // 2번을 누를 때
+                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+                }
+            }
+        }
+    }
+
+    void Microwave()
+    {
+        if(!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "왜 이런곳에 전자레인지하고 가스가...";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+        {
+            textField.text = "챙길까?";
+            choiceText1Field.text = "1. 챙긴다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        // 선택지
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                getItemTextField.text = "전자레인지와 가스 획득";
+                Destroy(microwave_gas); // 전자레인지 삭제
+                haveMicrowave_Gas = true; // 인벤토리에 Microwave 획득
+
+                StartCoroutine(GetItem());
+            }
+
+            // 2번을 누를 때
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
+    }
+
+    void TrashCan()
+    {
+
     }
     #endregion
 
