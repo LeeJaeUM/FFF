@@ -17,18 +17,20 @@ public enum ItemCode
     GasMask,        // 가스마스크
     Syrings,        // 주사기
     Key,            // 열쇠          /10
+    FirstDoorKey,   // FirstKeyDoor를 여는 키   //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
     FakeKey,        // 가짜열쇠
     MasterKey,      // 마스터키
     noteHint,       // 쪽지 힌트
     noteCaution,    // 주의문
     Book,           // 책
+    Bucket,         // 기름통(오일없는)  //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
     OilBucket,      // 오일(기름통)      //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
     OldPick,        // 녹슨 곡괭이       //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함 
     OldAxe,         // 녹슨 도끼         //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함 
     Knife,          // 나이프            //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함 
 
     // 장비
-    Gun,            // 총            /16
+    Gun,            // 총            /22
     Axe,            // 도끼
     Hammer,         // 망치
     Crowbar,        // 쇠지렛대
