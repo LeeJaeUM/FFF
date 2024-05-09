@@ -14,5 +14,6 @@ public class Matches : MonoBehaviour, IInteractable
     public void Interact()
     {
         inventoryUI.GetItemToSlot(ItemCode.Matches, 1);
+        Destroy(gameObject);
     }
 }

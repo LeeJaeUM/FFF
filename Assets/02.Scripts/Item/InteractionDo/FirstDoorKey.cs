@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OldAxe : MonoBehaviour, IInteractable
+public class FirstDoorKey : MonoBehaviour, IInteractable
 {
     InventoryUI inventoryUI;
 
@@ -13,7 +13,7 @@ public class OldAxe : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        inventoryUI.GetItemToSlot(ItemCode.OldAxe, 1);
+        inventoryUI.GetItemToSlot(ItemCode.FirstDoorKey, 1);
         Destroy(gameObject);
     }
 }

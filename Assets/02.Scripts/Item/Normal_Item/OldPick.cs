@@ -15,5 +15,6 @@ public class OldPick : MonoBehaviour, IInteractable
     public void Interact()
     {
         inventoryUI.GetItemToSlot(ItemCode.OldPick, 1);
+        Destroy(gameObject);
     }
 }
