@@ -13,6 +13,9 @@ public class PlayerGimicStage3 : MonoBehaviour
     RaycastHit hit;
 
     [SerializeField]
+    private Transform gameOverZone; // 플레이어가 이동할 게임오버 존
+
+    [SerializeField]
     private Transform raycastOrigin;
     [SerializeField]
     private Color rayColor = Color.red;
@@ -2702,7 +2705,62 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     void TrashCan()
     {
+        if(!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
 
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "뒤에 숨겨진 통로가 있다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+        {
+            textField.text = "여기로 빠져나갈수 있을것이다...";
+            choiceText1Field.text = "1. 빠져나간다";
+            choiceText2Field.text = "2. 가만히 있는다";
+            choicing = true;
+        }
+
+        // 선택지
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+
+                player.transform.position = gameOverZone.transform.position;
+            }
+
+            // 2번을 누를 때
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " "; // 상호작용 종료
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
     }
     #endregion
 
