@@ -32,7 +32,7 @@ public class OilDrum : MonoBehaviour, IInteractable
     private void BreakOilDrum()
     {
         // 특수 상호작용: 드럼 부수는 동작 실행
-        Debug.Log("캉!!"); // 사운드 재생 등의 동작 구현
+        Debug.Log("캉!!"); // 사운드 재생
 
         // 인벤토리에 Bucket이 있는지 확인
         if (inventoryUI.UseItemCheck(bucket))
