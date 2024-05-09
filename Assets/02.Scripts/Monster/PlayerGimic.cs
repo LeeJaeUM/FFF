@@ -13,8 +13,11 @@ public class PlayerGimic : MonoBehaviour
     //기본적으론 null 상태
     IInteractable cur_Interactable = null;
 
+    public  bool testIInteracHave = false;
+
     TipsUI tipsUI;
     PlayerInputAction inputActions;
+    Collider otherSave;
 
     private void Awake()
     {
@@ -38,11 +41,25 @@ public class PlayerGimic : MonoBehaviour
         tipsUI = Stage1Manager.Instance.TipsUI;
     }
 
+    private void Update()
+    {
+        // || otherSave.gameObject 이걸로 사라졌는지 판단
+        if (cur_Interactable == null)
+        {
+            testIInteracHave = false;
+        }
+        else
+        {
+            testIInteracHave = true;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         cur_Interactable = other.GetComponent<IInteractable>();
         if (cur_Interactable != null)
         {
+            otherSave = other;
             isPlayerIn = true;
             tipsUI.CanUse_InteractObj = isPlayerIn;
         }
