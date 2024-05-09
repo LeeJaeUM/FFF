@@ -21,8 +21,7 @@ public class TreeObj : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        //if (inventoryUI.UseItemCheck(oldAxe))
-        if(false)
+        if (inventoryUI.UseItemCheck(oldAxe))
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
             Debug.Log("나무 테스트");
@@ -43,7 +42,7 @@ public class TreeObj : MonoBehaviour, IInteractable
     private void BreakTree()
     {
         animator.SetTrigger(Interact_Hash);
-        inventoryUI.GetItemToSlot(ItemCode.Wood, 8);  //Wood 얻기 : 아이템코드로  getItem에 담기
+        //inventoryUI.GetItemToSlot(ItemCode.Wood, 8);  //Wood 얻기 : 아이템코드로  getItem에 담기
         breakCount++;
         if(breakCount > 2)
         {
