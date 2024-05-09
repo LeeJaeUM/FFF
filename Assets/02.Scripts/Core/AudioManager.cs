@@ -19,10 +19,15 @@ public class AudioManager : MonoBehaviour
     AudioSource[] sfxPlayers;
     int channelIndex;
 
-    [Header("Obj_Transform")]
-    public Transform listenerPosition; // 듣는 사람의 위치 (주로 카메라)
-    public Transform[] soundSourcePosition = new Transform[5]; // 소리를 발생시키는 오브젝트의 위치
-    public float maxVolumeDistance = 15f; // 최대 볼륨을 갖는 거리
+    /// <summary>
+    /// 필요한 소리
+    /// 문여는 소리, 문 안열리는 소리 , 철제문 열리는 소리
+    /// startDoor 열리는 소리, 나무, 곡괭이질, deadlyBody는 고어 소리에서
+    /// 종이 넘기는 소리, 키패드 입력소리, 열릴떄와 틀릴떄 효과음, 
+    /// 열쇠 따는소리, 음식 먹는 소리, Box류 부시는 소리, 터지는 소리
+    /// 기름통 뚜껑따는 소리
+    /// 
+    /// </summary>
 
     public enum Sfx
     {
@@ -40,7 +45,9 @@ public class AudioManager : MonoBehaviour
     }
     private void Start()
     {
-        PlayBgm(true);
+        //PlayBgm(true);
+
+        PlaySfx(Sfx.Knock);
     }
 
     private void Init()
@@ -91,37 +98,8 @@ public class AudioManager : MonoBehaviour
             channelIndex = loopIndex;
             sfxPlayers[loopIndex].clip = sfxClips[(int)sfx];
             sfxPlayers[loopIndex].Play();
-            StartCoroutine(DirAudio(loopIndex));
             break;
         }
     }
 
-
-    IEnumerator DirAudio(int index)
-    {
-        Debug.Log($"{index}번째거 음악실애");
-        while (true)
-        {
-
-            if (listenerPosition != null && soundSourcePosition != null && sfxPlayers[index] != null)
-            {
-                float distance = Vector3.Distance(soundSourcePosition[index].position, listenerPosition.position);
-                float volume = 1f; // 초기 볼륨
-
-                // 소리가 최대 거리를 벗어난 경우
-                if (distance > maxVolumeDistance)
-                {
-                    volume = 0f; // 소리가 들리지 않음
-                }
-                else
-                {
-                    // 소리가 최대 거리 내에 있는 경우, 거리에 따라 볼륨 조절
-                    volume = 1f - (distance / maxVolumeDistance);
-                }
-
-                sfxPlayers[index].volume = volume; // 볼륨 설정
-            }
-            yield return null;
-        }
-    }
 }

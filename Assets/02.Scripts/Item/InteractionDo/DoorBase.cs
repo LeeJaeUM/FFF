@@ -44,7 +44,7 @@ public class DoorBase : MonoBehaviour, IInteractable
                 break;
             case DoorType.Normal:
                 itemcode = (int)ItemCode.Axe;
-                announsText = ("도끼가 필요하다.");
+                announsText = ("부술 수 있는 도구가 필요하다");
                 break;
             case DoorType.Masterkey:
                 itemcode = (int)ItemCode.MasterKey;
@@ -60,7 +60,7 @@ public class DoorBase : MonoBehaviour, IInteractable
                 break;
             case DoorType.Clear:
                 itemcode = -1;
-                announsText = ("키패드로 비밀번호를 풀어야하는 문이다.");
+                announsText = ("옆의 패드의 비밀번호를 입력해야한다.");
                 break;
             default: break;
         }
@@ -92,7 +92,7 @@ public class DoorBase : MonoBehaviour, IInteractable
     protected void DoorOpen()
     {
         //문 성공적으로 열림
-        Debug.Log("문 성공적으로 열림");
+        Stage1Manager.Instance.BottomTMPText = ("문이 열렸다");
         animator.SetTrigger(Interact_Hash);
     }
 }
