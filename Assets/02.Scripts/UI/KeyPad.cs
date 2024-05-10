@@ -70,10 +70,10 @@ public class KeyPad : MonoBehaviour
     void ClickNumPad(int clickNum)
     {
         //selectNum가 10 = *, 11 = 0, 12 = #, 13이 확인버튼
-        Debug.Log(clickNum);
 
         if(numCount < 4)
         {
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.KeypadInput );
             //입력된 숫자 글자에 넣기
             switch (clickNum)
             {
@@ -109,12 +109,14 @@ public class KeyPad : MonoBehaviour
                 //정답이면 true 틀리면 false
                 if (CheckAnswer())
                 {
+                    AudioManager.instance.PlaySfx(AudioManager.Sfx.PasswordSuccess );
                     Debug.Log("정답!! 이 시점에서 액션을 쓰면 확인가능");
                     lensDotImg.color = Color.green;
                     onAnswerCheck?.Invoke();    
                 }
                 else
                 {
+                    AudioManager.instance.PlaySfx(AudioManager.Sfx.PasswordFailure );
                     //4자리를 넘으면 초기화
                     numCount = 0;
                     clickNums.Clear();

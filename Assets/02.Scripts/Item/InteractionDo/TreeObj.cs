@@ -42,10 +42,12 @@ public class TreeObj : MonoBehaviour, IInteractable
     private void BreakTree()
     {
         animator.SetTrigger(Interact_Hash);
-        //inventoryUI.GetItemToSlot(ItemCode.Wood, 8);  //Wood 얻기 : 아이템코드로  getItem에 담기
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.WoodChoppingWithAxe);
+        inventoryUI.GetItemToSlot(ItemCode.Wood, 8);  //Wood 얻기 : 아이템코드로  getItem에 담기
         breakCount++;
         if(breakCount > 2)
         {
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.FallingTree);
             Destroy(gameObject);                    // 나무를 없애고
         }
     }

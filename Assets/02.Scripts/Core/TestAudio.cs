@@ -8,12 +8,11 @@ public class TestAudio : TestBase
     protected override void OnTest1(InputAction.CallbackContext context)
     {
         Debug.Log("효과음 1");
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Knock);
+        //AudioManager.instance.PlaySfx(AudioManager.Sfx.Knock);
     }
 
     protected override void OnTest2(InputAction.CallbackContext context)
     {
         Debug.Log("효과음 22");
-        AudioManager.instance.PlaySfx(AudioManager.Sfx.Knock_Power);
     }
 }

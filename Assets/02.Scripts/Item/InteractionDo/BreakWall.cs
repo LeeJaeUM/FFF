@@ -8,7 +8,8 @@ public class BreakWall : MonoBehaviour, IInteractable
     private ItemCode matches = ItemCode.Matches; 
     private InventoryUI inventoryUI;
 
-    public bool testbool = false;
+    public float dynamiteDelay = 2.0f;
+
 
     private void Awake()
     {
@@ -25,24 +26,35 @@ public class BreakWall : MonoBehaviour, IInteractable
             // 코드 추가 예정
 
             Stage1Manager.Instance.BottomTMPText = ("길을 막은 벽을 처리했다");
-            
+
             // 벽을 없애고
-            Destroy(gameObject);
-            
+            StartCoroutine(WallDestroy());
         }
         else if (inventoryUI.UseItemCheck(dynamite))
         {
             Stage1Manager.Instance.BottomTMPText = ("Dynamite에 불을 붙일 것이 필요하다");
         }
-        else if(inventoryUI.UseItemCheck(ItemCode.Hammer))
+        else if(inventoryUI.UseItemCheck(ItemCode.Hammer) || inventoryUI.UseItemCheck(ItemCode.OldPick))
         {
-            int random = Random.Range(0, 2);
-            if(random > 0)
-                Stage1Manager.Instance.BottomTMPText = ("망치로도 부술 수 없을 거 같다");
-            else
-                Stage1Manager.Instance.BottomTMPText = ("더 강한 충격을 줘야할 거 같다");
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.PickaxeMiningIronOre );
+            Stage1Manager.Instance.BottomTMPText = ("더 강한 충격을 줘야할 거 같다");
         }
 
+    }
+
+    IEnumerator WallDestroy()
+    {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.DynamiteIgnition );
+
+        yield return new WaitForSeconds(dynamiteDelay);
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.DynamiteExplosion);
+
+
+        yield return new WaitForSeconds(0.75f);
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.BreakingWall);
+        Destroy(gameObject);
     }
 
 }

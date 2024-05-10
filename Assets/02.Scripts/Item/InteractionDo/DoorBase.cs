@@ -9,7 +9,6 @@ public class DoorBase : MonoBehaviour, IInteractable
     enum DoorType
     {
         None = 0,
-        Normal,
         Masterkey,
         Firstkey,
         Metal,
@@ -17,8 +16,14 @@ public class DoorBase : MonoBehaviour, IInteractable
     }
 
     [SerializeField] private DoorType doorType = DoorType.None;
+    AudioManager.Sfx sfx_Open;
+    AudioManager.Sfx sfx_Close;
+    AudioManager.Sfx sfx_CannotOpen = AudioManager.Sfx.HammerHittingMetalDoor;
 
     private string announsText = string.Empty;
+
+    [SerializeField] private bool isFirst = true;
+    [SerializeField] private bool isOpen = false;
 
     public int itemcode = 0;
     private InventoryUI inventoryUI;
@@ -41,26 +46,32 @@ public class DoorBase : MonoBehaviour, IInteractable
             case DoorType.None:
                 Debug.Log("아무것도 선택되지 않은 문");
                 itemcode = 99;
-                break;
-            case DoorType.Normal:
-                itemcode = (int)ItemCode.Axe;
-                announsText = ("부술 수 있는 도구가 필요하다");
+                sfx_Open = AudioManager.Sfx.DoorOpening;
+                sfx_Close = AudioManager.Sfx.DoorClosing;
                 break;
             case DoorType.Masterkey:
                 itemcode = (int)ItemCode.MasterKey;
                 announsText = ("특수한 열쇠가 필요하다.");
+                sfx_Open = AudioManager.Sfx.MetalDoorOpening;
+                sfx_Close = AudioManager.Sfx.MetalDoorOpening;
                 break;
             case DoorType.Firstkey:
                 itemcode = (int)ItemCode.Key;
                 announsText = ("열쇠가 필요하다.");
+                sfx_Open = AudioManager.Sfx.DoorOpening;
+                sfx_Close = AudioManager.Sfx.DoorClosing;
                 break;
             case DoorType.Metal:
                 itemcode = (int)ItemCode.OilBucket;
                 announsText = ("폭발물이 필요하다.");
+                sfx_Open = AudioManager.Sfx.MetalDoorOpening;
+                sfx_Close = AudioManager.Sfx.MetalDoorOpening;
                 break;
             case DoorType.Clear:
                 itemcode = -1;
                 announsText = ("옆의 패드의 비밀번호를 입력해야한다.");
+                sfx_Open = AudioManager.Sfx.MetalDoorOpening;
+                sfx_Close = AudioManager.Sfx.MetalDoorOpening;
                 break;
             default: break;
         }
@@ -83,6 +94,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         {
             // 불충분시 안내 텍스트
             Stage1Manager.Instance.BottomTMPText = announsText;
+            AudioManager.instance.PlaySfx(sfx_CannotOpen);
         }
 
 
@@ -91,8 +103,23 @@ public class DoorBase : MonoBehaviour, IInteractable
 
     protected void DoorOpen()
     {
-        //문 성공적으로 열림
-        Stage1Manager.Instance.BottomTMPText = ("문이 열렸다");
-        animator.SetTrigger(Interact_Hash);
+        if(!isOpen)
+        {
+            if(isFirst)
+            {
+                //문 성공적으로 열림
+                Stage1Manager.Instance.BottomTMPText = ("문이 열렸다");
+                isFirst = false;
+            }
+            AudioManager.instance.PlaySfx(sfx_Open);
+            animator.SetTrigger(Interact_Hash);
+            
+        }
+        else
+        {
+            AudioManager.instance.PlaySfx(sfx_Close);
+            animator.SetTrigger(Interact_Hash);
+        }
+
     }
 }
