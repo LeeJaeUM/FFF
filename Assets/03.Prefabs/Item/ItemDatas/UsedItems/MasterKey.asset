@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
-  m_Name: Hammer
+  m_Name: MasterKey
   m_EditorClassIdentifier: 
-  itemCode: 19
+  itemCode: 13
   itemIcon: {fileID: 0}
-  itemName: "\uD574\uBA38"
-  itemType: 2
+  itemName: "\uB9C8\uC2A4\uD130\uD0A4"
+  itemType: 0
   itemPrefab: {fileID: 0}
   itemDescription: 
-  SizeX: 1
-  SizeY: 2
+  SizeX: 0
+  SizeY: 0
   maxItemCount: 1
-  itemWeight: 8
+  itemWeight: 0

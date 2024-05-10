@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
-  m_Name: CanFood
+  m_Name: noteCaution
   m_EditorClassIdentifier: 
-  itemCode: 7
+  itemCode: 15
   itemIcon: {fileID: 0}
-  itemName: "\uD1B5\uC870\uB9BC"
+  itemName: "\uACBD\uACE0\uBB38"
   itemType: 1
   itemPrefab: {fileID: 0}
   itemDescription: 
   SizeX: 0
   SizeY: 0
-  maxItemCount: 3
-  itemWeight: 3
+  maxItemCount: 1
+  itemWeight: 0
