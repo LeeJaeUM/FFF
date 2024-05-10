@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClearDoor : DoorBase
 {
-    KeyPad keyPad;
+    KeypadSystem.KeyPad keyPad;
     [SerializeField] private bool isUse = false;
 
     private void Start()

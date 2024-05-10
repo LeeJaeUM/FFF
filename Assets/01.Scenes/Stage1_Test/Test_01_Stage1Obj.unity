@@ -136,6 +136,10 @@ PrefabInstance:
       value: ClearDoor
       objectReference: {fileID: 0}
     - target: {fileID: 5923353992338132113, guid: ae49fb3e5b1628e43bd2809eac9c622c, type: 3}
+      propertyPath: isFirst
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5923353992338132113, guid: ae49fb3e5b1628e43bd2809eac9c622c, type: 3}
       propertyPath: doorType
       value: 5
       objectReference: {fileID: 0}
@@ -240,6 +244,10 @@ PrefabInstance:
     - target: {fileID: 8689400104565535144, guid: 9373e99b3be0f234e83d739f6a0dfc5e, type: 3}
       propertyPath: m_Name
       value: MasterKeyDoor_Stage1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9171868560953520687, guid: 9373e99b3be0f234e83d739f6a0dfc5e, type: 3}
+      propertyPath: isFirst
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -444,6 +452,10 @@ PrefabInstance:
     - target: {fileID: 4337050113896650, guid: b571015d967a73b4cadb57317d7d0547, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711673236047420971, guid: b571015d967a73b4cadb57317d7d0547, type: 3}
+      propertyPath: isFirst
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2417,6 +2429,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1906358113}
     m_Modifications:
+    - target: {fileID: 2511333139222650726, guid: 0b4609d0475751a4781937f60ee64a3a, type: 3}
+      propertyPath: isFirst
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4134918898502914953, guid: 0b4609d0475751a4781937f60ee64a3a, type: 3}
       propertyPath: m_Name
       value: FirstKeyDoor_Stage1
@@ -2517,6 +2533,10 @@ PrefabInstance:
     - target: {fileID: 4946436644643995066, guid: eec603eaf8857f440b7b9f2284eb0d98, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9001923258607172572, guid: eec603eaf8857f440b7b9f2284eb0d98, type: 3}
+      propertyPath: isFirst
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

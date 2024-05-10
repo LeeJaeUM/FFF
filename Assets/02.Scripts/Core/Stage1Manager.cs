@@ -69,15 +69,15 @@ public class Stage1Manager : MonoBehaviour
 
     }
 
-    [SerializeField] private KeyPad keyPad;
-    public KeyPad KeyPad
+    [SerializeField] private KeypadSystem.KeyPad keyPad;
+    public KeypadSystem.KeyPad KeyPad
     {
         get
         {
             if(keyPad == null)
             {
                 Debug.Log("ds");
-                keyPad = FindObjectOfType<KeyPad>(true);
+                keyPad = FindObjectOfType<KeypadSystem.KeyPad>(true);
             }
             return keyPad;
         }
