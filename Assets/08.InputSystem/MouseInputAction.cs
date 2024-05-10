@@ -62,6 +62,15 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Produce"",
+                    ""type"": ""Button"",
+                    ""id"": ""2570382a-4fc5-49a2-83a4-4416f6e552f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -106,6 +115,17 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""InventroyOnOff"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c3da118-5678-4f50-bbe4-021add688e47"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Produce"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -165,6 +185,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         m_UI_RClick = m_UI.FindAction("RClick", throwIfNotFound: true);
         m_UI_LClick = m_UI.FindAction("LClick", throwIfNotFound: true);
         m_UI_InventroyOnOff = m_UI.FindAction("InventroyOnOff", throwIfNotFound: true);
+        m_UI_Produce = m_UI.FindAction("Produce", throwIfNotFound: true);
         // Interacable
         m_Interacable = asset.FindActionMap("Interacable", throwIfNotFound: true);
         m_Interacable_InteracableAction = m_Interacable.FindAction("InteracableAction", throwIfNotFound: true);
@@ -233,6 +254,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RClick;
     private readonly InputAction m_UI_LClick;
     private readonly InputAction m_UI_InventroyOnOff;
+    private readonly InputAction m_UI_Produce;
     public struct UIActions
     {
         private @MouseInputAction m_Wrapper;
@@ -241,6 +263,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         public InputAction @RClick => m_Wrapper.m_UI_RClick;
         public InputAction @LClick => m_Wrapper.m_UI_LClick;
         public InputAction @InventroyOnOff => m_Wrapper.m_UI_InventroyOnOff;
+        public InputAction @Produce => m_Wrapper.m_UI_Produce;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -262,6 +285,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @InventroyOnOff.started += instance.OnInventroyOnOff;
             @InventroyOnOff.performed += instance.OnInventroyOnOff;
             @InventroyOnOff.canceled += instance.OnInventroyOnOff;
+            @Produce.started += instance.OnProduce;
+            @Produce.performed += instance.OnProduce;
+            @Produce.canceled += instance.OnProduce;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -278,6 +304,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @InventroyOnOff.started -= instance.OnInventroyOnOff;
             @InventroyOnOff.performed -= instance.OnInventroyOnOff;
             @InventroyOnOff.canceled -= instance.OnInventroyOnOff;
+            @Produce.started -= instance.OnProduce;
+            @Produce.performed -= instance.OnProduce;
+            @Produce.canceled -= instance.OnProduce;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -356,6 +385,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         void OnRClick(InputAction.CallbackContext context);
         void OnLClick(InputAction.CallbackContext context);
         void OnInventroyOnOff(InputAction.CallbackContext context);
+        void OnProduce(InputAction.CallbackContext context);
     }
     public interface IInteracableActions
     {

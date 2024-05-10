@@ -106,7 +106,7 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 인벤토리 무게
     /// </summary>
-    private float weight = 0.0f;
+    private float weight = -1.0f;
 
     public float TotalWeight
     {
@@ -178,7 +178,7 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        TotalWeight = 0;
+        TotalWeight = 0.0f;
         UI.Initialized();
         invenGrid.GridInitialize();
         produceManager.Initialize();
@@ -189,14 +189,17 @@ public class InventoryUI : MonoBehaviour
         inputAction.UI.Enable();
         inputAction.UI.LClick.performed += OnLeftClick;
         inputAction.UI.InventroyOnOff.performed += OnOpenClose;
+        inputAction.UI.Produce.performed += OnProduce;
     }
 
     private void OnDisable()
     {
-        inputAction.UI.InventroyOnOff.performed += OnOpenClose;
+        inputAction.UI.Produce.performed -= OnProduce;
+        inputAction.UI.InventroyOnOff.performed -= OnOpenClose;
         inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
+
 
     #endregion
 
@@ -295,6 +298,14 @@ public class InventoryUI : MonoBehaviour
         if (UI != null)
         {
             UI.OnOff();
+        }
+    }
+
+    private void OnProduce(InputAction.CallbackContext context)
+    {
+        if(produceManager != null)
+        {
+            produceManager.OnOff();
         }
     }
 

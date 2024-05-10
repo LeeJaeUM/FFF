@@ -90,7 +90,7 @@ public class PlayerInteracable : MonoBehaviour
             IInteracable inter = hit.collider.gameObject.GetComponent<IInteracable>();
             if (inter != null && inter.CanUse)
             {
-                Debug.Log($"{inter}의 동작이 가능합니다.");
+                //Debug.Log($"{inter}의 동작이 가능합니다.");
                 return inter;
             }
         }
