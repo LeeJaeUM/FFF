@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class TreeObj : MonoBehaviour, IInteractable
 {
-    private ItemCode oldAxe = ItemCode.OldAxe;   
+    private ItemCode axe = ItemCode.Axe;   
     [SerializeField]
     private int breakCount = 0; //나무가 도끼질을 버티는 횟수카운트 // 3회
     private InventoryUI inventoryUI;
@@ -21,7 +21,7 @@ public class TreeObj : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        if (inventoryUI.UseItemCheck(oldAxe))
+        if (inventoryUI.UseItemCheck(axe))
         {
             //조건에 충족되면 아이템 추가 또는 여타 상호작용
             Debug.Log("나무 테스트");

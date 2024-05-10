@@ -2390,6 +2390,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -50
       objectReference: {fileID: 0}
+    - target: {fileID: 3725889871213412463, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 7c60ef60414c3b040bd18aba1465e89a, type: 2}
+    - target: {fileID: 3725889871213412463, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725889871213412463, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -1886996321495870322, guid: 7c60ef60414c3b040bd18aba1465e89a, type: 2}
+    - target: {fileID: 3725889871213412463, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: 97690656
+      objectReference: {fileID: 0}
+    - target: {fileID: 3725889871213412463, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4144528366239261458, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
       propertyPath: keyPad
       value: 

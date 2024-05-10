@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/01.Scenes/Title.unity
+    guid: 286896ffb11b8b9468676f646ec31e29
+  - enabled: 1
+    path: Assets/01.Scenes/Stage1_Test/Stage1_oculusion.unity
+    guid: c2b35046896077f498af9c2d44d0adcd
   m_configObjects: {}
