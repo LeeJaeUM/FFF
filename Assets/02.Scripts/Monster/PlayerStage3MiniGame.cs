@@ -81,6 +81,12 @@ public class PlayerStage3MiniGame : MonoBehaviour
             else if (other.CompareTag("WHITEBLOCK"))
                 SceneManager.LoadScene("GameOverScene");
         }
+
+        // 몬스터와 충돌했을 경우
+        if(other.CompareTag("MONSTER"))
+        {
+            SceneManager.LoadScene("GameOverScene");
+        }
     }
 
     // Update is called once per frame

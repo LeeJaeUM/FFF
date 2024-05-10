@@ -25,6 +25,8 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private GameObject player; // 플레이어 캐릭터
     [SerializeField]
+    private Transform playerPosition; // 플레이어 위치
+    [SerializeField]
     private LayerMask playerLayer; // 플레이어 레이어
     #region UI 변수
     [SerializeField]
@@ -226,8 +228,6 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     #region AudioSource 변수
     [SerializeField]
-    private AudioSource StartDoorSound; // 첫 문이 열렸을 때의 효과음
-    [SerializeField]
     private AudioSource trapSound; // 트랩 사운드
     [SerializeField]
     private AudioSource[] bookSound; // 책 넘기는 사운드
@@ -264,6 +264,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private AudioSource lastGameSound; // 마지막 기믹 사운드
     #endregion
+
+    [SerializeField]
+    private NavMeshAgent monster; // 몬스터 네브매쉬
+    [SerializeField]
+    private NavMeshAgent trashcanMonster; // 트래시 캔 몬스터 네브매시
 
     private float totalTime = 30f; // 총 시간
     private float currentTime; // 현재 시간
@@ -1447,8 +1452,15 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textField.text = " "; // 상호작용 종료
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
 
                 clearDoorAnimator.SetBool("IsOpen", true);
+
+                StartCoroutine(DestinationMonster());
             }
 
             // 2번을 누를 때
@@ -2980,6 +2992,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choicing = false;
 
                 player.transform.position = gameOverZone.transform.position;
+
+                StartCoroutine(DestinationTrashCanMonster());
             }
 
             // 2번을 누를 때
@@ -3141,7 +3155,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         yield return new WaitForSeconds(7);
 
-        StartDoorSound.Play();
+        padClearSound.Play(); // 사운드 재생
         startLeftDoor.SetTrigger("IsOpen");
         startRightDoor.SetTrigger("IsOpen");
         startDoorOpen = true;
@@ -3152,5 +3166,19 @@ public class PlayerGimicStage3 : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         SceneManager.LoadScene("GameOverScene");
+    }
+
+    IEnumerator DestinationMonster()
+    {
+        yield return new WaitForSeconds(2f);
+
+        monster.SetDestination(playerPosition.position); // 몬스터가 플레이어를 향해 이동
+    }
+
+    IEnumerator DestinationTrashCanMonster()
+    {
+        yield return new WaitForSeconds(2f);
+
+        trashcanMonster.SetDestination(playerPosition.position); // 몬스터가 플레이어를 향해 이동
     }
 }
