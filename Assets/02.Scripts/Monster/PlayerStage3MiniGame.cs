@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStage3MiniGame : MonoBehaviour
 {
@@ -45,40 +46,40 @@ public class PlayerStage3MiniGame : MonoBehaviour
     // Storage2의 미니게임
     private void OnTriggerEnter(Collider other)
     {
-        // 빨강이 아닌 다른 블록을 밟았을 경우
+        // 빨강이 아닌 다른 블록을 밟았을 경우 게임 오버
         if (caution2_1)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
             else if (other.CompareTag("WHITEBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_2)
         {
             if (other.CompareTag("REDBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
             else if (other.CompareTag("WHITEBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_3)
         {
             if (other.CompareTag("REDBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
             else if (other.CompareTag("WHITEBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
         }
 
         // 빨강이 아닌 다른 블록을 밟았을 경우
         else if (caution2_4)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
             else if (other.CompareTag("WHITEBLOCK"))
-                gameObject.SetActive(false);
+                SceneManager.LoadScene("GameOverScene");
         }
     }
 

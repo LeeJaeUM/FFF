@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine.AI;
 using Unity.Properties;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerGimicStage3 : MonoBehaviour
 {
@@ -229,17 +230,39 @@ public class PlayerGimicStage3 : MonoBehaviour
     [SerializeField]
     private AudioSource trapSound; // 트랩 사운드
     [SerializeField]
-    private AudioSource bookSound; // 책 넘기는 사운드
+    private AudioSource[] bookSound; // 책 넘기는 사운드
     [SerializeField]
     private AudioSource roomDoorSound; // 문이 열렸을 때의 효과음
     [SerializeField]
+    private AudioSource itemGetSound; // 아이템을 먹었을 때의 사운드
+    [SerializeField]
+    private AudioSource goreSound; // 시체를 건들 때의 사운드
+    [SerializeField]
     private AudioSource padBeep; // 패드가 틀렸을 때의 경고음
     [SerializeField]
-    private AudioSource padUnlockSound; // 패드가 성공했을 때의 언락 사운드
+    private AudioSource padClearSound; // 패드가 성공했을 때의 사운드
     [SerializeField]
-    private AudioSource bookShelfSound; // 책장 틈에서 나오는 바람 소리 
+    private AudioSource windSound; // 책장 틈에서 나오는 바람 소리 
+    [SerializeField]
+    private AudioSource bookShelfSound; // 책장 옮길 때 사운드
+    [SerializeField]
+    private AudioSource clearDoorSound; // 클리어 문 사운드
+    [SerializeField]
+    private AudioSource generatorDoorLock; // 발전기 문 안열리는 사운드
     [SerializeField]
     private AudioSource bikeEngineSound; // 바이크 엔진 소리
+    [SerializeField]
+    private AudioSource generatorButtonSound; // 발전기 돌리는 소리
+    [SerializeField]
+    private AudioSource meatWallSound; // 고기벽 만지는 소리
+    [SerializeField]
+    private AudioSource boomSound; // 폭탄터지는 소리
+    [SerializeField]
+    private AudioSource trashCanSound; // 쓰레기통 사운드
+    [SerializeField]
+    private AudioSource backgroundSound; // 기본 배경음
+    [SerializeField]
+    private AudioSource lastGameSound; // 마지막 기믹 사운드
     #endregion
 
     private float totalTime = 30f; // 총 시간
@@ -554,6 +577,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textDisplayed = false;
                 isEvent = true;
                 diaryUI[currentPageIndex].SetActive(true); // 일기장 UI 출력
+                bookSound[0].Play(); // 책 넘기는 사운드 재생
             }
 
             // 2번을 누를 때
@@ -576,6 +600,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             // E키를 누를 때마다 페이지가 넘어감
             if (Input.GetKeyDown(KeyCode.E))
             {
+                bookSound[0].Play(); // 책 넘기는 사운드 재생
                 diaryUI[currentPageIndex].SetActive(false);
 
                 currentPageIndex = (currentPageIndex + 1) % diaryUI.Length;
@@ -666,6 +691,9 @@ public class PlayerGimicStage3 : MonoBehaviour
                     choicing = false;
                     textDisplayed = false;
                     renderer.material = newScreenMaterial; // TV에 몬스터의 얼굴이 뜸.
+                    trapSound.Play();
+
+                    StartCoroutine(GameOver()); // 게임 오버
                 }
 
                 // 2번을 누를 때
@@ -777,6 +805,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textDisplayed = false;
                 isEvent = true;
                 researchLog[currentPageIndex].SetActive(true); // 연구보고서 UI 출력
+                bookSound[1].Play(); // 책 넘기는 소리 재생
             }
 
             // 2번을 누를 때
@@ -799,6 +828,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             // E키를 누를 때마다 페이지가 넘어감
             if (Input.GetKeyDown(KeyCode.E))
             {
+                bookSound[1].Play(); // 책을 넘길 때마다 사운드 재생
                 researchLog[currentPageIndex].SetActive(false);
 
                 currentPageIndex = (currentPageIndex + 1) % researchLog.Length;
@@ -858,6 +888,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 getItemTextField.text = "리모컨 획득";
                 Destroy(remoteControl); // 리모컨 비활성화
                 haveRemoteControl = true; // RetroTelevision 조건 활성화
+                itemGetSound.Play(); // 아이템을 먹었을 때의 사운드 재생
 
                 StartCoroutine(GetItem());
             }
@@ -969,6 +1000,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                             choiceText2Field.text = " ";
                             getItemTextField.text = "절단된 의사의 손 획득";
                             haveDoctorHand = true;
+                            goreSound.Play();
 
                             StartCoroutine(GetItem());
                         }
@@ -1050,6 +1082,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         // 1번을 누를 때
                         if (Input.GetKeyDown(KeyCode.Alpha1))
                         {
+                            goreSound.Play(); // 사운드 재생
                             textField.text = " "; // 상호작용 종료
                             choiceText1Field.text = " ";
                             choiceText2Field.text = " ";
@@ -1098,6 +1131,7 @@ public class PlayerGimicStage3 : MonoBehaviour
         // 상호작용 종료
         else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
         {
+            itemGetSound.Play();
             textField.text = " "; // 상호작용 종료
             choiceText1Field.text = " ";
             choiceText2Field.text = " ";
@@ -1149,6 +1183,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     choiceText3Field.text = " ";
                     getItemTextField.text = "도끼 획득";
                     haveAxe = true;
+                    itemGetSound.Play(); // 사운드 재생
 
                     StartCoroutine(GetItem()); // 상호작용 종료
                 }
@@ -1183,11 +1218,14 @@ public class PlayerGimicStage3 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
+                trapSound.Play(); // 사운드 재생
                 textField.text = " ";
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 choiceText3Field.text = " ";
                 trapUI.SetActive(true); // 게임 오버
+
+                StartCoroutine(GameOver());
             }
         }
     }
@@ -1216,7 +1254,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
             else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
             {
-                padBeep.Play();
+                padBeep.Play(); // 사운드 재생
                 textField.text = "적당한 것을 찾아보자";
 
                 StartCoroutine(GetItem());
@@ -1240,9 +1278,9 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
             else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
             {
-                padUnlockSound.Play();
+                padClearSound.Play(); // 사운드 재생
                 textField.text = " ";
-                unLockStorageDoor = true; // 창고문이 열렸다는 효과음
+                unLockStorageDoor = true;
                 storageDoorAnimator.SetBool("IsUnlock", true); // 창고문이 열림
 
                 player.SetActive(true); // 상호작용 강제 종료
@@ -1256,84 +1294,88 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     void Bookshelf()
     {
-        if (!isInteraction)
+        if(!isMoveBookShelf)
         {
-            interactionUI.SetActive(true);
-        }
-
-        // 일반상호작용
-        if (!isDiary3Open)
-        {
-            // 상호작용 시작
-            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+            if (!isInteraction)
             {
-                isInteraction = true;
-                interating = true;
-                textField.text = "커다란 책장이다..";
-                interactionUI.SetActive(false);
-                textDisplayed = true;
-                isInteractionTouchPad = true;
+                interactionUI.SetActive(true);
             }
 
-            // 일반상호작용 종료
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+            // 일반상호작용
+            if (!isDiary3Open)
             {
-                textField.text = " ";
-                player.SetActive(true);
-                isInteraction = false;
-                textDisplayed = false;
-                interating = false;
-            }
-        }
-
-        // 특수상호작용
-        if (isDiary3Open)
-        {
-            // 상호작용 시작
-            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
-            {
-                isInteraction = true;
-                interating = true;
-                interactionUI.SetActive(false);
-                bookShelfSound.Play();
-                textField.text = "뒤에 바람이 들어온다...";
-                textDisplayed = true;
-            }
-
-            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
-            {
-                textField.text = "뒤에 무언가가 있다...";
-                choiceText1Field.text = "1. 끌어당긴다";
-                choiceText2Field.text = "2. 내버려둔다";
-                choicing = true;
-            }
-
-            if (choicing)
-            {
-                // 1번을 누를 때
-                if (Input.GetKeyDown(KeyCode.Alpha1))
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                 {
-                    textField.text = " ";
-                    choiceText1Field.text = " ";
-                    choiceText2Field.text = " ";
-                    bookShelfAnimator.SetBool("IsTransform", true); // 책장이 옮겨짐
-                    isMoveBookShelf = true;
-
-                    StartCoroutine(GetItem()); // 상호작용 종료
+                    isInteraction = true;
+                    interating = true;
+                    textField.text = "커다란 책장이다..";
+                    interactionUI.SetActive(false);
+                    textDisplayed = true;
+                    isInteractionTouchPad = true;
                 }
 
-                // 2번을 누를 때
-                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                // 일반상호작용 종료
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
                 {
-                    textField.text = " "; // 상호작용 종료
-                    choiceText1Field.text = " ";
-                    choiceText2Field.text = " ";
-                    player.SetActive(true); // 상호작용 종료
+                    textField.text = " ";
+                    player.SetActive(true);
                     isInteraction = false;
                     textDisplayed = false;
                     interating = false;
-                    choicing = false;
+                }
+            }
+
+            // 특수상호작용
+            if (isDiary3Open)
+            {
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+                {
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    windSound.Play();
+                    textField.text = "뒤에 바람이 들어온다...";
+                    textDisplayed = true;
+                }
+
+                // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+                {
+                    textField.text = "뒤에 무언가가 있다...";
+                    choiceText1Field.text = "1. 끌어당긴다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        bookShelfSound.Play();
+                        textField.text = " ";
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        bookShelfAnimator.SetBool("IsTransform", true); // 책장이 옮겨짐
+                        isMoveBookShelf = true;
+
+                        StartCoroutine(GetItem()); // 상호작용 종료
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        interating = false;
+                        choicing = false;
+                    }
                 }
             }
         }
@@ -1352,6 +1394,9 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 상호작용 시작, 문이 열리고 닫힘.
             if (Input.GetKeyDown(KeyCode.E))
             {
+                // 문 열리는 사운드 재생
+                roomDoorSound.Play();
+
                 if (hiddenRoomDoor)
                 {
                     hiddenRoomAnimator.SetBool("IsOpen", true);
@@ -1398,6 +1443,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 1번을 누를 때(게임 오버)
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+                clearDoorSound.Play(); // 사운드 재생
                 textField.text = " "; // 상호작용 종료
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
@@ -1520,52 +1566,56 @@ public class PlayerGimicStage3 : MonoBehaviour
                         choiceText2Field.text = "2. 내버려둔다";
                         choicing = true;
                     }
-                }
 
-                // 선택지가 출력되었을 때 가능한 버튼
-                if (choicing)
-                {
-                    // 1번을 누를 때
-                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    // 선택지가 출력되었을 때 가능한 버튼
+                    if (choicing)
                     {
-                        // 키패드가 먼저 해금되었을경우
-                        if (lobbyKeypadUnlock)
+                        // 1번을 누를 때
+                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            // 키패드가 먼저 해금되었을경우
+                            if (lobbyKeypadUnlock)
+                            {
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                mecanicEyeUnlock = true;
+                                padClearSound.Play(); // 사운드 재생
+                                laboratoryLeftDoorAnimator.SetBool("IsOpen", true);
+                                laboratoryRightDoorAnimator.SetBool("IsOpen", true);
+
+                                player.SetActive(true); // 상호작용 종료
+                                isInteraction = false;
+                                textDisplayed = false;
+                                interating = false;
+                                choicing = false;
+                            }
+
+                            // 키패드가 해금되지 않았을 경우
+                            else if (!lobbyKeypadUnlock)
+                            {
+                                textField.text = " "; // 상호작용 종료
+                                choiceText1Field.text = " ";
+                                choiceText2Field.text = " ";
+                                trapSound.Play(); // 사운드 재생
+                                lobbyTrap.SetActive(true);
+
+                                StartCoroutine(GameOver());
+                            }
+                        }
+
+                        // 2번을 누를 때
+                        else if (Input.GetKeyDown(KeyCode.Alpha2))
                         {
                             textField.text = " "; // 상호작용 종료
                             choiceText1Field.text = " ";
                             choiceText2Field.text = " ";
-                            mecanicEyeUnlock = true;
-                            laboratoryLeftDoorAnimator.SetBool("IsOpen", true);
-                            laboratoryRightDoorAnimator.SetBool("IsOpen", true);
-
                             player.SetActive(true); // 상호작용 종료
                             isInteraction = false;
                             textDisplayed = false;
                             interating = false;
                             choicing = false;
                         }
-
-                        // 키패드가 해금되지 않았을 경우
-                        else if (!lobbyKeypadUnlock)
-                        {
-                            textField.text = " "; // 상호작용 종료
-                            choiceText1Field.text = " ";
-                            choiceText2Field.text = " ";
-                            lobbyTrap.SetActive(true);
-                        }
-                    }
-
-                    // 2번을 누를 때
-                    else if (Input.GetKeyDown(KeyCode.Alpha2))
-                    {
-                        textField.text = " "; // 상호작용 종료
-                        choiceText1Field.text = " ";
-                        choiceText2Field.text = " ";
-                        player.SetActive(true); // 상호작용 종료
-                        isInteraction = false;
-                        textDisplayed = false;
-                        interating = false;
-                        choicing = false;
                     }
                 }
             }
@@ -1675,6 +1725,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         keyPadUI.SetActive(false); // KeyPadUI창 닫기
                         choiceText1Field.text = " ";
                         choiceText2Field.text = " ";
+                        padBeep.Play(); // 사운드 재생
 
                         player.SetActive(true); // 상호작용 강제 종료
                         isInteraction = false;
@@ -1730,6 +1781,8 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 상호작용 시작, 문이 열리고 닫힘.
             if (Input.GetKeyDown(KeyCode.E))
             {
+                roomDoorSound.Play(); // 사운드 재생
+
                 if (restaurantDoor)
                 {
                     restaurantDoorAnimator.SetBool("IsOpen", true);
@@ -1779,6 +1832,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 getItemTextField.text = "쇠로 된 식기 획득";
+                itemGetSound.Play(); // 사운드 재생
                 Destroy(metal); // 식기 비활성화
                 haveMetal = true;
 
@@ -1831,6 +1885,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 GameObject newPrefabInstance = Instantiate(lastKeyPrefab, lastGameZone.position, lastGameZone.rotation);
                 newPrefabInstance.transform.position = lastGameZone.position;
                 isLastKeySetting = true;
+                itemGetSound.Play(); // 사운드 재생
 
                 StartCoroutine(GetItem());
             }
@@ -1869,6 +1924,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 // 1번을 누를 때
                 if (Input.GetKeyDown(KeyCode.Alpha1))
                 {
+                    Destroy(backgroundSound); // 기존 배경음 삭제
+                    lastGameSound.Play(); // 마지막 게임 사운드 재생
                     textField.text = " "; // 상호작용 종료
                     choiceText1Field.text = " ";
                     choiceText2Field.text = " ";
@@ -1925,6 +1982,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     isInteraction = true;
                     interating = true;
                     interactionUI.SetActive(false);
+                    generatorDoorLock.Play(); // 사운드 재생
                     textField.text = "문을 열 만한 도구가 필요하다.";
                     textDisplayed = true;
                 }
@@ -1958,6 +2016,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
                 {
                     textField.text = " ";
+                    clearDoorSound.Play(); // 사운드 재생
                     generatorDoorAnimator.SetBool("IsOpen", true);
                     isOperable = true;
                     player.SetActive(true); // 상호작용 강제 종료
@@ -2029,6 +2088,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 1번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad1))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch1)
                         {
                             switch1Animator.SetBool("IsMove", true);
@@ -2044,6 +2105,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 2번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad2))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch2)
                         {
                             switch2Animator.SetBool("IsMove", true);
@@ -2059,6 +2122,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 3번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad3))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch3)
                         {
                             switch3Animator.SetBool("IsMove", true);
@@ -2074,6 +2139,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 4번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad4))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch4)
                         {
                             switch4Animator.SetBool("IsMove", true);
@@ -2089,6 +2156,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 5번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad5))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch5)
                         {
                             switch5Animator.SetBool("IsMove", true);
@@ -2104,6 +2173,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 6번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad6))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch6)
                         {
                             switch6Animator.SetBool("IsMove", true);
@@ -2119,6 +2190,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 7번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad7))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch7)
                         {
                             switch7Animator.SetBool("IsMove", true);
@@ -2134,6 +2207,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 8번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad8))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch8)
                         {
                             switch8Animator.SetBool("IsMove", true);
@@ -2149,6 +2224,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 9번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad9))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch9)
                         {
                             switch9Animator.SetBool("IsMove", true);
@@ -2164,6 +2241,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 10번 스위치 조작
                     if (Input.GetKeyDown(KeyCode.Keypad0))
                     {
+                        generatorButtonSound.Play(); // 사운드 재생
+
                         if (switch10)
                         {
                             switch10Animator.SetBool("IsMove", true);
@@ -2179,6 +2258,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     // 조작 도중 강제 종료
                     if (Input.GetKeyDown(KeyCode.Q))
                     {
+                        padBeep.Play();
                         generatorButtonUI.SetActive(false);
                         choiceText1Field.text = " ";
                         choiceText2Field.text = " ";
@@ -2199,6 +2279,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         if (switch1 && !switch2 && !switch3 && !switch4 && switch5 && !switch6 && switch7 && switch8 && !switch9 && !switch10)
                         {
                             // 로비에 있는 MecanicEye와 LobbyKeyPad 특수상호작용 가능
+                            padClearSound.Play();
                             lobbyPower = true;
                             generatorButtonUI.SetActive(false);
                             choiceText1Field.text = " ";
@@ -2214,8 +2295,11 @@ public class PlayerGimicStage3 : MonoBehaviour
                         // 스위치를 틀렸을 때
                         else
                         {
+                            trapSound.Play();
                             Destroy(generator);
                             storageTrap.SetActive(true);
+
+                            StartCoroutine(GameOver()); // 게임 오버
                         }
                     }
                 }
@@ -2327,6 +2411,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 getItemTextField.text = "예리한 식칼 획득";
+                itemGetSound.Play(); // 사운드 재생
                 Destroy(blade); // 리모컨 비활성화
                 haveBlade = true; // RetroTelevision 조건 활성화
 
@@ -2383,6 +2468,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 getItemTextField.text = "폭탄 획득";
+                itemGetSound.Play(); // 사운드 재생
                 haveboom = true;
 
                 StartCoroutine(GetItem());
@@ -2440,7 +2526,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 getItemTextField.text = "연장 획득";
-                Destroy(pilers); // 리모컨 비활성화
+                itemGetSound.Play(); // 사운드 재생
+                Destroy(pilers); // 연장 비활성화
                 havePilers = true; // RetroTelevision 조건 활성화
 
                 StartCoroutine(GetItem());
@@ -2471,6 +2558,8 @@ public class PlayerGimicStage3 : MonoBehaviour
         // 상호작용 시작, 문이 열리고 닫힘.
         if (Input.GetKeyDown(KeyCode.E))
         {
+            roomDoorSound.Play(); // 사운드 재생
+
             bathroomCaution.SetActive(true);
 
             if (bathroomDoorOpen)
@@ -2604,6 +2693,7 @@ public class PlayerGimicStage3 : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Q))
             {
+                padBeep.Play(); // 사운드 재생
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
@@ -2663,6 +2753,7 @@ public class PlayerGimicStage3 : MonoBehaviour
 
                 // 레버가 움직임
                 LeverAnimator.SetBool("IsMove", true);
+                generatorButtonSound.Play(); // 사운드 재생
 
                 // 처리실 문이 열림
                 treatmentPlantDownDoorAnimator.SetBool("IsOpen", true);
@@ -2705,6 +2796,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 isInteraction = true;
                 interating = true;
                 interactionUI.SetActive(false);
+                meatWallSound.Play(); // 사운드 재생
                 textField.text = "이쪽 벽만 유독 물컹거린다.";
                 textDisplayed = true;
                 isInteractionMeatWall = true; // 
@@ -2766,6 +2858,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                     interating = false;
                     choicing = false;
 
+                    boomSound.Play(); // 사운드 재생
                     Destroy(meatWall); // 고기벽 삭제
                 }
 
@@ -2822,6 +2915,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText2Field.text = " ";
                 getItemTextField.text = "전자레인지와 가스 획득";
                 Destroy(microwave_gas); // 전자레인지 삭제
+                itemGetSound.Play(); // 사운드 재생
                 haveMicrowave_Gas = true; // 인벤토리에 Microwave 획득
 
                 StartCoroutine(GetItem());
@@ -2877,6 +2971,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textField.text = " ";
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
+                trashCanSound.Play(); // 사운드 재생
 
                 player.SetActive(true); // 상호작용 종료
                 isInteraction = false;
@@ -2916,6 +3011,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 lobbyKeypadUnlock = true; // 로비 키패드를 해금함.
+                padClearSound.Play(); // 사운드 재생
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
 
                 player.SetActive(true); // 상호작용 강제 종료
@@ -2932,6 +3028,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
+                trapSound.Play(); // 사운드 재생
                 lobbyTrap.SetActive(true);
             }
         }
@@ -2946,10 +3043,13 @@ public class PlayerGimicStage3 : MonoBehaviour
             // 비밀번호가 일치할 경우 게임오버
             if (input == correctStorage2Password)
             {
+                trapSound.Play(); // 사운드 재생
                 choiceText1Field.text = " ";
                 choiceText2Field.text = " ";
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 storage2Trap.SetActive(true); // 함정 가동
+
+                StartCoroutine(GameOver()); // 게임 오버
             }
 
             // 비밀번호가 다를 경우 해금
@@ -2962,6 +3062,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 caution2.SetActive(true);
 
                 // Storage2Door 문이 열림
+                padClearSound.Play(); // 사운드 재생
                 storage2DownDoorAnimator.SetBool("IsOpen", true);
                 storage2UpDoorAnimaotr.SetBool("IsOpen", true);
 
@@ -2977,6 +3078,8 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     void LaboratoryGameOver()
     {
+        trapSound.Play(); // 사운드 재생
+
         GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(targetTag); // 태그로부터 모든 오브젝트 찾기
 
         foreach(GameObject obj in objectsWithTag)
@@ -3048,6 +3151,6 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        gameObject.transform.rotation = Quaternion.Euler(0, 0, 180);
+        SceneManager.LoadScene("GameOverScene");
     }
 }
