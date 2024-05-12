@@ -41,12 +41,12 @@ public class AudioManager : MonoBehaviour
         KeypadInput,             // 8. 키패드 입력 소리
         PasswordSuccess,         // 9. 비밀번호 입력 성공 소리
         PasswordFailure,         // 10. 비밀번호 입력 실패 소리
-        WoodChoppingWithAxe,     // 11. 나무를 도끼로 패는 소리
+        ChopTree,                // 11. 나무를 도끼로 패는 소리 -
         FallingTree,             // 12. 나무가 쓰러지는 소리
         PickaxeMiningIronOre,    // 13. 곡괭이로 철광석을 캐는 소리
         HammerHittingMetalDoor,  // 14. 망치로 철제 문을 두드리는 소리
-        DynamiteIgnition,        // 15. 다이너마이트에 불을 붙이는 소리
-        DynamiteExplosion,       // 16. 다이너마이트 폭발음
+        DynamiteIgnition,        // 15. 다이너마이트에 불을 붙이는 소리-
+        DynamiteExplosion,       // 16. 다이너마이트 폭발음-
         BreakingWall,            // 17. 벽이 부서지는 소리
         AxeHittingBox,           // 18. 도끼로 상자를 부수는 소리
         OpeningCannedFood,       // 19. 통조림을 열고 있는 소리
