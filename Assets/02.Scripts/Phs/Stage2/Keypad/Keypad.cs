@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Keypad : MonoBehaviour
 {
-    KeypadButton[] buttons;
+    public KeypadButton[] buttons;
     Button okButton;
     Button cancelButton;
 
@@ -36,15 +36,10 @@ public class Keypad : MonoBehaviour
     private void Awake()
     {
         Transform child = transform.GetChild(1);
-        buttons = new KeypadButton[10];
         TextMeshProUGUI text = null;
 
-        buttons[0] = child.GetChild(10).GetComponent<KeypadButton>();
-        buttons[0].Initialize(0);
-
-        for (int i = 1; i < buttons.Length; i++)
+        for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i] = child.GetChild(i - 1).GetComponent<KeypadButton>();
             buttons[i].Initialize(i);
         }
 

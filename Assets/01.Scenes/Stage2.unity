@@ -13985,6 +13985,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c31f65d8b6588548b65e87de46b109c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttons:
+  - {fileID: 1347373291}
+  - {fileID: 1932289732}
+  - {fileID: 634802149}
+  - {fileID: 571555138}
+  - {fileID: 1046863866}
+  - {fileID: 1522903854}
+  - {fileID: 1364019963}
+  - {fileID: 639772683}
+  - {fileID: 533946745}
+  - {fileID: 1144229933}
 --- !u!225 &1176219502
 CanvasGroup:
   m_ObjectHideFlags: 0
