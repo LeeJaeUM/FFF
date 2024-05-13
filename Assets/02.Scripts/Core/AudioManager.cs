@@ -13,7 +13,7 @@ public class AudioManager : MonoBehaviour
     AudioSource bgmPlayer;
 
     [Header("#SFX")]
-    public AudioClip[] sfxClips;
+    public AudioClip[] sfxClips = new AudioClip[22];
     public float sfxVolume;
     public int channels;
     AudioSource[] sfxPlayers;
@@ -31,6 +31,7 @@ public class AudioManager : MonoBehaviour
 
     public enum Sfx
     {
+        None,                   // 0. 아무 효과음
         DoorOpening,             // 1. 문이 열리는 소리
         DoorClosing,             // 2. 문이 닫히는 소리
         KeyUsage,                // 3. 열쇠 사용하는 소리
@@ -53,9 +54,9 @@ public class AudioManager : MonoBehaviour
         EatingCannedFood,        // 20. 통조림을 먹는 소리
         TurningCorpse,           // 21. 시체를 뒤척이는 소리
         FlippingPages,           // 22. 책을 넘기는 소리
-        BuildingWall,            // 23. 벽을 만드는 소리
-        UnableToBuildWall,       // 24. 벽 생성 불가 소리
-        PressingBuildButton      // 25. 빌드 버튼을 누르는 소리
+        //BuildingWall,            // 23. 벽을 만드는 소리
+        //UnableToBuildWall,       // 24. 벽 생성 불가 소리
+        //PressingBuildButton      // 25. 빌드 버튼을 누르는 소리
     }
 
 
