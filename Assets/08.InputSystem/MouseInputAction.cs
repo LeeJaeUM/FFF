@@ -110,7 +110,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""52cf503c-4b49-4e32-af49-f1552e40e739"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/i"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
