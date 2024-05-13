@@ -62,6 +62,15 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Produce"",
+                    ""type"": ""Button"",
+                    ""id"": ""2570382a-4fc5-49a2-83a4-4416f6e552f1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -108,6 +117,45 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""InventroyOnOff"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c3da118-5678-4f50-bbe4-021add688e47"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Produce"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Interacable"",
+            ""id"": ""ba5dac88-b016-497a-812e-10013f6fe380"",
+            ""actions"": [
+                {
+                    ""name"": ""InteracableAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""a9396ff0-f82b-418e-95f1-50073fe12d7c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""f02820b2-8a2a-402c-9e33-7a0887a06406"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InteracableAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -137,6 +185,10 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         m_UI_RClick = m_UI.FindAction("RClick", throwIfNotFound: true);
         m_UI_LClick = m_UI.FindAction("LClick", throwIfNotFound: true);
         m_UI_InventroyOnOff = m_UI.FindAction("InventroyOnOff", throwIfNotFound: true);
+        m_UI_Produce = m_UI.FindAction("Produce", throwIfNotFound: true);
+        // Interacable
+        m_Interacable = asset.FindActionMap("Interacable", throwIfNotFound: true);
+        m_Interacable_InteracableAction = m_Interacable.FindAction("InteracableAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -202,6 +254,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RClick;
     private readonly InputAction m_UI_LClick;
     private readonly InputAction m_UI_InventroyOnOff;
+    private readonly InputAction m_UI_Produce;
     public struct UIActions
     {
         private @MouseInputAction m_Wrapper;
@@ -210,6 +263,7 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         public InputAction @RClick => m_Wrapper.m_UI_RClick;
         public InputAction @LClick => m_Wrapper.m_UI_LClick;
         public InputAction @InventroyOnOff => m_Wrapper.m_UI_InventroyOnOff;
+        public InputAction @Produce => m_Wrapper.m_UI_Produce;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -231,6 +285,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @InventroyOnOff.started += instance.OnInventroyOnOff;
             @InventroyOnOff.performed += instance.OnInventroyOnOff;
             @InventroyOnOff.canceled += instance.OnInventroyOnOff;
+            @Produce.started += instance.OnProduce;
+            @Produce.performed += instance.OnProduce;
+            @Produce.canceled += instance.OnProduce;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -247,6 +304,9 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
             @InventroyOnOff.started -= instance.OnInventroyOnOff;
             @InventroyOnOff.performed -= instance.OnInventroyOnOff;
             @InventroyOnOff.canceled -= instance.OnInventroyOnOff;
+            @Produce.started -= instance.OnProduce;
+            @Produce.performed -= instance.OnProduce;
+            @Produce.canceled -= instance.OnProduce;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -264,6 +324,52 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // Interacable
+    private readonly InputActionMap m_Interacable;
+    private List<IInteracableActions> m_InteracableActionsCallbackInterfaces = new List<IInteracableActions>();
+    private readonly InputAction m_Interacable_InteracableAction;
+    public struct InteracableActions
+    {
+        private @MouseInputAction m_Wrapper;
+        public InteracableActions(@MouseInputAction wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InteracableAction => m_Wrapper.m_Interacable_InteracableAction;
+        public InputActionMap Get() { return m_Wrapper.m_Interacable; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InteracableActions set) { return set.Get(); }
+        public void AddCallbacks(IInteracableActions instance)
+        {
+            if (instance == null || m_Wrapper.m_InteracableActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_InteracableActionsCallbackInterfaces.Add(instance);
+            @InteracableAction.started += instance.OnInteracableAction;
+            @InteracableAction.performed += instance.OnInteracableAction;
+            @InteracableAction.canceled += instance.OnInteracableAction;
+        }
+
+        private void UnregisterCallbacks(IInteracableActions instance)
+        {
+            @InteracableAction.started -= instance.OnInteracableAction;
+            @InteracableAction.performed -= instance.OnInteracableAction;
+            @InteracableAction.canceled -= instance.OnInteracableAction;
+        }
+
+        public void RemoveCallbacks(IInteracableActions instance)
+        {
+            if (m_Wrapper.m_InteracableActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IInteracableActions instance)
+        {
+            foreach (var item in m_Wrapper.m_InteracableActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_InteracableActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public InteracableActions @Interacable => new InteracableActions(this);
     private int m_KMSchemeIndex = -1;
     public InputControlScheme KMScheme
     {
@@ -279,5 +385,10 @@ public partial class @MouseInputAction: IInputActionCollection2, IDisposable
         void OnRClick(InputAction.CallbackContext context);
         void OnLClick(InputAction.CallbackContext context);
         void OnInventroyOnOff(InputAction.CallbackContext context);
+        void OnProduce(InputAction.CallbackContext context);
+    }
+    public interface IInteracableActions
+    {
+        void OnInteracableAction(InputAction.CallbackContext context);
     }
 }
