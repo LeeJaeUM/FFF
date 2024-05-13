@@ -70,7 +70,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4539dfd97ebaa1a428a391b99b24c9de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorType: 0
+  doorType: 4
+  isFirst: 1
+  isOpen: 0
   itemcode: 0
   isUse: 0
 --- !u!95 &6641232645243453679

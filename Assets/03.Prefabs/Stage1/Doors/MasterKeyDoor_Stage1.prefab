@@ -18,15 +18,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d12079778701ca418e07371f2641bb5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.685174
+      value: 0.8947797
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d12079778701ca418e07371f2641bb5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.85
+      value: 1.5166023
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d12079778701ca418e07371f2641bb5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.47263193
+      value: -0.22528976
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4d12079778701ca418e07371f2641bb5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -141,7 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a364828d9b0f04f4d9e46da3e1f20ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doorType: 2
+  doorType: 1
+  isFirst: 1
+  isOpen: 0
   itemcode: 0
 --- !u!95 &8650862342733856642
 Animator:
