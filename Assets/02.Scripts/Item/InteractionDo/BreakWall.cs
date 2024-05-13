@@ -51,7 +51,7 @@ public class BreakWall : MonoBehaviour, IInteractable
         AudioManager.instance.PlaySfx(AudioManager.Sfx.DynamiteExplosion);
 
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.5f);
 
         AudioManager.instance.PlaySfx(AudioManager.Sfx.BreakingWall);
         Destroy(gameObject);
