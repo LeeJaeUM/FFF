@@ -17,6 +17,10 @@ public class PlayerGimicStage3 : MonoBehaviour
     private Transform gameOverZone; // 플레이어가 이동할 게임오버 존
     [SerializeField]
     private Transform lastGameZone; // 라스트 키를 배치할 공간
+    [SerializeField]
+    private Transform[] monsterSpawnZone; // 라스트 게임에 몬스터의 스폰 공간
+    [SerializeField]
+    private GameObject[] monsterPrefab; // 라스트 게임에 생성될 몬스터 오브젝트
 
     [SerializeField]
     private Transform raycastOrigin;
@@ -173,6 +177,12 @@ public class PlayerGimicStage3 : MonoBehaviour
     private GameObject microwave_gas; // 전자레인지와 가스 오브젝트
     [SerializeField]
     private GameObject lastKeyPrefab; // 라스트 게임 키 프리팹
+    [SerializeField]
+    private GameObject id_Card; // ID 카드 오브젝트
+    [SerializeField]
+    private GameObject mainMonster; // 메인 몬스터 오브젝트
+    [SerializeField]
+    private GameObject restaurant; // Restaurant에 있는 오브젝트
     #endregion
     
     [SerializeField]
@@ -204,11 +214,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool haveRestaurantDoorKey = false; // 인벤토리에 RestaurantDoorKey가 있을 경우
     private bool haveDoctorHand = false; // 인벤토리에 DoctorHand가 있을 경우
     private bool haveBlade = false; // 인벤토리에 Blade가 있을 경우
-    private bool haveMetal = false; // 인벤토리에 Metal이 있을 경우
+    private bool haveMetal = true; // 인벤토리에 Metal이 있을 경우
     private bool havePilers = false; // 인벤토리에 Pilers가 있을 경우
     private bool haveDoctorEye = false; // 인벤토리에 DoctorEye가 있을 경우
     private bool haveboom = false; // 인벤토리에 Boom이 있을 경우
-    private bool haveMicrowave_Gas = false; // 인벤토리의 Microwave_Gas 유무
+    private bool haveMicrowave_Gas = true; // 인벤토리의 Microwave_Gas 유무
     private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
     private bool isOperable = false; // 발전기 조작 가능 여부
 
@@ -224,6 +234,12 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool isInteractionMeatWall = false; // MeatWall과 상호작용 여부
 
     private bool isLastKeySetting = false; // LastGameKey 세팅 여부
+
+    private bool isLastGameStart = false; // LastGameStart 시작
+
+    private bool isLastGameFailed = false; // 라스트 게임 실패
+
+    private bool isLastGameClear = false; // 라스트 게임 성공
     #endregion
 
     #region AudioSource 변수
@@ -279,7 +295,7 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     private void Start()
     {
-       
+
     }
 
     private void Update()
@@ -406,6 +422,10 @@ public class PlayerGimicStage3 : MonoBehaviour
                 if(!haveboom && isInteractionMeatWall)
                     Option();
             }
+
+            // LastGameBox 상호작용
+            if (hit.collider.CompareTag("LASTGAMEBOX"))
+                LastgameBox();
             #endregion
 
             #region Bathroom
@@ -416,6 +436,10 @@ public class PlayerGimicStage3 : MonoBehaviour
             // BathroomDoor 상호작용
             if (hit.collider.CompareTag("BATHROOMDOOR"))
                 BathroomDoor();
+
+            // ID_Card 상호작용
+            if (hit.collider.CompareTag("ID_CARD"))
+                ID_Card();
             #endregion
 
             #region Laboratory
@@ -947,7 +971,7 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             // 특수상호작용1(TouchPad 오브젝트와 한 번이라도 상호작용 했을 때)
-            if (isInteractionTouchPad)
+            if (isInteractionTouchPad && !haveDoctorHand)
             {
                 // 특수상호작용 1-1
                 if (!haveAxe)
@@ -1445,7 +1469,7 @@ public class PlayerGimicStage3 : MonoBehaviour
         // 선택지가 출력되었을 때 가능한 버튼
         if (choicing)
         {
-            // 1번을 누를 때(게임 오버)
+            // 1번을 누를 때
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 clearDoorSound.Play(); // 사운드 재생
@@ -1460,7 +1484,8 @@ public class PlayerGimicStage3 : MonoBehaviour
 
                 clearDoorAnimator.SetBool("IsOpen", true);
 
-                StartCoroutine(DestinationMonster());
+                if(!isLastGameClear)
+                    StartCoroutine(GameOver());
             }
 
             // 2번을 누를 때
@@ -1798,6 +1823,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 if (restaurantDoor)
                 {
                     restaurantDoorAnimator.SetBool("IsOpen", true);
+                    if (isLastGameFailed)
+                        StartCoroutine(GameOver());
                 }
                 else
                 {
@@ -1941,6 +1968,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                     textField.text = " "; // 상호작용 종료
                     choiceText1Field.text = " ";
                     choiceText2Field.text = " ";
+
+                    isLastGameStart = true;
 
                     // 타이머 작동
                     lastTimer.SetActive(true);
@@ -2500,6 +2529,188 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
         }
     }
+
+    void LastgameBox()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 마지막 기믹이 시작하지 않을 때
+        if(!isLastGameStart)
+        {
+            // 상호작용 시작
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+            {
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "실험체의 사진이 들어있는거 같다..";
+                textDisplayed = true;
+            }
+
+            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+            {
+                textField.text = "내용물을 볼까?";
+                choiceText1Field.text = "1. 본다";
+                choiceText2Field.text = "2. 내버려둔다";
+                choicing = true;
+            }
+
+            // 선택지가 출력되었을 때 가능한 버튼
+            if (choicing)
+            {
+                // 1번을 누를 때
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    trapUI.SetActive(true); // 트랩 UI생성
+                    trapSound.Play(); // 트랩 사운드 재생
+
+                    StartCoroutine(GameOver());
+                }
+
+                // 2번을 누를 때
+                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+                }
+            }
+        }
+
+        // 마지막 기믹이 시작했을 때
+        else if(isLastGameStart)
+        {
+            // 상호작용 시작
+            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
+            {
+                isInteraction = true;
+                interating = true;
+                interactionUI.SetActive(false);
+                textField.text = "전자레인지가 터지는 타이밍에 맞춰";
+                textDisplayed = true;
+            }
+
+            // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+            {
+                textField.text = "몬스터를 유인한다...";
+                choiceText1Field.text = "1. 본다...";
+                choiceText2Field.text = "2. 준비가 안됬다..";
+                choicing = true;
+            }
+
+            // 선택지가 출력되었을 때 가능한 버튼
+            if (choicing)
+            {
+                // 1번을 누를 때
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+
+                    // 타이머가 15초 이상 남았을 때
+                    if(currentTime>=15)
+                    {
+                        // 몬스터를 RestaurantDoor 앞에 배치
+                        GameObject newMonster = Instantiate(monsterPrefab[0], monsterSpawnZone[0].position, monsterSpawnZone[0].rotation);
+
+                        newMonster.SetActive(true);
+
+                        // 문이 열려 있으면 문을 닫음
+                        if (!restaurantDoor)
+                        {
+                            roomDoorSound.Play();
+                            restaurantDoorAnimator.SetBool("IsOpen", false);
+                        }
+
+                        restaurantDoor = true;
+
+                        // 타이머 종료
+                        lastTimer.SetActive(false);
+                        CancelInvoke("UpdateTimer");
+
+                        isLastGameFailed = true;
+                        Destroy(restaurant); // 오브젝트 삭제
+                        boomSound.Play(); // 사운드 재생
+
+                        // 해당 태그를 가진 모든 오브젝트를 배열에 저장
+                        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("LASTKEY");
+
+                        // 모든 오브젝트를 순회하며 삭제
+                        foreach (GameObject obj in objectsWithTag)
+                        {
+                            Destroy(obj); // 오브젝트 삭제
+                        }
+
+                        lastGameSound.Stop(); // 배경음 취소
+                    }
+
+                    // 타이머가 15초 이하로 남았을 때
+                    else if(currentTime<15)
+                    {
+                        // 몬스터를 Restaurant 앞에 배치
+                        GameObject newMonster1 = Instantiate(monsterPrefab[1], monsterSpawnZone[1].position, monsterSpawnZone[1].rotation);
+
+                        newMonster1.SetActive(true);
+
+                        // 타이머 종료
+                        lastTimer.SetActive(false);
+                        CancelInvoke("UpdateTimer");
+
+                        // ClearDoor 앞에 있는 몬스터 비활성화
+                        mainMonster.SetActive(false);
+                        isLastGameClear = true;
+
+                        Destroy(restaurant); // 오브젝트 삭제
+                        boomSound.Play(); // 사운드 재생
+
+                        // 해당 태그를 가진 모든 오브젝트를 배열에 저장
+                        GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("LASTKEY");
+
+                        // 모든 오브젝트를 순회하며 삭제
+                        foreach (GameObject obj in objectsWithTag)
+                        {
+                            Destroy(obj); // 오브젝트 삭제
+                        }
+
+                        lastGameSound.Stop(); // 배경음 취소
+                    }
+
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+                }
+
+                // 2번을 누를 때
+                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                {
+                    textField.text = " "; // 상호작용 종료
+                    choiceText1Field.text = " ";
+                    choiceText2Field.text = " ";
+                    player.SetActive(true); // 상호작용 종료
+                    isInteraction = false;
+                    textDisplayed = false;
+                    interating = false;
+                    choicing = false;
+                }
+            }
+        }
+    }
     #endregion
 
     #region Bathroom
@@ -2540,7 +2751,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 getItemTextField.text = "연장 획득";
                 itemGetSound.Play(); // 사운드 재생
                 Destroy(pilers); // 연장 비활성화
-                havePilers = true; // RetroTelevision 조건 활성화
+                havePilers = true;
 
                 StartCoroutine(GetItem());
             }
@@ -2584,6 +2795,79 @@ public class PlayerGimicStage3 : MonoBehaviour
             }
 
             bathroomDoorOpen = !bathroomDoorOpen;
+        }
+    }
+
+    void ID_Card()
+    {
+        if (!isInteraction)
+        {
+            interactionUI.SetActive(true);
+        }
+
+        // 상호작용 시작
+        if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+        {
+            isInteraction = true;
+            interating = true;
+            interactionUI.SetActive(false);
+            textField.text = "이곳 담당자의 신분증이다..";
+            textDisplayed = true;
+        }
+
+        // 상호작용 중(E키를 한번 더 누르면 선택지 출력)
+        else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !isEvent)
+        {
+            textField.text = "볼까?";
+            choiceText1Field.text = "1. 본다";
+            choiceText2Field.text = "2. 내버려둔다";
+            choicing = true;
+        }
+
+        // 선택지가 출력되었을 때 가능한 버튼
+        if (choicing)
+        {
+            // 1번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                choicing = false;
+                textDisplayed = false;
+                isEvent = true;
+
+                id_Card.SetActive(true); // ID카드 UI 활성화
+            }
+
+            // 2번을 누를 때
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                textField.text = " ";
+                choiceText1Field.text = " ";
+                choiceText2Field.text = " ";
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
+        }
+
+        // 이벤트 시작
+        if (isEvent && !choicing && !textDisplayed && isInteraction && interating)
+        {
+            // E키를 누르면 UI가 닫힘
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                id_Card.SetActive(false); // ID카드 UI 비활성화
+
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
+            }
         }
     }
     #endregion
@@ -3124,7 +3408,8 @@ public class PlayerGimicStage3 : MonoBehaviour
         {
             currentTime = 0f;
             CancelInvoke("UpdateTimer");
-            lastTimer.SetActive(false);
+
+            StartCoroutine(GameOver());
         }
 
         UpdateTimerUI();
@@ -3163,16 +3448,9 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     IEnumerator GameOver()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         SceneManager.LoadScene("GameOverScene");
-    }
-
-    IEnumerator DestinationMonster()
-    {
-        yield return new WaitForSeconds(2f);
-
-        monster.SetDestination(playerPosition.position); // 몬스터가 플레이어를 향해 이동
     }
 
     IEnumerator DestinationTrashCanMonster()
