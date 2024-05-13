@@ -37,26 +37,25 @@ public class AudioManager : MonoBehaviour
         KeyUsage,                // 3. 열쇠 사용하는 소리
         MetalDoorOpening,        // 4. 철제 문이 열리는 소리
         PouringOil,              // 5. 기름을 붓는 소리
-        PouringOilContainer,     // 6. 기름통 윗면에 기름을 따르는 소리
-        AxeHittingOilCan,        // 7. 기름통 윗면에 도끼로 따는 소리
-        KeypadInput,             // 8. 키패드 입력 소리
-        PasswordSuccess,         // 9. 비밀번호 입력 성공 소리
-        PasswordFailure,         // 10. 비밀번호 입력 실패 소리
-        ChopTree,                // 11. 나무를 도끼로 패는 소리 -
-        FallingTree,             // 12. 나무가 쓰러지는 소리
-        PickaxeMiningIronOre,    // 13. 곡괭이로 철광석을 캐는 소리
-        HammerHittingMetalDoor,  // 14. 망치로 철제 문을 두드리는 소리
-        DynamiteIgnition,        // 15. 다이너마이트에 불을 붙이는 소리-
-        DynamiteExplosion,       // 16. 다이너마이트 폭발음-
-        BreakingWall,            // 17. 벽이 부서지는 소리
-        AxeHittingBox,           // 18. 도끼로 상자를 부수는 소리
-        OpeningCannedFood,       // 19. 통조림을 열고 있는 소리
-        EatingCannedFood,        // 20. 통조림을 먹는 소리
-        TurningCorpse,           // 21. 시체를 뒤척이는 소리
-        FlippingPages,           // 22. 책을 넘기는 소리
-        //BuildingWall,            // 23. 벽을 만드는 소리
-        //UnableToBuildWall,       // 24. 벽 생성 불가 소리
-        //PressingBuildButton      // 25. 빌드 버튼을 누르는 소리
+        AxeHittingOilCan,        // 6. 기름통 윗면에 도끼로 따는 소리
+        KeypadInput,             // 7. 키패드 입력 소리
+        PasswordSuccess,         // 8. 비밀번호 입력 성공 소리
+        PasswordFailure,         // 9. 비밀번호 입력 실패 소리
+        ChopTree,                // 10. 나무를 도끼로 패는 소리 -
+        FallingTree,             // 11. 나무가 쓰러지는 소리
+        PickaxeMiningIronOre,    // 12. 곡괭이로 철광석을 캐는 소리
+        HammerHittingMetalDoor,  // 13. 망치로 철제 문을 두드리는 소리
+        DynamiteIgnition,        // 14. 다이너마이트에 불을 붙이는 소리-
+        DynamiteExplosion,       // 15. 다이너마이트 폭발음-
+        BreakingWall,            // 16. 벽이 부서지는 소리
+        AxeHittingBox,           // 17. 도끼로 상자를 부수는 소리
+        OpeningCannedFood,       // 18. 통조림을 열고 있는 소리
+        EatingCannedFood,        // 19. 통조림을 먹는 소리
+        TurningCorpse,           // 20. 시체를 뒤척이는 소리
+        FlippingPages,           // 21. 책을 넘기는 소리
+        //BuildingWall,            // 22. 벽을 만드는 소리
+        //UnableToBuildWall,       // 23. 벽 생성 불가 소리
+        //PressingBuildButton      // 24. 빌드 버튼을 누르는 소리
     }
 
 
