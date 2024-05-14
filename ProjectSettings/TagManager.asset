@@ -15,8 +15,44 @@ TagManager:
   - Buildables
   - EnviroAble
   - WOODTRAP
-  - LABORATORYTRAP
   - PICTUREFRAME
+  - DIARY
+  - RETROTELEVISION
+  - LAMP
+  - RESTROOMDOOR
+  - CLIPBOARD
+  - REMOTECONTROL
+  - DEADDOCTOR
+  - BAG
+  - TOUCHPAD
+  - BOOKSHELF
+  - HIDDENROOMDOOR
+  - CLEARDOOR
+  - MECANICEYE
+  - LOBBYKEYPAD
+  - RESTAURANTDOORKEY
+  - RESTAURANTDOOR
+  - BLADE
+  - METAL
+  - GENERATOR
+  - BIKE
+  - STORAGEDOOR
+  - PILERS
+  - BATHROOMDOOR
+  - GORE
+  - STORAGE2KEYPAD
+  - REDBLOCK
+  - BLACKBLOCK
+  - WHITEBLOCK
+  - LEVER
+  - OPTION
+  - MEATWALL
+  - MICROWAVE
+  - TRASHCAN
+  - LASTGAME
+  - ID_CARD
+  - LASTGAMEBOX
+  - LASTKEY
   layers:
   - Default
   - TransparentFX
@@ -26,9 +62,9 @@ TagManager:
   - UI
   - BuildObj
   - EnvrioAble
-  - 
-  - 
-  - 
+  - InteractionObj
+  - Player
+  - Camera
   - 
   - 
   - 
