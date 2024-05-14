@@ -2868,6 +2868,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textDisplayed = false;
                 interating = false;
                 choicing = false;
+                isEvent = false;
             }
         }
     }
