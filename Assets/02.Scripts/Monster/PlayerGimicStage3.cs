@@ -3459,7 +3459,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
 
-        SceneManager.LoadScene("GameOverScene");
+        SceneManager.LoadScene("GameOverScene3");
     }
 
     IEnumerator DestinationTrashCanMonster()

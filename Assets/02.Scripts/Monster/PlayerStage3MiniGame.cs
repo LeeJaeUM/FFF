@@ -50,42 +50,42 @@ public class PlayerStage3MiniGame : MonoBehaviour
         if (caution2_1)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_2)
         {
             if (other.CompareTag("REDBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_3)
         {
             if (other.CompareTag("REDBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 빨강이 아닌 다른 블록을 밟았을 경우
         else if (caution2_4)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 몬스터와 충돌했을 경우
         if(other.CompareTag("MONSTER"))
         {
-            SceneManager.LoadScene("GameOverScene");
+            SceneManager.LoadScene("GameOverScene3");
         }
     }
 
