@@ -214,11 +214,11 @@ public class PlayerGimicStage3 : MonoBehaviour
     private bool haveRestaurantDoorKey = false; // 인벤토리에 RestaurantDoorKey가 있을 경우
     private bool haveDoctorHand = false; // 인벤토리에 DoctorHand가 있을 경우
     private bool haveBlade = false; // 인벤토리에 Blade가 있을 경우
-    private bool haveMetal = true; // 인벤토리에 Metal이 있을 경우
+    private bool haveMetal = false; // 인벤토리에 Metal이 있을 경우
     private bool havePilers = false; // 인벤토리에 Pilers가 있을 경우
     private bool haveDoctorEye = false; // 인벤토리에 DoctorEye가 있을 경우
     private bool haveboom = false; // 인벤토리에 Boom이 있을 경우
-    private bool haveMicrowave_Gas = true; // 인벤토리의 Microwave_Gas 유무
+    private bool haveMicrowave_Gas = false; // 인벤토리의 Microwave_Gas 유무
     private bool isMoveBookShelf = false; // BookShelf가 이동했을 경우
     private bool isOperable = false; // 발전기 조작 가능 여부
 
@@ -2645,6 +2645,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         isLastGameFailed = true;
                         Destroy(restaurant); // 오브젝트 삭제
                         boomSound.Play(); // 사운드 재생
+                        
 
                         // 해당 태그를 가진 모든 오브젝트를 배열에 저장
                         GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("LASTKEY");
@@ -2909,6 +2910,12 @@ public class PlayerGimicStage3 : MonoBehaviour
                 choiceText2Field.text = " ";
 
                 LaboratoryGameOver();
+
+                player.SetActive(true); // 상호작용 종료
+                isInteraction = false;
+                textDisplayed = false;
+                interating = false;
+                choicing = false;
             }
 
             // 2번을 누를 때
@@ -3396,6 +3403,8 @@ public class PlayerGimicStage3 : MonoBehaviour
             // Gore 태그 오브젝트 삭제
             Destroy(obj);
         }
+
+        StartCoroutine(GameOver());
     }
 
     void UpdateTimer()
