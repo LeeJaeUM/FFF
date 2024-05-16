@@ -11,7 +11,6 @@ public class Medicine : InteracableBase
 
     private bool isOpen = false;
 
-    public override bool CanUse => true;
 
     private void Awake()
     {
