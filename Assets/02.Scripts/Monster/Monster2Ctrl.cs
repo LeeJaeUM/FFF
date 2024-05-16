@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Monster2Ctrl : MonoBehaviour
 {
@@ -28,6 +29,12 @@ public class Monster2Ctrl : MonoBehaviour
                 Debug.Log(playerLife);
                 isWoodExit = true;
             }
+        }
+
+        // 플레이어가 몬스터와 닿았을 경우 게임 오버
+        if(other.gameObject.CompareTag("MONSTER"))
+        {
+            SceneManager.LoadScene("GameOverScene2");
         }
     }
 

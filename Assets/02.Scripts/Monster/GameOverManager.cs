@@ -22,7 +22,20 @@ public class GameOverManager : MonoBehaviour
         gameOverUI.SetActive(true);
     }
 
-    public void Restart()
+    // 1단계 게임 오버시에
+    public void Restart1()
+    {
+        SceneManager.LoadScene("Stage1");
+    }
+
+    // 2단계 게임 오버시에
+    public void Restart2()
+    {
+        SceneManager.LoadScene("Stage2");
+    }
+
+    // 3단계 게임 오버시에
+    public void Restart3()
     {
         SceneManager.LoadScene("Stage3");
     }

@@ -8,6 +8,8 @@ public class PlayerStage3MiniGame : MonoBehaviour
 {
     [SerializeField]
     private TextMeshPro caution2Text; // caution2text의 UI시스템
+    [SerializeField]
+    private GameObject stageClearUI; // 스테이지 클리어 UI
 
     private bool caution2_1 = false; // caution2의 텍스트가 빨강,red일 경우
     private bool caution2_2 = false; // caution2의 텍스트가 빨강,black일 경우
@@ -85,7 +87,14 @@ public class PlayerStage3MiniGame : MonoBehaviour
         // 몬스터와 충돌했을 경우
         if(other.CompareTag("MONSTER"))
         {
-            SceneManager.LoadScene("GameOverScene3");
+            SceneManager.LoadScene("GameOverScene3"); // 게임 오버 씬으로 이동
+        }
+
+        // Goal 오브젝트와 충돌했을 경우
+        if(other.CompareTag("GOAL"))
+        {
+            stageClearUI.SetActive(true); // 스테이지 클리어 UI 출력
+            Time.timeScale = 0f;
         }
     }
 
