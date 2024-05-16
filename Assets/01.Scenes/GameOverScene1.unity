@@ -907,6 +907,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8477826046466885553, guid: cd253364d20651e43bc67b3425e3dc6d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 2a6b69271daaf864a903175f1168c334, type: 2}
     - target: {fileID: 8747714574565688842, guid: cd253364d20651e43bc67b3425e3dc6d, type: 3}
       propertyPath: m_Name
       value: BaseMesh_Skin1

@@ -9,6 +9,7 @@ public class MonsterCtrl : MonoBehaviour
     NavMeshAgent agent;
     Animator anim;
     Vector3 vec;
+    AudioSource audio;
 
     [SerializeField]
     private Transform skyLight; // directional light
@@ -36,12 +37,11 @@ public class MonsterCtrl : MonoBehaviour
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
-    public AudioSource rage; // 몬스터가 플레이어를 인식하면 내는 소리
-
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
+        audio=GetComponent<AudioSource>();
 
         // 초기 목적지 설정
         SetDestinationByIndex(current);
@@ -82,7 +82,7 @@ public class MonsterCtrl : MonoBehaviour
                 isChasing = true;
                 chaseTimer = 0;
 
-                rage.Play(); // 사운드 재생
+                audio.Play(); // 사운드 재생
                 agent.SetDestination(player.position);
             }
 
