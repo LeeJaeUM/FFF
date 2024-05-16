@@ -15992,6 +15992,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1296735810}
     m_Modifications:
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.78054446
+      objectReference: {fileID: 0}
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Size.y
+      value: 0.86742425
+      objectReference: {fileID: 0}
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Size.z
+      value: 0.788058
+      objectReference: {fileID: 0}
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Center.x
+      value: 0.019938119
+      objectReference: {fileID: 0}
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Center.y
+      value: 0.18018743
+      objectReference: {fileID: 0}
+    - target: {fileID: 121906228421572420, guid: 510332f99b1096949b78cac3e440768d, type: 3}
+      propertyPath: m_Center.z
+      value: -0.36910212
+      objectReference: {fileID: 0}
     - target: {fileID: 7159161365426807075, guid: 510332f99b1096949b78cac3e440768d, type: 3}
       propertyPath: m_Name
       value: OldPick
