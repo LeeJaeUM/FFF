@@ -8,6 +8,8 @@ public class PlayerStage3MiniGame : MonoBehaviour
 {
     [SerializeField]
     private TextMeshPro caution2Text; // caution2text의 UI시스템
+    [SerializeField]
+    private GameObject stageClearUI; // 스테이지 클리어 UI
 
     private bool caution2_1 = false; // caution2의 텍스트가 빨강,red일 경우
     private bool caution2_2 = false; // caution2의 텍스트가 빨강,black일 경우
@@ -50,42 +52,49 @@ public class PlayerStage3MiniGame : MonoBehaviour
         if (caution2_1)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_2)
         {
             if (other.CompareTag("REDBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 검정이 아닌 다른 블록을 밟았을 경우
         else if (caution2_3)
         {
             if (other.CompareTag("REDBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 빨강이 아닌 다른 블록을 밟았을 경우
         else if (caution2_4)
         {
             if (other.CompareTag("BLACKBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
             else if (other.CompareTag("WHITEBLOCK"))
-                SceneManager.LoadScene("GameOverScene");
+                SceneManager.LoadScene("GameOverScene3");
         }
 
         // 몬스터와 충돌했을 경우
         if(other.CompareTag("MONSTER"))
         {
-            SceneManager.LoadScene("GameOverScene");
+            SceneManager.LoadScene("GameOverScene3"); // 게임 오버 씬으로 이동
+        }
+
+        // Goal 오브젝트와 충돌했을 경우
+        if(other.CompareTag("GOAL"))
+        {
+            stageClearUI.SetActive(true); // 스테이지 클리어 UI 출력
+            Time.timeScale = 0f;
         }
     }
 

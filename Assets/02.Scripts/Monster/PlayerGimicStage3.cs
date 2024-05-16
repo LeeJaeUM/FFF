@@ -2868,6 +2868,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                 textDisplayed = false;
                 interating = false;
                 choicing = false;
+                isEvent = false;
             }
         }
     }
@@ -3459,7 +3460,7 @@ public class PlayerGimicStage3 : MonoBehaviour
     {
         yield return new WaitForSeconds(1.5f);
 
-        SceneManager.LoadScene("GameOverScene");
+        SceneManager.LoadScene("GameOverScene3");
     }
 
     IEnumerator DestinationTrashCanMonster()
