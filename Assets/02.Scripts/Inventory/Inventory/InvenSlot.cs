@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class InvenSlot : RecycleObject
 {

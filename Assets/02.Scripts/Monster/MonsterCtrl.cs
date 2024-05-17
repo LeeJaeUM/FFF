@@ -35,7 +35,6 @@ public class MonsterCtrl : MonoBehaviour
     private bool isMonsterMove = false; // 몬스터의 이동 상황
     private int current = 0; // 몬스터의 이동 순서 변수
     private bool isChasing = false; // 추적 중인지 여부확인
-    private bool isDarkWall = true; // 벽의 생성 여부
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
