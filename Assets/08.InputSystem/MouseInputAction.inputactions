@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Produce",
+                    "type": "Button",
+                    "id": "2570382a-4fc5-49a2-83a4-4416f6e552f1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -79,11 +88,50 @@
                 {
                     "name": "",
                     "id": "52cf503c-4b49-4e32-af49-f1552e40e739",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "InventroyOnOff",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c3da118-5678-4f50-bbe4-021add688e47",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Produce",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Interacable",
+            "id": "ba5dac88-b016-497a-812e-10013f6fe380",
+            "actions": [
+                {
+                    "name": "InteracableAction",
+                    "type": "Button",
+                    "id": "a9396ff0-f82b-418e-95f1-50073fe12d7c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f02820b2-8a2a-402c-9e33-7a0887a06406",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InteracableAction",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -5,6 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+<<<<<<< HEAD
   - enabled: 0
     path: Assets/01.Scenes/Stage2.unity
     guid: ae3e1e73b1ddb5e4692e4af19836711c
@@ -16,3 +17,12 @@ EditorBuildSettings:
     guid: 1af358ee00e3770499cc787d3fc9c629
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
+=======
+  - enabled: 1
+    path: Assets/01.Scenes/Title.unity
+    guid: 286896ffb11b8b9468676f646ec31e29
+  - enabled: 1
+    path: Assets/01.Scenes/Stage1_Test/Stage1_oculusion.unity
+    guid: c2b35046896077f498af9c2d44d0adcd
+  m_configObjects: {}
+>>>>>>> Stage1Backup0517

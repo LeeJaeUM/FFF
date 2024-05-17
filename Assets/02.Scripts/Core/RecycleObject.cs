@@ -6,31 +6,31 @@ using UnityEngine;
 public class RecycleObject : MonoBehaviour
 {
     /// <summary>
-    /// ÀçÈ°¿ë ¿ÀºêÁ§Æ®°¡ ºñÈ°¼ºÈ­ µÉ ¶§ ½ÇÇàµÇ´Â µ¨¸®°ÔÀÌÆ®
+    /// ì¬í™œìš© ì˜¤ë¸Œì íŠ¸ê°€ ë¹„í™œì„±í™” ë  ë•Œ ì‹¤í–‰ë˜ëŠ” ë¸ë¦¬ê²Œì´íŠ¸
     /// </summary>
     public Action onDisable;
 
     protected virtual void OnEnable()
     {
-        transform.localPosition = Vector3.zero; // ºÎ¸ğÀÇ À§Ä¡·Î º¸³»±â
-        transform.localRotation = Quaternion.identity;  // ºÎ¸ğÀÇ È¸Àü°¡ °°°Ô ¸¸µé±â
+        transform.localPosition = Vector3.zero; // ë¶€ëª¨ì˜ ìœ„ì¹˜ë¡œ ë³´ë‚´ê¸°
+        transform.localRotation = Quaternion.identity;  // ë¶€ëª¨ì˜ íšŒì „ê°€ ê°™ê²Œ ë§Œë“¤ê¸°
 
         StopAllCoroutines();
     }
 
     protected virtual void OnDisable()
     {
-        onDisable?.Invoke();        // ºñÈ°¼­È­ µÇ¾úÀ½À» ¾Ë¸²(Ç®¸¸µé¶§ ÇÒÀÏÀÌ µî·ÏµÇ¾î¾ß ÇÔ)
+        onDisable?.Invoke();        // ë¹„í™œì„œí™” ë˜ì—ˆìŒì„ ì•Œë¦¼(í’€ë§Œë“¤ë•Œ í• ì¼ì´ ë“±ë¡ë˜ì–´ì•¼ í•¨)
     }
 
     /// <summary>
-    /// ÀÏÁ¤ ½Ã°£ ÈÄ¿¡ ÀÌ °ÔÀÓ ¿ÀºêÁ§Æ®¸¦ ºñÈ°¼ºÈ­ ½ÃÅ°´Â ÄÚ·çÆ¾
+    /// ì¼ì • ì‹œê°„ í›„ì— ì´ ê²Œì„ ì˜¤ë¸Œì íŠ¸ë¥¼ ë¹„í™œì„±í™” ì‹œí‚¤ëŠ” ì½”ë£¨í‹´
     /// </summary>
-    /// <param name="delay">ºñÈ°¼­È­ µÉ ¶§±îÁö °É¸®´Â ½Ã°£</param>
+    /// <param name="delay">ë¹„í™œì„œí™” ë  ë•Œê¹Œì§€ ê±¸ë¦¬ëŠ” ì‹œê°„</param>
     /// <returns></returns>
     protected IEnumerator LifeOver(float delay = 0.0f)
     {
-        yield return new WaitForSeconds(delay); // delay¸¸Å­ °¡¸®°í
+        yield return new WaitForSeconds(delay); // delayë§Œí¼ ê°€ë¦¬ê³ 
         gameObject.SetActive(false);            // 
     }
 }
