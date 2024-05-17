@@ -56,7 +56,7 @@ public class DoorBase : MonoBehaviour, IInteractable
                 sfx_Close = AudioManager.Sfx.MetalDoorOpening;
                 break;
             case DoorType.Firstkey:
-                itemcode = (int)ItemCode.Key;
+                itemcode = (int)ItemCode.FirstDoorKey;
                 announsText = ("열쇠가 필요하다.");
                 sfx_Open = AudioManager.Sfx.DoorOpening;
                 sfx_Close = AudioManager.Sfx.DoorClosing;
