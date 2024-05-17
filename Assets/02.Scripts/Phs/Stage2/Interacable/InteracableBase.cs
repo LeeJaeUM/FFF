@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class InteracableBase : MonoBehaviour, IInteractable
 {
-    
+    protected bool CanPickUp = true;
+
     public void Interact()
     {
-        Debug.Log("동작");
-        OnUse();
+        if(CanPickUp)
+        {
+            Debug.Log("동작");
+            OnUse();
+        }
     }
 
 

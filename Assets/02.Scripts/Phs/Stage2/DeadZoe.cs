@@ -6,14 +6,35 @@ public class DeadZoe : MonoBehaviour
 {
     public ItemCode itemCode;
 
-    private void OnCollisionEnter(Collision collision)
+    Stage1Manager manager;
+
+    private void Awake()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        manager = Stage1Manager.Instance;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
         {
-            if(!GameManager.Instance.inven.UseItemCheck(itemCode))
+            if (GameManager.Instance.inven.UseItemCheck(itemCode))
             {
-                Debug.Log($"{collision.gameObject.name}이 죽었다.");
+                Debug.Log($"{other.gameObject.name}은 가스마스크 덕분에 살았다.");
+                manager.BottomTMPText = $"{other.name}은 가스마스크 덕분에 살았다.";
             }
+            else
+            {
+                Debug.Log($"{other.gameObject.name}이 죽었다.");
+                manager.BottomTMPText = $"{other.name}이 가스에 중독되어 죽었다.";
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            manager.BottomTMPText = "";
         }
     }
 }

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
-  m_Name: 2_00_Brain
-  m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemCode: 14
-  itemIcon: {fileID: 21300000, guid: 7382e2b6e79a9c04898292f1adaaa3cc, type: 3}
-  itemName: 
+  m_Name: 2_11_Book_29
+  m_EditorClassIdentifier: 
+  itemCode: 25
+  itemIcon: {fileID: 21300000, guid: 10b4e25963e04524cb8d14aeebca3ead, type: 3}
+  itemName: "\uCC45"
   itemType: 0
   itemPrefab: {fileID: 0}
   itemDescription: 

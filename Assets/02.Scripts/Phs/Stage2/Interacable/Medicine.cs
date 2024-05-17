@@ -11,15 +11,46 @@ public class Medicine : InteracableBase
 
     private bool isOpen = false;
 
+    public PickUpItem oldScissors;
+    FakeKey fakeKey;
+
+    Stage1Manager manager; 
+    
+    bool isPickUp = false;
 
     private void Awake()
     {
         animator = GetComponentInParent<Animator>();
+        manager = Stage1Manager.Instance;
+        fakeKey = FindObjectOfType<FakeKey>();
     }
 
     protected override void OnUse()
     {
-        isOpen = !isOpen;
-        animator.SetBool(Open_Hash, isOpen);
+        Debug.Log(isPickUp);
+
+        if(!isPickUp)
+        {
+            isOpen = !isOpen;
+            animator.SetBool(Open_Hash, isOpen);
+            isPickUp = true;
+        }
+        else
+        {
+            Debug.Log("문이 열였다.");
+            if(oldScissors != null)
+            {
+                manager.BottomTMPText = "가위를 찾았습니다.";
+                oldScissors.GetItem();
+            }
+            else
+            {
+                if(fakeKey != null)
+                {
+                    fakeKey.Open();
+                    isPickUp = false;
+                }
+            }
+        }
     }
 }
