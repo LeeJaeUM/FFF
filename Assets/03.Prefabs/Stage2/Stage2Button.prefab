@@ -70,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c5fdeaaf3cf473b4faa49ee4c13c0efc, type: 2}
     - target: {fileID: 919132149155446097, guid: 75f84811892cc444d8c26da4c9455a60, type: 3}
       propertyPath: m_Name
-      value: Button (1)
+      value: Stage2Button
       objectReference: {fileID: 0}
     - target: {fileID: 5074512353664290214, guid: 75f84811892cc444d8c26da4c9455a60, type: 3}
       propertyPath: m_DirtyAABB
@@ -159,7 +159,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

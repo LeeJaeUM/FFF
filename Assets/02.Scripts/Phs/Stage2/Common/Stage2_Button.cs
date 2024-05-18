@@ -42,7 +42,7 @@ public class Stage2_Button : InteracableBase
         }
         else
         {
-
+            Stage1Manager.Instance.BottomTMPText = "경보";
         }
 
         onTrigger?.Invoke(ButtonID);
