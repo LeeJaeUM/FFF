@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
-  m_Name: GoldHint_1
+  m_Name: 2_12_Room_3_Hint
   m_EditorClassIdentifier: 
-  itemCode: 0
+  itemCode: 26
   itemIcon: {fileID: 21300000, guid: 4268d0af1e7f0e5499e28ae00a83f141, type: 3}
-  itemName: "\uBB34\uC5C7\uAC00 \uC801\uD78C \uCABD"
-  itemType: 2
+  itemName: "3\uBC88\uC9F8 \uBC29\uC758 \uD78C\uD2B8"
+  itemType: 0
   itemPrefab: {fileID: 0}
   itemDescription: 
   SizeX: 1
   SizeY: 1
-  maxItemCount: 3
+  maxItemCount: 1
   itemWeight: 0.1
