@@ -145,4 +145,10 @@ public class Lobby : MonoBehaviour
     {
         SceneManager.LoadScene("Stage3");
     }
+
+    // 로비 버튼을 눌렀을 때
+    public void StageSelectLobby()
+    {
+        stageSelectUI.SetActive(false);
+    }
 }
