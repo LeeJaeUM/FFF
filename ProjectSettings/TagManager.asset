@@ -4,72 +4,35 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - BULLET
-  - PLAYER
-  - HOME
-  - CinemachineTarget
-  - MONSTER
-  - ROOM
-  - GOAL
-  - Ground
-  - Buildables
-  - EnviroAble
-  - WOODTRAP
-  - PICTUREFRAME
-  - DIARY
-  - RETROTELEVISION
-  - LAMP
-  - RESTROOMDOOR
-  - CLIPBOARD
-  - REMOTECONTROL
-  - DEADDOCTOR
-  - BAG
-  - TOUCHPAD
-  - BOOKSHELF
-  - HIDDENROOMDOOR
-  - CLEARDOOR
-  - MECANICEYE
-  - LOBBYKEYPAD
-  - RESTAURANTDOORKEY
-  - RESTAURANTDOOR
-  - BLADE
-  - METAL
-  - GENERATOR
-  - BIKE
-  - STORAGEDOOR
-  - PILERS
-  - BATHROOMDOOR
-  - GORE
-  - STORAGE2KEYPAD
-  - REDBLOCK
-  - BLACKBLOCK
-  - WHITEBLOCK
-  - LEVER
-  - OPTION
-  - MEATWALL
-  - MICROWAVE
-  - TRASHCAN
-  - LASTGAME
-  - ID_CARD
-  - LASTGAMEBOX
-  - LASTKEY
+  - Wall
+  - Metal
+  - Blood
+  - Dirt
+  - Concrete
+  - ExplosiveBarrel
+  - Target
+  - GasTank
+  - Metal (Static)
+  - Wood (Static)
+  - Dirt (Static)
+  - Wood
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Monster
+  - 
   - Water
   - UI
-  - BuildObj
-  - EnvrioAble
-  - InteractionObj
-  - Player
-  - Camera
   - 
   - 
-  - 
-  - 
-  - 
+  - Wall
+  - First Person View
+  - Character
+  - Post Processing
+  - Post Processing Weapon
+  - Post Processing Scope
+  - Invisible Wall
+  - Projectile
   - 
   - 
   - 
