@@ -11,6 +11,7 @@ using static Connecting;
 
 public class BlockSpwaner : MonoBehaviour
 {
+    #region enum타입 변수들
     public enum BuildMode   //건축 모드
     {
         None = 0,
@@ -40,24 +41,21 @@ public class BlockSpwaner : MonoBehaviour
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
     public MaterialType materialType = MaterialType.Wood;
+
+    #endregion
+
+
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
     public BlockData[] blockDatas; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
-    float lengthMul = 3f; // 생성할 벽의 길이(구버전)
-    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲
+    //float lengthMul = 3f; // 생성할 벽의 길이(구버전)
+    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲(반지름)
 
     [SerializeField] private float interactDistance = 18.0f; // 건축 상호작용 가능한 최대 거리
 
-    public Material SpawnAbledMat;
-    public Material SpawnDisabledMat;
 
-    [SerializeField] Vector3 downSpawnPoint = new Vector3 (0, 0.8f, 0); //토대의 크기에 맞게 약간 하단에 생성
-    [SerializeField] Vector3 testVec = Vector3.zero;            //확인용 변수
-
-
-    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
     /// <summary>
-    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트
+    /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트--------------------------
     /// </summary>
     public GameObject fa_preview;
     public GameObject wall_preview_H;
@@ -65,10 +63,16 @@ public class BlockSpwaner : MonoBehaviour
     public GameObject enviroment_preview;
     public GameObject previewObj;
 
+    //생성 가능/불가능 시 미리보기 옵젝에 씌울 적/녹색 머테리얼------------------------------------------
+    public Material SpawnAbledMat;
+    public Material SpawnDisabledMat;
+
+    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
+
     [SerializeField]
     EnviromentData[] enviromentDatas = null;
     //[SerializeField] int enviromentIndex = 0;
-    public int enviromentIndex = 0; //임시로 public으로 변경
+    [SerializeField] int enviromentIndex = 0; //임시로 public으로 변경
     public int EnviromentIndex
     {
         get => enviromentIndex;
@@ -76,16 +80,19 @@ public class BlockSpwaner : MonoBehaviour
         {
             if (enviromentIndex != value)
             {
-                enviromentIndex = value;
+                //enviroData 배열의 길이보다 길면 0
+                if(value >= enviromentDatas.Length)
+                    enviromentIndex = 0;
+                else 
+                    enviromentIndex = value;
+
                 EniromentPreview_Setting(enviromentIndex);
                 //enviroment_preview = 
             }
         }
     }
 
-    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
-
-    [SerializeField] bool canDespawn = false;
+    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
     [SerializeField] private float connectorOverlapRadius = 1;
     [SerializeField] private LayerMask buildObjLayer;
@@ -95,8 +102,10 @@ public class BlockSpwaner : MonoBehaviour
     public bool isRight = true;         //현재 Ray의 히트 위치가 블록 보다 오른쪽인지 왼쪽인지 판단
 
     public bool canSpawnObj = true;     //생성가능한지 판단
+    [SerializeField] bool canDespawn = false;
     Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
 
+    [SerializeField] EnviroAdjuster adjuster;
 
     PlayerInputAction inputAction;
 
@@ -151,6 +160,10 @@ public class BlockSpwaner : MonoBehaviour
 
             case BuildMode.Foundation:
                 buildMode = BuildMode.Wall_Horizontal;
+                break;
+            case BuildMode.Enviroment:
+                EnviromentIndex++;    
+                //EnviromentIndex %= enviromentDatas.Length;    //프로퍼티로는 작동이 안됨 + 인덱스범위를 넘은 뒤에 돌아와서 문제가있음
                 break;
             default:
                 buildMode = BuildMode.None;
@@ -222,7 +235,7 @@ public class BlockSpwaner : MonoBehaviour
             return;
         }
         else
-        {
+        {   //벽의 머테리얼 설정
             Renderer renderer = newObj.transform.GetChild(0).GetComponent<Renderer>();
             switch (materialType)
             {
@@ -259,8 +272,8 @@ public class BlockSpwaner : MonoBehaviour
             inputAction.Enable();
         }
     }
-
     #endregion
+
     private void Start()
     {
         fa_preview = transform.GetChild(0).gameObject;
@@ -268,8 +281,9 @@ public class BlockSpwaner : MonoBehaviour
         wall_preview_V = transform.GetChild(2).gameObject;
         enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
     }
-
-
+    ///                          --||--------------------------------------\\------------------------------------------||----------------
+    ///   --------//-----------------------------------------------||------------------- Update 문-------------------\\------------------------------------------||----------------------------------------
+    ///                          --||--------------------------------------\\------------------------------------------||----------------
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0f));
@@ -281,17 +295,26 @@ public class BlockSpwaner : MonoBehaviour
         // 환경요소 생성 모드일때
         if (buildMode == BuildMode.Enviroment)
         {
+            //EnvrioAble 레이어인 물체만 판단한다.
             if (Physics.Raycast(ray, out hit, interactDistance, LayerMask.GetMask("EnvrioAble")))
             {
                 // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
                 tagOfHitObject = hit.collider.gameObject.tag;
 
                 //프리뷰 오브젝트 레이캐스트 닿는 위치로 이동
-                previewObj.transform.position = hit.point;
+                //previewObj.transform.position = hit.point;
 
                 //환경요소에 닿을 때 제거 가능
-                canDespawn = true;
+                if (hit.collider.gameObject.transform.parent.CompareTag("Untagged"))
+                {
+                    canDespawn = false;
+                }
+                else
+                {
+                    canDespawn = true;
+                }
 
+                //환경요소에 닿을 때 생성 불가 , 태그 : Respawn
                 if (tagOfHitObject == "Respawn")
                 {
                     canSpawnObj = false;
@@ -300,8 +323,14 @@ public class BlockSpwaner : MonoBehaviour
                 {
                     canSpawnObj = true;
                 }
+
+                //프리뷰 색상 함수
                 PreviewMatSelect(canSpawnObj);
 
+                adjuster = hit.collider.GetComponent<EnviroAdjuster>();
+                if(adjuster != null) 
+                    EnviroAdjuset(adjuster.CenterVec, hit.point);
+                
             }
             else
             {
@@ -312,7 +341,6 @@ public class BlockSpwaner : MonoBehaviour
         // 환경요소 생성 모드가 아닐 때
         else
         {
-
             if (Physics.Raycast(ray, out hit, interactDistance))
             {
                 // 부딪힌 물체의 태그를 가져옴 디버그용 = 확인용
@@ -480,7 +508,7 @@ public class BlockSpwaner : MonoBehaviour
     {
         ///Transform previewConnector_Tr = connecting.transform;
         ///previewObj.transform.position = connecting.transform.position - (previewConnector_Tr.position - previewObj.transform.position);
-        Debug.Log(connecting.name);
+        //Debug.Log(connecting.name);
         //Floor에 생성할때
         if (connecting.objType == ObjType.Floor)    
         {   //foundation 생성모드일때
@@ -684,4 +712,101 @@ public class BlockSpwaner : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Enviro의 튀어나온 면을 floor안쪽으로 넣는 함수
+    /// </summary>
+    /// <param name="checkObjPosition">현재 바닥의 포지션(원점)</param>
+    /// <param name="prefabPosition">현재 ray가 닿는 미리보기 프리팹의 위치</param>
+    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition)
+    {
+        float lengthMultiX = lengthMulti;
+        float lengthMultiZ = lengthMulti;
+
+
+        // 두 오브젝트 간의 x 길이와 z 길이 계산(ray의 위치 - 중심 위치)
+        float deltaX = prefabPosition.x - checkObjPosition.x;
+        float deltaZ = prefabPosition.z - checkObjPosition.z;
+
+        //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
+        float radiusX = enviromentDatas[enviromentIndex].radiusX;
+        float radiusZ = enviromentDatas[enviromentIndex].radiusZ;
+
+        float newX = 0, newZ = 0;
+
+        //right, left
+        if (deltaX > 0)
+        {
+            float adjX = radiusX + deltaX;
+            float checkX = lengthMultiX - adjX;
+            if (checkX > 0 || adjuster.isConRight)       
+            {
+                //벗어나지 않음
+                newX = hit.point.x;
+            }
+            else
+            {
+                //밖으로 티어나옴 
+                newX = hit.point.x + checkX; //마이너스 값이라 더하면 빼짐
+   
+            }
+        }
+        else if (deltaX < 0)
+        {
+            float adjX = radiusX - deltaX;
+            float checkX = lengthMultiX - adjX;
+            if (checkX > 0 || adjuster.isConLeft)
+            {
+                //벗어나지 않음
+                newX = hit.point.x;
+            }
+            else
+            {
+                //밖으로 티어나옴 
+                newX = hit.point.x - checkX; //마이너스 값이라 빼면 더해짐
+
+            }
+        }
+
+        //forward, back
+        if (deltaZ > 0)
+        {
+            float adjZ = radiusZ + deltaZ;
+            float checkZ = lengthMultiZ - adjZ;
+            if (checkZ > 0 || adjuster.isConForward)
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
+            else
+            {
+                //밖으로 티어나옴  
+                newZ = hit.point.z + checkZ; //마이너스 값이라 더하면 빼짐
+            }
+        }
+        else if (deltaZ < 0)
+        {
+            float adjZ = radiusZ - deltaZ;
+            float checkZ = lengthMultiZ - adjZ;
+            if (checkZ > 0 || adjuster.isConBack)
+            {
+                //벗어나지 않음
+                newZ = hit.point.z;
+            }
+            else
+            {
+                //밖으로 티어나옴  
+                newZ = hit.point.z - checkZ; //마이너스 값이라 빼면 더해짐
+            }
+        }
+
+        //위 길이 만큼 안쪽으로 중심을 이동 시킨다.
+        previewObj.transform.position = new Vector3(newX, hit.point.y, newZ);
+
+        Debug.Log($"생성될 X : {newX}, 생성될 z : {newZ}");
+    }
+      
+
+    
+
 }

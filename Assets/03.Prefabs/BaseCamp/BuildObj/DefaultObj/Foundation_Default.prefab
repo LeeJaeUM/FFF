@@ -197,9 +197,9 @@ MonoBehaviour:
   isConnectedToFloor: 0
   isConnectedToWall_Ho: 0
   isConnectedToWall_Ve: 0
-  Wall_HoCount: 0
-  Wall_VeCount: 0
-  FloorCount: 0
+  wall_HoCount: 0
+  wall_VeCount: 0
+  floorCount: 0
 --- !u!33 &941651195685417788
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -328,9 +328,9 @@ MonoBehaviour:
   isConnectedToFloor: 0
   isConnectedToWall_Ho: 0
   isConnectedToWall_Ve: 0
-  Wall_HoCount: 0
-  Wall_VeCount: 0
-  FloorCount: 0
+  wall_HoCount: 0
+  wall_VeCount: 0
+  floorCount: 0
 --- !u!33 &7308225265702612652
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -459,9 +459,9 @@ MonoBehaviour:
   isConnectedToFloor: 0
   isConnectedToWall_Ho: 0
   isConnectedToWall_Ve: 0
-  Wall_HoCount: 0
-  Wall_VeCount: 0
-  FloorCount: 0
+  wall_HoCount: 0
+  wall_VeCount: 0
+  floorCount: 0
 --- !u!33 &1723085161488389802
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -579,9 +579,10 @@ GameObject:
   - component: {fileID: 3111115580900295576}
   - component: {fileID: 3544894949332591853}
   - component: {fileID: 8201716349251679793}
+  - component: {fileID: 2748233171265365445}
   m_Layer: 7
   m_Name: EnviroCheck
-  m_TagString: Untagged
+  m_TagString: Buildables
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -672,6 +673,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2748233171265365445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7532097549476357880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54512c336d6b22d41b39109305f6406a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connectings: []
+  lengthMultiX: 1.5
+  lengthMultiZ: 1.5
+  isConForward: 0
+  isConBack: 0
+  isConLeft: 0
+  isConRight: 0
 --- !u!1 &8812343883127040064
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,9 +749,9 @@ MonoBehaviour:
   isConnectedToFloor: 0
   isConnectedToWall_Ho: 0
   isConnectedToWall_Ve: 0
-  Wall_HoCount: 0
-  Wall_VeCount: 0
-  FloorCount: 0
+  wall_HoCount: 0
+  wall_VeCount: 0
+  floorCount: 0
 --- !u!33 &3007117691844812100
 MeshFilter:
   m_ObjectHideFlags: 0

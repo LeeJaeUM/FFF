@@ -49,9 +49,23 @@ public class Connecting : MonoBehaviour
     public bool isConnectedToWall_Ho = false;
     public bool isConnectedToWall_Ve = false;
 
-    [SerializeField] private int Wall_HoCount = 0;
-    [SerializeField] private int Wall_VeCount = 0;
-    [SerializeField] private int FloorCount = 0;
+    [SerializeField] private int wall_HoCount = 0;
+    [SerializeField] private int wall_VeCount = 0;
+    [SerializeField] private int floorCount = 0;
+    public int FloorCount
+    {
+        get => floorCount;
+        private set
+        {
+            floorCount = value;
+            onChangeCount?.Invoke((int)usedDir ,floorCount);
+        }
+    }
+
+    /// <summary>
+    /// Adjuster에 보낼 액션 : floor가 연결되어있는지 판단한다.
+    /// </summary>
+    public Action<int, int> onChangeCount;
 
     private void OnDrawGizmos()
     {
@@ -73,18 +87,6 @@ public class Connecting : MonoBehaviour
         {
             gizColor = Color.red;
         } 
-        //else if(isConnectedToFloor)
-        //{
-        //    gizColor = Color.yellow;
-        //}
-        //else if (isConnectedToWall_Ho)
-        //{
-        //    gizColor = Color.cyan;
-        //}
-        //else if (isConnectedToWall_Ve)
-        //{
-        //    gizColor = Color.magenta;
-        //}
         Gizmos.color = gizColor;
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
@@ -165,9 +167,9 @@ public class Connecting : MonoBehaviour
 
     void CountSetting(int ho, int ve, int floor)
     {
-        Wall_HoCount = ho;
-        Wall_VeCount = ve;
-        FloorCount = floor;
+        wall_HoCount = ho;
+        wall_VeCount = ve;
+        floorCount = floor;
     }
 
     public void UpdateConnecting(bool rootCall = false, bool isDestroy = false)
@@ -191,9 +193,9 @@ public class Connecting : MonoBehaviour
                 {
                     switch (otherConnecting.objType)
                     {
-                        case ObjType.Wall_Ho: Wall_HoCount--; break;
-                        case ObjType.Wall_Ve: Wall_VeCount--; break;
-                        case ObjType.Floor: FloorCount--; break;
+                        case ObjType.Wall_Ho: wall_HoCount--; break;
+                        case ObjType.Wall_Ve: wall_VeCount--; break;
+                        case ObjType.Floor: FloorCount--; break;            // Adjuster에 델리게이트를 실행함-------------------------------
                     }
                     //중복되어 무한 루프 방지
                     if (rootCall)
@@ -201,7 +203,7 @@ public class Connecting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("삭제될떄의 작업");
+                    //Debug.LogWarning("삭제될떄의 작업");
                     //중복되어 무한 루프 방지
                     if (rootCall)
                     {
@@ -213,23 +215,23 @@ public class Connecting : MonoBehaviour
         }
         canBuild = true;
 
-        if (Wall_HoCount < 1)
+        if (wall_HoCount < 1)
         {
             isConnectedToWall_Ho = true;
-            Wall_HoCount = 0;
+            wall_HoCount = 0;
         }
         else
             isConnectedToWall_Ho = false;
 
-        if (Wall_VeCount < 1)
+        if (wall_VeCount < 1)
         {
             isConnectedToWall_Ve = true;
-            Wall_VeCount = 0;
+            wall_VeCount = 0;
         }
         else
             isConnectedToWall_Ve = false;
 
-        if (FloorCount < 1)
+        if (floorCount < 1)            // Adjuster에 델리게이트를 실행함-------------------------------
         {
             isConnectedToFloor = true;
             FloorCount = 0;
