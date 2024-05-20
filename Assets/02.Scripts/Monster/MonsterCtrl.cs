@@ -55,12 +55,14 @@ public class MonsterCtrl : MonoBehaviour
             isMonsterMove = !isMonsterMove;
             if(isMonsterMove)
             {
-                darkWall.SetActive(false);
+                if(darkWall != null)
+                    darkWall.SetActive(false);
                 RenderSettings.ambientSkyColor = nightAmbientColor;
             }
             else if(!isMonsterMove)
             {
-                darkWall.SetActive(true);
+                if (darkWall != null)
+                    darkWall.SetActive(true);
                 RenderSettings.ambientSkyColor = afternoonAmbientColor;
             }
 

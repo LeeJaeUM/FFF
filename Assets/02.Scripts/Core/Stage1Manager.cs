@@ -66,7 +66,7 @@ public class Stage1Manager : MonoBehaviour
         Transform child = transform.GetChild(0);
         child = child.GetChild(0);
         bottomTMP = child.GetComponent<TextMeshProUGUI>();
-
+        BottomTMPText = string.Empty;
     }
 
     [SerializeField] private KeypadSystem.KeyPad keyPad;

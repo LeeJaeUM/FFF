@@ -43,6 +43,11 @@ public class PlayerGimic : MonoBehaviour
 
     private void Update()
     {
+        if (otherSave == null)
+        {
+            ExitInteract();
+        }
+
         // || otherSave.gameObject 이걸로 사라졌는지 판단
         if (cur_Interactable == null)
         {
@@ -70,12 +75,16 @@ public class PlayerGimic : MonoBehaviour
         cur_Interactable = other.GetComponent<IInteractable>();
         if (cur_Interactable != null)
         {
-            isPlayerIn = false;
-            tipsUI.CanUse_InteractObj = isPlayerIn;
-            cur_Interactable = null;
+            ExitInteract();
         }
     }
 
+    private void ExitInteract()
+    {
+        isPlayerIn = false;
+        cur_Interactable = null;
+        tipsUI.CanUse_InteractObj = isPlayerIn;
+    }
 
     /// <summary>
     /// 트리거 범위 내부일때 e를 눌러서 UI 활성화 가능함
