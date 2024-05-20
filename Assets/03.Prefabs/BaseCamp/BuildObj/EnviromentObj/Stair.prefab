@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 723536762666663113}
   - component: {fileID: 3887133877841359232}
   - component: {fileID: 7020160663070260989}
-  m_Layer: 0
-  m_Name: Stairs
-  m_TagString: Untagged
+  m_Layer: 7
+  m_Name: Stair
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
