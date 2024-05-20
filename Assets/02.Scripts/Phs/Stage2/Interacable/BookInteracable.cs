@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class BookInteracable : InteracableBase
 {
-    // Start is called before the first frame update
-    void Start()
+    ChooseUI chooseUI;
+
+    private void Awake()
     {
-        
+        chooseUI = FindObjectOfType<ChooseUI>();
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnUse()
     {
-        
+        if(GameManager.Instance.inven.UseItemCheck(ItemCode.Book_6) &&
+            GameManager.Instance.inven.UseItemCheck(ItemCode.Book_29))
+        {
+            chooseUI.Open(ChooseUI.ChooseType.Book);
+        }
+        else
+        {
+            Stage1Manager.Instance.BottomTMPText = "책이 꽂혀 있다";
+        }
     }
 }
