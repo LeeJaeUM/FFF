@@ -1,4 +1,4 @@
-﻿// Copyright 2021, Infima Games. All Rights Reserved.
+// Copyright 2021, Infima Games. All Rights Reserved.
 
 namespace InfimaGames.LowPolyShooterPack.Interface
 {
@@ -13,7 +13,7 @@ namespace InfimaGames.LowPolyShooterPack.Interface
         protected override void Tick()
         {
             //Update the text based on whether the cursor is locked or not.
-            textMesh.text = "Cursor " + (playerCharacter.IsCursorLocked() ? "Locked" : "Unlocked");
+            //textMesh.text = "Cursor " + (playerCharacter.IsCursorLocked() ? "Locked" : "Unlocked");
         }
 
         #endregion

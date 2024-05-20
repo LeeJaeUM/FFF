@@ -32,7 +32,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         #region PROPERTIES
 
-        //Velocity.
+        //Velocity
         private Vector3 Velocity
         {
             //Getter.

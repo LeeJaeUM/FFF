@@ -1,4 +1,4 @@
-﻿// Copyright 2021, Infima Games. All Rights Reserved.
+// Copyright 2021, Infima Games. All Rights Reserved.
 
 using UnityEngine;
 
@@ -61,7 +61,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// <summary>
         /// Returns true if the game cursor is locked.
         /// </summary>
-        public abstract bool IsCursorLocked();
+        //public abstract bool IsCursorLocked();
 
         /// <summary>
         /// Returns true if the tutorial text should be visible on the screen.
