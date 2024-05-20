@@ -6,10 +6,16 @@ using UnityEngine.InputSystem;
 public class Test_Inventory : TestBase
 {
     public ItemCode code;
-    public int count;
+    public int count = 1;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
         GameManager.Instance.inven.GetItemToSlot(code, count);
+    }
+
+    protected override void OnTest2(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.inven.GetItemToSlot(ItemCode.Book_6);
+        GameManager.Instance.inven.GetItemToSlot(ItemCode.Book_29);
     }
 }

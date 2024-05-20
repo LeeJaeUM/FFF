@@ -42,6 +42,8 @@ public class ChooseUI : MonoBehaviour
 
     public PickUpItem _fakeKey;
 
+    public Transform bookTransform;
+
     CanvasGroup canvas;
 
     Stage1Manager manager;
@@ -77,6 +79,7 @@ public class ChooseUI : MonoBehaviour
                 break;
             case ChooseType.Book:
                 Close();
+                Batch();
                 Type = ChooseType.None;
                 break;
         }
@@ -111,6 +114,17 @@ public class ChooseUI : MonoBehaviour
         canvas.interactable = false;
         canvas.blocksRaycasts = false;
         canvas.alpha = 0.0f;
+    }
+
+    public void Batch()
+    {
+        Transform child = bookTransform.GetChild(0);
+        child = child.GetChild(0);
+        child.gameObject.SetActive(true);
+
+        child = bookTransform.GetChild(1);
+        child = child.GetChild(0);
+        child.gameObject.SetActive(true);
     }
 }
 
