@@ -6,9 +6,9 @@ using UnityEngine;
 public class TreeObj : MonoBehaviour, IInteractable
 {
     private ItemCode axe = ItemCode.Axe;   
+    private InventoryUI inventoryUI;
     [SerializeField]
     private int breakCount = 0; //나무가 도끼질을 버티는 횟수카운트 // 3회
-    private InventoryUI inventoryUI;
 
     readonly int Interact_Hash = Animator.StringToHash("Interact");
     private Animator animator;
