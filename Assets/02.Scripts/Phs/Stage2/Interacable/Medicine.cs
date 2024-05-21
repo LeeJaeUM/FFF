@@ -12,7 +12,7 @@ public class Medicine : InteracableBase
     private bool isOpen = false;
 
     public PickUpItem oldScissors;
-    FakeKey fakeKey;
+    ChooseUI choose;
 
     Stage1Manager manager; 
     
@@ -22,7 +22,7 @@ public class Medicine : InteracableBase
     {
         animator = GetComponentInParent<Animator>();
         manager = Stage1Manager.Instance;
-        fakeKey = FindObjectOfType<FakeKey>();
+        choose = FindObjectOfType<ChooseUI>();
     }
 
     protected override void OnUse()
@@ -45,9 +45,9 @@ public class Medicine : InteracableBase
             }
             else
             {
-                if(fakeKey != null)
+                if(choose != null)
                 {
-                    fakeKey.Open();
+                    choose.Open(ChooseUI.ChooseType.FakeKey);
                     isPickUp = false;
                 }
             }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -44,6 +45,8 @@ public class ChooseUI : MonoBehaviour
 
     public Transform bookTransform;
 
+    public Action onBookButtonActive;
+
     CanvasGroup canvas;
 
     Stage1Manager manager;
@@ -80,6 +83,7 @@ public class ChooseUI : MonoBehaviour
             case ChooseType.Book:
                 Close();
                 Batch();
+                onBookButtonActive?.Invoke();
                 Type = ChooseType.None;
                 break;
         }
