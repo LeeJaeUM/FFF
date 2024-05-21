@@ -12,7 +12,8 @@ public class DoorBase : MonoBehaviour, IInteractable
         Masterkey,
         Firstkey,
         Metal,
-        Clear
+        Clear,
+        OilSyringe
     }
 
     [SerializeField] private DoorType doorType = DoorType.None;
@@ -70,6 +71,12 @@ public class DoorBase : MonoBehaviour, IInteractable
             case DoorType.Clear:
                 itemcode = -1;
                 announsText = ("옆의 패드의 비밀번호를 입력해야한다.");
+                sfx_Open = AudioManager.Sfx.MetalDoorOpening;
+                sfx_Close = AudioManager.Sfx.MetalDoorOpening;
+                break;
+            case DoorType.OilSyringe:
+                itemcode = (int)ItemCode.OilSyringe;
+                announsText = ("문고리가 녹슬어서 문을 열 수 없다. 기름같은 것이 필요할 거 같다.");
                 sfx_Open = AudioManager.Sfx.MetalDoorOpening;
                 sfx_Close = AudioManager.Sfx.MetalDoorOpening;
                 break;

@@ -188,14 +188,17 @@ public class InventoryUI : MonoBehaviour
     {
         inputAction.UI.Enable();
         inputAction.UI.LClick.performed += OnLeftClick;
+        inputAction.UI.RClick.performed += OnRightClick;
         inputAction.UI.InventroyOnOff.performed += OnOpenClose;
         inputAction.UI.Produce.performed += OnProduce;
+        inputAction.UI.HintClose.performed += OnHintClose;
     }
-
     private void OnDisable()
     {
+        inputAction.UI.HintClose.performed -= OnHintClose;
         inputAction.UI.Produce.performed -= OnProduce;
         inputAction.UI.InventroyOnOff.performed -= OnOpenClose;
+        inputAction.UI.RClick.performed -= OnRightClick;
         inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
@@ -293,6 +296,17 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    public Action<ItemContain> onInteracable;
+
+    private void OnRightClick(InputAction.CallbackContext context)
+    {
+        if(enterContain != null)
+        {
+            onInteracable?.Invoke(enterContain);
+        }
+    }
+
+
     private void OnOpenClose(InputAction.CallbackContext context)
     {
         if (UI != null)
@@ -308,6 +322,14 @@ public class InventoryUI : MonoBehaviour
             produceManager.OnOff();
         }
     }
+
+    public Action onHintClose;
+
+    private void OnHintClose(InputAction.CallbackContext context)
+    {
+        onHintClose?.Invoke();
+    }
+
 
     #endregion
 
