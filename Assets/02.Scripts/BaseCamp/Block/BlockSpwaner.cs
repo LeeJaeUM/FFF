@@ -80,6 +80,9 @@ public class BlockSpwaner : MonoBehaviour
         {
             if (enviromentIndex != value)
             {
+                //회전 체크 초기화
+                isRotated = false;
+
                 //enviroData 배열의 길이보다 길면 0
                 if(value >= enviromentDatas.Length)
                     enviromentIndex = 0;
@@ -102,11 +105,12 @@ public class BlockSpwaner : MonoBehaviour
     public bool isRight = true;         //현재 Ray의 히트 위치가 블록 보다 오른쪽인지 왼쪽인지 판단
 
     public bool canSpawnObj = true;     //생성가능한지 판단
-    [SerializeField] bool canDespawn = false;
-    Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
+    [SerializeField] private bool canDespawn = false;
+    private Connecting oneConnecting = null;    //현재 포인터에 닿는 커네팅 : 생성 가능한지 판단하기 위해 불러옴
+
+    [SerializeField] private bool isRotated = false;
 
     [SerializeField] EnviroAdjuster adjuster;
-
     PlayerInputAction inputAction;
 
     private void Awake()
@@ -295,12 +299,13 @@ public class BlockSpwaner : MonoBehaviour
     {
         if (buildMode == BuildMode.Enviroment)
         {
-            Vector2 testVec = context.ReadValue<Vector2>();
-
+            Vector2 wheelVec = context.ReadValue<Vector2>();
             Transform enviroChild = transform.GetChild(3);
 
+            isRotated = !isRotated;
+
             //위로 휠 했을 때
-            if (testVec.y > 0)
+            if (wheelVec.y > 0)
             {
                 // 현재 프리팹 오브젝트의 회전 가져오기
                 Quaternion currentRotation = enviroChild.rotation;
@@ -411,7 +416,7 @@ public class BlockSpwaner : MonoBehaviour
 
                 adjuster = hit.collider.GetComponent<EnviroAdjuster>();
                 if(adjuster != null) 
-                    EnviroAdjuset(adjuster.CenterVec, hit.point);
+                    EnviroAdjuset(adjuster.CenterVec, hit.point, isRotated);
 
             }
             else
@@ -798,21 +803,33 @@ public class BlockSpwaner : MonoBehaviour
     /// <summary>
     /// Enviro의 튀어나온 면을 floor안쪽으로 넣는 함수
     /// </summary>
-    /// <param name="checkObjPosition">현재 바닥의 포지션(원점)</param>
+    /// <param name="checkObjPosition">현재 바닥의 포지션(원점) : 정 가운데 </param>
     /// <param name="prefabPosition">현재 ray가 닿는 미리보기 프리팹의 위치</param>
-    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition)
+    /// <param name="isRotated">오브젝트를 회전 시켰는지 확인하는 변수</param>
+    void EnviroAdjuset(Vector3 checkObjPosition, Vector3 prefabPosition, bool isRotated)
     {
+        //바닥의 길이
         float lengthMultiX = lengthMulti;
         float lengthMultiZ = lengthMulti;
 
+        float radiusX = 0;
+        float radiusZ = 0;
 
         // 두 오브젝트 간의 x 길이와 z 길이 계산(ray의 위치 - 중심 위치)
         float deltaX = prefabPosition.x - checkObjPosition.x;
         float deltaZ = prefabPosition.z - checkObjPosition.z;
 
         //radius - (1.5 - 길이) 현재는 x,z길이 모두 정사각형으로 퉁쳐서 radius가 하나임
-        float radiusX = enviromentDatas[enviromentIndex].radiusX;
-        float radiusZ = enviromentDatas[enviromentIndex].radiusZ;
+        if (!isRotated)
+        {
+            radiusX = enviromentDatas[enviromentIndex].radiusX;
+            radiusZ = enviromentDatas[enviromentIndex].radiusZ;
+        }
+        else
+        {
+            radiusX = enviromentDatas[enviromentIndex].radiusZ;
+            radiusZ = enviromentDatas[enviromentIndex].radiusX;
+        }
 
         float newX = 0, newZ = 0;
 
@@ -884,6 +901,7 @@ public class BlockSpwaner : MonoBehaviour
 
         //위 길이 만큼 안쪽으로 중심을 이동 시킨다.
         previewObj.transform.position = new Vector3(newX, hit.point.y, newZ);
+  
 
         Debug.Log($"생성될 X : {newX}, 생성될 z : {newZ}");
     }
