@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc425dbc47df934ba10567e07e9ecb2, type: 3}
-  m_Name: WorkBench
+  m_Name: 04_Box
   m_EditorClassIdentifier: 
-  enviroPrefab: {fileID: 3196613445242150100, guid: 99c15d286aa18a3418fb0210ecc1edb0, type: 3}
-  previewPrefab: {fileID: 2102910533044104171, guid: f4ad55a8aa9f44e4583f357fe47ea770, type: 3}
-  radiusX: 1
-  radiusZ: 0.9
+  enviroPrefab: {fileID: 8768485004339793628, guid: b96f1862b9e02c04aa843d87d67349a7, type: 3}
+  previewPrefab: {fileID: 4683258872423231478, guid: 4b7fa819c39422048ba07e2f6666f942, type: 3}
+  radiusX: 0.15
+  radiusZ: 0.15

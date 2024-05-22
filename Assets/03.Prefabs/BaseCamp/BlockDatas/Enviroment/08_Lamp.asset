@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc425dbc47df934ba10567e07e9ecb2, type: 3}
-  m_Name: Empty
+  m_Name: 08_Lamp
   m_EditorClassIdentifier: 
-  enviroPrefab: {fileID: 3239781720939078565, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
-  previewPrefab: {fileID: 3239781720939078565, guid: 6005611416448424ca62ef18a8ee6238, type: 3}
-  radiusX: 0.5
-  radiusZ: 0.5
+  enviroPrefab: {fileID: 2513341517135006344, guid: f7bafa6af53e43b408e7ae73315fa886, type: 3}
+  previewPrefab: {fileID: 261348863803948726, guid: 86c7dfd16ef3f0940ae6cdb433617a9d, type: 3}
+  radiusX: 0.4
+  radiusZ: 0.4

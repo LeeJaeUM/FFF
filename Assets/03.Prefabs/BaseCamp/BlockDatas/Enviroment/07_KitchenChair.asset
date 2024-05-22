@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc425dbc47df934ba10567e07e9ecb2, type: 3}
-  m_Name: TestTable
+  m_Name: 07_KitchenChair
   m_EditorClassIdentifier: 
-  enviroPrefab: {fileID: 3196613445242150100, guid: f6f2618febda8804ca40ce6d93755924, type: 3}
-  previewPrefab: {fileID: 4798320799196274452, guid: d875f08472b337a4bb767bd48fe8dbfb, type: 3}
-  radiusX: 1.2
-  radiusZ: 0.85
+  enviroPrefab: {fileID: 6801617912666992229, guid: 37b8b0a92cd16864aaf01434d40ce258, type: 3}
+  previewPrefab: {fileID: 2013205003481212328, guid: 83fa2972411c7f9448b23e749ffeff9f, type: 3}
+  radiusX: 0.25
+  radiusZ: 0.25

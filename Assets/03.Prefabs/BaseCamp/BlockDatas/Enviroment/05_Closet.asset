@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6cc425dbc47df934ba10567e07e9ecb2, type: 3}
-  m_Name: Stair
+  m_Name: 05_Closet
   m_EditorClassIdentifier: 
-  enviroPrefab: {fileID: 2422649862903870974, guid: 3cba1cb8fa7e128409142ab588e7c3f4, type: 3}
-  previewPrefab: {fileID: 1891752014593978176, guid: b24dd207f780a9e448969222ce9f52f2, type: 3}
-  radiusX: 1.5
-  radiusZ: 1.5
+  enviroPrefab: {fileID: 2950561190879039325, guid: f55d7df03694fd244a9b29dcc29c2175, type: 3}
+  previewPrefab: {fileID: 2817933321315336287, guid: 7ed731315169d7e4a9be7c3bf34d099a, type: 3}
+  radiusX: 0.6
+  radiusZ: 0.4
