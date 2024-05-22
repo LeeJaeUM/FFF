@@ -123,11 +123,13 @@ public class BlockSpwaner : MonoBehaviour
         inputAction.Player.SpawnObj.performed += OnSpawnObj;
         inputAction.Player.BuildMode.performed += OnBuildMode;
         inputAction.Player.DespawnObj.performed += OnDespawnObj;
+        inputAction.Player.Wheel.performed += OnWheelMouse;
     }
 
 
     private void OnDisable()
     {
+        inputAction.Player.Wheel.performed -= OnWheelMouse;
         inputAction.Player.DespawnObj.performed -= OnDespawnObj;
         inputAction.Player.BuildMode.performed -= OnBuildMode;
         inputAction.Player.SpawnObj.performed -= OnSpawnObj;
@@ -179,7 +181,6 @@ public class BlockSpwaner : MonoBehaviour
     {
         if (canSpawnObj)
         {
-            
             switch (buildMode)
             {
                 case BuildMode.Wall_Horizontal:
@@ -209,8 +210,19 @@ public class BlockSpwaner : MonoBehaviour
                     }
                     break;
                 case BuildMode.Enviroment:
-                    if(canSpawnObj)
-                        SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
+                    if (canSpawnObj)
+                    {
+                        if (EnviromentIndex != 2) 
+                        {
+                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
+                        }
+                        else
+                        {
+                            //계단을 생성할 때의 조건
+                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, false);
+                        }
+
+                    }
                     //Debug.Log("환경요소는 따로 추가해야함");
                     break;
                 case BuildMode.None:
@@ -231,7 +243,11 @@ public class BlockSpwaner : MonoBehaviour
         GameObject newObj = Instantiate(prefab, previewObj.transform.position, Quaternion.identity);
         if (isEnviroment)
         {
+            // previewObj의 회전을 가져옴
+            Quaternion currentRotation = previewObj.transform.rotation;
 
+            // (추가적으로) 생성된 오브젝트의 회전을 현재 오브젝트와 동일하게 설정
+            newObj.transform.rotation = currentRotation;
             return;
         }
         else
@@ -250,9 +266,61 @@ public class BlockSpwaner : MonoBehaviour
                     break;
             }
 
-            foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
+            //계단이 아닐때만 벽 연결조건 체크
+            if(buildMode != BuildMode.Enviroment)
             {
-                connecting.UpdateConnecting(true);
+                foreach (Connecting connecting in newObj.GetComponentsInChildren<Connecting>())
+                {
+                    connecting.UpdateConnecting(true);
+                }
+            }
+            else
+            {          
+                // 계단이라면 회전 적용
+                Quaternion currentRotation = previewObj.transform.rotation;
+
+                // (추가적으로) 생성된 오브젝트의 회전을 현재 오브젝트와 동일하게 설정
+                newObj.transform.rotation = currentRotation;
+                return;
+
+            }
+        }
+    }
+
+    /// <summary>
+    /// 마우스 휠 액션 시 계단 회전
+    /// </summary>
+    /// <param name="context"></param>
+    private void OnWheelMouse(InputAction.CallbackContext context)
+    {
+        if (buildMode == BuildMode.Enviroment)
+        {
+            Vector2 testVec = context.ReadValue<Vector2>();
+
+            Transform enviroChild = transform.GetChild(3);
+
+            //위로 휠 했을 때
+            if (testVec.y > 0)
+            {
+                // 현재 프리팹 오브젝트의 회전 가져오기
+                Quaternion currentRotation = enviroChild.rotation;
+
+                // (0, 90, 0) 회전 값을 쿼터니언으로 만들기
+                Quaternion additionalRotation = Quaternion.Euler(0, 90, 0);
+
+                // 현재 회전에 새로운 회전을 더하기
+                enviroChild.rotation = currentRotation * additionalRotation;
+            }
+            else
+            {
+                // 현재 프리팹 오브젝트의 회전 가져오기
+                Quaternion currentRotation = enviroChild.rotation;
+
+                // (0, 90, 0) 회전 값을 쿼터니언으로 만들기
+                Quaternion additionalRotation = Quaternion.Euler(0, -90, 0);
+
+                // 현재 회전에 새로운 회전을 더하기
+                enviroChild.rotation = currentRotation * additionalRotation;
             }
         }
     }
@@ -282,7 +350,7 @@ public class BlockSpwaner : MonoBehaviour
         enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
     }
     ///                          --||--------------------------------------\\------------------------------------------||----------------
-    ///   --------//-----------------------------------------------||------------------- Update 문-------------------\\------------------------------------------||----------------------------------------
+    ///   --------//--------  -----||----------- Update 문-------------------\\------------------------------------------||----------------------------------------
     ///                          --||--------------------------------------\\------------------------------------------||----------------
     void Update()
     {
@@ -305,13 +373,27 @@ public class BlockSpwaner : MonoBehaviour
                 //previewObj.transform.position = hit.point;
 
                 //환경요소에 닿을 때 제거 가능
-                if (hit.collider.gameObject.transform.parent.CompareTag("Untagged"))
+                if(hit.collider.gameObject.transform.parent != null)
                 {
-                    canDespawn = false;
+                    if (hit.collider.gameObject.transform.parent.CompareTag("Untagged"))
+                    {
+                        canDespawn = false;
+                    }
+                    else
+                    {
+                        canDespawn = true;
+                    }
                 }
                 else
                 {
-                    canDespawn = true;
+                    if (hit.collider.gameObject.CompareTag("Respawn"))
+                    {
+                        canDespawn = true;
+                    }
+                    else
+                    {
+                        canDespawn = false;
+                    }
                 }
 
                 //환경요소에 닿을 때 생성 불가 , 태그 : Respawn
@@ -330,7 +412,7 @@ public class BlockSpwaner : MonoBehaviour
                 adjuster = hit.collider.GetComponent<EnviroAdjuster>();
                 if(adjuster != null) 
                     EnviroAdjuset(adjuster.CenterVec, hit.point);
-                
+
             }
             else
             {

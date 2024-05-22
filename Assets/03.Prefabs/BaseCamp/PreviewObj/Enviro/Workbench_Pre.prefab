@@ -92,7 +92,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 712931847621656239}
-  - component: {fileID: 7168382435810088798}
   m_Layer: 2
   m_Name: Workbench_Pre
   m_TagString: Untagged
@@ -119,27 +118,6 @@ Transform:
   - {fileID: 6390351270875902851}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7168382435810088798
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2102910533044104171}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.9324212, y: 1.32, z: 1.73}
-  m_Center: {x: 0, y: 0.8, z: -0.27}
 --- !u!1 &3065027576913487494
 GameObject:
   m_ObjectHideFlags: 0
