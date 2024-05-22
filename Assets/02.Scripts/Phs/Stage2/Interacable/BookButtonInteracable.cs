@@ -23,7 +23,11 @@ public class BookButtonInteracable : InteracableBase
     {
         if(isCanUse)
         {
-
+            BookShelf_Unlock unlock = FindAnyObjectByType<BookShelf_Unlock>();
+            if(unlock != null)
+            {
+                unlock.Open();
+            }
         }
         else
         {
