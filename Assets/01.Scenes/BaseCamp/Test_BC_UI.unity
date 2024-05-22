@@ -1296,14 +1296,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BaseCamp_Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 539565053726029905, guid: 1c800c678b6be4c41a416b2d417b6a4e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1554349972943877303, guid: 1c800c678b6be4c41a416b2d417b6a4e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3810962366633313894, guid: 1c800c678b6be4c41a416b2d417b6a4e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1383,10 +1375,6 @@ PrefabInstance:
     - target: {fileID: 3810962366633313894, guid: 1c800c678b6be4c41a416b2d417b6a4e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8798290195931394142, guid: 1c800c678b6be4c41a416b2d417b6a4e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

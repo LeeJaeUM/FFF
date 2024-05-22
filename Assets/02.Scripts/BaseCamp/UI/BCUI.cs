@@ -104,13 +104,21 @@ public class BCUI : MonoBehaviour
             enviroSelectGroup.SetActive(false);
             spwaner.materialType = (BlockSpwaner.MaterialType)btnIndex;
         }
-        else
-        {
+        else if (btnIndex == 3) 
+        { 
             //Enviroment를 눌렀을 때
 
             blockSelectGroup.SetActive(false);
             enviroSelectGroup.SetActive(true);
             return;
+        }
+        else
+        {
+            //종료 버튼을 눌렀을 때
+            isActive = !isActive;
+            buildUI.SetActive(isActive);
+            spwaner.ProhibitSpawn(isActive);
+            spwaner.buildMode = BlockSpwaner.BuildMode.None;
         }
     }
 

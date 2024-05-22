@@ -36,7 +36,7 @@ public class BlockSpwaner : MonoBehaviour
         Stone,
         Iron
     }
-    public BuildMode buildMode = BuildMode.Foundation;
+    public BuildMode buildMode = BuildMode.None;
 
     //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
@@ -151,6 +151,11 @@ public class BlockSpwaner : MonoBehaviour
             Destroy(hit.collider.transform.root.gameObject);
         }
     }
+
+    /// <summary>
+    /// Tab을 눌러 모드 변경
+    /// </summary>
+    /// <param name="context"></param>
     private void OnBuildMode(InputAction.CallbackContext context)
     {
         //UI로 변경하기 위해 임시로 막아둠
@@ -168,8 +173,8 @@ public class BlockSpwaner : MonoBehaviour
                 buildMode = BuildMode.Wall_Horizontal;
                 break;
             case BuildMode.Enviroment:
+                //환경요소일 경우는 Tab으로 다음 환경요소로 넘기기
                 EnviromentIndex++;    
-                //EnviromentIndex %= enviromentDatas.Length;    //프로퍼티로는 작동이 안됨 + 인덱스범위를 넘은 뒤에 돌아와서 문제가있음
                 break;
             default:
                 buildMode = BuildMode.None;
