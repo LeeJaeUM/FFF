@@ -39,6 +39,7 @@ public enum ItemCode
     Crowbar,        // 쇠지렛대
     BloodyKnife,
     Hint,
+    SecondKey,
     ThirdKey,
     OilSyringe,     // 기름이 들어간 주사기
 

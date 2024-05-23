@@ -761,6 +761,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        RefreshList();
         return false;
     }
 

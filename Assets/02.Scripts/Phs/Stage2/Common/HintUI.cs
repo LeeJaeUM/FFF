@@ -29,6 +29,9 @@ public class HintUI : MonoBehaviour
 
         switch(code)
         {
+            case ItemCode.Hint:
+                UIObject[0].SetActive(true);
+                break;
             case ItemCode.GoldHint_1:
                 UIObject[1].SetActive(true);
                 break;

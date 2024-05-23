@@ -28,7 +28,7 @@ public class ProduceSlot : RecycleObject
         }
     }
 
-    public bool IsProduceOk => count < Total;
+    public bool IsProduceOk => count <= Total;
 
 
     #region 컴포넌트
@@ -73,9 +73,16 @@ public class ProduceSlot : RecycleObject
         countText.text = $"X{total}/{count}";
     }
 
-    public void UseItem()
+    public void UseItem(bool isConsume)
     {
-        bool isUse = GameManager.Instance.inven.UseItem(data.itemCode, count);
+        bool isUse = false;
+        
+        Debug.LogWarning(isConsume);
+        if (isConsume)
+        {
+            isUse = GameManager.Instance.inven.UseItem(data.itemCode, count);
+        }
+
         Debug.Log(isUse);
     }
 }

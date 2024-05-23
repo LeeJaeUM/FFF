@@ -25,9 +25,15 @@ public struct parentCode
 
     public int Count => count;
 
-    public parentCode(ItemCode _code, int _count)
+    [SerializeField]
+    private bool notConsume;
+
+    public bool NotConsume => notConsume;
+
+    public parentCode(ItemCode _code, int _count, bool isConsume)
     {
         this.code = _code;
         this.count = _count;
+        this.notConsume = isConsume;
     }
 }
