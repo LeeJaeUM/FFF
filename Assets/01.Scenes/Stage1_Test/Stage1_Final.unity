@@ -1156,7 +1156,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &791566172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3606,10 +3606,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1898887934}
     - target: {fileID: 1788268838538737450, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
-      propertyPath: totalTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 1788268838538737450, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: area.Array.data[0]
       value: 
       objectReference: {fileID: 2111894453}
@@ -3669,17 +3665,9 @@ PrefabInstance:
       propertyPath: area.Array.data[14]
       value: 
       objectReference: {fileID: 89574392}
-    - target: {fileID: 4097710635157127802, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
-      propertyPath: m_Speed
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 4995095792887491936, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: m_Name
       value: Monster1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4995095792887491936, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4995095792887591170, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3719,10 +3707,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4995095792887591170, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8535957404372787881, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
-      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

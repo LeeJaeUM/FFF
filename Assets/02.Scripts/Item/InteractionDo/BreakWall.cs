@@ -34,10 +34,14 @@ public class BreakWall : MonoBehaviour, IInteractable
         {
             Stage1Manager.Instance.BottomTMPText = ("Dynamite에 불을 붙일 것이 필요하다");
         }
-        else if(inventoryUI.UseItemCheck(ItemCode.Hammer) || inventoryUI.UseItemCheck(ItemCode.OldPick))
+        else
         {
             AudioManager.instance.PlaySfx(AudioManager.Sfx.PickaxeMiningIronOre );
-            Stage1Manager.Instance.BottomTMPText = ("더 강한 충격을 줘야할 거 같다");
+            int random = Random.Range(0, 3);
+            if(random == 0)
+                Stage1Manager.Instance.BottomTMPText = ("더 강한 충격을 줘야할 거 같다");
+            else
+                Stage1Manager.Instance.BottomTMPText = ("폭발물이 필요하다");
         }
 
     }
