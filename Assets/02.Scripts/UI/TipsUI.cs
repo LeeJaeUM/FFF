@@ -7,7 +7,7 @@ public class TipsUI : MonoBehaviour
 {
     GameObject PressEGroup;
 
-    private bool isUIActive = false;
+    //private bool isUIActive = false;
     private bool canUse_InteractObj = false;
 
     public bool CanUse_InteractObj
@@ -21,10 +21,10 @@ public class TipsUI : MonoBehaviour
                 PressEGroup.gameObject.SetActive(value); // E버튼 안내 ui 비/활성화
 
                 // 트리거 밖으로 나가서 flase가 되면 자동으로 종료
-                if (canUse_InteractObj == false)
-                {
-                    isUIActive = false;
-                }
+                //if (canUse_InteractObj == false)
+                //{
+                //    isUIActive = false;
+                //}
             }
         }
     }

@@ -28,8 +28,6 @@ public class Stage1Manager : MonoBehaviour
         }
     }
 
-    [SerializeField] float rayDistance = 10f; // 레이의 최대 거리
-
     private TextMeshProUGUI bottomTMP;
 
     public string BottomTMPText

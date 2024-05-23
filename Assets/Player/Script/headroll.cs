@@ -81,10 +81,10 @@ public class headroll : MonoBehaviour
     // player
     private float _speed;
     private float _animationBlend;
-    private float _targetRotation = 0.0f;
+    //private float _targetRotation = 0.0f;     //안쓰는거 비활성화
     private float _rotationVelocity;
     private float _verticalVelocity;
-    private float _terminalVelocity = 53.0f;
+    //private float _terminalVelocity = 53.0f;  //안쓰는거 비활성화
 
     // timeout deltatime
     private float _jumpTimeoutDelta;

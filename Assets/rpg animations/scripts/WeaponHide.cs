@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 using System.Collections;
 
@@ -9,7 +9,7 @@ public class WeaponHide : MonoBehaviour
     Animator animator;
 
     [SerializeField]
-    string tag;
+    //string tag; //안쓰는거 비활성화
 
     public bool turned = true;
 

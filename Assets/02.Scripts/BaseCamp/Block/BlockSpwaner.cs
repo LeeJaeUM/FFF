@@ -136,9 +136,6 @@ public class BlockSpwaner : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool canEnvMatUsage = false;
-
-
     private RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
 
     [Header("Ray 관련 변수들")]
