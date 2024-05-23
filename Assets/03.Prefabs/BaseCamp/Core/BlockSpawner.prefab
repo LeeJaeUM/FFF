@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04acb576f746f5848b0fb75682916d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 1
+  buildMode: 0
   useDir: 0
   materialType: 0
   tagOfHitObject: 
@@ -79,6 +79,8 @@ MonoBehaviour:
   isRight: 1
   canSpawnObj: 1
   canDespawn: 0
+  isRotated: 0
+  adjuster: {fileID: 0}
 --- !u!1001 &5366069195058724592
 PrefabInstance:
   m_ObjectHideFlags: 0

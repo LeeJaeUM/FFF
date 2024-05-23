@@ -1434,6 +1434,10 @@ PrefabInstance:
       value: BlockSpawner
       objectReference: {fileID: 0}
     - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
+      propertyPath: buildMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4412039942450011162, guid: ae8cf3eff3ab0d24084300aea09380ba, type: 3}
       propertyPath: enviromentDatas.Array.size
       value: 8
       objectReference: {fileID: 0}

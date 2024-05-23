@@ -407,17 +407,7 @@ public class BlockSpwaner : MonoBehaviour
                 }
 
                 //환경요소에 닿을 때 생성 불가 , 태그 : Respawn
-                if (tagOfHitObject == "Respawn")
-                {
-                    canSpawnObj = false;
-                }
-                else
-                {
-                    canSpawnObj = true;
-                }
-
-                //프리뷰 색상 함수
-                PreviewMatSelect(canSpawnObj);
+                PreviewMatSelect((tagOfHitObject != "Respawn"));
 
                 adjuster = hit.collider.GetComponent<EnviroAdjuster>();
                 if(adjuster != null) 
@@ -518,7 +508,8 @@ public class BlockSpwaner : MonoBehaviour
     /// </summary>
     public void Preview_Hide()
     {
-        previewObj?.SetActive(false);
+        if(previewObj != null)
+            previewObj?.SetActive(false);
         fa_preview.SetActive(false);
         wall_preview_H.SetActive(false);
         wall_preview_V.SetActive(false);
@@ -552,19 +543,16 @@ public class BlockSpwaner : MonoBehaviour
         if(connecting == null || buildMode == BuildMode.Foundation && connecting.isConnectedToFloor || buildMode == BuildMode.Wall_Horizontal && connecting.isConnectedToWall_Ho 
                                                                                                     || buildMode == BuildMode.Wall_Vertical && connecting.isConnectedToWall_Ve  )
         {
-            canSpawnObj = false;
-            PreviewMatSelect(canSpawnObj);
+            PreviewMatSelect(false);
 
             if (hit.collider.transform.root.CompareTag("Ground") && buildMode == BuildMode.Foundation)   //만약 이 때 땅에 닿고있다면
             {
-                canSpawnObj = true;
-                PreviewMatSelect(canSpawnObj);
+                PreviewMatSelect(true);
             }
         }
        if(connecting != null)
         {
-            canSpawnObj = true;
-            PreviewMatSelect(canSpawnObj);
+            PreviewMatSelect(true);
             oneConnecting = connecting;
             Check_ConnectingToHitDir(connecting);
             SpawnPositionSelect(connecting);
@@ -635,8 +623,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Horizontal:
                     if (connecting.usedDir == UsedDir.Left || connecting.usedDir == UsedDir.Right)
                     {
-                        canSpawnObj = false;
-                        PreviewMatSelect(canSpawnObj);
+                        PreviewMatSelect(false);
                         break;
                     }
                     if (isHigher)
@@ -648,8 +635,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Vertical:
                     if (connecting.usedDir == UsedDir.Forward || connecting.usedDir == UsedDir.Back)
                     {
-                        canSpawnObj = false;
-                        PreviewMatSelect(canSpawnObj);
+                        PreviewMatSelect(false);
                         break;
                     }
                     if (isRight)
@@ -669,8 +655,7 @@ public class BlockSpwaner : MonoBehaviour
                     //벽의 위 아래를 제외한 곳에선 생성 불가
                     if (connecting.usedDir == UsedDir.Left || connecting.usedDir == UsedDir.Right || connecting.usedDir == UsedDir.Forward || connecting.usedDir == UsedDir.Back)
                     {
-                        canSpawnObj = false;
-                        PreviewMatSelect(canSpawnObj); break;
+                        PreviewMatSelect(false); break;
                     }
                     switch (connecting.objType)
                     {
@@ -786,7 +771,7 @@ public class BlockSpwaner : MonoBehaviour
     /// <param name="isSpawnable">생성 가능할때 true</param>
     void PreviewMatSelect(bool isSpawnable)    
     {
-
+        canSpawnObj = isSpawnable;
         if (isSpawnable)
         {
             previewRenderers = previewObj.GetComponentsInChildren<Renderer>();
