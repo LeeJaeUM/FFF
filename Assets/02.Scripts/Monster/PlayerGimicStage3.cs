@@ -3320,6 +3320,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 padClearSound.Play(); // 사운드 재생
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
 
+                passwordInputField.text = " "; // 패스워드 초기화
+
                 player.SetActive(true); // 상호작용 강제 종료
                 isInteraction = false;
                 textDisplayed = false;

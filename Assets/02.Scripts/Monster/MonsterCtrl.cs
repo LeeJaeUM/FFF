@@ -25,7 +25,7 @@ public class MonsterCtrl : MonoBehaviour
     private Color nightAmbientColor; // 밤으로 변환될 때 SkyBox 색
     private float chaseDuration = 20f; // 추적을 유지할 시간
 
-    private float totalTime = 120f; // 낮과 밤이 바뀌는 시간
+    private float totalTime = 10f; // 낮과 밤이 바뀌는 시간
     private float nowTime = 0;
     private float chaseTimer = 0; // 추적을 유지하는 타이머
     private float pursuitRange = 5f; // 플레이어를 인식하는 범위
