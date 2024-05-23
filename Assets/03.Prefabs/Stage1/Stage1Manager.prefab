@@ -557,8 +557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13252250bf9b266489abf89c1499e385, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayDistance: 10
-  bottomTMP: {fileID: 0}
   keyPad: {fileID: 0}
   tipsUI: {fileID: 0}
 --- !u!1 &7422975887655070300
@@ -1150,6 +1148,10 @@ PrefabInstance:
     - target: {fileID: 3420678160805579933, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420678160805579933, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0000009536743
       objectReference: {fileID: 0}
     - target: {fileID: 4736629369263426657, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_Name
