@@ -25,14 +25,14 @@ public class BreakWall : MonoBehaviour, IInteractable
             inventoryUI.UseItem(matches);
             // 코드 추가 예정
 
-            Stage1Manager.Instance.BottomTMPText = ("길을 막은 벽을 처리했다");
+            Stage1Manager.Instance.BottomTMPText = ("다이너마이트에 불을 붙였다..");
 
             // 벽을 없애고
             StartCoroutine(WallDestroy());
         }
         else if (inventoryUI.UseItemCheck(dynamite))
         {
-            Stage1Manager.Instance.BottomTMPText = ("Dynamite에 불을 붙일 것이 필요하다");
+            Stage1Manager.Instance.BottomTMPText = ("다이너마이트에 불을 붙일 것이 필요하다");
         }
         else
         {
@@ -59,6 +59,8 @@ public class BreakWall : MonoBehaviour, IInteractable
 
         AudioManager.instance.PlaySfx(AudioManager.Sfx.BreakingWall);
         Destroy(gameObject);
+
+        Stage1Manager.Instance.BottomTMPText = ("길을 막은 벽을 처리했다");
     }
 
 }

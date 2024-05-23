@@ -46,6 +46,8 @@ public class Test_ItemUse : TestBase
     }
     protected override void OnTest4(InputAction.CallbackContext context)
     {
-        base.OnTest4(context);
+        inventoryUI.GetItemToSlot(ItemCode.Matches, 1);
+        inventoryUI.GetItemToSlot(ItemCode.Dynamite, 1);
+
     }
 }
