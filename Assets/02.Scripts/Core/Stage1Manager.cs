@@ -37,7 +37,6 @@ public class Stage1Manager : MonoBehaviour
         get => bottomTMP.text;
         set
         {
-            Debug.Log("fdf");
             bottomTMP.text = value;
             if (tmpFadeCoroutine != null)
                 StopCoroutine(tmpFadeCoroutine);
@@ -76,7 +75,6 @@ public class Stage1Manager : MonoBehaviour
         {
             if(keyPad == null)
             {
-                Debug.Log("ds");
                 keyPad = FindObjectOfType<KeypadSystem.KeyPad>(true);
             }
             return keyPad;

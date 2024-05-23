@@ -77,6 +77,14 @@ public class BCUI : MonoBehaviour
     /// <param name="index"></param>
     private void OnClickBuildObjIcon(int index)
     {
+        Debug.Log($"눌린 버튼은 buildmode선택 버튼 : {index}");
+        if (index == 0)
+        {
+            //종료 버튼을 눌렀을 때
+            isActive = !isActive;
+            buildUI.SetActive(isActive);
+            spwaner.ProhibitSpawn(isActive);
+        }
         spwaner.buildMode = (BlockSpwaner.BuildMode)index;
     }
 
@@ -111,14 +119,6 @@ public class BCUI : MonoBehaviour
             blockSelectGroup.SetActive(false);
             enviroSelectGroup.SetActive(true);
             return;
-        }
-        else
-        {
-            //종료 버튼을 눌렀을 때
-            isActive = !isActive;
-            buildUI.SetActive(isActive);
-            spwaner.ProhibitSpawn(isActive);
-            spwaner.buildMode = BlockSpwaner.BuildMode.None;
         }
     }
 

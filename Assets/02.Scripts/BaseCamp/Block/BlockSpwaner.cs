@@ -321,7 +321,7 @@ public class BlockSpwaner : MonoBehaviour
                     break;
 
                 case BuildMode.None:
-                    Debug.Log("건축모드가 아닐때 마우스 클릭함");
+                    //Debug.Log("건축모드가 아닐때 마우스 클릭함");
                     break;
             }
         }
