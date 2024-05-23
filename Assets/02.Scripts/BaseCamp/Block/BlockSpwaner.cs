@@ -36,24 +36,65 @@ public class BlockSpwaner : MonoBehaviour
         Stone,
         Iron
     }
+
+    public enum EnviroMatUsage
+    {
+        WorkBench = 0,
+        Table,
+        Stair,
+        Box,
+        Closet,
+        Dresser,
+        Chair,
+        Lamp
+    }
+
     public BuildMode buildMode = BuildMode.None;
 
-    //public HitType hitType = HitType.None;
     public FA_UseDir useDir = FA_UseDir.None;
-    public MaterialType materialType = MaterialType.Wood;
+
+    // 스폰 시 소모할 재료
+    [SerializeField] private MaterialType materialType = MaterialType.Wood;
+
+    // BCUI에서 버튼 클릭 시 소모할 재료가 변경되도록 한 프로퍼티
+    public MaterialType MaterialTypeP
+    {
+        get => materialType;
+        set
+        {
+            if(materialType != value)
+            {
+                materialType = value;
+                switch(materialType)
+                {
+                    case MaterialType.Wood:
+                        itemcode = ItemCode.Wood;
+                        break;
+                    case MaterialType.Stone:
+                        itemcode = ItemCode.Ironstone;
+                        break;
+                    case MaterialType.Iron:
+                        itemcode = ItemCode.IronPlanks;
+                        break;
+                }
+            }
+        }
+    }
+
 
     #endregion
 
 
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
-    public BlockData[] blockDatas; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
-    //float lengthMul = 3f; // 생성할 벽의 길이(구버전)
-    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲(반지름)
-
+    [Header("벽 생성 Data들")]
     [SerializeField] private float interactDistance = 18.0f; // 건축 상호작용 가능한 최대 거리
 
+    public float lengthMulti = 1.5f; // 생성할 벽의 길이의 곲(반지름)
 
+    public BlockData[] blockDatas; // 생성할 큐브에 사용할 WoodWall 스크립터블 오브젝트
+
+    [Header("Preview Objs")]
     /// <summary>
     /// buildmode가 foundation일때 반투명하게 미리 위치를 보여주는 오브젝트--------------------------
     /// </summary>
@@ -67,12 +108,12 @@ public class BlockSpwaner : MonoBehaviour
     public Material SpawnAbledMat;
     public Material SpawnDisabledMat;
 
-    Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
+    private Renderer[] previewRenderers;       //미리보기 오브젝트의 머티리얼을 변경하기 위한 렌더러 변수
 
-    [SerializeField]
-    EnviromentData[] enviromentDatas = null;
+    [Header("Enviroment Data")]
+    [SerializeField] private EnviromentData[] enviromentDatas = null;
     //[SerializeField] int enviromentIndex = 0;
-    [SerializeField] int enviromentIndex = 0; //임시로 public으로 변경
+    [SerializeField] private int enviromentIndex = 0; //임시로 public으로 변경
     public int EnviromentIndex
     {
         get => enviromentIndex;
@@ -90,14 +131,19 @@ public class BlockSpwaner : MonoBehaviour
                     enviromentIndex = value;
 
                 EniromentPreview_Setting(enviromentIndex);
-                //enviroment_preview = 
+
             }
         }
     }
 
-    RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
+    [SerializeField] private bool canEnvMatUsage = false;
 
-    [SerializeField] private float connectorOverlapRadius = 1;
+
+    private RaycastHit hit; // Ray에 부딪힌 물체 정보를 저장할 변수
+
+    [Header("Ray 관련 변수들")]
+    // 겹쳐진 커넥터를 찾을 구의 지름
+    private float connectorOverlapRadius = 1;
     [SerializeField] private LayerMask buildObjLayer;
 
     public bool isHigher = true;        //현재 Ray의 히트 위치가 블록 보다 위인지 아래인지
@@ -113,10 +159,31 @@ public class BlockSpwaner : MonoBehaviour
     [SerializeField] EnviroAdjuster adjuster;
     PlayerInputAction inputAction;
 
+    /// <summary>
+    /// 아이템 코드
+    /// </summary>
+    ItemCode itemcode;
+
+    /// <summary>
+    /// 인벤토리
+    /// </summary>
+    InventoryUI inventoryUI;
+    Stage1Manager stage1Manager;
+
     private void Awake()
     {
         inputAction = new PlayerInputAction();
         buildObjLayer = LayerMask.GetMask("BuildObj");
+        inventoryUI = FindAnyObjectByType<InventoryUI>();   // 인벤토리UI 참조
+    }
+    private void Start()
+    {
+        fa_preview = transform.GetChild(0).gameObject;
+        wall_preview_H = transform.GetChild(1).gameObject;
+        wall_preview_V = transform.GetChild(2).gameObject;
+        enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
+
+        stage1Manager = Stage1Manager.Instance;
     }
 
     #region InputActions
@@ -193,6 +260,11 @@ public class BlockSpwaner : MonoBehaviour
             switch (buildMode)
             {
                 case BuildMode.Wall_Horizontal:
+
+                    //재료가 없다면  break문 실행 해서 생성 못함
+                    if (!inventoryUI.UseItem(itemcode, 5))
+                        break;
+
                     if (!oneConnecting.isConnectedToWall_Ho)
                     {
                         SpawnBuildObj(blockDatas[0].wallPrefab_Ho);
@@ -200,6 +272,11 @@ public class BlockSpwaner : MonoBehaviour
                     break;
 
                 case BuildMode.Wall_Vertical:
+
+                    //재료가 없다면  break문 실행 해서 생성 못함
+                    if (!inventoryUI.UseItem(itemcode, 5))
+                        break;
+
                     Quaternion rotation = Quaternion.Euler(0, 90, 0);
                     // 게임 오브젝트 생성과 함께 회전 적용
                     if (!oneConnecting.isConnectedToWall_Ve)
@@ -209,6 +286,11 @@ public class BlockSpwaner : MonoBehaviour
                     break;
 
                 case BuildMode.Foundation:
+
+                    //재료가 없다면  break문 실행 해서 생성 못함
+                    if (!inventoryUI.UseItem(itemcode, 5))
+                        break;
+
                     if (oneConnecting == null|| !oneConnecting.isConnectedToFloor)
                     {
                        SpawnBuildObj(blockDatas[0].floorPrefab);
@@ -219,27 +301,31 @@ public class BlockSpwaner : MonoBehaviour
                     }
                     break;
                 case BuildMode.Enviroment:
-                    if (canSpawnObj)
-                    {
-                        if (EnviromentIndex != 2) 
-                        {
-                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
-                        }
-                        else
-                        {
-                            //계단을 생성할 때의 조건
-                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, false);
-                        }
 
+                    //재료가 부족할 시 생성하지 않고 스킵
+                    if (!HandleEnviroMatUsage())
+                    {
+                        stage1Manager.BottomTMPText = ("재료가 부족하다");
+                        break;
                     }
-                    //Debug.Log("환경요소는 따로 추가해야함");
+
+                    if (EnviromentIndex == 2) 
+                    {
+                        SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, false);
+                    }
+                    else
+                    {
+                        //계단을 생성할 때의 조건
+                        SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
+                    }
                     break;
+
                 case BuildMode.None:
                     Debug.Log("건축모드가 아닐때 마우스 클릭함");
                     break;
             }
         }
-            oneConnecting = null;
+        oneConnecting = null;
     }
 
     /// <summary>
@@ -352,13 +438,6 @@ public class BlockSpwaner : MonoBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        fa_preview = transform.GetChild(0).gameObject;
-        wall_preview_H = transform.GetChild(1).gameObject;
-        wall_preview_V = transform.GetChild(2).gameObject;
-        enviroment_preview = transform.GetChild(3).gameObject;  //예시용 오브젝트 넣어둠
-    }
     ///                          --||--------------------------------------\\------------------------------------------||----------------
     ///   --------//--------  -----||----------- Update 문-------------------\\------------------------------------------||----------------------------------------
     ///                          --||--------------------------------------\\------------------------------------------||----------------
@@ -895,8 +974,56 @@ public class BlockSpwaner : MonoBehaviour
 
         Debug.Log($"생성될 X : {newX}, 생성될 z : {newZ}");
     }
-      
 
-    
+    /// <summary>
+    /// Enviroment 생성 시 소모할 재료를 확인해서 가능한지 판단하는 함수
+    /// </summary>
+    /// <returns> 가능하다면 소모 후 true, 안되면 false </returns>
+    private bool HandleEnviroMatUsage()
+    {
+        bool result = false;
+        EnviroMatUsage usage = (EnviroMatUsage)EnviromentIndex;
+
+        switch (usage)
+        {
+            case EnviroMatUsage.WorkBench:
+                // WorkBench에 대한 처리 코드 / 나무 6개, 돌 4개
+                result = ( (inventoryUI.UseItem(ItemCode.Wood, 6)) 
+                        && (inventoryUI.UseItem(ItemCode.Ironstone, 4)) );
+                break;
+            case EnviroMatUsage.Table:
+                // Table에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Wood, 5);
+                break;
+            case EnviroMatUsage.Stair:
+                // Stair에 대한 처리 코드 // 현재 사용 중인 벽의 재료 5개 소모
+                result = inventoryUI.UseItem(itemcode, 5);
+                break;
+            case EnviroMatUsage.Box:
+                // Box에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Wood, 3);
+                break;
+            case EnviroMatUsage.Closet:
+                // Closet에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Wood, 10);
+                break;
+            case EnviroMatUsage.Dresser:
+                // Dresser에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Wood, 4);
+                break;
+            case EnviroMatUsage.Chair:
+                // Chair에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Ironstone, 4);
+                break;
+            case EnviroMatUsage.Lamp:
+                // Lamp에 대한 처리 코드
+                result = inventoryUI.UseItem(ItemCode.Ironstone, 4)
+                        && inventoryUI.UseItem(ItemCode.IronPlanks, 2);
+                break;
+        }
+
+        return result;
+    }
+
 
 }

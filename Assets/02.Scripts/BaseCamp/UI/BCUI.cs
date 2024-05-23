@@ -102,7 +102,7 @@ public class BCUI : MonoBehaviour
         {
             blockSelectGroup.SetActive(true);
             enviroSelectGroup.SetActive(false);
-            spwaner.materialType = (BlockSpwaner.MaterialType)btnIndex;
+            spwaner.MaterialTypeP = (BlockSpwaner.MaterialType)btnIndex;
         }
         else if (btnIndex == 3) 
         { 

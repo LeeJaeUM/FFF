@@ -36,6 +36,7 @@ public class IronStone : MonoBehaviour, IInteractable
         animator.SetTrigger(Interact_Hash);
         //AudioManager.instance.PlaySfx(AudioManager.Sfx.ChopTree);
         inventoryUI.GetItemToSlot(ItemCode.Ironstone, 5);  //stone 얻기 
+        inventoryUI.GetItemToSlot(ItemCode.IronPlanks, 1);  //stone 얻기 
         breakCount++;
         if (breakCount > 2)
         {

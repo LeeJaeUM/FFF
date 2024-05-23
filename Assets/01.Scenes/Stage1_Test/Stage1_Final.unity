@@ -1135,6 +1135,53 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &791566171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 791566173}
+  - component: {fileID: 791566172}
+  m_Layer: 0
+  m_Name: TsetObj
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &791566172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791566171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97f1d4d7121834f4284368ac29d0c2c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  code: 0
+  count: 2
+--- !u!4 &791566173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791566171}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 37.428192, y: 3.6077816, z: 38.259422}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &799874884
 GameObject:
   m_ObjectHideFlags: 0
@@ -3467,53 +3514,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 419077625}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2141549104
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2141549106}
-  - component: {fileID: 2141549105}
-  m_Layer: 0
-  m_Name: TestInven
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2141549105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141549104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74d300371aaf74240b92a1098c93a6b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seed: 0
-  code: 10
-  count: 1
---- !u!4 &2141549106
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2141549104}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.169735, y: 4.2053733, z: 37.848946}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &525885573857757480
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3662,6 +3662,10 @@ PrefabInstance:
     - target: {fileID: 4995095792887491936, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: m_Name
       value: Monster1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4995095792887491936, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4995095792887591170, guid: 6645c493932a8a641bb4f1eff4edd107, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3893,8 +3897,8 @@ SceneRoots:
   - {fileID: 5201622308027589163}
   - {fileID: 317488355}
   - {fileID: 156164589}
-  - {fileID: 2141549106}
   - {fileID: 226082563}
   - {fileID: 1376528887}
   - {fileID: 1534443231}
   - {fileID: 389124601}
+  - {fileID: 791566173}
