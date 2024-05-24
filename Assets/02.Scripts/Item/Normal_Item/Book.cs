@@ -20,7 +20,7 @@ public class Book : MonoBehaviour, IInteractable
     private void Start()
     {
         Transform child = Stage1Manager.Instance.TipsUI.transform.GetChild(1);
-        hint = child.GetComponent<Image>(); 
+        hint = child.GetComponentInChildren<Image>(true);
     }
 
     public void Interact()

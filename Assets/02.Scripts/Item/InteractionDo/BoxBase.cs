@@ -87,6 +87,7 @@ public class BoxBase : MonoBehaviour, IInteractable
     private void BreakBox()
     {
         inventoryUI.GetItemToSlot(itemcode, 1);  // 인벤토리에 박스 종류에 해당되는 아이템 넣기
+        Stage1Manager.Instance.BottomTMPText = $"{itemcode}를 얻었다.";
         Destroy(gameObject);                    // 박스를 없애고
     }
 }
