@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class OldPick : MonoBehaviour, IInteractable
+public class Axe : MonoBehaviour, IInteractable
 {
     InventoryUI inventoryUI;
 
@@ -14,7 +13,7 @@ public class OldPick : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        inventoryUI.GetItemToSlot(ItemCode.OldPick, 1);
+        inventoryUI.GetItemToSlot(ItemCode.Axe, 1);
         Destroy(gameObject);
     }
 }

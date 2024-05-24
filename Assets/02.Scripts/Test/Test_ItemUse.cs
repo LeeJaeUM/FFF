@@ -48,6 +48,9 @@ public class Test_ItemUse : TestBase
     {
         inventoryUI.GetItemToSlot(ItemCode.Matches, 1);
         inventoryUI.GetItemToSlot(ItemCode.Dynamite, 1);
+        inventoryUI.GetItemToSlot(ItemCode.Magazine, 1);
+        inventoryUI.GetItemToSlot(ItemCode.Knife, 1);
+        inventoryUI.GetItemToSlot(ItemCode.Axe, 1);
 
     }
 }
