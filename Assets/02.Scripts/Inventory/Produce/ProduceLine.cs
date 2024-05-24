@@ -73,20 +73,22 @@ public class ProduceLine : RecycleObject
             InventoryUI inven = GameManager.Instance.inven;
 
 
-            for (int i = 0; i < inven.itemDatas.Length; i++)
+            for (int i = 0; i < data.parentCodes.Length; i++)
             {
-                for (int j = 0; j < data.parentCodes.Length; j++)
+                for (int j = 0; j < inven.itemDatas.Length; j++)
                 {
-                    if (inven.itemDatas[i].itemCode == data.parentCodes[j].Code)
+                    if (data.parentCodes[i].Code == inven.itemDatas[j].itemCode)
                     {
                         foreach (var slot in produceSlots)
                         {
-                            slot.UseItem(!data.parentCodes[j].NotConsume);
+                            if(slot.Data.itemCode == data.parentCodes[i].Code)
+                            {
+                                slot.UseItem(!data.parentCodes[i].NotConsume);
+                            }
                         }
                     }
                 }
             }
-
 
             ItemContain contain = Factory.Instance.GetItemContain(data);
             inven.containGrab = contain.GrabContain();

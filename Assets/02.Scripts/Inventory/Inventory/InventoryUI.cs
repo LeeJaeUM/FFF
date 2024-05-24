@@ -701,16 +701,25 @@ public class InventoryUI : MonoBehaviour
     /// <returns></returns>
     public bool UseItemCheck(ItemCode code, int useCount = 1)
     {
-        bool isOk = false;
+        return UseItemCheck(code, useCount, out int index);
+    }
 
-        foreach (var List in containList)
+    public bool UseItemCheck(ItemCode code, int useCount, out int index)
+    {
+        bool isOk = false;
+        int count = -1;
+
+        for (int i = 0; i < containList.Length; i++)
         {
-            if (List.itemCode == code && List.itemCount >= useCount)
+            if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
             {
+                count = i;
                 isOk = true;
+                break;
             }
         }
 
+        index = count;
         return isOk;
     }
 
@@ -724,39 +733,35 @@ public class InventoryUI : MonoBehaviour
     {
         int remain = useCount;
 
-        if (UseItemCheck(code, useCount))
+        if (UseItemCheck(code, useCount, out int index) && index > -1)   // 사용할 수 있는지 확인.
         {
-            for (int i = 0; i < containList.Length; i++)
+            for (int i = containList[index].containList.Count - 1; i > -1; i--)
             {
-                if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
+
+                if (remain == 0)
                 {
-                    for (int j = containList[i].containList.Count - 1; j > -1; j--)
-                    {
+                    RefreshList();
+                    return true;
+                }
 
-                        if (remain == 0)
-                        {
-                            RefreshList();
-                            return true;
-                        }
+                if (containList[index].containList[i].Count >= remain)  
+                {
+                    // 아이템 리스트 안에 있는 갯수보다 사용할 갯수가 작거나 같을때
+                    containList[index].containList[i].Count -= remain;
+                    remain = 0;
+                }
+                else                
+                {
+                    // 아이템 리스트 안에 있는 갯수가 사용할 아이템의 갯수보다 작을때
+                    remain -= containList[i].containList[i].Count;
+                    containList[i].containList[i].Count = 0;
+                }
 
-                        if (containList[i].containList[j].Count >= remain)
-                        {
-                            containList[i].containList[j].Count -= remain;
-                            containList[i].itemCount -= remain;
-                            remain = 0;
-                        }
-                        else
-                        {
-                            remain -= containList[i].containList[j].Count;
-                        }
+                Debug.Log($"{remain}");
 
-                        Debug.Log($"{remain}");
-
-                        if (containList[i].containList[j].Count <= 0)
-                        {
-                            containList[i].containList.RemoveAt(j);
-                        }
-                    }
+                if (containList[index].containList[i].Count <= 0)
+                {
+                    containList[index].containList.RemoveAt(i);
                 }
             }
         }

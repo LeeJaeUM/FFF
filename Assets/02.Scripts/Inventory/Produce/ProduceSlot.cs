@@ -47,7 +47,6 @@ public class ProduceSlot : RecycleObject
     /// </summary>
     /// <param name="_code"></param>
     /// <param name="_count"></param>
-    /// <param name="_total"></param>
     public void SetData(ItemCode _code, int _count)
     {
         this.data = GameManager.Instance.inven.FindCodeData(_code);
