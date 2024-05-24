@@ -645,6 +645,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        RefreshList();
         sameItemContainList.Clear();
         emptyList.Clear();
     }
@@ -726,6 +727,7 @@ public class InventoryUI : MonoBehaviour
                         else
                         {
                             remain -= containList[i].containList[j].Count;
+                            containList[i].containList[j].Count = 0;
                         }
 
                         Debug.Log($"{remain}");
@@ -739,6 +741,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        RefreshList();
         return false;
     }
 

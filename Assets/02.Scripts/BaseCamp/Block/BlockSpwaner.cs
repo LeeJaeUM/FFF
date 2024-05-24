@@ -259,10 +259,10 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Horizontal:
 
                     //재료가 없다면  break문 실행 해서 생성 못함
-                    if (!inventoryUI.UseItem(itemcode, 5))
-                        break;
+                    //if (!inventoryUI.UseItem(itemcode, 5))
+                    //    break;
 
-                    if (!oneConnecting.isConnectedToWall_Ho)
+                    if (!oneConnecting.isConnectedToWall_Ho && inventoryUI.UseItem(itemcode, 5))
                     {
                         SpawnBuildObj(blockDatas[0].wallPrefab_Ho);
                     }
@@ -286,9 +286,40 @@ public class BlockSpwaner : MonoBehaviour
 
                     //재료가 없다면  break문 실행 해서 생성 못함
                     if (!inventoryUI.UseItem(itemcode, 5))
+                    {
+                        Debug.LogWarning("인벤토리 부족임");
                         break;
+                    }
+                    #region MyRegion
 
-                    if (oneConnecting == null|| !oneConnecting.isConnectedToFloor)
+                
+                    else
+                    {
+                        Debug.LogWarning("인벤토리 아이템 체크완료");
+                    }
+
+                    if(oneConnecting == null)
+                    {
+                        Debug.LogWarning(" oneConnecting 비엇다");
+                    }
+                    else
+                    {
+                        Debug.LogWarning(" oneConnecting 가 있어서 안됨");
+                        if (!oneConnecting.isConnectedToFloor)
+                        {
+                            Debug.LogWarning("바닥과 연결체크 통과함");
+                        }
+                        else
+                        {
+                            Debug.LogWarning("바닥과 연결체크 실패함!!");
+                        }
+
+                    }
+
+
+                    #endregion
+
+                    if (oneConnecting == null || !oneConnecting.isConnectedToFloor)
                     {
                        SpawnBuildObj(blockDatas[0].floorPrefab);
                     }
