@@ -667,6 +667,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
+        RefreshList();
         sameItemContainList.Clear();
         emptyList.Clear();
     }

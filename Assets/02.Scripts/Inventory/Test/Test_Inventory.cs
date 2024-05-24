@@ -25,4 +25,9 @@ public class Test_Inventory : TestBase
         GameManager.Instance.inven.GetItemToSlot(ItemCode.Brain);
         GameManager.Instance.inven.GetItemToSlot(ItemCode.Entrails);
     }
+
+    protected override void OnTest4(InputAction.CallbackContext context)
+    {
+        GameManager.Instance.buttonManager.AllButtonTrigger();
+    }
 }

@@ -13,6 +13,7 @@ public class Stage2_Button : InteracableBase
 
     public int ButtonID;
     bool _isSuccess;
+    [HideInInspector] public bool canUse = true;
 
     public Action<int> onTrigger;
 
@@ -34,17 +35,22 @@ public class Stage2_Button : InteracableBase
 
     protected override void OnUse()
     {
-        animator.SetTrigger(Use);
-
-        if (_isSuccess)
+        if (canUse)
         {
+            animator.SetTrigger(Use);
 
+            if (!_isSuccess)
+            {
+                Stage1Manager.Instance.BottomTMPText = "경보";
+            }
+
+            onTrigger?.Invoke(ButtonID);
+
+            canUse = false;
         }
         else
         {
-            Stage1Manager.Instance.BottomTMPText = "경보";
+            Stage1Manager.Instance.BottomTMPText = "이미 작동된다.";
         }
-
-        onTrigger?.Invoke(ButtonID);
     }
 }
