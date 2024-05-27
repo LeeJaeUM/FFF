@@ -22,8 +22,8 @@ public class Test_ItemUse : TestBase
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        Debug.Log("11");
         GameManager.Instance.inven.GetItemToSlot(code, count);
+        Debug.Log($"{code.ToString()} 아이템 {count}개 획득함");
     }
 
     protected override void OnTest2(InputAction.CallbackContext context)

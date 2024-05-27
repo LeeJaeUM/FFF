@@ -84,6 +84,7 @@ public class BlockSpwaner : MonoBehaviour
 
     #endregion
 
+    public bool TESTnoUseItem = false;
 
     public string tagOfHitObject = ""; // 부딪힌 물체의 태그를 저장할 변수
 
@@ -259,8 +260,11 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.Wall_Horizontal:
 
                     //재료가 없다면  break문 실행 해서 생성 못함
-                    //if (!inventoryUI.UseItem(itemcode, 5))
-                    //    break;
+                    if (!inventoryUI.UseItem(itemcode, 5))
+                    {
+                        if (!TESTnoUseItem)
+                            break;
+                    }
 
                     if (!oneConnecting.isConnectedToWall_Ho && inventoryUI.UseItem(itemcode, 5))
                     {
@@ -272,7 +276,11 @@ public class BlockSpwaner : MonoBehaviour
 
                     //재료가 없다면  break문 실행 해서 생성 못함
                     if (!inventoryUI.UseItem(itemcode, 5))
-                        break;
+                    {
+
+                        if (!TESTnoUseItem)
+                            break;
+                    }
 
                     Quaternion rotation = Quaternion.Euler(0, 90, 0);
                     // 게임 오브젝트 생성과 함께 회전 적용
@@ -287,8 +295,11 @@ public class BlockSpwaner : MonoBehaviour
                     //재료가 없다면  break문 실행 해서 생성 못함
                     if (!inventoryUI.UseItem(itemcode, 5))
                     {
+                            
                         Debug.LogWarning("인벤토리 부족임");
-                        break;
+
+                        if (!TESTnoUseItem)
+                            break;
                     }
                     #region MyRegion
 
@@ -334,7 +345,8 @@ public class BlockSpwaner : MonoBehaviour
                     if (!HandleEnviroMatUsage())
                     {
                         stage1Manager.BottomTMPText = ("재료가 부족하다");
-                        break;
+                        if (!TESTnoUseItem)
+                            break;
                     }
 
                     if (EnviromentIndex == 2) 
