@@ -64,6 +64,13 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         //Debug.Log(item.Size);
     }
 
+    protected override void OnDisable()
+    {
+        item = null;
+
+        base.OnDisable();
+    }
+
     /// <summary>
     /// 컨테이너 시작 함수
     /// </summary>

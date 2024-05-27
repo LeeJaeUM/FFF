@@ -15,8 +15,10 @@ public class Test_Inventory : TestBase
 
     protected override void OnTest2(InputAction.CallbackContext context)
     {
-        GameManager.Instance.inven.GetItemToSlot(ItemCode.Book_6);
-        GameManager.Instance.inven.GetItemToSlot(ItemCode.Book_29);
+        //gamemanager.instance.inven.getitemtoslot(itemcode.book_6);
+        //gamemanager.instance.inven.getitemtoslot(itemcode.book_29);
+
+        GameManager.Instance.inven.UseItem(code, count);
     }
 
     protected override void OnTest3(InputAction.CallbackContext context)

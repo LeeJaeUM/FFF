@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,9 +71,11 @@ public struct SlotColorHighlights
     }
 }
 
+[Serializable]
 public struct ItemContainList
 {
     public ItemCode itemCode;
     public List<ItemContain> containList;
     public int itemCount;
+    public float itemWeight;
 }
