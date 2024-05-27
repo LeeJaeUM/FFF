@@ -3397,7 +3397,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5314147084661406164, guid: 79bbe19986792e34fa4b300b4b1825f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.900002
+      value: 29.08
       objectReference: {fileID: 0}
     - target: {fileID: 5314147084661406164, guid: 79bbe19986792e34fa4b300b4b1825f1, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3405,7 +3405,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5314147084661406164, guid: 79bbe19986792e34fa4b300b4b1825f1, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 32.8
+      value: 32.06
       objectReference: {fileID: 0}
     - target: {fileID: 5314147084661406164, guid: 79bbe19986792e34fa4b300b4b1825f1, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3843,12 +3843,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958493210615307113, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000016205013
+      value: 0.000010073185
       objectReference: {fileID: 0}
     - target: {fileID: 6983453095724670177, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
       propertyPath: m_Name
       value: Stage1Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 7033439522268555192, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: itemDatas.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7033439522268555192, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: itemDatas.Array.data[14]
+      value: 
+      objectReference: {fileID: 11400000, guid: 33554d841e6445941955a9dd4483a611, type: 2}
+    - target: {fileID: 7033439522268555192, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
+      propertyPath: itemDatas.Array.data[15]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d2ef81b21e378d44a9f9960b56ee072, type: 2}
     - target: {fileID: 9033043575264476030, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
