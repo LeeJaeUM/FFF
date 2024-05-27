@@ -237,6 +237,8 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     private bool isLastGameStart = false; // LastGameStart 시작
 
+    private bool isMonsterDie = false; // 몬스터 사망
+
     private bool isLastGameFailed = false; // 라스트 게임 실패
 
     private bool isLastGameClear = false; // 라스트 게임 성공
@@ -1895,109 +1897,112 @@ public class PlayerGimicStage3 : MonoBehaviour
 
     void LastGame()
     {
-        if (!isInteraction)
+        if(!isLastGameStart)
         {
-            interactionUI.SetActive(true);
-        }
-
-        // 일반상호작용(전자레인지 설치가 안됬을 때)
-        if(!isLastKeySetting)
-        {
-            // 상호작용 시작
-            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
+            if (!isInteraction)
             {
-                isInteraction = true;
-                interating = true;
-                interactionUI.SetActive(false);
-                textField.text = "전자레인지안에 가스통과 식기를 설치하자";
-                textDisplayed = true;
+                interactionUI.SetActive(true);
             }
 
-            // 상호작용 종료
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
+            // 일반상호작용(전자레인지 설치가 안됬을 때)
+            if (!isLastKeySetting)
             {
-                textField.text = " "; // 상호작용 종료
-                choiceText1Field.text = " ";
-                choiceText2Field.text = " ";
-
-                // LastKey 세팅
-                GameObject newPrefabInstance = Instantiate(lastKeyPrefab, lastGameZone.position, lastGameZone.rotation);
-                newPrefabInstance.transform.position = lastGameZone.position;
-                isLastKeySetting = true;
-                itemGetSound.Play(); // 사운드 재생
-
-                StartCoroutine(GetItem());
-            }
-        }
-
-        // 특수상호작용(전자레인지가 설치 됬을 때
-        else if(isLastKeySetting)
-        {
-            if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
-            {
-                isInteractionMecanicEye = true;
-                isInteraction = true;
-                interating = true;
-                interactionUI.SetActive(false);
-                textField.text = "타이밍에 맞춰 몬스터를 유인하고";
-                textDisplayed = true;
-            }
-
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
-            {
-                textField.text = "전자레인지를 기폭시킨다..";
-                textDisplayed2 = true;
-            }
-
-            else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
-            {
-                textField.text = "준비는 끝났나?";
-                choiceText1Field.text = "1. 가동시킨다";
-                choiceText2Field.text = "2. 내버려둔다";
-                choicing = true;
-            }
-
-            // 선택지가 출력되었을 때 가능한 버튼
-            if (choicing)
-            {
-                // 1번을 누를 때
-                if (Input.GetKeyDown(KeyCode.Alpha1))
+                // 상호작용 시작
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !isEvent)
                 {
-                    Destroy(backgroundSound); // 기존 배경음 삭제
-                    lastGameSound.Play(); // 마지막 게임 사운드 재생
-                    textField.text = " "; // 상호작용 종료
-                    choiceText1Field.text = " ";
-                    choiceText2Field.text = " ";
-
-                    isLastGameStart = true;
-
-                    // 타이머 작동
-                    lastTimer.SetActive(true);
-                    currentTime = totalTime;
-                    UpdateTimerUI();
-                    // 1초마다 UpdateTimer 함수 호출
-                    InvokeRepeating("UpdateTimer", 1f, 1f);
-
-                    player.SetActive(true); // 상호작용 종료
-                    isInteraction = false;
-                    textDisplayed = false;
-                    textDisplayed2 = false;
-                    interating = false;
-                    choicing = false;
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "전자레인지안에 가스통과 식기를 설치하자";
+                    textDisplayed = true;
                 }
 
-                // 2번을 누를 때
-                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                // 상호작용 종료
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed)
                 {
                     textField.text = " "; // 상호작용 종료
                     choiceText1Field.text = " ";
                     choiceText2Field.text = " ";
-                    player.SetActive(true); // 상호작용 종료
-                    isInteraction = false;
-                    textDisplayed = false;
-                    textDisplayed2 = false;
-                    interating = false;
-                    choicing = false;
+
+                    // LastKey 세팅
+                    GameObject newPrefabInstance = Instantiate(lastKeyPrefab, lastGameZone.position, lastGameZone.rotation);
+                    newPrefabInstance.transform.position = lastGameZone.position;
+                    isLastKeySetting = true;
+                    itemGetSound.Play(); // 사운드 재생
+
+                    StartCoroutine(GetItem());
+                }
+            }
+
+            // 특수상호작용(전자레인지가 설치 됬을 때
+            else if (isLastKeySetting)
+            {
+                if (Input.GetKeyDown(KeyCode.E) && !textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    isInteractionMecanicEye = true;
+                    isInteraction = true;
+                    interating = true;
+                    interactionUI.SetActive(false);
+                    textField.text = "타이밍에 맞춰 몬스터를 유인하고";
+                    textDisplayed = true;
+                }
+
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && !textDisplayed2 && !isEvent)
+                {
+                    textField.text = "전자레인지를 기폭시킨다..";
+                    textDisplayed2 = true;
+                }
+
+                else if (Input.GetKeyDown(KeyCode.E) && textDisplayed && textDisplayed2 && !isEvent)
+                {
+                    textField.text = "준비는 끝났나?";
+                    choiceText1Field.text = "1. 가동시킨다";
+                    choiceText2Field.text = "2. 내버려둔다";
+                    choicing = true;
+                }
+
+                // 선택지가 출력되었을 때 가능한 버튼
+                if (choicing)
+                {
+                    // 1번을 누를 때
+                    if (Input.GetKeyDown(KeyCode.Alpha1))
+                    {
+                        Destroy(backgroundSound); // 기존 배경음 삭제
+                        lastGameSound.Play(); // 마지막 게임 사운드 재생
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+
+                        isLastGameStart = true;
+
+                        // 타이머 작동
+                        lastTimer.SetActive(true);
+                        currentTime = totalTime;
+                        UpdateTimerUI();
+                        // 1초마다 UpdateTimer 함수 호출
+                        InvokeRepeating("UpdateTimer", 1f, 1f);
+
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        textDisplayed2 = false;
+                        interating = false;
+                        choicing = false;
+                    }
+
+                    // 2번을 누를 때
+                    else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    {
+                        textField.text = " "; // 상호작용 종료
+                        choiceText1Field.text = " ";
+                        choiceText2Field.text = " ";
+                        player.SetActive(true); // 상호작용 종료
+                        isInteraction = false;
+                        textDisplayed = false;
+                        textDisplayed2 = false;
+                        interating = false;
+                        choicing = false;
+                    }
                 }
             }
         }
@@ -2590,7 +2595,7 @@ public class PlayerGimicStage3 : MonoBehaviour
         }
 
         // 마지막 기믹이 시작했을 때
-        else if(isLastGameStart)
+        else if(isLastGameStart && !isMonsterDie)
         {
             // 상호작용 시작
             if (Input.GetKeyDown(KeyCode.E) && !textDisplayed)
@@ -2690,6 +2695,7 @@ public class PlayerGimicStage3 : MonoBehaviour
                         lastGameSound.Stop(); // 배경음 취소
                     }
 
+                    isMonsterDie = true;
                     player.SetActive(true); // 상호작용 종료
                     isInteraction = false;
                     textDisplayed = false;
