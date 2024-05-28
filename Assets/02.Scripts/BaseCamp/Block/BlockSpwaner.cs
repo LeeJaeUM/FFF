@@ -255,18 +255,69 @@ public class BlockSpwaner : MonoBehaviour
     {
         if (canSpawnObj)
         {
-            switch (buildMode)
+            if (TESTnoUseItem)
+            {
+                switch (buildMode)
+                {
+                    case BuildMode.Wall_Horizontal:
+                        if (!oneConnecting.isConnectedToWall_Ho)
+                        {
+                            SpawnBuildObj(blockDatas[0].wallPrefab_Ho);
+                        }
+                        break;
+
+                    case BuildMode.Wall_Vertical:
+
+
+                        Quaternion rotation = Quaternion.Euler(0, 90, 0);
+                        // 게임 오브젝트 생성과 함께 회전 적용
+                        if (!oneConnecting.isConnectedToWall_Ve)
+                        {
+                            SpawnBuildObj(blockDatas[0].wallPrefab_Ve);
+                        }
+                        break;
+
+                    case BuildMode.Foundation:
+                        if (oneConnecting == null || !oneConnecting.isConnectedToFloor)
+                        {
+                            SpawnBuildObj(blockDatas[0].floorPrefab);
+                        }
+                        else
+                        {
+                            Debug.Log("층 생성모드 중 조건에 벗어남");
+                        }
+                        break;
+                    case BuildMode.Enviroment:
+
+                        if (EnviromentIndex == 2)
+                        {
+                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, false);
+                        }
+                        else
+                        {
+                            //계단을 생성할 때의 조건
+                            SpawnBuildObj(enviromentDatas[EnviromentIndex].enviroPrefab, true);
+                        }
+                        break;
+
+                    case BuildMode.None:
+                        //Debug.Log("건축모드가 아닐때 마우스 클릭함");
+                        break;
+                }
+            }
+            else
+            {
+                switch (buildMode)
             {
                 case BuildMode.Wall_Horizontal:
 
                     //재료가 없다면  break문 실행 해서 생성 못함
                     if (!inventoryUI.UseItem(itemcode, 5))
                     {
-                        if (!TESTnoUseItem)
                             break;
                     }
 
-                    if (!oneConnecting.isConnectedToWall_Ho && inventoryUI.UseItem(itemcode, 5))
+                    if (!oneConnecting.isConnectedToWall_Ho)
                     {
                         SpawnBuildObj(blockDatas[0].wallPrefab_Ho);
                     }
@@ -277,8 +328,6 @@ public class BlockSpwaner : MonoBehaviour
                     //재료가 없다면  break문 실행 해서 생성 못함
                     if (!inventoryUI.UseItem(itemcode, 5))
                     {
-
-                        if (!TESTnoUseItem)
                             break;
                     }
 
@@ -298,34 +347,33 @@ public class BlockSpwaner : MonoBehaviour
                             
                         Debug.LogWarning("인벤토리 부족임");
 
-                        if (!TESTnoUseItem)
                             break;
                     }
                     #region MyRegion
 
                 
-                    else
-                    {
-                        Debug.LogWarning("인벤토리 아이템 체크완료");
-                    }
+                    //else
+                    //{
+                    //    Debug.LogWarning("인벤토리 아이템 체크완료");
+                    //}
 
-                    if(oneConnecting == null)
-                    {
-                        Debug.LogWarning(" oneConnecting 비엇다");
-                    }
-                    else
-                    {
-                        Debug.LogWarning(" oneConnecting 가 있어서 안됨");
-                        if (!oneConnecting.isConnectedToFloor)
-                        {
-                            Debug.LogWarning("바닥과 연결체크 통과함");
-                        }
-                        else
-                        {
-                            Debug.LogWarning("바닥과 연결체크 실패함!!");
-                        }
+                    //if(oneConnecting == null)
+                    //{
+                    //    Debug.LogWarning(" oneConnecting 비엇다");
+                    //}
+                    //else
+                    //{
+                    //    Debug.LogWarning(" oneConnecting 가 있어서 안됨");
+                    //    if (!oneConnecting.isConnectedToFloor)
+                    //    {
+                    //        Debug.LogWarning("바닥과 연결체크 통과함");
+                    //    }
+                    //    else
+                    //    {
+                    //        Debug.LogWarning("바닥과 연결체크 실패함!!");
+                    //    }
 
-                    }
+                    //}
 
 
                     #endregion
@@ -345,7 +393,6 @@ public class BlockSpwaner : MonoBehaviour
                     if (!HandleEnviroMatUsage())
                     {
                         stage1Manager.BottomTMPText = ("재료가 부족하다");
-                        if (!TESTnoUseItem)
                             break;
                     }
 
@@ -363,6 +410,7 @@ public class BlockSpwaner : MonoBehaviour
                 case BuildMode.None:
                     //Debug.Log("건축모드가 아닐때 마우스 클릭함");
                     break;
+            }
             }
         }
         oneConnecting = null;
@@ -757,7 +805,7 @@ public class BlockSpwaner : MonoBehaviour
                         PreviewMatSelect(false);
                         break;
                     }
-                    if (isRight)
+                    if (isHigher)
                         previewObj.transform.position = connecting.transform.position + Vector3.up * lengthMulti;
                     else
                         previewObj.transform.position = connecting.transform.position + Vector3.down * lengthMulti;
