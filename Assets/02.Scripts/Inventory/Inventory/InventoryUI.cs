@@ -12,7 +12,9 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 아이템 정보를 담는 컨테이너 리스트
     /// </summary>
-    public ItemContainList[] containList;
+    private ItemContainList[] containList;
+
+    public ItemContainList[] ContainList => containList;
 
     public Action onContainListChange;
 
@@ -264,7 +266,7 @@ public class InventoryUI : MonoBehaviour
                                 Debug.Log("같은 아이템이므로 저장");
                                 AddContain(containGrab, ContainGrab.Count);
                                 ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                                ContainGrab.ContainRemvoe();
+                                ContainGrab.ContainRemove();
                             }
                             break;
                     }
@@ -750,7 +752,10 @@ public class InventoryUI : MonoBehaviour
 
                 if (containList[index].containList[i].Count <= 0)
                 {
-                    containList[index].containList.RemoveAt(i);
+                    ItemContain temp = containList[index].containList[i];
+                    RemoveList(temp);
+                    temp.ContainRemove();
+                    //containList[index].containList.RemoveAt(i);
                 }
 
                 if (remain == 0)
@@ -794,7 +799,7 @@ public class InventoryUI : MonoBehaviour
         {
             if (containList[i].itemCode == remove.item.itemCode)
             {
-                containList[i].containList.Add(remove);
+                containList[i].containList.Remove(remove);
             }
             break;
         }
@@ -868,7 +873,7 @@ public class InventoryUI : MonoBehaviour
     private void Drop(Transform position)
     {
         Factory.Instance.GetDropItem(containGrab, position);
-        containGrab.ContainRemvoe();
+        containGrab.ContainRemove();
     }
     #endregion
 }

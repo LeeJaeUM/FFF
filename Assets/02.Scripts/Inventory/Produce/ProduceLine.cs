@@ -102,7 +102,7 @@ public class ProduceLine : RecycleObject
     {
         foreach(var slot in produceSlots)
         {
-            foreach(var ItemContain in GameManager.Instance.inven.containList)
+            foreach(var ItemContain in GameManager.Instance.inven.ContainList)
             {
 
                 if(ItemContain.itemCode == slot.Data.itemCode)
