@@ -44,7 +44,7 @@ public class ObjectPool<T> : MonoBehaviour where T : RecycleObject
             // 풀이 이미 만들어져 있는 경우(ex:씬이 추가로 로딩 or 씬이 다시 시작
             foreach (T obj in pool)
             {
-                obj.gameObject.SetActive(false);
+                obj?.gameObject.SetActive(false);
             }
         }
     }

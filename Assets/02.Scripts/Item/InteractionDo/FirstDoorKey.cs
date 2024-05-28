@@ -14,6 +14,7 @@ public class FirstDoorKey : MonoBehaviour, IInteractable
     public void Interact()
     {
         inventoryUI.GetItemToSlot(ItemCode.FirstDoorKey, 1);
+        Stage1Manager.Instance.BottomTMPText = "열쇠를 얻었다.";
         Destroy(gameObject);
     }
 }

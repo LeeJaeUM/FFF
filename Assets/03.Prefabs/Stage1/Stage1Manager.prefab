@@ -1046,13 +1046,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2685657860355436101}
     m_Modifications:
+    - target: {fileID: 642657188824135251, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: item
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: invenGrid
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: containGrab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: enterContain
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: itemDatas.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: itemDatas.Array.data[14]
+      value: 
+      objectReference: {fileID: 11400000, guid: 33554d841e6445941955a9dd4483a611, type: 2}
+    - target: {fileID: 3347005650536443980, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: itemDatas.Array.data[15]
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d2ef81b21e378d44a9f9960b56ee072, type: 2}
     - target: {fileID: 3420678160805579933, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3420678160805579933, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000016205013
+      value: 0.000010073185
       objectReference: {fileID: 0}
     - target: {fileID: 3653238817138338954, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1065,6 +1093,10 @@ PrefabInstance:
     - target: {fileID: 3653238817138338954, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664140981825016693, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
+      propertyPath: item
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 4736629369263426657, guid: 6719dbf12996b6d45ab8b7c590471fb2, type: 3}
       propertyPath: m_Name

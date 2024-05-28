@@ -151,4 +151,15 @@ public class Lobby : MonoBehaviour
     {
         stageSelectUI.SetActive(false);
     }
+
+    // 스테이지 클리어를 관리하는 메서드 추가
+    public void ClearStage(int stageNumber)
+    {
+        // StageDataSave 스크립트 인스턴스를 찾아 ClearStage 호출
+        StageDataSave stageDataSave = FindObjectOfType<StageDataSave>();
+        if (stageDataSave != null)
+        {
+            stageDataSave.ClearStage(stageNumber);
+        }
+    }
 }

@@ -107,7 +107,6 @@ public class Singleton<T> : MonoBehaviour where T : Component
     /// </summary>
     protected virtual void OnInitialize()
     {
-
     }
 
     private void OnApplicationQuit()

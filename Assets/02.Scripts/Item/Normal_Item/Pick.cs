@@ -15,6 +15,7 @@ public class Pick : MonoBehaviour, IInteractable
     public void Interact()
     {
         inventoryUI.GetItemToSlot(ItemCode.Pick, 1);
+        Stage1Manager.Instance.BottomTMPText = "곡괭이를 얻었다.";
         Destroy(gameObject);
     }
 }
