@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class Test_Inventory : TestBase
 {
     public ItemCode code;
     public int count = 1;
+
+    public Action onWarning;
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
@@ -31,5 +34,10 @@ public class Test_Inventory : TestBase
     protected override void OnTest4(InputAction.CallbackContext context)
     {
         GameManager.Instance.buttonManager.AllButtonTrigger();
+    }
+
+    protected override void OnTest5(InputAction.CallbackContext context)
+    {
+        onWarning?.Invoke();
     }
 }

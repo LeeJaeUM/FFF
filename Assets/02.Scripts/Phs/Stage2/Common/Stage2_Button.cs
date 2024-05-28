@@ -12,7 +12,6 @@ public class Stage2_Button : InteracableBase
     readonly int Use = Animator.StringToHash("Button");
 
     public int ButtonID;
-    bool _isSuccess;
     [HideInInspector] public bool canUse = true;
 
     public Action<int> onTrigger;
@@ -23,26 +22,11 @@ public class Stage2_Button : InteracableBase
         _keypad = FindObjectOfType<Stage2_Keypad>();
     }
 
-    private void Start()
-    {
-        _keypad.onSuccess += OnKeypadAnwser;
-    }
-
-    private void OnKeypadAnwser(bool isSuccess)
-    {
-        _isSuccess = isSuccess;
-    }
-
     protected override void OnUse()
     {
         if (canUse)
         {
             animator.SetTrigger(Use);
-
-            if (!_isSuccess)
-            {
-                Stage1Manager.Instance.BottomTMPText = "경보";
-            }
 
             onTrigger?.Invoke(ButtonID);
 

@@ -1,3 +1,4 @@
+using KeypadSystem;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,17 @@ public class ButtonManager : MonoBehaviour
     public Material successMaterial;
     public Material failMaterial;
 
+    public Action onWarning;
     public Action AllAccess;
+
+    bool isSuccess;
+
+    Stage2_Keypad _keypad;
+
+    private void Awake()
+    {
+        _keypad = FindObjectOfType<Stage2_Keypad>();
+    }
 
     private void Start()
     {
@@ -20,11 +31,23 @@ public class ButtonManager : MonoBehaviour
             buttons[i].ButtonID = i;
             buttons[i].onTrigger += OnTrigger;
         }
+
+        _keypad.onSuccess += OnKeypadAnwser;
+    }
+
+    private void OnKeypadAnwser(bool isSuccess)
+    {
+        this.isSuccess = isSuccess;
     }
 
     private void OnTrigger(int id)
     {
         Battery[id].GetComponent<MeshRenderer>().material = successMaterial;
+        if (!isSuccess)
+        {
+            Stage1Manager.Instance.BottomTMPText = "경보";
+            onWarning?.Invoke();
+        }
         Refresh();
     }
 

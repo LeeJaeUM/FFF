@@ -16,6 +16,37 @@ public class Monster2Ctrl : MonoBehaviour
     private bool isWoodExit = false;
     private bool isChasing = false;
 
+    public Transform target;
+
+    private void Awake()
+    {
+        monsterAgent = GetComponent<NavMeshAgent>();
+        monsterAnim = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        ButtonManager manager = FindAnyObjectByType<ButtonManager>();
+        manager.onWarning += HpDown;
+
+        ChooseUI choose = FindAnyObjectByType<ChooseUI>();
+        choose.onWarning += HpDown;
+
+        BookShelf_Unlock bookShelf = FindAnyObjectByType<BookShelf_Unlock>();
+        bookShelf.onWarning += HpDown;
+
+        Test_Inventory test = FindAnyObjectByType<Test_Inventory>();
+        if(test != null)
+        {
+            test.onWarning += HpDown;
+        }
+    }
+
+    private void HpDown()
+    {
+        playerLife--;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // 플레이어가 BrokenTable을 밟았을 경우
@@ -49,7 +80,7 @@ public class Monster2Ctrl : MonoBehaviour
         if(playerLife<=0)
         {
             isChasing = true;
-            monsterAgent.SetDestination(gameObject.transform.position);
+            monsterAgent.SetDestination(target.position);
             monsterAnim.SetBool("isChasing", isChasing);
         }
     }

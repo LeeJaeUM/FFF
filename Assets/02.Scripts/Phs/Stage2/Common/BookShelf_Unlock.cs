@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ public class BookShelf_Unlock : MonoBehaviour
     TextMeshProUGUI infoText;
 
     public Action onSecretRoom;
+
+    public Action onWarning;
 
     // 컴포넌트
     CanvasGroup canvas;
@@ -85,6 +88,7 @@ public class BookShelf_Unlock : MonoBehaviour
                 {
                     Debug.LogWarning($"{id}_경고");
                     Stage1Manager.Instance.BottomTMPText = "경고";
+                    onWarning?.Invoke();
                     Close();
                     return;
                 }

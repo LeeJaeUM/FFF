@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class BookButtonInteracable : InteracableBase
 {
-    bool isCanUse = false;
+    public bool isCanUse = false;
+
+    ChooseUI choose;
 
     private void Start()
     {
-        ChooseUI choose = FindAnyObjectByType<ChooseUI>();
+        choose = FindAnyObjectByType<ChooseUI>();
 
         choose.onBookButtonActive += OnBookButtonActive;
     }
@@ -21,17 +23,19 @@ public class BookButtonInteracable : InteracableBase
 
     protected override void OnUse()
     {
-        if(isCanUse)
-        {
-            BookShelf_Unlock unlock = FindAnyObjectByType<BookShelf_Unlock>();
-            if(unlock != null)
-            {
-                unlock.Open();
-            }
-        }
-        else
-        {
-            Stage1Manager.Instance.BottomTMPText = "눌러도 반응이 없다.";
-        }
+        choose.Open(ChooseUI.ChooseType.BookButton);
+        //if (isCanUse)
+        //{
+        //    BookShelf_Unlock unlock = FindAnyObjectByType<BookShelf_Unlock>();
+        //    if(unlock != null)
+        //    {
+        //        unlock.Open();
+        //    }
+        //}
+        //else
+        //{
+        //    choose.Open(ChooseUI.ChooseType.BookButton);
+        //    Stage1Manager.Instance.BottomTMPText = "눌러도 반응이 없다.";
+        //}
     }
 }

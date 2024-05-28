@@ -13,6 +13,7 @@ public class ChooseUI : MonoBehaviour
         None,
         FakeKey,
         Book,
+        BookButton,
     }
 
     ChooseType type = ChooseType.None;
@@ -36,6 +37,9 @@ public class ChooseUI : MonoBehaviour
                     case ChooseType.Book:
                         message.text = "책을 끼울 수 있을 것 같다. 책을 끼우겠습니까?";
                         break;
+                    case ChooseType.BookButton:
+                        message.text = "버튼을 누르겠습니까?";
+                        break;
                 }
             }
         }
@@ -44,6 +48,8 @@ public class ChooseUI : MonoBehaviour
     public PickUpItem _fakeKey;
 
     public Transform bookTransform;
+
+    public Action onWarning;
 
     public Action onBookButtonActive;
 
@@ -79,12 +85,30 @@ public class ChooseUI : MonoBehaviour
                 Close();
                 manager.BottomTMPText = "경보";
                 Type = ChooseType.None;
+                onWarning?.Invoke();
                 break;
             case ChooseType.Book:
                 Close();
                 Batch();
                 onBookButtonActive?.Invoke();
                 Type = ChooseType.None;
+                break;
+            case ChooseType.BookButton:
+                Type = ChooseType.None;
+                BookButtonInteracable book = FindAnyObjectByType<BookButtonInteracable>();
+                if (!book.isCanUse)
+                {
+                    manager.BottomTMPText = "경보";
+                    onWarning?.Invoke();
+                }
+                else
+                {
+                    BookShelf_Unlock unlock = FindAnyObjectByType<BookShelf_Unlock>();
+                    if (unlock != null)
+                    {
+                        unlock.Open();
+                    }
+                }
                 break;
         }
     }
@@ -99,6 +123,10 @@ public class ChooseUI : MonoBehaviour
                 Type = ChooseType.None;
                 break;
             case ChooseType.Book:
+                Close();
+                Type = ChooseType.None;
+                break;
+            case ChooseType.BookButton:
                 Close();
                 Type = ChooseType.None;
                 break;
