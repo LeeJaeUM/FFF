@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class MonsterCtrl : MonoBehaviour
 {
     NavMeshAgent agent;
+    NavMeshSurface surface;
     Animator anim;
     Vector3 vec;
     AudioSource audio;
@@ -33,7 +35,6 @@ public class MonsterCtrl : MonoBehaviour
     private bool isMonsterMove = false; // 몬스터의 이동 상황
     private int current = 0; // 몬스터의 이동 순서 변수
     private bool isChasing = false; // 추적 중인지 여부확인
-    private bool isDarkWall = true; // 벽의 생성 여부
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
@@ -122,6 +123,7 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
+    // 몬스터의 이동 루트 설정
     void SetNextDestination()
     {
         if(area!=null && area.Length>0)

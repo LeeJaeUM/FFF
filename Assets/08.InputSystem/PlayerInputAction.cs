@@ -71,6 +71,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Wheel"",
+                    ""type"": ""Value"",
+                    ""id"": ""1c6a3957-7050-4a26-b883-c83dea5852e7"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -172,6 +181,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""BuildUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3019d727-4ece-4894-a119-07cc1cc5cb14"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Wheel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -187,6 +207,15 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Use"",
+                    ""type"": ""Button"",
+                    ""id"": ""56fb0dbf-c8d5-480f-9413-58a8ec54a395"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -198,6 +227,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""719a5a74-e892-4fa4-9bcb-1c0998814aa9"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Use"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -219,9 +259,11 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_SpawnObj = m_Player.FindAction("SpawnObj", throwIfNotFound: true);
         m_Player_DespawnObj = m_Player.FindAction("DespawnObj", throwIfNotFound: true);
         m_Player_BuildUI = m_Player.FindAction("BuildUI", throwIfNotFound: true);
+        m_Player_Wheel = m_Player.FindAction("Wheel", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
+        m_UI_Use = m_UI.FindAction("Use", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -288,6 +330,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SpawnObj;
     private readonly InputAction m_Player_DespawnObj;
     private readonly InputAction m_Player_BuildUI;
+    private readonly InputAction m_Player_Wheel;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -297,6 +340,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         public InputAction @SpawnObj => m_Wrapper.m_Player_SpawnObj;
         public InputAction @DespawnObj => m_Wrapper.m_Player_DespawnObj;
         public InputAction @BuildUI => m_Wrapper.m_Player_BuildUI;
+        public InputAction @Wheel => m_Wrapper.m_Player_Wheel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -321,6 +365,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @BuildUI.started += instance.OnBuildUI;
             @BuildUI.performed += instance.OnBuildUI;
             @BuildUI.canceled += instance.OnBuildUI;
+            @Wheel.started += instance.OnWheel;
+            @Wheel.performed += instance.OnWheel;
+            @Wheel.canceled += instance.OnWheel;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -340,6 +387,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @BuildUI.started -= instance.OnBuildUI;
             @BuildUI.performed -= instance.OnBuildUI;
             @BuildUI.canceled -= instance.OnBuildUI;
+            @Wheel.started -= instance.OnWheel;
+            @Wheel.performed -= instance.OnWheel;
+            @Wheel.canceled -= instance.OnWheel;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -362,11 +412,13 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_Click;
+    private readonly InputAction m_UI_Use;
     public struct UIActions
     {
         private @PlayerInputAction m_Wrapper;
         public UIActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
         public InputAction @Click => m_Wrapper.m_UI_Click;
+        public InputAction @Use => m_Wrapper.m_UI_Use;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -379,6 +431,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Click.started += instance.OnClick;
             @Click.performed += instance.OnClick;
             @Click.canceled += instance.OnClick;
+            @Use.started += instance.OnUse;
+            @Use.performed += instance.OnUse;
+            @Use.canceled += instance.OnUse;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -386,6 +441,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Click.started -= instance.OnClick;
             @Click.performed -= instance.OnClick;
             @Click.canceled -= instance.OnClick;
+            @Use.started -= instance.OnUse;
+            @Use.performed -= instance.OnUse;
+            @Use.canceled -= instance.OnUse;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -419,9 +477,11 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         void OnSpawnObj(InputAction.CallbackContext context);
         void OnDespawnObj(InputAction.CallbackContext context);
         void OnBuildUI(InputAction.CallbackContext context);
+        void OnWheel(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
         void OnClick(InputAction.CallbackContext context);
+        void OnUse(InputAction.CallbackContext context);
     }
 }

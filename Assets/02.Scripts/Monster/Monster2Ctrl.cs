@@ -12,6 +12,8 @@ public class Monster2Ctrl : MonoBehaviour
     private AudioSource brokenWoodSound; // 플레이어가 나무를 밟았을 경우 생기는 소리
     [SerializeField]
     private Animator monsterAnim;
+    [SerializeField]
+    private AudioSource rage; // 몬스터 움직일 때 사운드
 
     private int playerLife = 3; // 플레이어의 생명
     private bool isWoodExit = false;
@@ -58,6 +60,7 @@ public class Monster2Ctrl : MonoBehaviour
             isChasing = true;
             monsterAgent.SetDestination(gameObject.transform.position);
             monsterAnim.SetBool("isChasing", isChasing);
+            rage.Play(); // 사운드 재생
         }
     }
 }
