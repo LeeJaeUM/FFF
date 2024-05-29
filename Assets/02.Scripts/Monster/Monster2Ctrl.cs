@@ -47,6 +47,22 @@ public class Monster2Ctrl : MonoBehaviour
         playerLife--;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        //IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
+        //if (interactable != null)
+        //{
+        //    Destroy(collision.gameObject.gameObject);
+        //}
+
+        Debug.LogWarning(collision.collider.gameObject.CompareTag("Player"));
+
+        if (collision.collider.gameObject.CompareTag("Player"))
+        {
+            Stage1Manager.Instance.BottomTMPText = "게임 오버";
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // 플레이어가 BrokenTable을 밟았을 경우
@@ -60,6 +76,17 @@ public class Monster2Ctrl : MonoBehaviour
                 isWoodExit = true;
             }
         }
+
+        //IInteractable interactable = other.GetComponent<IInteractable>();
+        //if(interactable != null)
+        //{
+        //    Destroy(other.gameObject);
+        //}
+
+        //if (other.gameObject.CompareTag("Player"))
+        //{
+        //    Stage1Manager.Instance.BottomTMPText = "게임 오버";
+        //}
     }
 
     private void OnTriggerExit(Collider other)

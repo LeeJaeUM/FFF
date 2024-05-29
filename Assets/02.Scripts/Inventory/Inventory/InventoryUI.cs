@@ -9,6 +9,7 @@ using static UnityEditor.Progress;
 
 public class InventoryUI : MonoBehaviour
 {
+    [SerializeField]
     /// <summary>
     /// 아이템 정보를 담는 컨테이너 리스트
     /// </summary>
@@ -624,7 +625,7 @@ public class InventoryUI : MonoBehaviour
         // 넣는다.
         for(int i = 0; i < containList.Length; i++)
         {
-            Debug.LogWarning(containList.Length);
+            //Debug.LogWarning(containList.Length);
             if (containList[i].itemCode == code && containList[i].itemCount > 0)
             {
                 for (int j = 0; j < containList[i].containList.Count; j++)
@@ -713,6 +714,7 @@ public class InventoryUI : MonoBehaviour
             {
                 count = i;
                 isOk = true;
+                Debug.LogWarning(isOk);
                 break;
             }
         }
@@ -782,8 +784,8 @@ public class InventoryUI : MonoBehaviour
             if (containList[i].itemCode == add.item.itemCode)
             {
                 containList[i].containList.Add(add);
+                break;
             }
-            break;
         }
 
         RefreshList();
@@ -800,8 +802,8 @@ public class InventoryUI : MonoBehaviour
             if (containList[i].itemCode == remove.item.itemCode)
             {
                 containList[i].containList.Remove(remove);
+                break;
             }
-            break;
         }
 
         RefreshList();
