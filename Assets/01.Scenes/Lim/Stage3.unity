@@ -45742,6 +45742,459 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1001 &3988742270106636753
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1554844458725361317, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_Name
+      value: Player3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: trap
+      value: 
+      objectReference: {fileID: 2127925644}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: blade
+      value: 
+      objectReference: {fileID: 1787593609}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: metal
+      value: 
+      objectReference: {fileID: 1905797468}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: pilers
+      value: 
+      objectReference: {fileID: 1213700631}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 235639735}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: trapUI
+      value: 
+      objectReference: {fileID: 1230893533}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: id_Card
+      value: 
+      objectReference: {fileID: 1582218019}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: monster
+      value: 
+      objectReference: {fileID: 1861878008}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: padBeep
+      value: 
+      objectReference: {fileID: 1106438498}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: caution2
+      value: 
+      objectReference: {fileID: 1097546343}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: keyPadUI
+      value: 
+      objectReference: {fileID: 596575461}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: meatWall
+      value: 
+      objectReference: {fileID: 1148491597}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: tvScreen
+      value: 
+      objectReference: {fileID: 1659686223}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: boomSound
+      value: 
+      objectReference: {fileID: 1944566214}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generator
+      value: 
+      objectReference: {fileID: 784340116}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: goreSound
+      value: 
+      objectReference: {fileID: 1836746151}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: lastTimer
+      value: 
+      objectReference: {fileID: 1507131834}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: lobbyTrap
+      value: 
+      objectReference: {fileID: 199352208}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: textField
+      value: 
+      objectReference: {fileID: 747546158}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: timerText
+      value: 
+      objectReference: {fileID: 1507131836}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: trapSound
+      value: 
+      objectReference: {fileID: 1744993868}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: windSound
+      value: 
+      objectReference: {fileID: 1594936966}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: restaurant
+      value: 
+      objectReference: {fileID: 666068483}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: mainMonster
+      value: 
+      objectReference: {fileID: 1861878007}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: storageTrap
+      value: 
+      objectReference: {fileID: 2093177755}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: caution2Text
+      value: 
+      objectReference: {fileID: 1097546345}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: gameOverZone
+      value: 
+      objectReference: {fileID: 1703413228}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: itemGetSound
+      value: 
+      objectReference: {fileID: 199132913}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: lastGameZone
+      value: 
+      objectReference: {fileID: 1563445973}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: pictureFrame
+      value: 
+      objectReference: {fileID: 819249823}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: storage2Trap
+      value: 
+      objectReference: {fileID: 737409746}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: LeverAnimator
+      value: 
+      objectReference: {fileID: 2135304999}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: interactionUI
+      value: 
+      objectReference: {fileID: 177519081}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: lastGameSound
+      value: 
+      objectReference: {fileID: 1766712701}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: meatWallSound
+      value: 
+      objectReference: {fileID: 1803574871}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: microwave_gas
+      value: 
+      objectReference: {fileID: 1404569467}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: padClearSound
+      value: 
+      objectReference: {fileID: 1610000494}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: raycastOrigin
+      value: 
+      objectReference: {fileID: 1336695073}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: remoteControl
+      value: 
+      objectReference: {fileID: 1823352292}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: roomDoorSound
+      value: 
+      objectReference: {fileID: 1001368680}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: startLeftDoor
+      value: 
+      objectReference: {fileID: 435938179}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: trashCanSound
+      value: 
+      objectReference: {fileID: 300134736}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bookShelfSound
+      value: 
+      objectReference: {fileID: 2090988778}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: clearDoorSound
+      value: 
+      objectReference: {fileID: 1382552891}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: playerPosition
+      value: 
+      objectReference: {fileID: 235639744}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: startRightDoor
+      value: 
+      objectReference: {fileID: 1012063586}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: backgroundSound
+      value: 
+      objectReference: {fileID: 1771879458}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bathroomCaution
+      value: 
+      objectReference: {fileID: 370245093}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bikeEngineSound
+      value: 
+      objectReference: {fileID: 1465298117}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: restroomCaution
+      value: 
+      objectReference: {fileID: 1748284622}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch1Animator
+      value: 
+      objectReference: {fileID: 766191380}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch2Animator
+      value: 
+      objectReference: {fileID: 1365095324}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch3Animator
+      value: 
+      objectReference: {fileID: 834072712}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch4Animator
+      value: 
+      objectReference: {fileID: 834072716}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch5Animator
+      value: 
+      objectReference: {fileID: 834072715}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch6Animator
+      value: 
+      objectReference: {fileID: 919208726}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch7Animator
+      value: 
+      objectReference: {fileID: 1515113206}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch8Animator
+      value: 
+      objectReference: {fileID: 1515113205}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch9Animator
+      value: 
+      objectReference: {fileID: 1515113204}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: trashcanMonster
+      value: 
+      objectReference: {fileID: 1520005549}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: choiceText1Field
+      value: 
+      objectReference: {fileID: 836590288}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: choiceText2Field
+      value: 
+      objectReference: {fileID: 596186038}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: choiceText3Field
+      value: 
+      objectReference: {fileID: 1631488848}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: getItemTextField
+      value: 
+      objectReference: {fileID: 167575654}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: switch10Animator
+      value: 
+      objectReference: {fileID: 1515113203}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bookShelfAnimator
+      value: 
+      objectReference: {fileID: 1594936965}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: clearDoorAnimator
+      value: 
+      objectReference: {fileID: 1087074537}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generatorButtonUI
+      value: 
+      objectReference: {fileID: 1520461010}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generatorDoorLock
+      value: 
+      objectReference: {fileID: 1537685046}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: hiddenRoomAnimator
+      value: 
+      objectReference: {fileID: 1834743714}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: passwordInputField
+      value: 
+      objectReference: {fileID: 871371735}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: storageDoorAnimator
+      value: 
+      objectReference: {fileID: 962677005}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bathroomDoorAnimator
+      value: 
+      objectReference: {fileID: 2110592742}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generatorButtonSound
+      value: 
+      objectReference: {fileID: 929251726}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: restroomDoorAnimator
+      value: 
+      objectReference: {fileID: 1001368676}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: diaryUI.Array.data[0]
+      value: 
+      objectReference: {fileID: 661320743}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: diaryUI.Array.data[1]
+      value: 
+      objectReference: {fileID: 762317150}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: diaryUI.Array.data[2]
+      value: 
+      objectReference: {fileID: 1031586275}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: diaryUI.Array.data[3]
+      value: 
+      objectReference: {fileID: 1863792309}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: diaryUI.Array.data[4]
+      value: 
+      objectReference: {fileID: 623073670}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generatorDoorAnimator
+      value: 
+      objectReference: {fileID: 855098763}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: restaurantRoomDoorKey
+      value: 
+      objectReference: {fileID: 1076763839}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: generatorLeverAnimator
+      value: 
+      objectReference: {fileID: 436752780}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: restaurantDoorAnimator
+      value: 
+      objectReference: {fileID: 218609110}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: storage2UpDoorAnimaotr
+      value: 
+      objectReference: {fileID: 563488968}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bookSound.Array.data[0]
+      value: 
+      objectReference: {fileID: 1061807992}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: bookSound.Array.data[1]
+      value: 
+      objectReference: {fileID: 1251369566}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: storage2DownDoorAnimator
+      value: 
+      objectReference: {fileID: 1536254950}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: researchLog.Array.data[0]
+      value: 
+      objectReference: {fileID: 1964902843}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: researchLog.Array.data[1]
+      value: 
+      objectReference: {fileID: 1561112459}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: researchLog.Array.data[2]
+      value: 
+      objectReference: {fileID: 1323845381}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: researchLog.Array.data[3]
+      value: 
+      objectReference: {fileID: 1349777990}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: researchLog.Array.data[4]
+      value: 
+      objectReference: {fileID: 1697651403}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: laboratoryLeftDoorAnimator
+      value: 
+      objectReference: {fileID: 635152575}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: laboratoryRightDoorAnimator
+      value: 
+      objectReference: {fileID: 878783905}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: treatmentPlantUpDoorAnimator
+      value: 
+      objectReference: {fileID: 947261563}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: monsterSpawnZone.Array.data[0]
+      value: 
+      objectReference: {fileID: 592965681}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: monsterSpawnZone.Array.data[1]
+      value: 
+      objectReference: {fileID: 1489875244}
+    - target: {fileID: 4209230191856268040, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: treatmentPlantDownDoorAnimator
+      value: 
+      objectReference: {fileID: 1367446470}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.691033
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11.777059
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.19832051
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8803318263970097628, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0117703a24a0c6f48a97d231eb4baa3c, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -45757,3 +46210,4 @@ SceneRoots:
   - {fileID: 2024754709}
   - {fileID: 2107272031}
   - {fileID: 980676436}
+  - {fileID: 3988742270106636753}
