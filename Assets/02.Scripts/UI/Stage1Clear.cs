@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StageClear : MonoBehaviour
+public class Stage1Clear : MonoBehaviour
 {
-    public int stageNumber = 1; // 클리어할 스테이지 번호
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) // 플레이어가 트리거에 들어갔는지 확인
         {
-            ClearStage();
+            Clear();
         }
     }
 
-    private void ClearStage()
+    private void Clear()
     {
-        Lobby lobby = FindObjectOfType<Lobby>();
-        if (lobby != null)
+        // StageDataSave 스크립트 인스턴스를 찾아 ClearStage 호출
+        StageDataSave stageDataSave = FindObjectOfType<StageDataSave>();
+        if (stageDataSave != null)
         {
-            lobby.ClearStage(stageNumber);
+            stageDataSave.ClearStage(1);
         }
 
         // 스테이지 클리어 후 로비로 이동

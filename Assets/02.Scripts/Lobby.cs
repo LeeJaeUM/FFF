@@ -137,7 +137,7 @@ public class Lobby : MonoBehaviour
     // Stage2 버튼을 눌렀을 때 씬 이동
     public void Stage2()
     {
-        SceneManager.LoadScene("Stage2");
+        SceneManager.LoadScene("Test_01");
     }
 
     // Stage3 버튼을 눌렀을 때 씬 이동
@@ -150,16 +150,5 @@ public class Lobby : MonoBehaviour
     public void StageSelectLobby()
     {
         stageSelectUI.SetActive(false);
-    }
-
-    // 스테이지 클리어를 관리하는 메서드 추가
-    public void ClearStage(int stageNumber)
-    {
-        // StageDataSave 스크립트 인스턴스를 찾아 ClearStage 호출
-        StageDataSave stageDataSave = FindObjectOfType<StageDataSave>();
-        if (stageDataSave != null)
-        {
-            stageDataSave.ClearStage(stageNumber);
-        }
     }
 }
