@@ -1,17 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class MonsterCtrl : MonoBehaviour
 {
     NavMeshAgent agent;
-    NavMeshSurface surface;
     Animator anim;
     Vector3 vec;
-    AudioSource audio;
 
     [SerializeField]
     private Transform skyLight; // directional light
@@ -25,16 +21,18 @@ public class MonsterCtrl : MonoBehaviour
     private Color afternoonAmbientColor; // 낮으로 변환될 때 SkyBox 색
     [SerializeField]
     private Color nightAmbientColor; // 밤으로 변환될 때 SkyBox 색
-    private float chaseDuration = 20f; // 추적을 유지할 시간
+    private float chaseDuration = 10f; // 추적을 유지할 시간
 
-    private float totalTime = 10f; // 낮과 밤이 바뀌는 시간
+    [SerializeField]
+    private float totalTime = 60f; // 낮과 밤이 바뀌는 시간
     private float nowTime = 0;
     private float chaseTimer = 0; // 추적을 유지하는 타이머
-    private float pursuitRange = 5f; // 플레이어를 인식하는 범위
+    private float pursuitRange = 3f; // 플레이어를 인식하는 범위
 
     private bool isMonsterMove = false; // 몬스터의 이동 상황
     private int current = 0; // 몬스터의 이동 순서 변수
     private bool isChasing = false; // 추적 중인지 여부확인
+    //private bool isDarkWall = true; // 벽의 생성 여부
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
@@ -42,7 +40,6 @@ public class MonsterCtrl : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        audio=GetComponent<AudioSource>();
 
         // 초기 목적지 설정
         SetDestinationByIndex(current);
@@ -58,12 +55,14 @@ public class MonsterCtrl : MonoBehaviour
             isMonsterMove = !isMonsterMove;
             if(isMonsterMove)
             {
-                darkWall.SetActive(false);
+                if(darkWall != null)
+                    darkWall.SetActive(false);
                 RenderSettings.ambientSkyColor = nightAmbientColor;
             }
             else if(!isMonsterMove)
             {
-                darkWall.SetActive(true);
+                if (darkWall != null)
+                    darkWall.SetActive(true);
                 RenderSettings.ambientSkyColor = afternoonAmbientColor;
             }
 
@@ -83,8 +82,8 @@ public class MonsterCtrl : MonoBehaviour
                 isChasing = true;
                 chaseTimer = 0;
 
-                audio.Play(); // 사운드 재생
                 agent.SetDestination(player.position);
+                anim.SetBool("IsChasing", true);
             }
 
             // 추적 중이면서 지정된 시간 이내에 있는 경우 계속 추적
@@ -123,7 +122,6 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
-    // 몬스터의 이동 루트 설정
     void SetNextDestination()
     {
         if(area!=null && area.Length>0)
@@ -151,10 +149,6 @@ public class MonsterCtrl : MonoBehaviour
         {
             maxHp -= 1;
         }
-
-        // 플레이어와 닿았을 경우 게임 오버 씬으로 이동
-        if (other.gameObject.CompareTag("PLAYER"))
-            SceneManager.LoadScene("GameOverScene1");
     }
 
     IEnumerator ReDestination()

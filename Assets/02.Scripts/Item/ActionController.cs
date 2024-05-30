@@ -5,6 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 아이템 테스트용으로 플레이어의 메인카메라에 담으려 했던 스크립트
+/// </summary>
 public class ActionController : MonoBehaviour
 {
     [SerializeField]

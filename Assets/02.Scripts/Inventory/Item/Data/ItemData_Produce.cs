@@ -20,6 +20,7 @@ public struct parentCode
     public ItemCode Code => code;
 
     [SerializeField]
+    [Range(1, 5)]
     private int count;
 
     public int Count => count;

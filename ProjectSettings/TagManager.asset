@@ -4,35 +4,36 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Wall
-  - Metal
-  - Blood
-  - Dirt
-  - Concrete
-  - ExplosiveBarrel
-  - Target
-  - GasTank
-  - Metal (Static)
-  - Wood (Static)
-  - Dirt (Static)
-  - Wood
+  - BULLET
+  - PLAYER
+  - HOME
+  - CinemachineTarget
+  - MONSTER
+  - ROOM
+  - GOAL
+  - Ground
+  - Buildables
+  - EnviroAble
+  - WOODTRAP
+  - LABORATORYTRAP
+  - PICTUREFRAME
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Monster
   - Water
   - UI
+  - BuildObj
+  - EnvrioAble
+  - Player
   - 
   - 
-  - Wall
-  - First Person View
-  - Character
-  - Post Processing
-  - Post Processing Weapon
-  - Post Processing Scope
-  - Invisible Wall
-  - Projectile
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

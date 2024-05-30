@@ -6,45 +6,31 @@ using UnityEngine.SceneManagement;
 
 public class Singleton<T> : MonoBehaviour where T : Component
 {
-    /// <summary>
-    /// ÀÌ ½Ì±ÛÅæÀÌ ÃÊ±âÈ­µÇ¾ú´ÂÁö È®ÀÎÇÏ±â À§ÇÑ º¯¼ö
-    /// </summary>
     bool isInitialized = false;
-
-    /// <summary>
-    /// Á¾·áÃ³¸®¿¡ µé¾î°¬´ÂÁö È®ÀÎÇÏ±â À§ÇÑ º¯¼ö
-    /// </summary>
     private static bool isShutdown = false;
-
-    /// <summary>
-    /// ÀÌ ½Ì±ÛÅæÀÇ °´Ã¼(ÀÎ½ºÅÏ½º)
-    /// </summary>
     private static T instance = null;
 
-    /// <summary>
-    /// ÀÌ ½Ì±ÛÅæ
-    /// </summary>
     public static T Instance
     {
         get
         {
-            if (isShutdown)  // Á¾·áÃ³¸®¿¡ µé¾î°¬À¸¸é
+            if (isShutdown)
             {
-                Debug.LogWarning("½Ì±ÛÅæÀÌ Á×¾ú½À´Ï´Ù.");    // °æ°íÃâ·ÂÇÏ°í 
-                return null;                                 // null ¸®ÅÏ
+                Debug.LogWarning("ì‹±ê¸€í†¤ì´ ì£½ì—ˆìŠµë‹ˆë‹¤.");
+                return null;
             }
 
-            if (instance == null)        // °´Ã¼°¡ ¾øÀ¸¸é
+            if (instance == null)
             {
-                T singletion = FindAnyObjectByType<T>();            // ´Ù¸¥°ÔÀÓ ¿ÀºêÁ§Æ®¿¡ ÇØ´ç ½Ì±ÛÅæÀÌ ÀÖÀ¸¸é
-                if (singletion == null)                              // ´Ù¸¥ °ÔÀÓ ¿ÀºêÁ§Æ®¿¡µµ ÀÌ ½Ì±ÛÅæÀÌ ¾øÀ¸¸é
+                T singletion = FindAnyObjectByType<T>();
+                if (singletion == null)
                 {
-                    GameObject obj = new GameObject();              // ºó °ÔÀÓ ¿ÀºêÁ§Æ® ¸¸µé°í
-                    obj.name = "Singleton";                         // ÀÌ¸§ ÁöÁ¤ÇÑ ´ÙÀ½
-                    singletion = obj.AddComponent<T>();             // ½ÌÅ¬Åæ ÄÄÆ÷³ÍÆ® ¸¸µé¾î¼­ Ãß°¡
+                    GameObject obj = new GameObject();
+                    obj.name = "Singleton";
+                    singletion = obj.AddComponent<T>();
                 }
-                instance = singletion;                              // ´Ù¸¥ °ÔÀÓ¿ÀºêÁ§Æ®¿¡ ÀÖ´Â ½Ì±ÛÅæÀÌ³ª »õ·Î¸¸µç ½Ì±ÛÅæÀ» ÀúÀå
-                DontDestroyOnLoad(instance.gameObject);             // ¾ÀÀÌ »ç¶óÁú ¶§ °ÔÀÓ¿ÀºêÁ§Æ®°¡ »èÁ¦µÇÁö ¾Êµµ·Ï ¼³Á¤
+                instance = singletion;
+                DontDestroyOnLoad(instance.gameObject);
             }
             return instance;
         }
@@ -52,23 +38,22 @@ public class Singleton<T> : MonoBehaviour where T : Component
 
     protected virtual void Awake()
     {
-        if (instance == null)        // ¾ÀÀÌ ÀÌ¹Ì ¹èÄ¡µÈ ´Ù¸¥ ½Ì±ÛÅæÀÌ ¾ø´Ù.
+        if (instance == null)
         {
-            instance = this as T;        // Ã¹¹øÂ°¸¦ ÀúÀå
-            DontDestroyOnLoad(instance.gameObject); // ¾ÀÀÌ »ç¶óÁú ¶§ °ÔÀÓ¿ÀºêÁ§Æ®°¡ »èÁ¦µÇÁö ¾Êµµ·Ï ¼³Á¤
+            instance = this as T;
+            DontDestroyOnLoad(instance.gameObject);
         }
-        else                // 
+        else
         {
             if (instance != this)
             {
-                Destroy(this.gameObject);   // ³ª ÀÚ½ÅÀ» »èÁ¦
+                Destroy(this.gameObject);
             }
         }
     }
 
     protected virtual void OnEnable()
     {
-        // SceneManager.sceneLoaded
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -77,11 +62,6 @@ public class Singleton<T> : MonoBehaviour where T : Component
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    /// <summary>
-    /// ¾ÀÀÌ ·ÎµåµÇ¾úÀ» ¶§ È£ÃâµÉ ÇÔ¼ö
-    /// </summary>
-    /// <param name="scene">¾ÀÁ¤º¸</param>
-    /// <param name="mode">·Îµù¸ğµå</param>
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (!isInitialized)
@@ -94,20 +74,13 @@ public class Singleton<T> : MonoBehaviour where T : Component
         }
     }
 
-    /// <summary>
-    /// ½ÌÅ¬ÅæÀÌ ¸¸µé¾îÁú ¶§ ´Ü ÇÑ¹ø¸¸ È£ÃâµÇ´Â ÇÔ¼ö
-    /// </summary>
     protected virtual void OnPreInitialize()
     {
         isInitialized = true;
     }
 
-    /// <summary>
-    /// ½Ì±ÛÅæÀÌ ¸¸µé¾îÁö°í ¾ÀÀÌ Single·Î ·ÎµåµÉ ¶§¸¶´Ù È£ÃâµÉ ÇÔ¼ö(additive´Â ¾ÈµÊ)
-    /// </summary>
     protected virtual void OnInitialize()
     {
-
     }
 
     private void OnApplicationQuit()

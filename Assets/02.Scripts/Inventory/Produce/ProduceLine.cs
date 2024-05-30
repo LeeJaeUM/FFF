@@ -50,11 +50,18 @@ public class ProduceLine : RecycleObject
         itemName.text = _data.itemName;
 
         produceSlots = new ProduceSlot[_data.parentCodes.Length];
-        int index = 0;
-        foreach(var code in _data.parentCodes)
+        //int index = 0;
+
+        //foreach(var code in _data.parentCodes)
+        //{
+        //    produceSlots[index] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
+        //    index++;
+        //}
+
+        for(int i = 0; i < produceSlots.Length; i++)
         {
-            produceSlots[index] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
-            index++;
+            parentCode code = _data.parentCodes[i];
+            produceSlots[i] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
         }
 
         // 아이템 갯수 체크

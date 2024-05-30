@@ -21,8 +21,8 @@ public class Lobby : MonoBehaviour
     private Transform titleText; // 타이틀 UI의 타이틀 텍스트
     [SerializeField]
     private GameObject buttonUI; // 버튼 UI;
-    [SerializeField]
-    private GameObject optionUI; // 옵션 UI;
+    //[SerializeField]
+    //private GameObject optionUI; // 옵션 UI;
     [SerializeField]
     private GameObject exitCaution; // exit 버튼을 눌렀을 때 뜨는 UI창
     [SerializeField]
@@ -90,11 +90,11 @@ public class Lobby : MonoBehaviour
 
         titleText.transform.position = new Vector2(600f, 800f);
 
-        backgroundSound.Play(); // 오디오 재생
+        //backgroundSound.Play(); // 오디오 재생
 
         // 타이틀 창에 이미지를 랜덤 배치
         int randomIndex = Random.Range(0, randomImage.Length);
-        titleImageUI.texture = randomImage[randomIndex];
+        //titleImageUI.texture = randomImage[randomIndex];
         buttonUI.SetActive(true); // 버튼 UI 활성화
     }
 
@@ -105,10 +105,10 @@ public class Lobby : MonoBehaviour
     }
 
     // Option 버튼을 눌렀을 때 OptionUI 활성화
-    public void Option()
-    {
-        optionUI.SetActive(true);
-    }
+    //public void Option()
+    //{
+    //    optionUI.SetActive(true);
+    //}
 
     // Exit 버튼을 눌렀을 때 CautionUI활성화
     public void Exit()
@@ -131,13 +131,13 @@ public class Lobby : MonoBehaviour
     // Stage1 버튼을 눌렀을 때 씬 이동
     public void Stage1()
     {
-        SceneManager.LoadScene("Stage1");
+        SceneManager.LoadScene("Stage1_Final");
     }
 
     // Stage2 버튼을 눌렀을 때 씬 이동
     public void Stage2()
     {
-        SceneManager.LoadScene("Stage2");
+        SceneManager.LoadScene("Test_01");
     }
 
     // Stage3 버튼을 눌렀을 때 씬 이동
