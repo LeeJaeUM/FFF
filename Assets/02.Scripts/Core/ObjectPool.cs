@@ -2,27 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// where T : MonoBehaviour // T Å¸ÀÔÀº MonoBehaviourÀÌ°Å³ª MonoBehaviour¸¦ »ó¼Ó¹Ş´Â Å¬·¡½º¸¸ °¡´ÉÇÏ´Ù.
 public class ObjectPool<T> : MonoBehaviour where T : RecycleObject
 {
-    /// <summary>
-    /// Ç®¿¡¼­ °ü¸®ÇÒ ¿ÀºêÁ§Æ®ÀÇ ÇÁ¸®ÆÕ
-    /// </summary>
     public GameObject originalPrefab;
-
-    /// <summary>
-    /// Ç®ÀÇ Å©±â. Ã³À½¿¡ »ı¼ºÇÏ´Â ¿ÀºêÁ§Æ®ÀÇ °¹¼ö. ¸ğµç °¹¼ö´Â 2^n·Î Àâ´Â °ÍÀÌ ÁÁ´Ù.
-    /// </summary>
     public int poolSize = 64;
-
-    /// <summary>
-    /// TÅ¸ÀÔÀ¸·Î ÁöÁ¤µÈ ¿ÀºêÁ§Æ®ÀÇ ¹è¿­. »ı¼ºµÈ ¸ğµç ¿ÀºêÁ§Æ®°¡ ÀÖ´Â ¹è¿­
-    /// </summary>
     T[] pool;
-
-    /// <summary>
-    /// ÇöÀç »ç¿ë°¡´ÉÇÑ(ºñÈ°¼ºÈ­µÇ¾îÀÖ´Â) ¿ÀºêÁ§Æ®µéÀ» °ü¸®ÇÏ´Â Å¥
-    /// </summary>
     Queue<T> readyQueue;
 
     private void Awake()
@@ -32,93 +16,77 @@ public class ObjectPool<T> : MonoBehaviour where T : RecycleObject
 
     public void Initialized()
     {
-        if(pool == null)
+        if (pool == null)
         {
-            pool = new T[poolSize];                  // ¹è¿­ÀÇ Å©±â ¸¸Å­ new
-            readyQueue = new Queue<T>(poolSize);     // ·¹µğÅ¥¸¦ ¸¸µé°í capacity¸¦ poolSize·Î ÁöÁ¤
+            pool = new T[poolSize];
+            readyQueue = new Queue<T>(poolSize);
 
             GenerateObjects(0, poolSize, pool);
         }
         else
         {
-            // Ç®ÀÌ ÀÌ¹Ì ¸¸µé¾îÁ® ÀÖ´Â °æ¿ì(ex:¾ÀÀÌ Ãß°¡·Î ·Îµù or ¾ÀÀÌ ´Ù½Ã ½ÃÀÛ
-            foreach(T obj in pool)
+            foreach (T obj in pool)
             {
-                obj.gameObject.SetActive(false);
+                if (obj != null) // ìˆ˜ì •: ê°ì²´ê°€ nullì¸ì§€ í™•ì¸
+                {
+                    obj.gameObject.SetActive(false);
+                }
             }
         }
     }
 
-
-    /// <summary>
-    /// Ç®¿¡¼­ »ç¿ëÇÏÁö ¾Ê´Â ¿ÀºêÁ§Æ®¸¦ ÇÏ³ª ²¨³½ ÈÄ ¸®ÅÏ ÇÏ´Â ÇÔ¼ö
-    /// </summary>
-    /// <param name="position">¹èÄ¡µÉ À§Ä¡(¿ùµåÁÂÇ¥)</param>
-    /// <returns>Ç®¿¡¼­ ²¨³½ ¿ÀºêÁ§Æ®(È°¼ºÈ­µÊ)</returns>
     public T GetObject(Vector3? position = null, Vector3? eulerAngle = null)
     {
-        if (readyQueue.Count > 0)            // ·¹µğÅ¥¿¡ ¿ÀºêÁ§Æ®°¡ ³²¾ÆÀÖ´ÂÁö È®ÀÎ
+        while (readyQueue.Count > 0)  // ìˆ˜ì •: ë ˆë””íê°€ ë¹„ì–´ìˆì§€ ì•Šì€ ë™ì•ˆ ë°˜ë³µ
         {
-            T comp = readyQueue.Dequeue();  // ³²¾ÆÀÖÀ¸¸é ÇÏ³ª ²¨³»°í
-            comp.gameObject.SetActive(true);// È°¼ºÈ­ ½ÃÅ°°í
-            comp.transform.position = position.GetValueOrDefault();
-            comp.transform.Rotate(eulerAngle.GetValueOrDefault());
-            OnGetObject(comp);              // ¿ÀºêÁ§Æ®º° Ãß°¡ Ã³¸®
-            return comp;                    // ¸®ÅÏ
+            T comp = readyQueue.Dequeue();
+            if (comp != null && comp.gameObject != null) // ìˆ˜ì •: ê°ì²´ì™€ ê²Œì„ ì˜¤ë¸Œì íŠ¸ê°€ nullì¸ì§€ í™•ì¸
+            {
+                comp.gameObject.SetActive(true);
+                comp.transform.position = position.GetValueOrDefault();
+                comp.transform.eulerAngles = eulerAngle.GetValueOrDefault();
+                OnGetObject(comp);
+                return comp;
+            }
         }
-        else
-        {
-            // ·¹µğÅ¥°¡ ºñ¾îÀÖ´Ù == ³²¾ÆÀÖ´Â ¿ÀºêÁ§Æ®°¡ ¾ø´Ù.
-            ExpandPool();       // Ç®À» µÎ¹è·Î È®ÀåÇÑ´Ù.
-            return GetObject(position, eulerAngle); // »õ·Î ÇÏ³ª ²¨³½´Ù.
-        }
+
+        ExpandPool();
+        return GetObject(position, eulerAngle);
     }
 
-    /// <summary>
-    /// °¢ ¿ÀºêÁ§Æ® º°·Î Æ¯º°È÷ Ã³¸®ÇØ¾ß ÇÒ ÀÏÀÌ ÀÖÀ» °æ¿ì ½ÇÇàÇÏ´Â ÇÔ¼ö
-    /// </summary>
     protected virtual void OnGetObject(T component)
     {
     }
 
-    /// <summary>
-    /// Ç®À» µÎ¹è·Î È®Àå½ÃÅ°´Â ÇÔ¼ö
-    /// </summary>
     void ExpandPool()
     {
-        // ÃÖ´ëÇÑ ÀÏ¾î³ª¸é ¾ÈµÇ´Â ÀÏÀÌ´Ï±î °æ°í Ç¥½Ã
-        Debug.LogWarning($"{gameObject.name} Ç® »çÀÌÁî Áõ°¡. {poolSize} -> {poolSize * 2}");
-        int newSize = poolSize * 2;         // »õ·Î¿î Ç®ÀÇ Å©±â ÁöÁ¤
-        T[] newPool = new T[newSize];       // »õ·Î¿î Ç® »ı¼º
-        for(int i = 0; i < poolSize; i++)   // ÀÌÀü Ç®¿¡ ÀÖ´ø ³»¿ëÀ» »õ Ç®¿¡ º¹»ç
+        Debug.LogWarning($"{gameObject.name} í’€ ì‚¬ì´ì¦ˆ ì¦ê°€. {poolSize} -> {poolSize * 2}");
+        int newSize = poolSize * 2;
+        T[] newPool = new T[newSize];
+        for (int i = 0; i < poolSize; i++)
         {
             newPool[i] = pool[i];
         }
 
-        GenerateObjects(poolSize, newSize, newPool);    // »õ Ç®ÀÇ ³²Àº ºÎºĞ¿¡ ¿ÀºêÁ§Æ® »ı¼ºÇØ¼­ Ãß°¡
-        pool = newPool;         // »õ Ç® »çÀÌÁî ÁöÁ¤
-        poolSize = newSize;     // »õ Ç®À» Ç®·Î ¼³Á¤
+        GenerateObjects(poolSize, newSize, newPool);
+        pool = newPool;
+        poolSize = newSize;
     }
 
-    /// <summary>
-    /// Ç®¿¡¼­ »ç¿ëÇÒ ¿ÀºêÁ§Æ®¸¦ »ı¼ºÇÏ´Â ÇÔ¼ö
-    /// </summary>
-    /// <param name="start">»õ·Î »ı¼º ½ÃÀÛÇÒ ÀÎµ¦½º</param>
-    /// <param name="end">»õ·Î »ı¼ºÀÌ ³¡³ª´Â ÀÎµ¦½º+1</param>
-    /// <param name="results">»ı¼ºµÈ ¿ÀºêÁ§Æ®°¡ µé¾î°¥ ¹è¿­</param>
     void GenerateObjects(int start, int end, T[] results)
     {
-        for(int i = start; i < end; i++)
+        for (int i = start; i < end; i++)
         {
-            GameObject obj = Instantiate(originalPrefab, transform);    // ÇÁ¸®ÆÕ »ı¼ºÇÏ±â
-            obj.name = $"{originalPrefab.name}_{i}";                    // ÀÌ¸§ ¹Ù²Ù°í
+            GameObject obj = Instantiate(originalPrefab, transform);
+            obj.name = $"{originalPrefab.name}_{i}";
 
             T comp = obj.GetComponent<T>();
-            comp.onDisable += () => readyQueue.Enqueue(comp);           // ÀçÈ°¿ë ¿ÀºêÁ§Æ®°¡ ºñÈ°¼ºÈ­ µÇ¸é ·¹µğÅ¥·Î µÇµ¹·Á¶ó
-            //readyQueue.Enqueue(comp);                                   // ·¹µğÅ¥¿¡ Ãß°¡ÇÏ°í
-
-            results[i] = comp;                                          // ¹è¿­¿¡ ÀúÀåÇÏ°í
-            obj.SetActive(false);                                       // ºñÈ°¼­È­ ½ÃÅ²´Ù.
+            if (comp != null)
+            {
+                comp.onDisable += () => readyQueue.Enqueue(comp);
+                results[i] = comp;
+                obj.SetActive(false);
+            }
         }
     }
 }
