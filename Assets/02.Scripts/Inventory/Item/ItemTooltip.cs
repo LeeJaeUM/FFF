@@ -65,7 +65,7 @@ public class ItemTooltip : MonoBehaviour
         {
             // 컴포넌트 채우기
             Icon.sprite = data.itemIcon;
-            nameText.text = data.name;
+            nameText.text = data.itemName;
             DescriptionText.text =$" {data.itemDescription}";
             weightText.text = $"무게 : {data.itemWeight}";
 
