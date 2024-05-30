@@ -600,6 +600,7 @@ MonoBehaviour:
   stageSelectUI: {fileID: 1255882575}
   randomImage: []
   titleImageUI: {fileID: 202099523}
+  isUseFakeTitle: 1
 --- !u!4 &276158012
 Transform:
   m_ObjectHideFlags: 0
