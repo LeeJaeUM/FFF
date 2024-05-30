@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1554844458725361317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8803318263970097628}
+  - component: {fileID: 4209230191856268040}
+  m_Layer: 0
+  m_Name: Player3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8803318263970097628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554844458725361317}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 11.691033, y: 11.777059, z: -0.19832051}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4209230191856268040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554844458725361317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca970cce5977b694c85d732aa67ace8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverZone: {fileID: 0}
+  lastGameZone: {fileID: 0}
+  monsterSpawnZone:
+  - {fileID: 0}
+  - {fileID: 0}
+  monsterPrefab:
+  - {fileID: 2838672944659312862, guid: 74d54bd6bf13ff24e82bf039334d2e55, type: 3}
+  - {fileID: 2838672944659312862, guid: 7f98621ab9f489c4184d1384b2655450, type: 3}
+  raycastOrigin: {fileID: 0}
+  rayColor: {r: 1, g: 0, b: 0, a: 1}
+  player: {fileID: 0}
+  playerPosition: {fileID: 0}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  interactionUI: {fileID: 0}
+  textField: {fileID: 0}
+  choiceText1Field: {fileID: 0}
+  choiceText2Field: {fileID: 0}
+  choiceText3Field: {fileID: 0}
+  getItemTextField: {fileID: 0}
+  passwordInputField: {fileID: 0}
+  laboratoryTrap: {fileID: 2838672944659312862, guid: 74d54bd6bf13ff24e82bf039334d2e55, type: 3}
+  caution2Text: {fileID: 0}
+  generatorButtonUI: {fileID: 0}
+  switch1Animator: {fileID: 0}
+  switch2Animator: {fileID: 0}
+  switch3Animator: {fileID: 0}
+  switch4Animator: {fileID: 0}
+  switch5Animator: {fileID: 0}
+  switch6Animator: {fileID: 0}
+  switch7Animator: {fileID: 0}
+  switch8Animator: {fileID: 0}
+  switch9Animator: {fileID: 0}
+  switch10Animator: {fileID: 0}
+  generatorLeverAnimator: {fileID: 0}
+  restroomDoorAnimator: {fileID: 0}
+  storageDoorAnimator: {fileID: 0}
+  bookShelfAnimator: {fileID: 0}
+  hiddenRoomAnimator: {fileID: 0}
+  clearDoorAnimator: {fileID: 0}
+  startLeftDoor: {fileID: 0}
+  startRightDoor: {fileID: 0}
+  restaurantDoorAnimator: {fileID: 0}
+  generatorDoorAnimator: {fileID: 0}
+  laboratoryLeftDoorAnimator: {fileID: 0}
+  laboratoryRightDoorAnimator: {fileID: 0}
+  bathroomDoorAnimator: {fileID: 0}
+  storage2UpDoorAnimaotr: {fileID: 0}
+  storage2DownDoorAnimator: {fileID: 0}
+  LeverAnimator: {fileID: 0}
+  treatmentPlantUpDoorAnimator: {fileID: 0}
+  treatmentPlantDownDoorAnimator: {fileID: 0}
+  trap: {fileID: 0}
+  trapUI: {fileID: 0}
+  pictureFrame: {fileID: 0}
+  tvScreen: {fileID: 0}
+  diaryUI:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  researchLog:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  remoteControl: {fileID: 0}
+  blade: {fileID: 0}
+  metal: {fileID: 0}
+  pilers: {fileID: 0}
+  generator: {fileID: 0}
+  restaurantRoomDoorKey: {fileID: 0}
+  restroomCaution: {fileID: 0}
+  storageTrap: {fileID: 0}
+  keyPadUI: {fileID: 0}
+  lobbyTrap: {fileID: 0}
+  bathroomCaution: {fileID: 0}
+  storage2Trap: {fileID: 0}
+  caution2: {fileID: 0}
+  meatWall: {fileID: 0}
+  microwave_gas: {fileID: 0}
+  lastKeyPrefab: {fileID: 8194365338588670102, guid: 444457dc3b466794dbbb4ea55285265d, type: 3}
+  id_Card: {fileID: 0}
+  mainMonster: {fileID: 0}
+  restaurant: {fileID: 0}
+  newScreenMaterial: {fileID: 2100000, guid: 45f05a17d335be9409eaf9d56567a27e, type: 2}
+  trapSound: {fileID: 0}
+  bookSound:
+  - {fileID: 0}
+  - {fileID: 0}
+  roomDoorSound: {fileID: 0}
+  itemGetSound: {fileID: 0}
+  goreSound: {fileID: 0}
+  padBeep: {fileID: 0}
+  padClearSound: {fileID: 0}
+  windSound: {fileID: 0}
+  bookShelfSound: {fileID: 0}
+  clearDoorSound: {fileID: 0}
+  generatorDoorLock: {fileID: 0}
+  bikeEngineSound: {fileID: 0}
+  generatorButtonSound: {fileID: 0}
+  meatWallSound: {fileID: 0}
+  boomSound: {fileID: 0}
+  trashCanSound: {fileID: 0}
+  backgroundSound: {fileID: 0}
+  lastGameSound: {fileID: 0}
+  monster: {fileID: 0}
+  trashcanMonster: {fileID: 0}
+  timerText: {fileID: 0}
+  lastTimer: {fileID: 0}
