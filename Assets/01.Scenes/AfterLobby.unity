@@ -515,7 +515,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: Stage3
         m_Mode: 1
@@ -571,8 +571,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 276158012}
+  - component: {fileID: 276158011}
   - component: {fileID: 276158013}
-  - component: {fileID: 276158015}
+  - component: {fileID: 276158014}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -580,7 +581,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
-<<<<<<<< HEAD:Assets/01.Scenes/StartLobby.unity
 --- !u!114 &276158011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,9 +602,6 @@ MonoBehaviour:
   stageSelectUI: {fileID: 1255882575}
   randomImage: []
   titleImageUI: {fileID: 202099523}
-  isUseFakeTitle: 1
-========
->>>>>>>> 2228032851305598d86fbb38a0380a79ca440bdc:Assets/01.Scenes/_LastScene/Lobby.unity
 --- !u!4 &276158012
 Transform:
   m_ObjectHideFlags: 0
@@ -716,7 +713,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &276158015
+--- !u!114 &276158014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -725,30 +722,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 276158010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-<<<<<<<< HEAD:Assets/01.Scenes/StartLobby.unity
   m_Script: {fileID: 11500000, guid: a254a9867bb52f24ca8913bc5eab7d66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stage1Button: {fileID: 459192438}
   stage2Button: {fileID: 277360078}
   stage3Button: {fileID: 258981509}
-========
-  m_Script: {fileID: 11500000, guid: 6717b3d148f60374d8ac06b94b9843b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fakeTitle: {fileID: 755189987}
-  realTitle: {fileID: 1554107497}
-  blackImage: {fileID: 350070130}
-  titleText: {fileID: 962014341}
-  buttonUI: {fileID: 478290804}
-  exitCaution: {fileID: 1074955278}
-  stageSelectUI: {fileID: 1255882575}
-  randomImage:
-  - {fileID: 2800000, guid: 0151896fe0d38244c9122ddb91e9f671, type: 3}
-  - {fileID: 2800000, guid: c54bca0e062702646aaf03a653d03838, type: 3}
-  - {fileID: 2800000, guid: 75cffa22677f8014fa1cc96751d73db9, type: 3}
-  titleImageUI: {fileID: 202099523}
->>>>>>>> 2228032851305598d86fbb38a0380a79ca440bdc:Assets/01.Scenes/_LastScene/Lobby.unity
 --- !u!1 &277360076
 GameObject:
   m_ObjectHideFlags: 0
@@ -832,7 +811,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: Stage2
         m_Mode: 1
@@ -962,23 +941,8 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<<< HEAD:Assets/01.Scenes/StartLobby.unity
-    - target: {fileID: 1387139459601216341, guid: 45b725d459ef9db42aff9d92cb4f0568, type: 3}
-========
-    - target: {fileID: 1374121347314680651, guid: 45b725d459ef9db42aff9d92cb4f0568,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: d70f05ed80484e9458fef4e3c04d04f8,
-        type: 2}
-    - target: {fileID: 1374121347314680651, guid: 45b725d459ef9db42aff9d92cb4f0568,
-        type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1387139459601216341, guid: 45b725d459ef9db42aff9d92cb4f0568,
         type: 3}
->>>>>>>> 2228032851305598d86fbb38a0380a79ca440bdc:Assets/01.Scenes/_LastScene/Lobby.unity
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
@@ -1304,7 +1268,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: Option
         m_Mode: 1
@@ -1437,7 +1401,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: Stage1
         m_Mode: 1
@@ -1716,7 +1680,8 @@ MonoBehaviour:
   m_text: Stage3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
-  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
+  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2472,7 +2437,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: GameStart
         m_Mode: 1
@@ -2686,7 +2651,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: Exit
         m_Mode: 1
@@ -2796,7 +2761,8 @@ MonoBehaviour:
   m_text: Stage2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
-  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
+  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3008,7 +2974,8 @@ MonoBehaviour:
   m_text: Stage1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
-  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8, type: 2}
+  m_sharedMaterial: {fileID: -837871431218429551, guid: d70f05ed80484e9458fef4e3c04d04f8,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3514,7 +3481,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: StageSelectLobby
         m_Mode: 1
@@ -3659,7 +3626,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: No
         m_Mode: 1
@@ -3792,7 +3759,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276158015}
+      - m_Target: {fileID: 276158011}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: RealExit
         m_Mode: 1

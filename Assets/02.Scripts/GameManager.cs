@@ -24,8 +24,13 @@ public class GameManager : Singleton<GameManager>
     protected override void Awake()
     {
         base.Awake();
+;
+    }
 
-        inven = FindObjectOfType<InventoryUI>();
+    protected override void OnInitialize()
+    {
+        if(inven == null) 
+            inven = FindObjectOfType<InventoryUI>();
     }
 
     private void Update()

@@ -242,7 +242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6124797492294182833
 RectTransform:
   m_ObjectHideFlags: 0
@@ -697,7 +697,7 @@ RectTransform:
   m_Father: {fileID: 930903386239371672}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1107,6 +1107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotPrefab: {fileID: 5469440677691397200, guid: bbcc37202730e554b9edb2d5faa8e7c2, type: 3}
+  gridSize: {x: 0, y: 0}
+  slotSize: 0
+  edgePadding: 0
 --- !u!222 &8466098863902971192
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2722,7 +2725,7 @@ PrefabInstance:
     - target: {fileID: 3208005884970212430, guid: 701c661d95e83f0419c9ff3d68793682, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: e33b8b41522165542b92600052457d4e, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5965839999139122750, guid: 701c661d95e83f0419c9ff3d68793682, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2863,7 +2866,7 @@ PrefabInstance:
     - target: {fileID: 3208005884970212430, guid: 701c661d95e83f0419c9ff3d68793682, type: 3}
       propertyPath: item
       value: 
-      objectReference: {fileID: 11400000, guid: 1f2d5cc133fafc94e93e3ceeb346ebf1, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 5965839999139122750, guid: 701c661d95e83f0419c9ff3d68793682, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
