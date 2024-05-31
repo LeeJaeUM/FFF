@@ -90,11 +90,32 @@ public class Lobby : MonoBehaviour
 
         titleText.transform.position = new Vector2(600f, 800f);
 
-        //backgroundSound.Play(); // 오디오 재생
+        backgroundSound.Play(); // 오디오 재생
+
+        // 디버그: 배열 길이를 로그로 출력하고 배열이 초기화되었는지 확인
+        Debug.Log("randomImage 배열 길이: " + randomImage.Length);
+
+        if (randomImage == null || randomImage.Length == 0)
+        {
+            Debug.LogError("randomImage 배열이 null이거나 비어 있습니다.");
+            yield break;
+        }
 
         // 타이틀 창에 이미지를 랜덤 배치
         int randomIndex = Random.Range(0, randomImage.Length);
-        //titleImageUI.texture = randomImage[randomIndex];
+        Debug.Log("랜덤 인덱스: " + randomIndex);
+
+        if (randomImage[randomIndex] == null)
+        {
+            Debug.LogError("randomImage[" + randomIndex + "]이(가) null입니다.");
+            yield break;
+        }
+
+        titleImageUI.texture = randomImage[randomIndex];
+
+        // 디버그: 텍스처 변경 로그
+        Debug.Log("titleImageUI 텍스처가 randomImage[" + randomIndex + "]로 설정되었습니다.");
+
         buttonUI.SetActive(true); // 버튼 UI 활성화
     }
 
