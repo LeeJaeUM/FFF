@@ -3344,6 +3344,8 @@ public class PlayerGimicStage3 : MonoBehaviour
                 keyPadUI.SetActive(false); // KeyPadUI창 닫기
                 trapSound.Play(); // 사운드 재생
                 lobbyTrap.SetActive(true);
+
+                StartCoroutine(GameOver());
             }
         }
     }
