@@ -15,14 +15,7 @@ public class Stage1Clear : MonoBehaviour
 
     private void Clear()
     {
-        // StageDataSave 스크립트 인스턴스를 찾아 ClearStage 호출
-        StageDataSave stageDataSave = FindObjectOfType<StageDataSave>();
-        if (stageDataSave != null)
-        {
-            stageDataSave.ClearStage(1);
-        }
-
-        // 스테이지 클리어 후 로비로 이동
-        SceneManager.LoadScene("Lobby");
+        // 스테이지 클리어시 클리어 씬으로 이동
+        SceneManager.LoadScene("StageClear");
     }
 }

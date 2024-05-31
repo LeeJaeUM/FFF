@@ -7,15 +7,17 @@ using UnityEngine.UI;
 
 public class InvenInfo : MonoBehaviour
 {
+    InventoryUI inven;
     TextMeshProUGUI weightText;
 
     private void Awake()
     {
+        inven = transform.parent.parent.GetComponent<InventoryUI>();    
         weightText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         Button button = transform.GetChild(1).GetComponent<Button>();
         button.onClick.AddListener(() =>
         {
-            ProduceManager produceManager = GameManager.Instance.inven.produceManager;
+            ProduceManager produceManager = inven.produceManager;
             if (produceManager != null)
             {
                 produceManager.OnOff();
@@ -25,7 +27,7 @@ public class InvenInfo : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.inven.onWeightChange += Refresh;
+        inven.onWeightChange += Refresh;
     }
 
     private void Refresh(float weight)
