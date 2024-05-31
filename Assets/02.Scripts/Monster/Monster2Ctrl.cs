@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class Monster2Ctrl : MonoBehaviour
 {
@@ -12,12 +11,57 @@ public class Monster2Ctrl : MonoBehaviour
     private AudioSource brokenWoodSound; // 플레이어가 나무를 밟았을 경우 생기는 소리
     [SerializeField]
     private Animator monsterAnim;
-    [SerializeField]
-    private AudioSource rage; // 몬스터 움직일 때 사운드
 
     private int playerLife = 3; // 플레이어의 생명
     private bool isWoodExit = false;
     private bool isChasing = false;
+
+    public Transform target;
+
+    private void Awake()
+    {
+        monsterAgent = GetComponent<NavMeshAgent>();
+        monsterAnim = GetComponent<Animator>();
+    }
+
+    private void Start()
+    {
+        ButtonManager manager = FindAnyObjectByType<ButtonManager>();
+        manager.onWarning += HpDown;
+
+        ChooseUI choose = FindAnyObjectByType<ChooseUI>();
+        choose.onWarning += HpDown;
+
+        BookShelf_Unlock bookShelf = FindAnyObjectByType<BookShelf_Unlock>();
+        bookShelf.onWarning += HpDown;
+
+        Test_Inventory test = FindAnyObjectByType<Test_Inventory>();
+        if(test != null)
+        {
+            test.onWarning += HpDown;
+        }
+    }
+
+    private void HpDown()
+    {
+        playerLife--;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //IInteractable interactable = collision.gameObject.GetComponent<IInteractable>();
+        //if (interactable != null)
+        //{
+        //    Destroy(collision.gameObject.gameObject);
+        //}
+
+        Debug.LogWarning(collision.collider.gameObject.CompareTag("Player"));
+
+        if (collision.collider.gameObject.CompareTag("Player"))
+        {
+            Stage1Manager.Instance.BottomTMPText = "게임 오버";
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,11 +77,16 @@ public class Monster2Ctrl : MonoBehaviour
             }
         }
 
-        // 플레이어가 몬스터와 닿았을 경우 게임 오버
-        if(other.gameObject.CompareTag("MONSTER"))
-        {
-            SceneManager.LoadScene("GameOverScene2");
-        }
+        //IInteractable interactable = other.GetComponent<IInteractable>();
+        //if(interactable != null)
+        //{
+        //    Destroy(other.gameObject);
+        //}
+
+        //if (other.gameObject.CompareTag("Player"))
+        //{
+        //    Stage1Manager.Instance.BottomTMPText = "게임 오버";
+        //}
     }
 
     private void OnTriggerExit(Collider other)
@@ -58,9 +107,8 @@ public class Monster2Ctrl : MonoBehaviour
         if(playerLife<=0)
         {
             isChasing = true;
-            monsterAgent.SetDestination(gameObject.transform.position);
+            monsterAgent.SetDestination(target.position);
             monsterAnim.SetBool("isChasing", isChasing);
-            rage.Play(); // 사운드 재생
         }
     }
 }

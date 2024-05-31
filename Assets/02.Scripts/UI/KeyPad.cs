@@ -30,6 +30,11 @@ namespace KeypadSystem
         // 정답 입력시 호출할 액션
         public Action onAnswerCheck;
 
+        /// <summary>
+        /// 실패시 전달할 델리게이트
+        /// </summary>
+        public Action onAnswerFail;
+
         private void Awake()
         {
             pads = GetComponentsInChildren<Button>();
@@ -123,6 +128,7 @@ namespace KeypadSystem
                         numCount = 0;
                         clickNums.Clear();
                         RefreshSelectedNums();
+                        onAnswerFail?.Invoke();
                     }
                 }
                 else

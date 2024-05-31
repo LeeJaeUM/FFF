@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class ItemTooltip : MonoBehaviour
 {
-    private TextMeshProUGUI nameText, DescriptionText, priceText, weightText;
+    private TextMeshProUGUI nameText, DescriptionText, weightText;
     private Image Icon;
 
     CanvasGroup canvasGroup;
@@ -49,10 +49,8 @@ public class ItemTooltip : MonoBehaviour
         child = transform.GetChild(2);
         nameText = child.GetComponent<TextMeshProUGUI>();
         child = transform.GetChild(3);
-        priceText = child.GetComponent<TextMeshProUGUI>();
-        child = transform.GetChild(4);
         weightText = child.GetComponent<TextMeshProUGUI>();
-        child = transform.GetChild(5);
+        child = transform.GetChild(4);
         DescriptionText = child.GetComponent<TextMeshProUGUI>();
     }
 
@@ -67,7 +65,7 @@ public class ItemTooltip : MonoBehaviour
         {
             // 컴포넌트 채우기
             Icon.sprite = data.itemIcon;
-            nameText.text = data.name;
+            nameText.text = data.itemName;
             DescriptionText.text =$" {data.itemDescription}";
             weightText.text = $"무게 : {data.itemWeight}";
 

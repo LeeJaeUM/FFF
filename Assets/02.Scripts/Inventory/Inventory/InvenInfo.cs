@@ -12,7 +12,7 @@ public class InvenInfo : MonoBehaviour
 
     private void Awake()
     {
-        inven = transform.parent.parent.GetComponent<InventoryUI>();    
+        inven = transform.parent.parent.GetComponent<InventoryUI>();
         weightText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         Button button = transform.GetChild(1).GetComponent<Button>();
         button.onClick.AddListener(() =>

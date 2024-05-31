@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,7 +40,9 @@ public enum ItemCode
     Crowbar,        // 쇠지렛대
     BloodyKnife,
     Hint,
+    SecondKey,
     ThirdKey,
+    OilSyringe,     // 기름이 들어간 주사기
 
     Bucket,         // 기름통(오일없는)  //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
     OilBucket,      // 오일(기름통)      //인벤토리에서 int값을 고정으로 쓰고 있다면 위치를 변경해야함
@@ -67,9 +70,11 @@ public struct SlotColorHighlights
     }
 }
 
+[Serializable]
 public struct ItemContainList
 {
     public ItemCode itemCode;
     public List<ItemContain> containList;
     public int itemCount;
+    public float itemWeight;
 }

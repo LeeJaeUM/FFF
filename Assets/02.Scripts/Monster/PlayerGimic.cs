@@ -13,7 +13,7 @@ public class PlayerGimic : MonoBehaviour
     //기본적으론 null 상태
     IInteractable cur_Interactable = null;
 
-    public  bool testIInteracHave = false;
+    public bool testIInteracHave = false;
 
     TipsUI tipsUI;
     PlayerInputAction inputActions;
@@ -67,6 +67,11 @@ public class PlayerGimic : MonoBehaviour
             otherSave = other;
             isPlayerIn = true;
             tipsUI.CanUse_InteractObj = isPlayerIn;
+        }
+
+        if (other.gameObject.CompareTag("MONSTER"))
+        {
+            Stage1Manager.Instance.BottomTMPText = "플레이어 사망";
         }
     }
 

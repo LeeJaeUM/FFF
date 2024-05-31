@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: 2_00_Brain
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemCode: 14
-  itemIcon: {fileID: 0}
+  itemIcon: {fileID: 21300000, guid: 7382e2b6e79a9c04898292f1adaaa3cc, type: 3}
   itemName: 
   itemType: 0
   itemPrefab: {fileID: 0}
   itemDescription: 
-  SizeX: 1
-  SizeY: 1
-  maxItemCount: 0
-  itemWeight: 0
+  SizeX: 2
+  SizeY: 2
+  maxItemCount: 1
+  itemWeight: 0.1

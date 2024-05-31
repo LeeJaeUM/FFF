@@ -6,11 +6,23 @@ public class PickUpItem : InteracableBase
 {
     public ItemCode itemCode;
 
-    public override bool CanUse => true;
+    public string descript;
 
     protected override void OnUse()
     {
         GameManager.Instance.inven.GetItemToSlot(itemCode);
+
+        TipsUI tips = Stage1Manager.Instance.TipsUI;
+
+        tips.CanUse_InteractObj = false;
+
+        Stage1Manager.Instance.BottomTMPText = descript;
+
         Destroy(gameObject);
+    }
+
+    public void GetItem()
+    {
+        OnUse();
     }
 }

@@ -71,10 +71,25 @@ public class ProduceLine : RecycleObject
         produceButton.onClick.AddListener(() =>
         {
             InventoryUI inven = GameManager.Instance.inven;
-            foreach(var slot in produceSlots)
+
+
+            for (int i = 0; i < data.parentCodes.Length; i++)
             {
-                slot.UseItem();
+                for (int j = 0; j < inven.itemDatas.Length; j++)
+                {
+                    if (data.parentCodes[i].Code == inven.itemDatas[j].itemCode)
+                    {
+                        foreach (var slot in produceSlots)
+                        {
+                            if(slot.Data.itemCode == data.parentCodes[i].Code)
+                            {
+                                slot.UseItem(!data.parentCodes[i].NotConsume);
+                            }
+                        }
+                    }
+                }
             }
+
             ItemContain contain = Factory.Instance.GetItemContain(data);
             inven.containGrab = contain.GrabContain();
         });
@@ -87,7 +102,7 @@ public class ProduceLine : RecycleObject
     {
         foreach(var slot in produceSlots)
         {
-            foreach(var ItemContain in GameManager.Instance.inven.containList)
+            foreach(var ItemContain in GameManager.Instance.inven.ContainList)
             {
 
                 if(ItemContain.itemCode == slot.Data.itemCode)

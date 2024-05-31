@@ -14,14 +14,13 @@ public class InvenUI : MonoBehaviour
     InventoryUI inven;
 
 
-
     private void Awake()
     {
-        inven = transform.parent.GetComponent<InventoryUI>();
         canvas = GetComponent<CanvasGroup>();
         invenHeadRect = transform.GetChild(0).GetComponent<RectTransform>();
         invenInfoRect = transform.GetChild(1).GetComponent<RectTransform>();
         invenGridRect = transform.GetChild(2).GetComponent<RectTransform>();
+        inven = transform.parent.GetComponent<InventoryUI>();
     }
 
     public void Initialized()

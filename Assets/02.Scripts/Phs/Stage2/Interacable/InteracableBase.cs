@@ -2,24 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteracableBase : MonoBehaviour, IInteracable
+public class InteracableBase : MonoBehaviour, IInteractable
 {
-    [SerializeField]
-    bool canUse = false;
+    protected bool CanPickUp = true;
 
-    public virtual bool CanUse
+    public void Interact()
     {
-        get => canUse;
-    }
-
-    public void Use()
-    {
-        if(CanUse)
+        if(CanPickUp)
         {
             Debug.Log("동작");
             OnUse();
         }
     }
+
 
     protected virtual void OnUse()
     {

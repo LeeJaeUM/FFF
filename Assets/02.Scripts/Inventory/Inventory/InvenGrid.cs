@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +35,7 @@ public class InvenGrid : MonoBehaviour
     {
         inven = transform.parent.parent.GetComponent<InventoryUI>();
         gridSize = inven.gridSize;
-        slotSize = inven.slotSize;
+        slotGrid = inven.slotGrid;
         edgePadding = inven.edgePadding;
         slotGrid = new InvenSlot[gridSize.x, gridSize.y];
         CreateSlots();

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5f92b64e029154092dda25f744bc40, type: 3}
+  m_Name: 2_11_Book_29
+  m_EditorClassIdentifier: 
+  itemCode: 25
+  itemIcon: {fileID: 21300000, guid: 10b4e25963e04524cb8d14aeebca3ead, type: 3}
+  itemName: "\uCC45"
+  itemType: 0
+  itemPrefab: {fileID: 1580521775455820, guid: e67c8e956fbecc349b4e8470d5ae65c6, type: 3}
+  itemDescription: 
+  SizeX: 2
+  SizeY: 2
+  maxItemCount: 1
+  itemWeight: 0.1
