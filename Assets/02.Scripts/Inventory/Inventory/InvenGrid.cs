@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class InvenGrid : MonoBehaviour
 {
+    InventoryUI inven;
+
     /// <summary>
     /// 그리드 오브젝트
     /// </summary>
@@ -17,20 +19,24 @@ public class InvenGrid : MonoBehaviour
     /// <summary>
     /// 그리드 사이즈
     /// </summary>
-    public Vector2Int gridSize => GameManager.Instance.inven.gridSize;
+    public Vector2Int gridSize;
 
     /// <summary>
     /// 슬롯의 크기
     /// </summary>
-    public float slotSize => GameManager.Instance.inven.slotSize;
+    public float slotSize;
 
     /// <summary>
     /// 슬롯 사이의 거리
     /// </summary>
-    public float edgePadding => GameManager.Instance.inven.edgePadding;
+    public float edgePadding;
 
     public void GridInitialize()
     {
+        inven = transform.parent.parent.GetComponent<InventoryUI>();
+        gridSize = inven.gridSize;
+        slotGrid = inven.slotGrid;
+        edgePadding = inven.edgePadding;
         slotGrid = new InvenSlot[gridSize.x, gridSize.y];
         CreateSlots();
         ResizePanel();
@@ -56,7 +62,7 @@ public class InvenGrid : MonoBehaviour
                 slotGrid[x, y] = slot;
             }
         }
-        GameManager.Instance.inven.slotGrid = slotGrid;
+        inven.slotGrid = slotGrid;
     }
 
     /// <summary>

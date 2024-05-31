@@ -37,6 +37,7 @@ public class ButtonManager : MonoBehaviour
 
     private void OnKeypadAnwser(bool isSuccess)
     {
+        Stage1Manager.Instance.BottomTMPText = "리포트가 작동한 것 같다.";
         this.isSuccess = isSuccess;
     }
 
