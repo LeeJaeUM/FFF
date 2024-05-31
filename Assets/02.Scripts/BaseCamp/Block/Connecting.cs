@@ -52,6 +52,10 @@ public class Connecting : MonoBehaviour
     [SerializeField] private int wall_HoCount = 0;
     [SerializeField] private int wall_VeCount = 0;
     [SerializeField] private int floorCount = 0;
+
+    /// <summary>
+    /// Adjuster에 사용할 카운트용 프로퍼티 
+    /// </summary>
     public int FloorCount
     {
         get => floorCount;
@@ -67,29 +71,7 @@ public class Connecting : MonoBehaviour
     /// </summary>
     public Action<int, int> onChangeCount;
 
-    private void OnDrawGizmos()
-    {
-        Color gizColor = Color.white;
-        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
-        {
-            gizColor = Color.black;
-
-        }
-        else if (isConnectedToFloor && isConnectedToWall_Ho)
-        {
-            gizColor = Color.green;
-        }
-        else if (isConnectedToWall_Ho && isConnectedToWall_Ve)
-        {
-            gizColor = Color.blue;
-        }
-        else if (isConnectedToWall_Ve && isConnectedToFloor)
-        {
-            gizColor = Color.red;
-        } 
-        Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
-    }
+   
 
     private void Awake()
     {
@@ -128,6 +110,9 @@ public class Connecting : MonoBehaviour
             usedDir = UsedDir.None;
     }
 
+    /// <summary>
+    /// 카운팅을 초기화하는 함수
+    /// </summary>
     void CountReset()
     {
         switch (objType)
@@ -165,6 +150,12 @@ public class Connecting : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 카운팅을 초기화할 때 사용하는 함수
+    /// </summary>
+    /// <param name="ho">horizontal 벽 타일</param>
+    /// <param name="ve">vertical 벽 타일</param>
+    /// <param name="floor">바닥 타일</param>
     void CountSetting(int ho, int ve, int floor)
     {
         wall_HoCount = ho;
@@ -172,6 +163,11 @@ public class Connecting : MonoBehaviour
         floorCount = floor;
     }
 
+    /// <summary>
+    /// 겹치는 Connecting이 있는 지 확인 후 어떤 타일인지 확인하여 카운트를 변경시키는 함수
+    /// </summary>
+    /// <param name="rootCall">중복방지용 변수  최초에 실행될 Connecting이면 true 아니면 flase</param>
+    /// <param name="isDestroy">타일을 삭제할 떄 실행한건지 판단하는 변수 true면 삭제 시 실행 false면 생성 시 실행</param>
     public void UpdateConnecting(bool rootCall = false, bool isDestroy = false)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, connectorOverlapRadius * 0.5f, connectorLayer);
@@ -243,4 +239,36 @@ public class Connecting : MonoBehaviour
             canBuild = false;
 
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// 설치가능한지 시각적으로 표시
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        Color gizColor = Color.white;
+        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
+        {
+            gizColor = Color.black;
+
+        }
+        else if (isConnectedToFloor && isConnectedToWall_Ho)
+        {
+            gizColor = Color.green;
+        }
+        else if (isConnectedToWall_Ho && isConnectedToWall_Ve)
+        {
+            gizColor = Color.blue;
+        }
+        else if (isConnectedToWall_Ve && isConnectedToFloor)
+        {
+            gizColor = Color.red;
+        }
+        Gizmos.color = gizColor;
+        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
+    }
+
+#endif
+
 }
