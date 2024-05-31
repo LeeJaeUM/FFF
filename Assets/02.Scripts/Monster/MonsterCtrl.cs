@@ -36,6 +36,8 @@ public class MonsterCtrl : MonoBehaviour
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
+    private bool isEnterHouse = false;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -43,11 +45,14 @@ public class MonsterCtrl : MonoBehaviour
 
         // 초기 목적지 설정
         SetDestinationByIndex(current);
+
+        Stage1Manager.Instance.FrontDoor.onFrontDoorOpen = () => { isEnterHouse = true; };
     }
 
     private void Update()
     {
-        nowTime += Time.deltaTime;
+        if (isEnterHouse)
+            nowTime += Time.deltaTime;
 
         // 시간의 흐름에 따라 낮밤 조절
         if (nowTime >= totalTime)

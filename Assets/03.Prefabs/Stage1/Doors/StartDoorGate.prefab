@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4972167997025879799}
-  - component: {fileID: 7021823297820637296}
   - component: {fileID: 9106791689512785885}
   - component: {fileID: 4998147725526673027}
+  - component: {fileID: 8416404677173352224}
   m_Layer: 0
   m_Name: StartDoorGate
   m_TagString: Untagged
@@ -37,22 +37,6 @@ Transform:
   - {fileID: 4972167997025879805}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7021823297820637296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4972167997025983191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a364828d9b0f04f4d9e46da3e1f20ca2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doorType: 0
-  isFirst: 1
-  isOpen: 0
-  itemcode: 0
 --- !u!65 &9106791689512785885
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -95,6 +79,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8416404677173352224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972167997025983191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db2efe3148954284b9b57123bd67a804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorType: 0
+  isFirst: 1
+  isOpen: 0
+  itemcode: 0
 --- !u!1 &4972167997025983193
 GameObject:
   m_ObjectHideFlags: 0

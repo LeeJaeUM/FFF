@@ -37,7 +37,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         animator = GetComponent<Animator>();  
     }
 
-    private void Start()
+    protected virtual void Start()
     {
 
         //start에서 위의 doorType에 따라서 itemCode Itemcode enum타입의 맞게 코드 설정해주기
@@ -101,7 +101,7 @@ public class DoorBase : MonoBehaviour, IInteractable
         Debug.Log("문과 interact함");
     }
 
-    protected void DoorOpen()
+    protected virtual void DoorOpen()
     {
         if(!isOpen)
         {

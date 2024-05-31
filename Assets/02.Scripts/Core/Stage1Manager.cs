@@ -92,6 +92,17 @@ public class Stage1Manager : MonoBehaviour
         }
     }
 
+    private FrontDoor frontDoor;
+    public FrontDoor FrontDoor
+    {
+        get
+        {
+            if(frontDoor == null)
+                frontDoor = FindObjectOfType<FrontDoor>();
+            return frontDoor;
+        }
+    }
+
     IEnumerator TmpFade()
     {
         float duration = 0.5f; // 알파 값을 0으로 줄일 총 시간

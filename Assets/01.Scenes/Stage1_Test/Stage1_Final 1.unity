@@ -2422,6 +2422,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66adc45754e56194cb0a56fb43448093, type: 3}
+--- !u!4 &1467683122 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7468164198104871983, guid: 31f9a4be37e811b449fd33f873ffb806,
+    type: 3}
+  m_PrefabInstance: {fileID: 1929263744883934339}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1494919635
 GameObject:
   m_ObjectHideFlags: 0
@@ -3676,7 +3682,7 @@ PrefabInstance:
         type: 3}
       propertyPath: player
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1467683122}
     - target: {fileID: 1788268838538737450, guid: 6645c493932a8a641bb4f1eff4edd107,
         type: 3}
       propertyPath: darkWall
