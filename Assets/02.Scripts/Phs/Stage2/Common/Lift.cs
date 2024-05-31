@@ -15,14 +15,14 @@ public class Lift : InteracableBase
     bool canUse = false;
     bool move = false;
 
-    PersonController controller;
+    //PersonController controller;
     Rigidbody rigid;
 
     public Action onGameClear;
 
     private void Start()
     {
-        controller = FindAnyObjectByType<PersonController>();
+       // controller = FindAnyObjectByType<PersonController>();
         rigid = GetComponent<Rigidbody>();
         GameManager.Instance.buttonManager.AllAccess = OnAllAccess;
     }
@@ -59,7 +59,7 @@ public class Lift : InteracableBase
         {
             //transform.Translate(Time.fixedDeltaTime * Vector3.down * 3f);
             rigid.MovePosition(rigid.position + (Time.fixedDeltaTime * moveSpeed * Vector3.down));
-            controller.transform.Translate(Time.fixedDeltaTime * moveSpeed * Vector3.down);
+            //controller.transform.Translate(Time.fixedDeltaTime * moveSpeed * Vector3.down);
         }
 
         if(transform.position.y < -5)
