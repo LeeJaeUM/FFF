@@ -25,7 +25,7 @@ public class ProduceManager : MonoBehaviour
 
     public void Initialize()
     {
-        inven = GameManager.Instance.inven;
+        inven = transform.parent.GetComponent<InventoryUI>();
 
         // 리스트에 따로 보관
         foreach (ItemData data in inven.itemDatas)

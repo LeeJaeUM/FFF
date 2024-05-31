@@ -604,6 +604,7 @@ MonoBehaviour:
   - {fileID: 2800000, guid: c54bca0e062702646aaf03a653d03838, type: 3}
   - {fileID: 2800000, guid: 75cffa22677f8014fa1cc96751d73db9, type: 3}
   titleImageUI: {fileID: 202099523}
+  isUseFakeTitle: 0
 --- !u!4 &276158012
 Transform:
   m_ObjectHideFlags: 0

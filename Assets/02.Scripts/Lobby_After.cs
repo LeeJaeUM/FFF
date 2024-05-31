@@ -7,12 +7,10 @@ using UnityEngine.Device;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
-public class Lobby : MonoBehaviour
+public class Lobby_After : MonoBehaviour
 {
     AudioSource backgroundSound;
 
-    [SerializeField]
-    private GameObject fakeTitle; // 처음에 나오는 페이크 타이틀
     [SerializeField]
     private GameObject realTitle; // 나중에 나오는 진짜 타이틀창
     [SerializeField]
@@ -40,20 +38,10 @@ public class Lobby : MonoBehaviour
     private float screenFlickeringStartTime = 2f; // 화면 깜빡임 시작 시간
     private float screenFlickeringTime = 1f; // 화면 깜빡임 전환
 
-    public bool isUseFakeTitle = true;
-
     private void Start()
     {
         backgroundSound = GetComponent<AudioSource>();
-        if (isUseFakeTitle)
-        {
-            StartCoroutine(ScreenTransition());
-        }
-        else
-        {
-            StopCoroutine(ScreenFlickerStart());
-            NoFakeRealTitle();
-        }
+        StartCoroutine(ScreenTransition());
     }
 
     private void Update()
@@ -64,29 +52,12 @@ public class Lobby : MonoBehaviour
         }
     }
 
-    private void NoFakeRealTitle()
-    {
-        isRealTitleOpen = true;
-        Destroy(fakeTitle);
-        realTitle.SetActive(true);
-        blackImage.SetActive(false);
-
-        titleText.transform.position = new Vector2(600f, 800f);
-
-        //backgroundSound.Play(); // 오디오 재생
-
-        // 타이틀 창에 이미지를 랜덤 배치
-        int randomIndex = Random.Range(0, randomImage.Length);
-        //titleImageUI.texture = randomImage[randomIndex];
-        buttonUI.SetActive(true); // 버튼 UI 활성화
-    }
-
     IEnumerator ScreenTransition()
     {
         yield return new WaitForSeconds(screenTransitionTime);
         isRealTitleOpen = true;
 
-        Destroy(fakeTitle);
+        //Destroy(fakeTitle);
         realTitle.SetActive(true);
         blackImage.SetActive(false);
 
