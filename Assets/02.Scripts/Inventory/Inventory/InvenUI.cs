@@ -11,8 +11,7 @@ public class InvenUI : MonoBehaviour
     RectTransform invenInfoRect;
     RectTransform invenGridRect;
 
-    InventoryUI inven => GameManager.Instance.inven;
-
+    InventoryUI inven;
 
 
     private void Awake()
@@ -21,6 +20,7 @@ public class InvenUI : MonoBehaviour
         invenHeadRect = transform.GetChild(0).GetComponent<RectTransform>();
         invenInfoRect = transform.GetChild(1).GetComponent<RectTransform>();
         invenGridRect = transform.GetChild(2).GetComponent<RectTransform>();
+        inven = transform.parent.GetComponent<InventoryUI>();
     }
 
     public void Initialized()
