@@ -179,7 +179,7 @@ public class Lobby : MonoBehaviour
     // Stage1 버튼을 눌렀을 때 씬 이동
     public void Stage1()
     {
-        SceneManager.LoadScene("Stage1_Final");
+        SceneManager.LoadScene("Stage1");
     }
 
     // Stage2 버튼을 눌렀을 때 씬 이동
