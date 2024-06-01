@@ -35,7 +35,7 @@ public class InvenGrid : MonoBehaviour
     {
         inven = transform.parent.parent.GetComponent<InventoryUI>();
         gridSize = inven.gridSize;
-        slotGrid = inven.slotGrid;
+        slotSize = inven.slotSize;
         edgePadding = inven.edgePadding;
         slotGrid = new InvenSlot[gridSize.x, gridSize.y];
         CreateSlots();
