@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
+using UnityEngine.SceneManagement;
 
 public class Lift : InteracableBase
 {
@@ -15,7 +16,7 @@ public class Lift : InteracableBase
     bool canUse = false;
     bool move = false;
 
-    //PersonController controller;
+    public Transform player;
     Rigidbody rigid;
 
     public Action onGameClear;
@@ -59,12 +60,12 @@ public class Lift : InteracableBase
         {
             //transform.Translate(Time.fixedDeltaTime * Vector3.down * 3f);
             rigid.MovePosition(rigid.position + (Time.fixedDeltaTime * moveSpeed * Vector3.down));
-            //controller.transform.Translate(Time.fixedDeltaTime * moveSpeed * Vector3.down);
+            player.Translate(Time.fixedDeltaTime * moveSpeed * Vector3.down);
         }
 
         if(transform.position.y < -5)
         {
-            Stage1Manager.Instance.BottomTMPText = "게임 클리어";
+            SceneManager.LoadScene("StageClear");
             onGameClear?.Invoke();
         }
     }

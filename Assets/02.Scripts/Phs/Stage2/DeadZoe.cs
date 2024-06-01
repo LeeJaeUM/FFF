@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DeadZoe : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class DeadZoe : MonoBehaviour
             else
             {
                 Debug.Log($"{other.gameObject.name}이 죽었다.");
+
+                SceneManager.LoadScene("GameOverScene2");
                 manager.BottomTMPText = $"{other.name}이 가스에 중독되어 죽었다.";
             }
         }
