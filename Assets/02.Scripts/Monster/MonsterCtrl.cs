@@ -25,6 +25,7 @@ public class MonsterCtrl : MonoBehaviour
 
     [SerializeField]
     private float totalTime = 60f; // 낮과 밤이 바뀌는 시간
+    [SerializeField]
     private float nowTime = 0;
     private float chaseTimer = 0; // 추적을 유지하는 타이머
     private float pursuitRange = 3f; // 플레이어를 인식하는 범위
