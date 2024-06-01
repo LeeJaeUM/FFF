@@ -3078,7 +3078,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -3123,6 +3123,7 @@ MonoBehaviour:
   darkWall: {fileID: 0}
   afternoonAmbientColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 0}
   nightAmbientColor: {r: 0, g: 0, b: 0, a: 0}
+  totalTime: 60
 --- !u!136 &7518369894637201559
 CapsuleCollider:
   m_ObjectHideFlags: 0

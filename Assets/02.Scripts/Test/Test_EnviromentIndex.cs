@@ -5,31 +5,16 @@ using UnityEngine.InputSystem;
 
 public class Test_EnviromentIndex : TestBase
 {
-    BlockSpwaner blockSpwaner;
+    public int a = 0;
+    public List<int> b = new List<int>() { 0,1,2,3};
 
-    private void Start()
-    {
-        blockSpwaner = FindAnyObjectByType<BlockSpwaner>(); 
-    }
 
     protected override void OnTest1(InputAction.CallbackContext context)
     {
-        blockSpwaner.EnviromentIndex = 0;
+        a = (++a) % b.Count;
     }
     protected override void OnTest2(InputAction.CallbackContext context)
     {
-        blockSpwaner.EnviromentIndex = 1;
     }
-    protected override void OnTest3(InputAction.CallbackContext context)
-    {
-        blockSpwaner.EnviromentIndex = 2;
-    }
-    protected override void OnTest4(InputAction.CallbackContext context)
-    {
-        blockSpwaner.EnviromentIndex = 3;
-    }
-    protected override void OnTest5(InputAction.CallbackContext context)
-    {
-        blockSpwaner.EnviromentIndex = 4;
-    }
+
 }

@@ -48,34 +48,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04acb576f746f5848b0fb75682916d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildMode: 1
+  buildMode: 0
   useDir: 0
+  materialType: 0
   tagOfHitObject: 
-  woodBlockData: {fileID: 11400000, guid: 89bc3d1ba562dae4fba2c50cf9e720f8, type: 2}
+  blockDatas:
+  - {fileID: 11400000, guid: 89bc3d1ba562dae4fba2c50cf9e720f8, type: 2}
+  - {fileID: 11400000, guid: 1c1efb865fe98c348892a5a08013bcb9, type: 2}
+  - {fileID: 11400000, guid: d04ecac2cace8e74eb9f9768d7900283, type: 2}
   lengthMulti: 1.5
-  interactDistance: 12
-  SpawnAbledMat: {fileID: 2100000, guid: fb668fbbbc0df2a4ab9c7e69b3d79e8e, type: 2}
-  SpawnDisabledMat: {fileID: 2100000, guid: 061bb097f65b6694ab750f44ffd1261e, type: 2}
-  downSpawnPoint: {x: 0, y: 0.8, z: 0}
-  testVec: {x: 0, y: 0, z: 0}
+  interactDistance: 18
   fa_preview: {fileID: 3146838483896004017}
   wall_preview_H: {fileID: 2860555762372291448}
   wall_preview_V: {fileID: 384856258963049592}
   enviroment_preview: {fileID: 6777748465058022059}
   previewObj: {fileID: 0}
+  SpawnAbledMat: {fileID: 2100000, guid: fb668fbbbc0df2a4ab9c7e69b3d79e8e, type: 2}
+  SpawnDisabledMat: {fileID: 2100000, guid: 061bb097f65b6694ab750f44ffd1261e, type: 2}
   enviromentDatas:
-  - {fileID: 11400000, guid: ac664e903a7951144b97ee604de989e0, type: 2}
   - {fileID: 11400000, guid: 573f87e69f494c4438877e6b00c69924, type: 2}
   - {fileID: 11400000, guid: 14168793baa93ee489ce07843449d5cc, type: 2}
-  canDespawn: 0
+  - {fileID: 11400000, guid: 5f9c7931dd63c154da58bd7d5371e5c1, type: 2}
+  - {fileID: 11400000, guid: c08eec02b533b1b468838a20f957bc04, type: 2}
+  - {fileID: 11400000, guid: 0edfd633d41b1ec49957251bb2d48816, type: 2}
+  - {fileID: 11400000, guid: 545d04b6effeaf242a072c6af80a5f97, type: 2}
+  - {fileID: 11400000, guid: ed5bcd4abc1bc5b468e55b5eed27d0ff, type: 2}
+  - {fileID: 11400000, guid: 8ea2679611d15e840871da5720aa69e8, type: 2}
+  enviromentIndex: 0
   connectorOverlapRadius: 1
   buildObjLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   isHigher: 1
   isAhead: 1
   isRight: 1
   canSpawnObj: 1
+  canDespawn: 0
+  isRotated: 0
+  adjuster: {fileID: 0}
 --- !u!1001 &5366069195058724592
 PrefabInstance:
   m_ObjectHideFlags: 0

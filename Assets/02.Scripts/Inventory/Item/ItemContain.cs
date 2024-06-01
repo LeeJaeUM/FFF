@@ -35,10 +35,10 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
             {
                 count = value;
                 SetCount(count);
-                if(count <= 0)
-                {
-                    ContainRemvoe();
-                }
+                //if(count <= 0)
+                //{
+                //    ContainRemvoe();
+                //}
             }
         }
     }
@@ -62,6 +62,13 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
         itemIcon = transform.GetChild(1).GetComponent<Image>();
         itemCount = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         //Debug.Log(item.Size);
+    }
+
+    protected override void OnDisable()
+    {
+        item = null;
+
+        base.OnDisable();
     }
 
     /// <summary>
@@ -193,7 +200,7 @@ public class ItemContain : RecycleObject, IPointerClickHandler, IPointerEnterHan
     /// <summary>
     /// 컨테이너 삭제 함수
     /// </summary>
-    public void ContainRemvoe()
+    public void ContainRemove()
     {
         Debug.Log("삭제");
         // 아이템 정보 삭제

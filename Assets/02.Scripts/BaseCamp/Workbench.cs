@@ -5,14 +5,18 @@ using UnityEngine;
 
 public class Workbench : MonoBehaviour
 {
-    public bool isPlayerIn = false;
-    public Action<bool> onTrigger; 
+    [SerializeField] private bool isPlayerIn = false;
+
+    /// <summary>
+    /// ㅌ트리거 범위 내에 들어 왔을때 e를 눌러서 UI비/활성화 가능, 나갔을때 자동으로 UI 비활성화
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             isPlayerIn = true;
-            onTrigger.Invoke(isPlayerIn);
+            BaseCampManager.Instance.WBUI.CanUse_Workbench = isPlayerIn;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -20,7 +24,8 @@ public class Workbench : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerIn = false;
-            onTrigger.Invoke(isPlayerIn);
+            BaseCampManager.Instance.WBUI.CanUse_Workbench = isPlayerIn;
+
         }
     }
 }

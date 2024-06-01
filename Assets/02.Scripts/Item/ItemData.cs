@@ -58,14 +58,14 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     /// <summary>
     /// 아이템의 가로크기
     /// </summary>
-    [Range(1, 3)]
-    public int SizeX;
+    [Range(1, 5)]
+    public int SizeX = 1;
 
     /// <summary>
     /// 아이템의 세로크기
     /// </summary>
     [Range(1, 5)]
-    public int SizeY;
+    public int SizeY = 1;
 
     public Vector2Int Size
     {
@@ -83,12 +83,12 @@ public class ItemData : ScriptableObject    // 게임 오브젝트에 붙일필�
     /// <summary>
     /// 아이템의 최대 수량
     /// </summary>
-    public int maxItemCount;
+    public int maxItemCount = 1;
 
     /// <summary>
     /// 아이템의 무게
     /// </summary>
-    public float itemWeight;
+    public float itemWeight = 0.0f;
 
 
      /* ScriptableObject를 상속받는다면

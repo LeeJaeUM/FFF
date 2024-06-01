@@ -49,45 +49,29 @@ public class Connecting : MonoBehaviour
     public bool isConnectedToWall_Ho = false;
     public bool isConnectedToWall_Ve = false;
 
-    [SerializeField] private int Wall_HoCount = 0;
-    [SerializeField] private int Wall_VeCount = 0;
-    [SerializeField] private int FloorCount = 0;
+    [SerializeField] private int wall_HoCount = 0;
+    [SerializeField] private int wall_VeCount = 0;
+    [SerializeField] private int floorCount = 0;
 
-    private void OnDrawGizmos()
+    /// <summary>
+    /// Adjuster에 사용할 카운트용 프로퍼티 
+    /// </summary>
+    public int FloorCount
     {
-        Color gizColor = Color.white;
-        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
+        get => floorCount;
+        private set
         {
-            gizColor = Color.black;
-
+            floorCount = value;
+            onChangeCount?.Invoke((int)usedDir ,floorCount);
         }
-        else if (isConnectedToFloor && isConnectedToWall_Ho)
-        {
-            gizColor = Color.green;
-        }
-        else if (isConnectedToWall_Ho && isConnectedToWall_Ve)
-        {
-            gizColor = Color.blue;
-        }
-        else if (isConnectedToWall_Ve && isConnectedToFloor)
-        {
-            gizColor = Color.red;
-        } 
-        //else if(isConnectedToFloor)
-        //{
-        //    gizColor = Color.yellow;
-        //}
-        //else if (isConnectedToWall_Ho)
-        //{
-        //    gizColor = Color.cyan;
-        //}
-        //else if (isConnectedToWall_Ve)
-        //{
-        //    gizColor = Color.magenta;
-        //}
-        Gizmos.color = gizColor;
-        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
     }
+
+    /// <summary>
+    /// Adjuster에 보낼 액션 : floor가 연결되어있는지 판단한다.
+    /// </summary>
+    public Action<int, int> onChangeCount;
+
+   
 
     private void Awake()
     {
@@ -126,6 +110,9 @@ public class Connecting : MonoBehaviour
             usedDir = UsedDir.None;
     }
 
+    /// <summary>
+    /// 카운팅을 초기화하는 함수
+    /// </summary>
     void CountReset()
     {
         switch (objType)
@@ -163,13 +150,24 @@ public class Connecting : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 카운팅을 초기화할 때 사용하는 함수
+    /// </summary>
+    /// <param name="ho">horizontal 벽 타일</param>
+    /// <param name="ve">vertical 벽 타일</param>
+    /// <param name="floor">바닥 타일</param>
     void CountSetting(int ho, int ve, int floor)
     {
-        Wall_HoCount = ho;
-        Wall_VeCount = ve;
-        FloorCount = floor;
+        wall_HoCount = ho;
+        wall_VeCount = ve;
+        floorCount = floor;
     }
 
+    /// <summary>
+    /// 겹치는 Connecting이 있는 지 확인 후 어떤 타일인지 확인하여 카운트를 변경시키는 함수
+    /// </summary>
+    /// <param name="rootCall">중복방지용 변수  최초에 실행될 Connecting이면 true 아니면 flase</param>
+    /// <param name="isDestroy">타일을 삭제할 떄 실행한건지 판단하는 변수 true면 삭제 시 실행 false면 생성 시 실행</param>
     public void UpdateConnecting(bool rootCall = false, bool isDestroy = false)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, connectorOverlapRadius * 0.5f, connectorLayer);
@@ -191,9 +189,9 @@ public class Connecting : MonoBehaviour
                 {
                     switch (otherConnecting.objType)
                     {
-                        case ObjType.Wall_Ho: Wall_HoCount--; break;
-                        case ObjType.Wall_Ve: Wall_VeCount--; break;
-                        case ObjType.Floor: FloorCount--; break;
+                        case ObjType.Wall_Ho: wall_HoCount--; break;
+                        case ObjType.Wall_Ve: wall_VeCount--; break;
+                        case ObjType.Floor: FloorCount--; break;            // Adjuster에 델리게이트를 실행함-------------------------------
                     }
                     //중복되어 무한 루프 방지
                     if (rootCall)
@@ -201,7 +199,7 @@ public class Connecting : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("삭제될떄의 작업");
+                    //Debug.LogWarning("삭제될떄의 작업");
                     //중복되어 무한 루프 방지
                     if (rootCall)
                     {
@@ -213,23 +211,23 @@ public class Connecting : MonoBehaviour
         }
         canBuild = true;
 
-        if (Wall_HoCount < 1)
+        if (wall_HoCount < 1)
         {
             isConnectedToWall_Ho = true;
-            Wall_HoCount = 0;
+            wall_HoCount = 0;
         }
         else
             isConnectedToWall_Ho = false;
 
-        if (Wall_VeCount < 1)
+        if (wall_VeCount < 1)
         {
             isConnectedToWall_Ve = true;
-            Wall_VeCount = 0;
+            wall_VeCount = 0;
         }
         else
             isConnectedToWall_Ve = false;
 
-        if (FloorCount < 1)
+        if (floorCount < 1)            // Adjuster에 델리게이트를 실행함-------------------------------
         {
             isConnectedToFloor = true;
             FloorCount = 0;
@@ -241,4 +239,36 @@ public class Connecting : MonoBehaviour
             canBuild = false;
 
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// 설치가능한지 시각적으로 표시
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        Color gizColor = Color.white;
+        if (isConnectedToFloor && isConnectedToWall_Ho && isConnectedToWall_Ve)
+        {
+            gizColor = Color.black;
+
+        }
+        else if (isConnectedToFloor && isConnectedToWall_Ho)
+        {
+            gizColor = Color.green;
+        }
+        else if (isConnectedToWall_Ho && isConnectedToWall_Ve)
+        {
+            gizColor = Color.blue;
+        }
+        else if (isConnectedToWall_Ve && isConnectedToFloor)
+        {
+            gizColor = Color.red;
+        }
+        Gizmos.color = gizColor;
+        Gizmos.DrawWireSphere(transform.position, transform.localScale.x / 3f);
+    }
+
+#endif
+
 }

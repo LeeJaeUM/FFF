@@ -6,15 +6,15 @@ using UnityEngine.EventSystems;
 
 public class BuildSelectUI : MonoBehaviour, IPointerClickHandler
 {
-    public enum BuildMode   //건축 모드
+    private enum BuildMode_UI   //건축 모드
     {
         None = 0,
         Foundation,
         Wall_Horizontal,
         Wall_Vertical,
-        Enviroment
+        Enviroment,
     };
-    [SerializeField] BuildMode buildMode = BuildMode.None;
+    [SerializeField] private BuildMode_UI buildMode_UI = BuildMode_UI.None;
 
     public Action<int> onClickBlock;
     /// <summary>
@@ -23,7 +23,7 @@ public class BuildSelectUI : MonoBehaviour, IPointerClickHandler
     /// <param name="eventData"></param>
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClickBlock?.Invoke((int)buildMode);
+        onClickBlock?.Invoke((int)buildMode_UI);
     }
 
 }

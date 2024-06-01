@@ -5,13 +5,17 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using System.ComponentModel;
+using static UnityEditor.Progress;
 
 public class InventoryUI : MonoBehaviour
 {
+    [SerializeField]
     /// <summary>
     /// 아이템 정보를 담는 컨테이너 리스트
     /// </summary>
-    public ItemContainList[] containList;
+    private ItemContainList[] containList;
+
+    public ItemContainList[] ContainList => containList;
 
     public Action onContainListChange;
 
@@ -106,7 +110,7 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 인벤토리 무게
     /// </summary>
-    private float weight = 0.0f;
+    private float weight = -1.0f;
 
     public float TotalWeight
     {
@@ -173,12 +177,13 @@ public class InventoryUI : MonoBehaviour
             containList[i].itemCode = itemDatas[i].itemCode;
             containList[i].containList = new List<ItemContain>();
             containList[i].itemCount = 0;
+            containList[i].itemWeight = 0;
         }
     }
 
     private void Start()
     {
-        TotalWeight = 0;
+        TotalWeight = 0.0f;
         UI.Initialized();
         invenGrid.GridInitialize();
         produceManager.Initialize();
@@ -188,15 +193,21 @@ public class InventoryUI : MonoBehaviour
     {
         inputAction.UI.Enable();
         inputAction.UI.LClick.performed += OnLeftClick;
+        inputAction.UI.RClick.performed += OnRightClick;
         inputAction.UI.InventroyOnOff.performed += OnOpenClose;
+        inputAction.UI.Produce.performed += OnProduce;
+        inputAction.UI.HintClose.performed += OnHintClose;
     }
-
     private void OnDisable()
     {
-        inputAction.UI.InventroyOnOff.performed += OnOpenClose;
+        inputAction.UI.HintClose.performed -= OnHintClose;
+        inputAction.UI.Produce.performed -= OnProduce;
+        inputAction.UI.InventroyOnOff.performed -= OnOpenClose;
+        inputAction.UI.RClick.performed -= OnRightClick;
         inputAction.UI.LClick.performed -= OnLeftClick;
         inputAction.UI.Disable();
     }
+
 
     #endregion
 
@@ -256,7 +267,7 @@ public class InventoryUI : MonoBehaviour
                                 Debug.Log("같은 아이템이므로 저장");
                                 AddContain(containGrab, ContainGrab.Count);
                                 ColorChangeLoop(SlotColorHighlights.White, otherItemSize, otherItemPos);
-                                ContainGrab.ContainRemvoe();
+                                ContainGrab.ContainRemove();
                             }
                             break;
                     }
@@ -290,6 +301,17 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
+    public Action<ItemContain> onInteracable;
+
+    private void OnRightClick(InputAction.CallbackContext context)
+    {
+        if(enterContain != null)
+        {
+            onInteracable?.Invoke(enterContain);
+        }
+    }
+
+
     private void OnOpenClose(InputAction.CallbackContext context)
     {
         if (UI != null)
@@ -297,6 +319,22 @@ public class InventoryUI : MonoBehaviour
             UI.OnOff();
         }
     }
+
+    private void OnProduce(InputAction.CallbackContext context)
+    {
+        if(produceManager != null)
+        {
+            produceManager.OnOff();
+        }
+    }
+
+    public Action onHintClose;
+
+    private void OnHintClose(InputAction.CallbackContext context)
+    {
+        onHintClose?.Invoke();
+    }
+
 
     #endregion
 
@@ -556,12 +594,12 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     /// <param name="code">얻은 아이템 코드</param>
     /// <param name="_count">얻은 아이템의 갯수</param>
-    public void GetItemToSlot(ItemCode code, int _count)
+    public void GetItemToSlot(ItemCode code, int _count = 1)
     {
         ItemData data = FindCodeData(code);
 
+        // 빈 그리드를 저장하는 리스트
         List<Vector2Int> emptyList = new List<Vector2Int>();
-        List<ItemContain> sameItemContainList = new List<ItemContain>();
 
         // 탐색을 하고
         for (int y = 0; y < _verticalSlotCount; y++)
@@ -579,40 +617,34 @@ public class InventoryUI : MonoBehaviour
                         emptyList.Add(new Vector2Int(x, y));
                     }
                 }
-                else
-                {
-                    foreach (var contain in containList)
-                    {
-                        if (contain.itemCode == data.itemCode)
-                        {
-                            foreach (var _contain in contain.containList)
-                                sameItemContainList.Add(_contain);
-                        }
-                    }
-                }
             }
         }
 
         int remain = _count;
 
         // 넣는다.
-        if (sameItemContainList.Count > 0)
+        for(int i = 0; i < containList.Length; i++)
         {
-            Debug.Log("같은 아이템이 있다.");
-            foreach (var item in sameItemContainList)
+            //Debug.LogWarning(containList.Length);
+            if (containList[i].itemCode == code && containList[i].itemCount > 0)
             {
-                remain = item.ItemStack(remain);
-                if (remain == 0)
-                    break;
+                for (int j = 0; j < containList[i].containList.Count; j++)
+                {
+                    if (containList[i].containList[j] == null || remain == 0)
+                        break;
+                    remain = containList[i].containList[j].ItemStack(remain);
+                }
+                break;
             }
         }
+
         if (emptyList.Count > 0 && remain > 0)
         {
             foreach (var grid in emptyList)
             {
                 ItemContain contain = null;
                 // 데이터의 최대 수량보다 크며
-                if (_count > data.maxItemCount)
+                if (remain > data.maxItemCount)
                 {
                     remain -= data.maxItemCount;
                     contain = Factory.Instance.GetItemContain(data, data.maxItemCount);
@@ -634,7 +666,7 @@ public class InventoryUI : MonoBehaviour
             }
         }
 
-        sameItemContainList.Clear();
+        RefreshList();
         emptyList.Clear();
     }
 
@@ -668,16 +700,26 @@ public class InventoryUI : MonoBehaviour
     /// <returns></returns>
     public bool UseItemCheck(ItemCode code, int useCount = 1)
     {
-        bool isOk = false;
+        return UseItemCheck(code, useCount, out int index);
+    }
 
-        foreach (var List in containList)
+    public bool UseItemCheck(ItemCode code, int useCount, out int index)
+    {
+        bool isOk = false;
+        int count = -1;
+
+        for (int i = 0; i < containList.Length; i++)
         {
-            if (List.itemCode == code && List.itemCount >= useCount)
+            if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
             {
+                count = i;
                 isOk = true;
+                Debug.LogWarning(isOk);
+                break;
             }
         }
 
+        index = count;
         return isOk;
     }
 
@@ -691,43 +733,43 @@ public class InventoryUI : MonoBehaviour
     {
         int remain = useCount;
 
-        if (UseItemCheck(code, useCount))
+        if (UseItemCheck(code, useCount, out int index) && index > -1)   // 사용할 수 있는지 확인.
         {
-            for (int i = 0; i < containList.Length; i++)
+            for (int i = containList[index].containList.Count - 1; i > -1; i--)
             {
-                if (containList[i].itemCode == code && containList[i].itemCount >= useCount)
+                if (containList[index].containList[i].Count >= remain)  
                 {
-                    for (int j = containList[i].containList.Count - 1; j > -1; j--)
-                    {
-
-                        if (remain == 0)
-                        {
-                            RefreshList();
-                            return true;
-                        }
-
-                        if (containList[i].containList[j].Count >= remain)
-                        {
-                            containList[i].containList[j].Count -= remain;
-                            containList[i].itemCount -= remain;
-                            remain = 0;
-                        }
-                        else
-                        {
-                            remain -= containList[i].containList[j].Count;
-                        }
-
-                        Debug.Log($"{remain}");
-
-                        if (containList[i].containList[j].Count <= 0)
-                        {
-                            containList[i].containList.RemoveAt(j);
-                        }
-                    }
+                    // 아이템 리스트 안에 있는 갯수보다 사용할 갯수가 작거나 같을때
+                    containList[index].containList[i].Count -= remain;
+                    remain = 0;
                 }
+                else                
+                {
+                    // 아이템 리스트 안에 있는 갯수가 사용할 아이템의 갯수보다 작을때
+                    remain -= containList[i].containList[i].Count;
+                    containList[i].containList[i].Count = 0;
+                }
+
+                Debug.Log($"{remain}");
+
+                if (containList[index].containList[i].Count <= 0)
+                {
+                    ItemContain temp = containList[index].containList[i];
+                    RemoveList(temp);
+                    temp.ContainRemove();
+                    //containList[index].containList.RemoveAt(i);
+                }
+
+                if (remain == 0)
+                {
+                    RefreshList();
+                    return true;
+                }
+
             }
         }
 
+        RefreshList();
         return false;
     }
 
@@ -742,7 +784,7 @@ public class InventoryUI : MonoBehaviour
             if (containList[i].itemCode == add.item.itemCode)
             {
                 containList[i].containList.Add(add);
-                containList[i].itemCount += add.Count;
+                break;
             }
         }
 
@@ -757,8 +799,11 @@ public class InventoryUI : MonoBehaviour
     {
         for (int i = 0; i < containList.Length; i++)
         {
-            containList[i].itemCount -= remove.Count;
-            containList[i].containList.Remove(remove);
+            if (containList[i].itemCode == remove.item.itemCode)
+            {
+                containList[i].containList.Remove(remove);
+                break;
+            }
         }
 
         RefreshList();
@@ -777,6 +822,9 @@ public class InventoryUI : MonoBehaviour
             {
                 containList[i].itemCount += contain.Count;
             }
+
+            ItemData data = FindCodeData(containList[i].itemCode);
+            containList[i].itemWeight = data.itemWeight * containList[i].itemCount;
         }
 
         TotalWeight = WeightCheck();
@@ -815,9 +863,7 @@ public class InventoryUI : MonoBehaviour
 
         foreach (var List in containList)
         {
-            ItemData data = FindCodeData(List.itemCode);
-            Debug.Log($"{data.itemWeight}_{List.itemCount}");
-            result += data.itemWeight * List.itemCount;
+            result += List.itemWeight;
         }
 
         return result;
@@ -829,7 +875,7 @@ public class InventoryUI : MonoBehaviour
     private void Drop(Transform position)
     {
         Factory.Instance.GetDropItem(containGrab, position);
-        containGrab.ContainRemvoe();
+        containGrab.ContainRemove();
     }
     #endregion
 }

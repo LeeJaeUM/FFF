@@ -21,11 +21,15 @@ public class GameManager : Singleton<GameManager>
 
     public InventoryUI inven;
 
-    protected override void Awake()
+    public ButtonManager buttonManager;
+
+
+    protected override void OnInitialize()
     {
-        base.Awake();
+        base.OnInitialize();
 
         inven = FindObjectOfType<InventoryUI>();
+        buttonManager = FindObjectOfType<ButtonManager>();
     }
 
     private void Update()

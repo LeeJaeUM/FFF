@@ -50,11 +50,18 @@ public class ProduceLine : RecycleObject
         itemName.text = _data.itemName;
 
         produceSlots = new ProduceSlot[_data.parentCodes.Length];
-        int index = 0;
-        foreach(var code in _data.parentCodes)
+        //int index = 0;
+
+        //foreach(var code in _data.parentCodes)
+        //{
+        //    produceSlots[index] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
+        //    index++;
+        //}
+
+        for(int i = 0; i < produceSlots.Length; i++)
         {
-            produceSlots[index] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
-            index++;
+            parentCode code = _data.parentCodes[i];
+            produceSlots[i] = Factory.Instance.GetProduceSlot(code.Code, code.Count, ingredient);
         }
 
         // 아이템 갯수 체크
@@ -64,10 +71,25 @@ public class ProduceLine : RecycleObject
         produceButton.onClick.AddListener(() =>
         {
             InventoryUI inven = GameManager.Instance.inven;
-            foreach(var slot in produceSlots)
+
+
+            for (int i = 0; i < data.parentCodes.Length; i++)
             {
-                slot.UseItem();
+                for (int j = 0; j < inven.itemDatas.Length; j++)
+                {
+                    if (data.parentCodes[i].Code == inven.itemDatas[j].itemCode)
+                    {
+                        foreach (var slot in produceSlots)
+                        {
+                            if(slot.Data.itemCode == data.parentCodes[i].Code)
+                            {
+                                slot.UseItem(!data.parentCodes[i].NotConsume);
+                            }
+                        }
+                    }
+                }
             }
+
             ItemContain contain = Factory.Instance.GetItemContain(data);
             inven.containGrab = contain.GrabContain();
         });
@@ -80,7 +102,7 @@ public class ProduceLine : RecycleObject
     {
         foreach(var slot in produceSlots)
         {
-            foreach(var ItemContain in GameManager.Instance.inven.containList)
+            foreach(var ItemContain in GameManager.Instance.inven.ContainList)
             {
 
                 if(ItemContain.itemCode == slot.Data.itemCode)
