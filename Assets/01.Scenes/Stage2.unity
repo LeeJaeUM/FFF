@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43667546, g: 0.48427135, b: 0.5645225, a: 1}
+  m_IndirectSpecularColor: {r: 0.4366756, g: 0.48427194, b: 0.5645252, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9612,6 +9612,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 947612788}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &947612797 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8997996947095583982, guid: c5efc39a8aaf6e64ea40e9ad573e9b47,
+    type: 3}
+  m_PrefabInstance: {fileID: 947612788}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &953599104 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2205100273192689838, guid: 7d898b64e6282274c8684bc725c807b3,
@@ -14422,6 +14428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   waitTime: 3
+  player: {fileID: 947612797}
 --- !u!54 &1462009258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24068,7 +24075,7 @@ MonoBehaviour:
   monsterAgent: {fileID: 0}
   brokenWoodSound: {fileID: 0}
   monsterAnim: {fileID: 0}
-  target: {fileID: 0}
+  target: {fileID: 947612797}
 --- !u!1001 &1987050430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24251,7 +24258,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1032128384971348885, guid: 0498004e0b2dbe848afbf813ca812755, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2685657860355436101, guid: 0498004e0b2dbe848afbf813ca812755,
         type: 3}

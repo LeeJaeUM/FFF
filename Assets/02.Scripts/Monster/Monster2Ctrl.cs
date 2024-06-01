@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Monster2Ctrl : MonoBehaviour
 {
@@ -59,7 +60,8 @@ public class Monster2Ctrl : MonoBehaviour
 
         if (collision.collider.gameObject.CompareTag("Player"))
         {
-            Stage1Manager.Instance.BottomTMPText = "게임 오버";
+            //Stage1Manager.Instance.BottomTMPText = "게임 오버";
+            SceneManager.LoadScene("GameOverScene2");
         }
     }
 
@@ -83,10 +85,11 @@ public class Monster2Ctrl : MonoBehaviour
         //    Destroy(other.gameObject);
         //}
 
-        //if (other.gameObject.CompareTag("Player"))
-        //{
-        //    Stage1Manager.Instance.BottomTMPText = "게임 오버";
-        //}
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Stage1Manager.Instance.BottomTMPText = "게임 오버";
+            SceneManager.LoadScene("GameOverScene2");
+        }
     }
 
     private void OnTriggerExit(Collider other)
