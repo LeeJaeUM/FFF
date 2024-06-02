@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using Cinemachine;
 
 public class BCUI : MonoBehaviour
 {
@@ -29,6 +30,10 @@ public class BCUI : MonoBehaviour
     /// </summary>
     MaterialSelectUI materialSelectUI;
 
+    /// <summary>
+    /// 카메라
+    /// </summary>
+    public CinemachineVirtualCamera virtualCamera;
 
     private void Awake()
     {
@@ -77,6 +82,7 @@ public class BCUI : MonoBehaviour
     /// <param name="index"></param>
     private void OnClickBuildObjIcon(int index)
     {
+        SetCameraFOV(60.0f);
         Debug.Log($"눌린 버튼은 buildmode선택 버튼 : {index}");
         if (index == 0)
         {
@@ -84,7 +90,9 @@ public class BCUI : MonoBehaviour
             isActive = !isActive;
             buildUI.SetActive(isActive);
             spwaner.ProhibitSpawn(isActive);
+            SetCameraFOV(40.0f);
         }
+
         spwaner.buildMode = (BlockSpwaner.BuildMode)index;
     }
 
@@ -130,4 +138,15 @@ public class BCUI : MonoBehaviour
 
     }
 
+    public void SetCameraFOV(float fov)
+    {
+        if (virtualCamera != null)
+        {
+            virtualCamera.m_Lens.FieldOfView = fov;
+        }
+        else
+        {
+            Debug.LogError("Virtual Camera is not assigned!");
+        }
+    }
 }

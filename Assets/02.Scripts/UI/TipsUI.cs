@@ -9,6 +9,7 @@ public class TipsUI : MonoBehaviour
     GameObject PressEGroup;
     GameObject bookImg;
     Image bookHint;
+    GameObject woodSign;
 
     //private bool isUIActive = false;
     private bool canUse_InteractObj = false;
@@ -41,6 +42,8 @@ public class TipsUI : MonoBehaviour
         child = transform.GetChild(1);
         bookImg = child.gameObject;
         bookHint = bookImg.GetComponentInChildren<Image>(true);
+        child = transform.GetChild(2);
+        woodSign = child.gameObject;
     }
 
 }

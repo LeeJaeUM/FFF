@@ -1,28 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Book : MonoBehaviour, IInteractable
+public class WoodSign : MonoBehaviour, IInteractable
 {
-    InventoryUI inventoryUI;
-
     [SerializeField]
-    private Image hint;
+    private GameObject hint;
 
     [SerializeField]
     private bool isUse = false;
 
-    private void Awake()
-    {
-        inventoryUI = FindAnyObjectByType<InventoryUI>();
-    }
-
     private void Start()
     {
-        Transform child = Stage1Manager.Instance.TipsUI.transform.GetChild(1);
-        hint = child.GetComponentInChildren<Image>(true);
+        Transform child = Stage1Manager.Instance.TipsUI.transform.GetChild(2);
+        hint = child.gameObject;
     }
 
     public void Interact()
@@ -31,6 +23,14 @@ public class Book : MonoBehaviour, IInteractable
         //inventoryUI.GetItemToSlot(ItemCode.Book, 1);
         Stage1Manager.Instance.BottomTMPText = "책 안쪽에 쪽지가 ...";
         // 1852가 적힌 쪽지 보이게하기
-        hint.enabled = isUse;
+        hint.SetActive(isUse);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isUse = false;
+        }
     }
 }
