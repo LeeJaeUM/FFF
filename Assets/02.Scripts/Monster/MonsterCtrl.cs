@@ -52,8 +52,7 @@ public class MonsterCtrl : MonoBehaviour
 
     private void Update()
     {
-        if (isEnterHouse)
-            nowTime += Time.deltaTime;
+        nowTime += Time.deltaTime;
 
         // 시간의 흐름에 따라 낮밤 조절
         if (nowTime >= totalTime)
