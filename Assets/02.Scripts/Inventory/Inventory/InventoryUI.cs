@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using System;
 using System.ComponentModel;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class InventoryUI : MonoBehaviour
 {

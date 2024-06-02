@@ -33,7 +33,7 @@ public class Test_Inventory : TestBase
 
     protected override void OnTest4(InputAction.CallbackContext context)
     {
-        GameManager.Instance.buttonManager.AllButtonTrigger();
+        //GameManager.Instance.buttonManager.AllButtonTrigger();
     }
 
     protected override void OnTest5(InputAction.CallbackContext context)
