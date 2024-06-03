@@ -25,12 +25,6 @@ public class TipsUI : MonoBehaviour
                 PressEGroup.gameObject.SetActive(value); // E버튼 안내 ui 비/활성화
                 bookImg.gameObject.SetActive(value);
                 bookHint.enabled = false;
-
-                // 트리거 밖으로 나가서 flase가 되면 자동으로 종료
-                //if (canUse_InteractObj == false)
-                //{
-                //    isUIActive = false;
-                //}
             }
         }
     }
