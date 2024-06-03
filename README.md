@@ -17,14 +17,22 @@
 이재웅, 박훈섭, 임현택, 신준원, 김민수
 
 ### 맡은 기능
-스테이지 1 기믹 및 하우징 : 이재웅
-![image](https://github.com/LeeJaeUM/FFF/assets/106094800/233d67c6-621e-49b3-ac4e-aa29cd6f4c9a)
+#### 스테이지 1 기믹 및 하우징 : 이재웅
+> ![image](https://github.com/LeeJaeUM/FFF/assets/106094800/233d67c6-621e-49b3-ac4e-aa29cd6f4c9a)
 </p>
 스테이지 2 기믹 및 인벤토리 : 박훈섭 
+
+> ![화면 캡처 2024-06-03 144948](https://github.com/LeeJaeUM/FFF/assets/106094800/ff043c64-78f3-416c-9c9b-ac7a6f35bdcf)
+
  </p>
 스테이지 3 기믹 및 미니게임 : 임현택 
+
+> ![화면 캡처 2024-06-03 145025](https://github.com/LeeJaeUM/FFF/assets/106094800/a8c7b173-39fa-4cb1-8ae3-115293bc86fd)
+
  </p>
 아이템 관련 기능 : 신준원  
+
+> ![image](https://github.com/LeeJaeUM/FFF/assets/106094800/a688db49-3bfd-4e39-82fb-b5f94f7be782)
 
 </p>
 플레이어 기능 : 김민수 </p>
