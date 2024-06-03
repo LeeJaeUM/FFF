@@ -37,7 +37,8 @@ public class MonsterCtrl : MonoBehaviour
 
     private int maxHp = 5; // 몬스터의 기존 Hp 
 
-    private bool isEnterHouse = false;
+    [SerializeField]
+    private bool isEnterHouse = false;  // 건물 안에 플레이어가 들어 갔는지 체크 들어가면 낮밤 기믹 시작
 
     private void Start()
     {
@@ -52,7 +53,8 @@ public class MonsterCtrl : MonoBehaviour
 
     private void Update()
     {
-        nowTime += Time.deltaTime;
+        if(isEnterHouse)
+            nowTime += Time.deltaTime;
 
         // 시간의 흐름에 따라 낮밤 조절
         if (nowTime >= totalTime)
